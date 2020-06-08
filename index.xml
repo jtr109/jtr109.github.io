@@ -23,7 +23,7 @@
  图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。 图片的自动存放路径。  指定图片根路径 点击 Use Image Root Path，选择 static 目录作为根路径。
 设置图片自动存放路径 在设置中选择 Image 栏，将 static/images 的绝对路径设置为图片插入地址。
 也可以通过语法加入图片子目录，更好地管理图片。
-经过如上配置，截图便可通过 Command+v 自动保存在 static/images 目录中。
+经过如上配置，截图便可通过 command+v 自动保存在 static/images 目录中。
 配置 Hugo 但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 static，符合要求。此时拉起站点，就可以正常显示图片了！
 参考  使用hugo搭建博客系统 Images in Typora  </description>
     </item>
