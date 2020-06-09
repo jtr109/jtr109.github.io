@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="jtr109">
+    <meta name="description" content="背景 Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。
+Naive Datetime &amp; Timezone-awared Datetime 在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：
+  Naive dateime
+ 2020-06-09T12:10:19.805    Timezone-awared datetime
+  2020-06-09T04:10:19.805Z
+  2020-06-09T04:10:19.805&#43;00:00
+    Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，绝对不能使用 naive datetime。
+而 Timezone-awared datetime 最后的 Z 或 &#43;00:00 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。
+ISO Format &amp; Timestamp ISO Format String 和 Timestamp 各自的特点 首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：
+ ISO formated timezone-awared datetime  字符串形式 可读性强 对时区表达方式不唯一（Z 或 &#43;00:00）   timestamp  整型数字 不同程序对 timestamp 精度的定义不同  如 Java 和 JavaScript 中为 millisecond 而 Unix 和 Python 中为 second      前端对时间的处理 如果浏览器当前时区为东八区，取一个北京时间 2020-06-09T14:56:00.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="开发过程中的时间和时区问题"/>
+<meta name="twitter:description" content="背景 Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。
+Naive Datetime &amp; Timezone-awared Datetime 在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：
+  Naive dateime
+ 2020-06-09T12:10:19.805    Timezone-awared datetime
+  2020-06-09T04:10:19.805Z
+  2020-06-09T04:10:19.805&#43;00:00
+    Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，绝对不能使用 naive datetime。
+而 Timezone-awared datetime 最后的 Z 或 &#43;00:00 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。
+ISO Format &amp; Timestamp ISO Format String 和 Timestamp 各自的特点 首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：
+ ISO formated timezone-awared datetime  字符串形式 可读性强 对时区表达方式不唯一（Z 或 &#43;00:00）   timestamp  整型数字 不同程序对 timestamp 精度的定义不同  如 Java 和 JavaScript 中为 millisecond 而 Unix 和 Python 中为 second      前端对时间的处理 如果浏览器当前时区为东八区，取一个北京时间 2020-06-09T14:56:00."/>
+
+    <meta property="og:title" content="开发过程中的时间和时区问题" />
+<meta property="og:description" content="背景 Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。
+Naive Datetime &amp; Timezone-awared Datetime 在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：
+  Naive dateime
+ 2020-06-09T12:10:19.805    Timezone-awared datetime
+  2020-06-09T04:10:19.805Z
+  2020-06-09T04:10:19.805&#43;00:00
+    Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，绝对不能使用 naive datetime。
+而 Timezone-awared datetime 最后的 Z 或 &#43;00:00 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。
+ISO Format &amp; Timestamp ISO Format String 和 Timestamp 各自的特点 首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：
+ ISO formated timezone-awared datetime  字符串形式 可读性强 对时区表达方式不唯一（Z 或 &#43;00:00）   timestamp  整型数字 不同程序对 timestamp 精度的定义不同  如 Java 和 JavaScript 中为 millisecond 而 Unix 和 Python 中为 second      前端对时间的处理 如果浏览器当前时区为东八区，取一个北京时间 2020-06-09T14:56:00." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/time-zone-between-systems/" />
+<meta property="article:published_time" content="2020-06-09T12:03:19+08:00" />
+<meta property="article:modified_time" content="2020-06-09T12:03:19+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/time-zone-between-systems/">
+    
+    <title>
+  开发过程中的时间和时区问题 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/time-zone-between-systems/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">开发过程中的时间和时区问题</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-06-09T12:03:19&#43;08:00'>
+                June 9, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/datetime/">Datetime</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/time-zone/">Time Zone</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/time/">Time</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">背景</h2>
+<p>Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。</p>
+<h2 id="naive-datetime--timezone-awared-datetime">Naive Datetime &amp; Timezone-awared Datetime</h2>
+<p>在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：</p>
+<ul>
+<li>
+<p>Naive dateime</p>
+<ul>
+<li><code>2020-06-09T12:10:19.805</code></li>
+</ul>
+</li>
+<li>
+<p>Timezone-awared datetime</p>
+<ul>
+<li>
+<p><code>2020-06-09T04:10:19.805Z</code></p>
+</li>
+<li>
+<p><code>2020-06-09T04:10:19.805+00:00</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，<strong>绝对</strong>不能使用 naive datetime。</p>
+<p>而 Timezone-awared datetime 最后的 <code>Z</code> 或 <code>+00:00</code> 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。</p>
+<h2 id="iso-format--timestamp">ISO Format &amp; Timestamp</h2>
+<h3 id="iso-format-string-和-timestamp-各自的特点">ISO Format String 和 Timestamp 各自的特点</h3>
+<p>首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：</p>
+<ul>
+<li>ISO formated timezone-awared datetime
+<ul>
+<li>字符串形式</li>
+<li>可读性强</li>
+<li>对时区表达方式不唯一（<code>Z</code> 或 <code>+00:00</code>）</li>
+</ul>
+</li>
+<li>timestamp
+<ul>
+<li>整型数字</li>
+<li>不同程序对 timestamp 精度的定义不同
+<ul>
+<li>如 Java 和 JavaScript 中为 millisecond</li>
+<li>而 Unix 和 Python 中为 second</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="前端对时间的处理">前端对时间的处理</h3>
+<p>如果浏览器当前时区为东八区，取一个北京时间 <code>2020-06-09T14:56:00.658540+08:00</code> 为例，对应的秒级精度 timestamp 为 1591685760.65854。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">&gt; <span style="font-weight:bold">new</span> Date(<span style="font-style:italic">&#34;2020-06-09T14:56:00.658540+08:00&#34;</span>)
+&lt; Tue Jun 09 2020 14:56:00 GMT+0800 (China Standard Time)  <span style="font-style:italic">// 使用带时区 ISO format 可以正确解析
+</span><span style="font-style:italic"></span>
+&gt; <span style="font-weight:bold">new</span> Date(<span style="font-style:italic">&#34;2020-06-09T06:56:00.658540Z&#34;</span>)
+&lt; Tue Jun 09 2020 14:56:00 GMT+0800 (China Standard Time)  <span style="font-style:italic">// Z 结尾的 ISO format 也可以正确解析
+</span><span style="font-style:italic"></span>
+&gt; <span style="font-weight:bold">new</span> Date(<span style="font-style:italic">&#34;2020-06-09T14:56:00.658540&#34;</span>)
+&lt; Tue Jun 09 2020 14:56:00 GMT+0800 (China Standard Time)  <span style="font-style:italic">// 不带时区的 ISO format 会被当作浏览器当前时区解析
+</span><span style="font-style:italic"></span>
+&gt; <span style="font-weight:bold">new</span> Date(1591685760658.54)
+&lt; Tue Jun 09 2020 14:56:00 GMT+0800 (China Standard Time)  <span style="font-style:italic">// 毫秒级精度的时间戳可以正确解析
+</span><span style="font-style:italic"></span>
+&gt; <span style="font-weight:bold">new</span> Date(1591685760.65854)
+&lt; Mon Jan 19 1970 18:08:05 GMT+0800 (China Standard Time)  <span style="font-style:italic">// JavaScript 只能理解毫秒级的时间戳，秒级精度的时间戳会解析到错误时间
+</span></code></pre></div><h3 id="使用-iso-format-string-还是-timestamp">使用 ISO Format String 还是 Timestamp？</h3>
+<p>根据两种表示方案的特点，我们可以这样选择：</p>
+<ol>
+<li>在后端系统见传递时间，使用时间戳。另外考虑到提供更高的精度，推荐使用毫秒级时间戳。</li>
+<li>和前端的接口中使用带时区的 ISO Format String，提供更好的可读性，同时保证解析无歧义。</li>
+</ol>
+<h2 id="延伸阅读">延伸阅读</h2>
+<ul>
+<li><a href="https://docs.djangoproject.com/en/3.0/topics/i18n/timezones/">Django 中自带的时区处理机制</a></li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         jtr109 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+
+    
+
+  </body>
+
+</html>
