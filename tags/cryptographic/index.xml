@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cryptographic on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/cryptographic/</link>
+    <description>Recent content in cryptographic on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 10 Jun 2020 14:54:41 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/cryptographic/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>在 Python 中使用 RSA 2048</title>
+      <link>https://jtr109.github.io/posts/python-rsa-2048/</link>
+      <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-rsa-2048/</guid>
+      <description>使用 OpenSSL 生成公私钥对 生成私钥：
+openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
+openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
+from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&amp;#34;private.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&amp;#34;receiver.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
+In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA.</description>
+    </item>
+    
+  </channel>
+</rss>

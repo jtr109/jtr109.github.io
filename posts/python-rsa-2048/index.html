@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="jtr109">
+    <meta name="description" content="使用 OpenSSL 生成公私钥对 生成私钥：
+openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
+openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
+from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&#34;private.pem&#34;, &#34;wb&#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&#34;receiver.pem&#34;, &#34;wb&#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
+In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在 Python 中使用 RSA 2048"/>
+<meta name="twitter:description" content="使用 OpenSSL 生成公私钥对 生成私钥：
+openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
+openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
+from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&#34;private.pem&#34;, &#34;wb&#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&#34;receiver.pem&#34;, &#34;wb&#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
+In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA."/>
+
+    <meta property="og:title" content="在 Python 中使用 RSA 2048" />
+<meta property="og:description" content="使用 OpenSSL 生成公私钥对 生成私钥：
+openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
+openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
+from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&#34;private.pem&#34;, &#34;wb&#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&#34;receiver.pem&#34;, &#34;wb&#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
+In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/python-rsa-2048/" />
+<meta property="article:published_time" content="2020-06-10T14:54:41+08:00" />
+<meta property="article:modified_time" content="2020-06-10T14:54:41+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/python-rsa-2048/">
+    
+    <title>
+  在 Python 中使用 RSA 2048 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/python-rsa-2048/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">在 Python 中使用 RSA 2048</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-06-10T14:54:41&#43;08:00'>
+                June 10, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/rsa/">rsa</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/cryptographic/">cryptographic</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="使用-openssl-生成公私钥对">使用 OpenSSL 生成公私钥对</h2>
+<p>生成私钥：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> openssl genrsa -out private_key.pem 2048
+</code></pre></div><p>通过私钥生成公钥：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem
+</code></pre></div><h2 id="使用-python-生成公私钥对">使用 Python 生成公私钥对</h2>
+<p>参考<a href="https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key">官方文档</a></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.PublicKey</span> <span style="font-weight:bold">import</span> RSA
+
+key = RSA.generate(2048)
+private_key = key.export_key()
+file_out = open(<span style="font-style:italic">&#34;private.pem&#34;</span>, <span style="font-style:italic">&#34;wb&#34;</span>)
+file_out.write(private_key)
+file_out.close()
+
+public_key = key.publickey().export_key()
+file_out = open(<span style="font-style:italic">&#34;receiver.pem&#34;</span>, <span style="font-style:italic">&#34;wb&#34;</span>)
+file_out.write(public_key)
+file_out.close()
+</code></pre></div><h2 id="使用-python-加解密">使用 Python 加解密</h2>
+<p>使用 <a href="https://pycryptodome.readthedocs.io/en/latest/index.html">PyCryptodome</a> 实现 RSA-2048 加解密。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">In [1]: <span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.PublicKey</span> <span style="font-weight:bold">import</span> RSA
+
+In [2]: <span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.Cipher</span> <span style="font-weight:bold">import</span> PKCS1_OAEP
+
+In [3]: private_key = RSA.import_key(open(<span style="font-style:italic">&#34;/Users/jtr109/Downloads/private_key.pem&#34;</span>).read())
+
+In [4]: public_key = RSA.import_key(open(<span style="font-style:italic">&#34;/Users/jtr109/Downloads/public_key.pem&#34;</span>).read())
+
+In [5]: encryptor = PKCS1_OAEP.new(public_key)
+
+In [6]: data = <span style="font-style:italic">b</span><span style="font-style:italic">&#39;Hello world&#39;</span>
+
+In [7]: encrypted_data = encryptor.encrypt(data)
+
+In [8]: decryptor = PKCS1_OAEP.new(private_key)
+
+In [9]: decryptor.decrypt(encrypted_data)
+Out[9]: <span style="font-style:italic">b</span><span style="font-style:italic">&#39;Hello world&#39;</span>
+</code></pre></div><h2 id="faq">FAQ</h2>
+<h3 id="可以使用私钥加密公钥解密吗">可以使用私钥加密，公钥解密吗？</h3>
+<p>公钥是对外复数发放的，有不止一个对象可以获得公钥。</p>
+<p>一般的操作方式是公钥加密、私钥解密。另一种用法是私钥签名、公钥验证。</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         jtr109 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+
+    
+
+  </body>
+
+</html>

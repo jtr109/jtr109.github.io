@@ -6,10 +6,28 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 09 Jun 2020 12:03:19 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jun 2020 14:54:41 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>cryptographic</title>
+      <link>https://jtr109.github.io/tags/cryptographic/</link>
+      <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/cryptographic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rsa</title>
+      <link>https://jtr109.github.io/tags/rsa/</link>
+      <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/rsa/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Datetime</title>
