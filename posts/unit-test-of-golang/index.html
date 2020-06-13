@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
 
-    <meta name="author" content="jtr109">
+    <meta name="author" content="Ryan Li">
     <meta name="description" content="notes 测试最重要的就是处理依赖, 覆盖所有的流程, 合理的 assertion.
 我们在一个测试中, 不应对其依赖的实现做测试, 所以我们需要 mock 掉相应的实现. 由于 Golang 中 first class function 的存在, 我们可以通过在 package 中定义变量 (var) 的方式将依赖提到包级作用域中, 在测试中替换对应的逻辑, 从而不会对包中的执行代码产生影响.
 依赖返回的类型主要有两种: 基本类型组合, interface
@@ -222,7 +222,7 @@ Links  Golang unit testing interfaces MX record First class function in Golang  
         ©
         
         2020
-         jtr109 
+         Ryan Li 
       
       
          · 

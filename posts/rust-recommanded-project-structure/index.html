@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
 
-    <meta name="author" content="jtr109">
+    <meta name="author" content="Ryan Li">
     <meta name="description" content="Background The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
 . ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib The elements want be used outside should start with pub (which means publish) in src/lib.rs.
 pub fn hello(s: &amp;str) -&gt; String { format!">
@@ -154,7 +154,7 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
 │   └── main.rs
 └── tests
     └── some-integration-tests.rs
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div><!-- more -->
 <h2 id="lib">Lib</h2>
 <p>The elements want be used outside should start with <code>pub</code> (which means <strong>publish</strong>) in <code>src/lib.rs</code>.</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-weight:bold">pub</span> <span style="font-weight:bold">fn</span> hello(s: <span style="">&amp;</span><span style="">str</span>) -&gt; String {
@@ -293,7 +293,7 @@ hello, another_executable
         ©
         
         2020
-         jtr109 
+         Ryan Li 
       
       
          · 

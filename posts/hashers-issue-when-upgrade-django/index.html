@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
 
-    <meta name="author" content="jtr109">
+    <meta name="author" content="Ryan Li">
     <meta name="description" content="Note for check_password in Django
 Background We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.
 I tried to fork the logic of User.check_password and create an async one. But the new one does not work as my wrong exception. But I learn something from that at least.
@@ -214,7 +214,8 @@ Different behavior of User.check_password between objects from fixture and creat
         algorithm, iterations, salt, hash = encoded.split(<span style="font-style:italic">&#39;$&#39;</span>, 3)
         <span style="font-weight:bold">return</span> int(iterations) != self.iterations
 </code></pre></div><p>I printed the decoded password and found the iterations in fixtures is 24000 and was changed into 36000 after <code>check_password</code>. And here is the truth that the iterations of <code>PBKDF2PasswordHasher</code> in version 1.9.10 of Django is 24000 and is changed into 36000 in the version 1.11.14. But of couse it will not make any trouble when <code>check_password</code> in the new version, just changing the decoded password of user object.</p>
-<!-- raw HTML omitted -->
+<details><summary>snippet of `PBKDF2PasswordHasher` in Django 1.9.10</summary>
+<p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">PBKDF2PasswordHasher</span>(BasePasswordHasher):
     <span style="font-style:italic">&#34;&#34;&#34;
 </span><span style="font-style:italic">    Secure password hashing using the PBKDF2 algorithm (recommended)
@@ -228,8 +229,10 @@ Different behavior of User.check_password between objects from fixture and creat
     digest = hashlib.sha256
 
     <span style="font-style:italic"># ...</span>
-</code></pre></div><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+</code></pre></div></p>
+</details>
+<details><summary>snippet of `PBKDF2PasswordHasher` in Django 1.11.14</summary>
+<p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">PBKDF2PasswordHasher</span>(BasePasswordHasher):
     <span style="font-style:italic">&#34;&#34;&#34;
 </span><span style="font-style:italic">    Secure password hashing using the PBKDF2 algorithm (recommended)
@@ -243,7 +246,8 @@ Different behavior of User.check_password between objects from fixture and creat
     digest = hashlib.sha256
 
     <span style="font-style:italic"># ...</span>
-</code></pre></div><!-- raw HTML omitted -->
+</code></pre></div></p>
+</details>
 <p>After figuring out the cause of changing in password, I found the tip in the section <a href="https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading">Password upgrading</a> in Django documentation.</p>
 <blockquote>
 <p>Hashed passwords will be updated when increasing (or decreasing) the number of PBKDF2 iterations or bcrypt rounds.</p>
@@ -316,7 +320,7 @@ Different behavior of User.check_password between objects from fixture and creat
         ©
         
         2020
-         jtr109 
+         Ryan Li 
       
       
          · 

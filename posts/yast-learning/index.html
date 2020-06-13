@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
 
-    <meta name="author" content="jtr109">
+    <meta name="author" content="Ryan Li">
     <meta name="description" content="算数操作 基本算数操作  函数 exact-&gt;inexact 用于把分数转换为浮点数. 函数 quotient 用于求商数（quotient）。 函数 remainder 和 modulo 用于求余数（remainder）。 函数 sqrt 用于求参数的平方根（square root）。  (exact-&gt;inexact (/ 29 3 7)) ;-&gt; 1.380952380952381 (quotient 7 3) ;→ 2 (modulo 7 3) ;→ 1 (sqrt 8) ;→ 2.8284271247461903 练习 练习中发现, 如果创建 scm 文件并写入多个算式, 好像不能得出每个计算的值, 得到的只能是最后一个算式的结果.
 表 空表 &#39;() 即为空表
 有两种非常类似的 value, 实现的方式却是不同的:
@@ -274,7 +274,7 @@
 <p>一个分别接受一个表 <code>ls</code> 和一个对象 <code>x</code> 的函数，该函数返回从 <code>ls</code> 中删除 <code>x</code> 后得到的表。</p>
 </blockquote>
 <p>后面给出了习题答案, 但是处理 &ldquo;过于优雅&rdquo;, 对初学者不是很友好, 在<a href="https://stackoverflow.com/questions/1905222/how-to-delete-an-element-from-a-list-in-scheme#answer-15017744">这个回答</a>中可以找到更易懂的解题方法. 下面把两种做一个对照:</p>
-<!-- raw HTML omitted -->
+<script src="https://gist.github.com/jtr109/3f8577f07255af1e2b3d9b3fd09e8774.js"></script>
 <h3 id="浅谈-lambda">浅谈 lambda</h3>
 <p>原答案中最让人纠结的地方就是 if&hellip; lambda&hellip; 的组合使用, 由于之前本课程中没有过对于 lambda 的介绍, 只有 define 函数的时候提到过, 所以难免不清楚怎么使用. 其实可以在终端中动手试试, 你会发现 lambda 的用法如下:</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">((<span style="font-weight:bold">lambda </span>(x) (* 2 x)) 1)
@@ -365,7 +365,7 @@
         ©
         
         2020
-         jtr109 
+         Ryan Li 
       
       
          · 

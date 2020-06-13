@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
 
-    <meta name="author" content="jtr109">
+    <meta name="author" content="Ryan Li">
     <meta name="description" content="背景 今天学习 The Rust Cookbook 的时候看到一段 JSON 解码的代码:
 #[macro_use] extern crate serde_json; use serde_json::{Value, Error}; fn main() -&gt; Result&lt;(), Error&gt; { let j = r#&#34;{ &#34;userid&#34;: 103609, &#34;verified&#34;: true, &#34;access_privileges&#34;: [ &#34;user&#34;, &#34;admin&#34; ] }&#34;#; let parsed: Value = serde_json::from_str(j)?; let expected = json!({ &#34;userid&#34;: 103609, &#34;verified&#34;: true, &#34;access_privileges&#34;: [ &#34;user&#34;, &#34;admin&#34; ] }); assert_eq!(parsed, expected); Ok(()) } 疑问 这里衍生出一个问题: &ldquo;变量 expected 被一个宏 json! 的结果赋值, 那这个 expected 到底是什么类型?&rdquo;
 查看文档可以了解到这是一个 serde_json::value::Value.">
@@ -175,7 +175,7 @@
 <p>查看<a href="https://docs.serde.rs/serde_json/value/enum.Value.html">文档</a>可以了解到这是一个 <code>serde_json::value::Value</code>.</p>
 <p>那随之而来的就是另一个问题: 怎么把 <code>Value</code> 转换为实际类型.</p>
 <p>举个例子, <code>expected</code> 中的 <code>userid</code> 的 <code>u64</code> 版本应该怎么获取?</p>
-<!-- raw HTML omitted -->
+<!-- more -->
 <h2 id="提取字段值">提取字段值</h2>
 <p>文档中说明了可以显式指定转换类型, 生成对应类型的值, 例如 <code>T</code>: <code>Option&lt;T&gt;</code></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq!(expected[<span style="font-style:italic">&#34;userid&#34;</span>].as_u64().unwrap(), 103609);
@@ -273,7 +273,7 @@
         ©
         
         2020
-         jtr109 
+         Ryan Li 
       
       
          · 
