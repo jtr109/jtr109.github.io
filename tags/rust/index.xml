@@ -21,7 +21,7 @@
 TOTP TOTP 即 Time-Based One-Time Password Algorithm。顾名思义这是一种基于时间的 token 算法，从宏观来看就是基于时间和共享的密钥（shared secret key）生成随机数字 token。
 与之类似的算法还有HOTP（Event-Based One-Time Password Algorithm）。
 Google Authenticator Google Authenticator 也是一种 TOTP，只不过它的 secret key 必须使用 base32 的1。
-Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考我的 fork2； rust-oath：使用数最多的相关 crate，功能全面；  Have A Try  在项目中尝试了生成 secret （secret.rs），生成二维码（qr_code.rs）以及生成 token（code.rs）。  Reference       Google Authenticator 的特殊性参考这个项目中的说明 &amp;#x21a9;&amp;#xfe0e;
+Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考我的 fork2； rust-oath：使用数最多的相关 crate，功能全面；  Have A Try  在项目中尝试了生成 secret （secret.rs），生成二维码（qr_code.rs）以及生成 token（code.rs）。  Reference   Google Authenticator 的特殊性参考这个项目中的说明 &amp;#x21a9;&amp;#xfe0e;
  已提交 pull request &amp;#x21a9;&amp;#xfe0e;
    </description>
     </item>
