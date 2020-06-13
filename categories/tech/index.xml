@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tech on jtr109&#39;s Castle</title>
+    <title>Tech on jtr109&#39;s Castle</title>
     <link>https://jtr109.github.io/categories/tech/</link>
-    <description>Recent content in tech on jtr109&#39;s Castle</description>
+    <description>Recent content in Tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 13 Jun 2020 12:02:11 +0800</lastBuildDate>
@@ -179,6 +179,26 @@ $ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1 $ pip fre
 以下面这部分代码为例:
 # models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&amp;#39;c53b8ba212ef4f15b2365e1bb3d524fe&amp;#39;, defaults=dict(name=&amp;#39;foo&amp;#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.</description>
+    </item>
+    
+    <item>
+      <title>Rust Unit Test Example</title>
+      <link>https://jtr109.github.io/posts/rust-unittest-example/</link>
+      <pubDate>Thu, 07 Nov 2019 22:38:24 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-unittest-example/</guid>
+      <description>起因 一个标准的单元测试写法为:
+pub fn add(a: i32, b: i32) -&amp;gt; i32 { a + b } // This is a really bad adding function, its purpose is to fail in this // example. #[allow(dead_code)] fn bad_add(a: i32, b: i32) -&amp;gt; i32 { a - b } #[cfg(test)] mod tests { // Note this useful idiom: importing names from outer (for mod tests) scope.  use super::*; #[test] fn test_add() { assert_eq!(add(1, 2), 3); } #[test] fn test_bad_add() { // This assert would fire and test will fail.</description>
+    </item>
+    
+    <item>
+      <title>Diesel UUID Problem Note</title>
+      <link>https://jtr109.github.io/posts/diesel-uuid/</link>
+      <pubDate>Thu, 07 Nov 2019 22:36:29 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
+      <description>背景描述 在使用 Diesel 和 uuid 开发的过程中, 使用发生报错:
+error[E0277]: the trait bound `uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not satisfied --&amp;gt; src/models.rs:45:14 | 45 | .load::&amp;lt;App&amp;gt;(conn) | ^^^^ the trait `diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not implemented for `uuid::Uuid` | = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `(uuid::Uuid, std::string::String)` = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `models::App` = note: required because of the requirements on the impl of `diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;` for `diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;` 代码如下:</description>
     </item>
     
     <item>
