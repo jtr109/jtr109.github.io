@@ -154,91 +154,91 @@
 <p>Django 的 ORM 操作中有一个非常实用的功能: <a href="https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528"><code>get_or_create</code></a>, 可以判断数据库中是否有符合条件的条目, 没有则创建.</p>
 <p>但是在使用过程中如果不加留意, 会发生 race condition. 导致数据库中创建出的条目不符合预期.</p>
 <p>以下面这部分代码为例:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># models.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># models.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Race</span>(models.Model):
-    user_id = models.CharField(max_length=32)
-    name = models.CharField(max_length=32)
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Race</span>(<span style="color:#268bd2">models</span>.<span style="color:#268bd2">Model</span>):
+    <span style="color:#268bd2">user_id</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>)
+    <span style="color:#268bd2">name</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>)
 </code></pre></div><p>如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># tests.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># tests.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">RaceTestCase</span>(TestCase):
+<span style="color:#859900">class</span> <span style="color:#cb4b16">RaceTestCase</span>(<span style="color:#268bd2">TestCase</span>):
 
-    <span style="font-weight:bold">def</span> test_race(self):
+    <span style="color:#859900">def</span> <span style="color:#268bd2">test_race</span>(<span style="color:#268bd2">self</span>):
 
-        <span style="font-weight:bold">def</span> get_or_create():
-            Race.objects.get_or_create(
-                user_id=<span style="font-style:italic">&#39;c53b8ba212ef4f15b2365e1bb3d524fe&#39;</span>,
-                defaults=dict(name=<span style="font-style:italic">&#39;foo&#39;</span>, age=1),
+        <span style="color:#859900">def</span> <span style="color:#268bd2">get_or_create</span>():
+            <span style="color:#268bd2">Race</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">get_or_create</span>(
+                <span style="color:#268bd2">user_id</span>=<span style="color:#2aa198">&#39;c53b8ba212ef4f15b2365e1bb3d524fe&#39;</span>,
+                <span style="color:#268bd2">defaults</span>=<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;foo&#39;</span>, <span style="color:#268bd2">age</span>=<span style="color:#2aa198;font-weight:bold">1</span>),
             )
 
-        threads = list()
-        <span style="font-weight:bold">for</span> _ <span style="font-weight:bold">in</span> range(10):
-            threads.append(threading.Thread(target=get_or_create))
-        <span style="font-weight:bold">for</span> t <span style="font-weight:bold">in</span> threads:
-            t.start()
-        <span style="font-weight:bold">for</span> t <span style="font-weight:bold">in</span> threads:
-            t.join()
-        self.assertNotEqual(Race.objects.count(), 1)
+        <span style="color:#268bd2">threads</span> = <span style="color:#cb4b16">list</span>()
+        <span style="color:#859900">for</span> <span style="color:#268bd2">_</span> <span style="color:#859900">in</span> <span style="color:#cb4b16">range</span>(<span style="color:#2aa198;font-weight:bold">10</span>):
+            <span style="color:#268bd2">threads</span>.<span style="color:#268bd2">append</span>(<span style="color:#268bd2">threading</span>.<span style="color:#268bd2">Thread</span>(<span style="color:#268bd2">target</span>=<span style="color:#268bd2">get_or_create</span>))
+        <span style="color:#859900">for</span> <span style="color:#268bd2">t</span> <span style="color:#859900">in</span> <span style="color:#268bd2">threads</span>:
+            <span style="color:#268bd2">t</span>.<span style="color:#268bd2">start</span>()
+        <span style="color:#859900">for</span> <span style="color:#268bd2">t</span> <span style="color:#859900">in</span> <span style="color:#268bd2">threads</span>:
+            <span style="color:#268bd2">t</span>.<span style="color:#268bd2">join</span>()
+        <span style="color:#268bd2">self</span>.<span style="color:#268bd2">assertNotEqual</span>(<span style="color:#268bd2">Race</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">count</span>(), <span style="color:#2aa198;font-weight:bold">1</span>)
 </code></pre></div><p>如果执行测试, 有一定概率会返回如下信息:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ python manage.py test
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ python manage.py <span style="color:#cb4b16">test</span>
 ...
 Exception in thread Thread-7:
 Traceback (most recent call last):
-  File <span style="font-style:italic">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 926, in _bootstrap_inner
+  File <span style="color:#2aa198">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 926, in _bootstrap_inner
     self.run()
-  File <span style="font-style:italic">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 870, in run
+  File <span style="color:#2aa198">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 870, in run
     self._target(*self._args, **self._kwargs)
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&#34;</span>, line 20, in get_or_create
-    defaults=dict(name=<span style="font-style:italic">&#39;foo&#39;</span>, age=1),
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&#34;</span>, line 82, in manager_method
-    <span style="font-weight:bold">return</span> getattr(self.get_queryset(), name)(*args, **kwargs)
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 538, in get_or_create
-    <span style="font-weight:bold">return</span> self.get(**kwargs), False
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 412, in get
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&#34;</span>, line 20, in get_or_create
+    <span style="color:#268bd2">defaults</span>=dict(<span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;foo&#39;</span>, <span style="color:#268bd2">age</span>=1),
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&#34;</span>, line 82, in manager_method
+    <span style="color:#859900">return</span> getattr(self.get_queryset(), name)(*args, **kwargs)
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 538, in get_or_create
+    <span style="color:#859900">return</span> self.get(**kwargs), False
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 412, in get
     (self.model._meta.object_name, num)
 race.models.Race.MultipleObjectsReturned: get() returned more than one Race -- it returned 2!
 
 Exception in thread Thread-9:
 Traceback (most recent call last):
-  File <span style="font-style:italic">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 926, in _bootstrap_inner
+  File <span style="color:#2aa198">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 926, in _bootstrap_inner
     self.run()
-  File <span style="font-style:italic">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 870, in run
+  File <span style="color:#2aa198">&#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&#34;</span>, line 870, in run
     self._target(*self._args, **self._kwargs)
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&#34;</span>, line 20, in get_or_create
-    defaults=dict(name=<span style="font-style:italic">&#39;foo&#39;</span>, age=1),
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&#34;</span>, line 82, in manager_method
-    <span style="font-weight:bold">return</span> getattr(self.get_queryset(), name)(*args, **kwargs)
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 538, in get_or_create
-    <span style="font-weight:bold">return</span> self.get(**kwargs), False
-  File <span style="font-style:italic">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 412, in get
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&#34;</span>, line 20, in get_or_create
+    <span style="color:#268bd2">defaults</span>=dict(<span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;foo&#39;</span>, <span style="color:#268bd2">age</span>=1),
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&#34;</span>, line 82, in manager_method
+    <span style="color:#859900">return</span> getattr(self.get_queryset(), name)(*args, **kwargs)
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 538, in get_or_create
+    <span style="color:#859900">return</span> self.get(**kwargs), False
+  File <span style="color:#2aa198">&#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&#34;</span>, line 412, in get
     (self.model._meta.object_name, num)
 race.models.Race.MultipleObjectsReturned: get() returned more than one Race -- it returned 2!
 
 .
 ----------------------------------------------------------------------
-Ran 1 test in 0.107s
+Ran <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#cb4b16">test</span> in 0.107s
 
 OK
-Destroying test database <span style="font-weight:bold">for</span> alias <span style="font-style:italic">&#39;default&#39;</span>...
+Destroying <span style="color:#cb4b16">test</span> database <span style="color:#859900">for</span> <span style="color:#cb4b16">alias</span> <span style="color:#2aa198">&#39;default&#39;</span>...
 </code></pre></div><p><em>由于使用 <code>threading</code> 实现并发, 所以不一定每次执行都会出现如上状况. 如果没有复现, 请重试几次.</em></p>
 <p>从上面的信息可以看到, 数据库中生成了不止一个条目, 而且有的 threading 在执行时报 <code>get() returned more than one Race</code> 错误.</p>
 <h2 id="原因分析">原因分析</h2>
 <p>查看 <a href="https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528"><code>get_or_create</code></a> 源码可以看到, 这个操作分为两步: 查询和创建. 所以在异步场景下, 可能出现多个读操作都没有查到条目, 触发 <code>DoesNotExist</code> 报错, 写入多条, 而非预期中的始终只有一条.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">def</span> get_or_create(self, defaults=None, **kwargs):
-    <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">    Look up an object with the given kwargs, creating one if necessary.
-</span><span style="font-style:italic">    Return a tuple of (object, created), where created is a boolean
-</span><span style="font-style:italic">    specifying whether an object was created.
-</span><span style="font-style:italic">    &#34;&#34;&#34;</span>
-    <span style="font-style:italic"># The get() needs to be targeted at the write database in order</span>
-    <span style="font-style:italic"># to avoid potential transaction consistency problems.</span>
-    self._for_write = True
-    <span style="font-weight:bold">try</span>:
-        <span style="font-weight:bold">return</span> self.get(**kwargs), False
-    <span style="font-weight:bold">except</span> self.model.DoesNotExist:
-        params = self._extract_model_params(defaults, **kwargs)
-        <span style="font-weight:bold">return</span> self._create_object_from_params(kwargs, params)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">def</span> <span style="color:#268bd2">get_or_create</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">defaults</span>=<span style="color:#268bd2">None</span>, **<span style="color:#268bd2">kwargs</span>):
+    <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">    Look up an object with the given kwargs, creating one if necessary.
+</span><span style="color:#2aa198">    Return a tuple of (object, created), where created is a boolean
+</span><span style="color:#2aa198">    specifying whether an object was created.
+</span><span style="color:#2aa198">    &#34;&#34;&#34;</span>
+    <span style="color:#93a1a1;font-style:italic"># The get() needs to be targeted at the write database in order</span>
+    <span style="color:#93a1a1;font-style:italic"># to avoid potential transaction consistency problems.</span>
+    <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_for_write</span> = <span style="color:#268bd2">True</span>
+    <span style="color:#859900">try</span>:
+        <span style="color:#859900">return</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">get</span>(**<span style="color:#268bd2">kwargs</span>), <span style="color:#268bd2">False</span>
+    <span style="color:#859900">except</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">model</span>.<span style="color:#268bd2">DoesNotExist</span>:
+        <span style="color:#268bd2">params</span> = <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_extract_model_params</span>(<span style="color:#268bd2">defaults</span>, **<span style="color:#268bd2">kwargs</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_create_object_from_params</span>(<span style="color:#268bd2">kwargs</span>, <span style="color:#268bd2">params</span>)
 </code></pre></div><h2 id="解决方案">解决方案</h2>
 <p>这个问题其实在文档中<a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#get-or-create">已经指出</a>:</p>
 <blockquote>
@@ -246,23 +246,23 @@ Destroying test database <span style="font-weight:bold">for</span> alias <span s
 </blockquote>
 <p>所以如果希望避免条目冲突, 需要将 <code>get_or_create</code> 参照的列设置为 unique. 对于多列参照的情况, 必须保证 <code>unique_together</code>.</p>
 <p>以 <code>Race</code>为例进行改造:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># models.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># models.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Solution</span>(models.Model):
-    user_id = models.CharField(max_length=32, unique=True)  <span style="font-style:italic"># declaring `user_id` uniqueness</span>
-    name = models.CharField(max_length=32)
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Solution</span>(<span style="color:#268bd2">models</span>.<span style="color:#268bd2">Model</span>):
+    <span style="color:#268bd2">user_id</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>, <span style="color:#268bd2">unique</span>=<span style="color:#268bd2">True</span>)  <span style="color:#93a1a1;font-style:italic"># declaring `user_id` uniqueness</span>
+    <span style="color:#268bd2">name</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>)
 </code></pre></div><p>补充一个 <code>unique_together</code> 示例:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># models.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># models.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Together</span>(models.Model):
-    user_id = models.CharField(max_length=32)
-    name = models.CharField(max_length=32)
-    age = models.PositiveIntegerField()
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Together</span>(<span style="color:#268bd2">models</span>.<span style="color:#268bd2">Model</span>):
+    <span style="color:#268bd2">user_id</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>)
+    <span style="color:#268bd2">name</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">32</span>)
+    <span style="color:#268bd2">age</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">PositiveIntegerField</span>()
 
-    <span style="font-weight:bold">class</span> <span style="font-weight:bold">Meta</span>:
-        unique_together = [
-            <span style="font-style:italic"># declaring the combination of `user_id` and `name` is unique</span>
-            [<span style="font-style:italic">&#39;user_id&#39;</span>, <span style="font-style:italic">&#39;name&#39;</span>],
+    <span style="color:#859900">class</span> <span style="color:#cb4b16">Meta</span>:
+        <span style="color:#268bd2">unique_together</span> = [
+            <span style="color:#93a1a1;font-style:italic"># declaring the combination of `user_id` and `name` is unique</span>
+            [<span style="color:#2aa198">&#39;user_id&#39;</span>, <span style="color:#2aa198">&#39;name&#39;</span>],
         ]
 
 </code></pre></div><p>完整示例可以参考<a href="https://github.com/jtr109/django-update-or-create-example">示例项目</a></p>

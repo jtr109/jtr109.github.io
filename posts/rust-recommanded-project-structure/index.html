@@ -140,7 +140,7 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
         
         <h2 id="background">Background</h2>
 <p><a href="https://doc.rust-lang.org/cargo/index.html">The Cargo Book</a> recommand the <a href="https://doc.rust-lang.org/cargo/guide/project-layout.html#package-layout">package layout</a> of rust project. Here is <a href="https://github.com/jtr109/rust-play/tree/recommand-structure">an example project</a> implemented with it.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">.
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">.
 ├── Cargo.lock
 ├── Cargo.toml
 ├── benches
@@ -157,77 +157,77 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
 </code></pre></div><!-- more -->
 <h2 id="lib">Lib</h2>
 <p>The elements want be used outside should start with <code>pub</code> (which means <strong>publish</strong>) in <code>src/lib.rs</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-weight:bold">pub</span> <span style="font-weight:bold">fn</span> hello(s: <span style="">&amp;</span><span style="">str</span>) -&gt; String {
-    format!(<span style="font-style:italic">&#34;hello, {}&#34;</span>, s)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">pub</span> <span style="color:#859900">fn</span> <span style="color:#268bd2">hello</span>(<span style="color:#268bd2">s</span>: <span style="color:#859900">&amp;</span><span style="color:#859900;font-weight:bold">str</span>) -&gt; <span style="color:#cb4b16">String</span> {
+    <span style="color:#268bd2">format</span>!(<span style="color:#2aa198">&#34;hello, {}&#34;</span>, <span style="color:#268bd2">s</span>)
 }
 </code></pre></div><h2 id="main">Main</h2>
 <p>The <code>src/lib.rs</code> can be used as a module in project.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-style:italic">// src/main.rs
-</span><span style="font-style:italic"></span><span style="font-weight:bold">mod</span> <span style="font-weight:bold">lib</span>;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// src/main.rs
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">mod</span> <span style="color:#268bd2">lib</span>;
 
-<span style="font-weight:bold">use</span> lib::hello;
+<span style="color:#859900">use</span> <span style="color:#268bd2">lib</span>::<span style="color:#268bd2">hello</span>;
 
-<span style="font-weight:bold">fn</span> main() {
-    println!(<span style="font-style:italic">&#34;{}&#34;</span>, hello(<span style="font-style:italic">&#34;main&#34;</span>));
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() {
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;{}&#34;</span>, <span style="color:#268bd2">hello</span>(<span style="color:#2aa198">&#34;main&#34;</span>));
 }
 </code></pre></div><p>You can get expected result by running with <code>play</code>, the package name in this example.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo run --bin play
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo run --bin play
     Finished dev [unoptimized + debuginfo] target(s) in 0.00s
-     Running <span style="font-style:italic">`</span>target/debug/play<span style="font-style:italic">`</span>
+     Running <span style="color:#2aa198">`</span>target/debug/play<span style="color:#2aa198">`</span>
 hello, main
 </code></pre></div><h2 id="bin">Bin</h2>
 <p>It is easy to create other executables by adding them in directory <code>src/bin</code>. Cargo will find all executables in it. So it is unnecessary to config <code>Cargo.toml</code> like <a href="https://stackoverflow.com/a/26946705/6522746">that</a>.</p>
 <p>But there are some difference from <code>src/main.rs</code> that we cannot find module named <code>lib</code> in the scope of <code>src/bin/another_executable.rs</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-style:italic">// src/bin/another_executable.rs
-</span><span style="font-style:italic"></span><span style="font-weight:bold">mod</span> <span style="font-weight:bold">lib</span>; <span style="font-style:italic">// not work!
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">use</span> lib::hello;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// src/bin/another_executable.rs
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">mod</span> <span style="color:#268bd2">lib</span>; <span style="color:#93a1a1;font-style:italic">// not work!
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">use</span> <span style="color:#268bd2">lib</span>::<span style="color:#268bd2">hello</span>;
 
-<span style="font-weight:bold">fn</span> main() {
-    println!(<span style="font-style:italic">&#34;{}&#34;</span>, hello(<span style="font-style:italic">&#34;another_executable&#34;</span>));
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() {
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;{}&#34;</span>, <span style="color:#268bd2">hello</span>(<span style="color:#2aa198">&#34;another_executable&#34;</span>));
 }
 </code></pre></div><p>If we try code above, we will get errors below:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo check
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo check
     Checking play v0.1.0 (/Users/jtr109/mystuff/learn/rust/play)
-error[E0583]: file not found <span style="font-weight:bold">for</span> module <span style="font-style:italic">`</span>lib<span style="font-style:italic">`</span>
+error[E0583]: file not found <span style="color:#859900">for</span> module <span style="color:#2aa198">`</span>lib<span style="color:#2aa198">`</span>
  --&gt; src/bin/another_executable.rs:5:5
   |
-5 | mod lib;
+<span style="color:#2aa198;font-weight:bold">5</span> | mod lib;
   |     ^^^
   |
-  = help: name the file either lib.rs or lib/mod.rs inside the directory <span style="font-style:italic">&#34;src/bin&#34;</span>
+  = help: name the file either lib.rs or lib/mod.rs inside the directory <span style="color:#2aa198">&#34;src/bin&#34;</span>
 
 error: aborting due to previous error
 
-For more information about this error, try <span style="font-style:italic">`</span>rustc --explain E0583<span style="font-style:italic">`</span>.
-error: could not compile <span style="font-style:italic">`</span>play<span style="font-style:italic">`</span>.
-warning: build failed, waiting <span style="font-weight:bold">for</span> other jobs to finish...
+For more information about this error, try <span style="color:#2aa198">`</span>rustc --explain E0583<span style="color:#2aa198">`</span>.
+error: could not compile <span style="color:#2aa198">`</span>play<span style="color:#2aa198">`</span>.
+warning: build failed, waiting <span style="color:#859900">for</span> other <span style="color:#cb4b16">jobs</span> to finish...
 error: build failed
 </code></pre></div><p>We need to use <code>src/lib.rs</code> as an extern crate:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-style:italic">// src/bin/another_executable.rs
-</span><span style="font-style:italic"></span><span style="font-weight:bold">extern</span> <span style="font-weight:bold">crate</span> play;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// src/bin/another_executable.rs
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">extern</span> <span style="color:#859900">crate</span> <span style="color:#268bd2">play</span>;
 
-<span style="font-weight:bold">use</span> play::hello;
+<span style="color:#859900">use</span> <span style="color:#268bd2">play</span>::<span style="color:#268bd2">hello</span>;
 
-<span style="font-weight:bold">fn</span> main() {
-    println!(<span style="font-style:italic">&#34;{}&#34;</span>, hello(<span style="font-style:italic">&#34;another_executable&#34;</span>));
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() {
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;{}&#34;</span>, <span style="color:#268bd2">hello</span>(<span style="color:#2aa198">&#34;another_executable&#34;</span>));
 }
 </code></pre></div><p>And it will works well:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo run --bin another_executable
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ cargo run --bin another_executable
    Compiling play v0.1.0 (/Users/jtr109/mystuff/learn/rust/play)
     Finished dev [unoptimized + debuginfo] target(s) in 0.37s
-     Running <span style="font-style:italic">`</span>target/debug/another_executable<span style="font-style:italic">`</span>
+     Running <span style="color:#2aa198">`</span>target/debug/another_executable<span style="color:#2aa198">`</span>
 hello, another_executable
 </code></pre></div><h2 id="tests">Tests</h2>
 <p>It is similar with using <code>src/lib.rs</code> in <code>src/bin</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-style:italic">// tests/some-integration-tests.rs
-</span><span style="font-style:italic"></span><span style="font-weight:bold">extern</span> <span style="font-weight:bold">crate</span> play;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// tests/some-integration-tests.rs
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">extern</span> <span style="color:#859900">crate</span> <span style="color:#268bd2">play</span>;
 
-<span style="font-weight:bold">use</span> play::hello;
+<span style="color:#859900">use</span> <span style="color:#268bd2">play</span>::<span style="color:#268bd2">hello</span>;
 
-<span style="">#[test]</span>
-<span style="font-weight:bold">fn</span> test_hello() {
-    assert_eq!(<span style="font-style:italic">&#34;hello, foo&#34;</span>, hello(<span style="font-style:italic">&#34;foo&#34;</span>));
+<span style="color:#93a1a1;font-style:italic">#[test]</span>
+<span style="color:#859900">fn</span> <span style="color:#268bd2">test_hello</span>() {
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#2aa198">&#34;hello, foo&#34;</span>, <span style="color:#268bd2">hello</span>(<span style="color:#2aa198">&#34;foo&#34;</span>));
 }
 </code></pre></div>
       </div>

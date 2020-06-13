@@ -139,79 +139,79 @@ error[E0277]: the trait bound `uuid::Uuid: diesel::Queryable&lt;diesel::sql_type
         
         <h2 id="背景描述">背景描述</h2>
 <p>在使用 <a href="http://diesel.rs/">Diesel</a> 和 <a href="https://crates.io/crates/uuid">uuid</a> 开发的过程中, 使用发生报错:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">error[E0277]: the trait bound <span style="font-style:italic">`</span>uuid::Uuid: diesel::Queryable&lt;diesel::sql_types::Uuid, _&gt;<span style="font-style:italic">`</span> is not satisfied
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">error[E0277]: the trait bound <span style="color:#2aa198">`</span>uuid::Uuid: diesel::Queryable&lt;diesel::sql_types::Uuid, _&gt;<span style="color:#2aa198">`</span> is not satisfied
   --&gt; src/models.rs:45:14
    |
-45 |             .load::&lt;App&gt;(conn)
-   |              ^^^^ the trait <span style="font-style:italic">`</span>diesel::Queryable&lt;diesel::sql_types::Uuid, _&gt;<span style="font-style:italic">`</span> is not implemented <span style="font-weight:bold">for</span> <span style="font-style:italic">`</span>uuid::Uuid<span style="font-style:italic">`</span>
+<span style="color:#2aa198;font-weight:bold">45</span> |             .load::&lt;App&gt;(conn)
+   |              ^^^^ the trait <span style="color:#2aa198">`</span>diesel::Queryable&lt;diesel::sql_types::Uuid, _&gt;<span style="color:#2aa198">`</span> is not implemented <span style="color:#859900">for</span> <span style="color:#2aa198">`</span>uuid::Uuid<span style="color:#2aa198">`</span>
    |
-   = note: required because of the requirements on the impl of <span style="font-style:italic">`</span>diesel::Queryable&lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&gt;<span style="font-style:italic">`</span> <span style="font-weight:bold">for</span> <span style="font-style:italic">`</span>(uuid::Uuid, std::string::String)<span style="font-style:italic">`</span>
-   = note: required because of the requirements on the impl of <span style="font-style:italic">`</span>diesel::Queryable&lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&gt;<span style="font-style:italic">`</span> <span style="font-weight:bold">for</span> <span style="font-style:italic">`</span>models::App<span style="font-style:italic">`</span>
-   = note: required because of the requirements on the impl of <span style="font-style:italic">`</span>diesel::query_dsl::LoadQuery&lt;_, models::App&gt;<span style="font-style:italic">`</span> <span style="font-weight:bold">for</span> <span style="font-style:italic">`</span>diesel::query_builder::SelectStatement&lt;schema::app::table, dies
+   = note: required because of the requirements on the impl of <span style="color:#2aa198">`</span>diesel::Queryable&lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&gt;<span style="color:#2aa198">`</span> <span style="color:#859900">for</span> <span style="color:#2aa198">`</span>(uuid::Uuid, std::string::String)<span style="color:#2aa198">`</span>
+   = note: required because of the requirements on the impl of <span style="color:#2aa198">`</span>diesel::Queryable&lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&gt;<span style="color:#2aa198">`</span> <span style="color:#859900">for</span> <span style="color:#2aa198">`</span>models::App<span style="color:#2aa198">`</span>
+   = note: required because of the requirements on the impl of <span style="color:#2aa198">`</span>diesel::query_dsl::LoadQuery&lt;_, models::App&gt;<span style="color:#2aa198">`</span> <span style="color:#859900">for</span> <span style="color:#2aa198">`</span>diesel::query_builder::SelectStatement&lt;schema::app::table, dies
 el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query
-_builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&lt;diesel::expression::bound::Bound&lt;diesel::sql_types::BigInt, i64&gt;&gt;&gt;<span style="font-style:italic">`</span>
+_builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&lt;diesel::expression::bound::Bound&lt;diesel::sql_types::BigInt, i64&gt;&gt;&gt;<span style="color:#2aa198">`</span>
 </code></pre></div><p>代码如下:</p>
 <p><code>Cargo.toml</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[dependencies]
-diesel = <span style="">{</span> version = <span style="font-style:italic">&#34;1.4.2&#34;</span>, features = [<span style="font-style:italic">&#34;postgres&#34;</span>, <span style="font-style:italic">&#34;uuid&#34;</span>] <span style="">}</span>
-uuid = <span style="">{</span> version = <span style="font-style:italic">&#34;0.7.4&#34;</span>, features = [<span style="font-style:italic">&#34;v4&#34;</span>] <span style="">}</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#268bd2">dependencies</span>]
+<span style="color:#268bd2">diesel</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;1.4.2&#34;</span>, <span style="color:#268bd2">features</span> = [<span style="color:#2aa198">&#34;postgres&#34;</span>, <span style="color:#2aa198">&#34;uuid&#34;</span>] }
+<span style="color:#268bd2">uuid</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;0.7.4&#34;</span>, <span style="color:#268bd2">features</span> = [<span style="color:#2aa198">&#34;v4&#34;</span>] }
 </code></pre></div><p><code>schema.rs</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">table! {
-    app (id) {
-        id -&gt; <span style="font-weight:bold">Uuid</span>,
-        jwt_secret -&gt; <span style="font-weight:bold">Varchar</span>,
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#268bd2">table</span>! {
+    <span style="color:#268bd2">app</span> (<span style="color:#268bd2">id</span>) {
+        <span style="color:#268bd2">id</span> -&gt; <span style="color:#cb4b16">Uuid</span>,
+        <span style="color:#268bd2">jwt_secret</span> -&gt; <span style="color:#cb4b16">Varchar</span>,
     }
 }
 </code></pre></div><p><code>models.rs</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-weight:bold">use</span> diesel::pg::PgConnection;
-<span style="font-weight:bold">use</span> diesel::prelude::*;
-<span style="font-weight:bold">use</span> uuid::Uuid;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">use</span> <span style="color:#268bd2">diesel</span>::<span style="color:#268bd2">pg</span>::<span style="color:#268bd2">PgConnection</span>;
+<span style="color:#859900">use</span> <span style="color:#268bd2">diesel</span>::<span style="color:#268bd2">prelude</span>::*;
+<span style="color:#859900">use</span> <span style="color:#268bd2">uuid</span>::<span style="color:#268bd2">Uuid</span>;
 
-<span style="font-weight:bold">use</span> <span style="font-weight:bold">crate</span>::schema::app;
-<span style="font-weight:bold">use</span> <span style="font-weight:bold">crate</span>::token::{create_claims, create_jwt_secret, encode_token, Claims, TokenError};
+<span style="color:#859900">use</span> <span style="color:#859900">crate</span>::<span style="color:#268bd2">schema</span>::<span style="color:#268bd2">app</span>;
+<span style="color:#859900">use</span> <span style="color:#859900">crate</span>::<span style="color:#268bd2">token</span>::{<span style="color:#268bd2">create_claims</span>, <span style="color:#268bd2">create_jwt_secret</span>, <span style="color:#268bd2">encode_token</span>, <span style="color:#268bd2">Claims</span>, <span style="color:#268bd2">TokenError</span>};
 
-<span style="">#[derive(Queryable)]</span>
-<span style="font-weight:bold">struct</span> <span style="font-weight:bold">App</span> {
-    id: <span style="font-weight:bold">Uuid</span>,
-    jwt_secret: String,
+<span style="color:#93a1a1;font-style:italic">#[derive(Queryable)]</span>
+<span style="color:#859900">struct</span> <span style="color:#cb4b16">App</span> {
+    <span style="color:#268bd2">id</span>: <span style="color:#cb4b16">Uuid</span>,
+    <span style="color:#268bd2">jwt_secret</span>: <span style="color:#cb4b16">String</span>,
 }
 
-<span style="">#[derive(Insertable)]</span>
-<span style="">#[table_name = </span><span style="font-style:italic">&#34;app&#34;</span><span style="">]</span>
-<span style="font-weight:bold">struct</span> <span style="font-weight:bold">NewApp</span> {
-    jwt_secret: String,
+<span style="color:#93a1a1;font-style:italic">#[derive(Insertable)]</span>
+<span style="color:#93a1a1;font-style:italic">#[table_name = </span><span style="color:#2aa198">&#34;app&#34;</span><span style="color:#93a1a1;font-style:italic">]</span>
+<span style="color:#859900">struct</span> <span style="color:#cb4b16">NewApp</span> {
+    <span style="color:#268bd2">jwt_secret</span>: <span style="color:#cb4b16">String</span>,
 }
 
-<span style="font-weight:bold">impl</span> App {
-    <span style="font-weight:bold">fn</span> get_by_id(&amp;self, conn: <span style="">&amp;</span><span style="font-weight:bold">PgConnection</span>) -&gt; Vec&lt;App&gt; {
-        app::table
-            .limit(1)
-            .load::&lt;App&gt;(conn)
-            .expect(<span style="font-style:italic">&#34;Error loading app&#34;</span>)
+<span style="color:#859900">impl</span> <span style="color:#268bd2">App</span> {
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">get_by_id</span>(&amp;<span style="color:#268bd2">self</span>, <span style="color:#268bd2">conn</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">PgConnection</span>) -&gt; <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#268bd2">App</span>&gt; {
+        <span style="color:#268bd2">app</span>::<span style="color:#268bd2">table</span>
+            .<span style="color:#268bd2">limit</span>(<span style="color:#2aa198;font-weight:bold">1</span>)
+            .<span style="color:#268bd2">load</span>::&lt;<span style="color:#268bd2">App</span>&gt;(<span style="color:#268bd2">conn</span>)
+            .<span style="color:#268bd2">expect</span>(<span style="color:#2aa198">&#34;Error loading app&#34;</span>)
     }
 }
 </code></pre></div><h2 id="经过">经过</h2>
 <p>在往上查询未果, 经人提点可能是项目中 uuid 和版本不一致的问题导致的.</p>
 <h3 id="uuid-降级">UUID 降级</h3>
 <p>查看 Diesel 的 <a href="https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml">diesel/Cargo.toml at 1.4.x · diesel-rs/diesel · GitHub</a> 发现 Diesel 依赖的 <a href="https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L26">uuid 版本</a>为 <code>&gt;=0.2.0, &lt;0.7.0</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">uuid = <span style="">{</span> version = <span style="font-style:italic">&#34;&gt;=0.2.0, &lt;0.7.0&#34;</span>, optional = <span style="font-weight:bold">true</span>, features = [<span style="font-style:italic">&#34;use_std&#34;</span>] <span style="">}</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#268bd2">uuid</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;&gt;=0.2.0, &lt;0.7.0&#34;</span>, <span style="color:#268bd2">optional</span> = <span style="color:#859900;font-weight:bold">true</span>, <span style="color:#268bd2">features</span> = [<span style="color:#2aa198">&#34;use_std&#34;</span>] }
 </code></pre></div><p>而我在项目中使用的 <code>uuid</code> 为 <code>0.7.4</code>. 尝试将 uuid 降级到 <code>0.6</code>.</p>
 <p>上述问题不再报错, 不过有一个新的报错出现:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">error[E0599]: no method named <span style="font-style:italic">`</span>to_simple<span style="font-style:italic">`</span> found <span style="font-weight:bold">for</span> type <span style="font-style:italic">`</span>uuid::Uuid<span style="font-style:italic">`</span> in the current scope
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">error[E0599]: no method named <span style="color:#2aa198">`</span>to_simple<span style="color:#2aa198">`</span> found <span style="color:#859900">for</span> <span style="color:#cb4b16">type</span> <span style="color:#2aa198">`</span>uuid::Uuid<span style="color:#2aa198">`</span> in the current scope
   --&gt; src/models.rs:37:45
    |
-37 |         let claims = create_claims(&amp;self.id.to_simple().to_string());
-   |                                             ^^^^^^^^^ help: there is a method with a similar name: <span style="font-style:italic">`</span>simple<span style="font-style:italic">`</span>
+<span style="color:#2aa198;font-weight:bold">37</span> |         <span style="color:#cb4b16">let</span> <span style="color:#268bd2">claims</span> = create_claims(&amp;self.id.to_simple().to_string());
+   |                                             ^^^^^^^^^ help: there is a method with a similar name: <span style="color:#2aa198">`</span>simple<span style="color:#2aa198">`</span>
 </code></pre></div><p>可以推断, uuid 在 0.6 到 0.7 的过程中有较大的功能改变. 那新问题就来了:</p>
 <p><em>我希望使用 uuid 最新版本的能力.</em></p>
 <h3 id="修改-dependence">修改 Dependence</h3>
 <p>好消息是我在 <code>Cargo.toml</code> 紧接着的一行发现了一个 dependence: <a href="https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L27">uuidv07</a>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">uuidv07 = <span style="">{</span> version = <span style="font-style:italic">&#34;0.7.0&#34;</span>, optional = <span style="font-weight:bold">true</span>, package = <span style="font-style:italic">&#34;uuid&#34;</span><span style="">}</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#268bd2">uuidv07</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;0.7.0&#34;</span>, <span style="color:#268bd2">optional</span> = <span style="color:#859900;font-weight:bold">true</span>, <span style="color:#268bd2">package</span> = <span style="color:#2aa198">&#34;uuid&#34;</span>}
 </code></pre></div><p>从配置信息可以看到, 这个 <code>uuidv07</code> 同样使用的是 uuid 包 (<code>package = &quot;uuid&quot;</code>). 但是版本为 &ldquo;0.7.0&rdquo; (<code>version = &quot;0.7.0&quot;</code>).</p>
 <p>尝试修改本地项目的 <code>Cargo.toml</code> 文件:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[dependencies]
-diesel = <span style="">{</span> version = <span style="font-style:italic">&#34;1.4.2&#34;</span>, features = [<span style="font-style:italic">&#34;postgres&#34;</span>, <span style="font-style:italic">&#34;uuidv07&#34;</span>] <span style="">}</span>
-uuid = <span style="">{</span> version = <span style="font-style:italic">&#34;0.7.4&#34;</span>, features = [<span style="font-style:italic">&#34;v4&#34;</span>] <span style="">}</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#268bd2">dependencies</span>]
+<span style="color:#268bd2">diesel</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;1.4.2&#34;</span>, <span style="color:#268bd2">features</span> = [<span style="color:#2aa198">&#34;postgres&#34;</span>, <span style="color:#2aa198">&#34;uuidv07&#34;</span>] }
+<span style="color:#268bd2">uuid</span> = { <span style="color:#268bd2">version</span> = <span style="color:#2aa198">&#34;0.7.4&#34;</span>, <span style="color:#268bd2">features</span> = [<span style="color:#2aa198">&#34;v4&#34;</span>] }
 </code></pre></div><p><em>测试通过!</em></p>
 <h2 id="结论">结论</h2>
 <p>网上几乎没法找到这个<a href="https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md#fixed-3">改动</a>相关的问题和解决方案, 甚至文档中都没有提及.</p>

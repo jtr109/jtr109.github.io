@@ -177,14 +177,14 @@
 <li>这是目前找到最好的实现方法了, 可以解耦功能, 处理逻辑也相对清晰.</li>
 </ul>
 <p>具体操作方法:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="font-weight:bold">let</span> pages = getCurrentPages()
-<span style="font-weight:bold">let</span> currentPage = pages[pages.length -1]
-<span style="font-weight:bold">let</span> prevPage = pages[pages.length -1]
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#859900">let</span> <span style="color:#268bd2">pages</span> = <span style="color:#268bd2">getCurrentPages</span>()
+<span style="color:#859900">let</span> <span style="color:#268bd2">currentPage</span> = <span style="color:#268bd2">pages</span>[<span style="color:#268bd2">pages</span>.<span style="color:#268bd2">length</span> -<span style="color:#2aa198;font-weight:bold">1</span>]
+<span style="color:#859900">let</span> <span style="color:#268bd2">prevPage</span> = <span style="color:#268bd2">pages</span>[<span style="color:#268bd2">pages</span>.<span style="color:#268bd2">length</span> -<span style="color:#2aa198;font-weight:bold">1</span>]
 
-<span style="font-style:italic">// prevPage 相当于上个页面中的 this 可以执行相关的一切操作.
-</span><span style="font-style:italic">// 未尝试过其返回值, 使用时需做测试.
-</span><span style="font-style:italic"></span>prePage.setData({
-  mydata: <span style="font-style:italic">&#39;any data&#39;</span>
+<span style="color:#93a1a1;font-style:italic">// prevPage 相当于上个页面中的 this 可以执行相关的一切操作.
+</span><span style="color:#93a1a1;font-style:italic">// 未尝试过其返回值, 使用时需做测试.
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#268bd2">prePage</span>.<span style="color:#268bd2">setData</span>({
+  <span style="color:#268bd2">mydata</span>: <span style="color:#2aa198">&#39;any data&#39;</span>
 })
 </code></pre></div>
       </div>

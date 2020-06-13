@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Language" content="en">
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="删除行末的空格 :%s/\s\&#43;$//e有几点值得注意:
+    <meta name="description" content="删除行末的空格 :%s/\s\&#43;$//e 有几点值得注意:
  e tag 的作用是 error no display, 这里加入的目的是为了在没有可替换内容的时候不发出错误提示. 可以发现这里的正则表达式中, &ldquo;多个空格&rdquo; 的处理是 \s\&#43;, 这里需要留意, &#43; 也是需要转义的.  ">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
@@ -15,11 +15,11 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="vim 使用技巧"/>
-<meta name="twitter:description" content="删除行末的空格 :%s/\s\&#43;$//e有几点值得注意:
+<meta name="twitter:description" content="删除行末的空格 :%s/\s\&#43;$//e 有几点值得注意:
  e tag 的作用是 error no display, 这里加入的目的是为了在没有可替换内容的时候不发出错误提示. 可以发现这里的正则表达式中, &ldquo;多个空格&rdquo; 的处理是 \s\&#43;, 这里需要留意, &#43; 也是需要转义的.  "/>
 
     <meta property="og:title" content="vim 使用技巧" />
-<meta property="og:description" content="删除行末的空格 :%s/\s\&#43;$//e有几点值得注意:
+<meta property="og:description" content="删除行末的空格 :%s/\s\&#43;$//e 有几点值得注意:
  e tag 的作用是 error no display, 这里加入的目的是为了在没有可替换内容的时候不发出错误提示. 可以发现这里的正则表达式中, &ldquo;多个空格&rdquo; 的处理是 \s\&#43;, 这里需要留意, &#43; 也是需要转义的.  " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jtr109.github.io/posts/vim-skills/" />
@@ -135,8 +135,8 @@
       <div>
         
         <h2 id="删除行末的空格">删除行末的空格</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:%s<span style="font-style:italic">/\s\+$/</span>/e<span style="">
-</span></code></pre></div><p>有几点值得注意:</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:%<span style="color:#268bd2">s</span><span style="color:#2aa198">/\s\+$/</span>/<span style="color:#268bd2">e</span>
+</code></pre></div><p>有几点值得注意:</p>
 <ul>
 <li><code>e</code> tag 的作用是 error no display, 这里加入的目的是为了在没有可替换内容的时候不发出错误提示.</li>
 <li>可以发现这里的正则表达式中, &ldquo;多个空格&rdquo; 的处理是 <code>\s\+</code>, 这里需要留意, <code>+</code> 也是需要转义的.</li>

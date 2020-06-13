@@ -148,43 +148,43 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1
         
         <h2 id="使用-openssl-生成公私钥对">使用 OpenSSL 生成公私钥对</h2>
 <p>生成私钥：</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> openssl genrsa -out private_key.pem 2048
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> openssl genrsa -out private_key.pem <span style="color:#2aa198;font-weight:bold">2048</span>
 </code></pre></div><p>通过私钥生成公钥：</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem
 </code></pre></div><h2 id="使用-python-生成公私钥对">使用 Python 生成公私钥对</h2>
 <p>参考<a href="https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key">官方文档</a></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.PublicKey</span> <span style="font-weight:bold">import</span> RSA
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">Crypto.PublicKey</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">RSA</span>
 
-key = RSA.generate(2048)
-private_key = key.export_key()
-file_out = open(<span style="font-style:italic">&#34;private.pem&#34;</span>, <span style="font-style:italic">&#34;wb&#34;</span>)
-file_out.write(private_key)
-file_out.close()
+<span style="color:#268bd2">key</span> = <span style="color:#268bd2">RSA</span>.<span style="color:#268bd2">generate</span>(<span style="color:#2aa198;font-weight:bold">2048</span>)
+<span style="color:#268bd2">private_key</span> = <span style="color:#268bd2">key</span>.<span style="color:#268bd2">export_key</span>()
+<span style="color:#268bd2">file_out</span> = <span style="color:#cb4b16">open</span>(<span style="color:#2aa198">&#34;private.pem&#34;</span>, <span style="color:#2aa198">&#34;wb&#34;</span>)
+<span style="color:#268bd2">file_out</span>.<span style="color:#268bd2">write</span>(<span style="color:#268bd2">private_key</span>)
+<span style="color:#268bd2">file_out</span>.<span style="color:#268bd2">close</span>()
 
-public_key = key.publickey().export_key()
-file_out = open(<span style="font-style:italic">&#34;receiver.pem&#34;</span>, <span style="font-style:italic">&#34;wb&#34;</span>)
-file_out.write(public_key)
-file_out.close()
+<span style="color:#268bd2">public_key</span> = <span style="color:#268bd2">key</span>.<span style="color:#268bd2">publickey</span>().<span style="color:#268bd2">export_key</span>()
+<span style="color:#268bd2">file_out</span> = <span style="color:#cb4b16">open</span>(<span style="color:#2aa198">&#34;receiver.pem&#34;</span>, <span style="color:#2aa198">&#34;wb&#34;</span>)
+<span style="color:#268bd2">file_out</span>.<span style="color:#268bd2">write</span>(<span style="color:#268bd2">public_key</span>)
+<span style="color:#268bd2">file_out</span>.<span style="color:#268bd2">close</span>()
 </code></pre></div><h2 id="使用-python-加解密">使用 Python 加解密</h2>
 <p>使用 <a href="https://pycryptodome.readthedocs.io/en/latest/index.html">PyCryptodome</a> 实现 RSA-2048 加解密。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">In [1]: <span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.PublicKey</span> <span style="font-weight:bold">import</span> RSA
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">1</span>]: <span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">Crypto.PublicKey</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">RSA</span>
 
-In [2]: <span style="font-weight:bold">from</span> <span style="font-weight:bold">Crypto.Cipher</span> <span style="font-weight:bold">import</span> PKCS1_OAEP
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">2</span>]: <span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">Crypto.Cipher</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">PKCS1_OAEP</span>
 
-In [3]: private_key = RSA.import_key(open(<span style="font-style:italic">&#34;/Users/jtr109/Downloads/private_key.pem&#34;</span>).read())
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">3</span>]: <span style="color:#268bd2">private_key</span> = <span style="color:#268bd2">RSA</span>.<span style="color:#268bd2">import_key</span>(<span style="color:#cb4b16">open</span>(<span style="color:#2aa198">&#34;/Users/jtr109/Downloads/private_key.pem&#34;</span>).<span style="color:#268bd2">read</span>())
 
-In [4]: public_key = RSA.import_key(open(<span style="font-style:italic">&#34;/Users/jtr109/Downloads/public_key.pem&#34;</span>).read())
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">4</span>]: <span style="color:#268bd2">public_key</span> = <span style="color:#268bd2">RSA</span>.<span style="color:#268bd2">import_key</span>(<span style="color:#cb4b16">open</span>(<span style="color:#2aa198">&#34;/Users/jtr109/Downloads/public_key.pem&#34;</span>).<span style="color:#268bd2">read</span>())
 
-In [5]: encryptor = PKCS1_OAEP.new(public_key)
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">5</span>]: <span style="color:#268bd2">encryptor</span> = <span style="color:#268bd2">PKCS1_OAEP</span>.<span style="color:#268bd2">new</span>(<span style="color:#268bd2">public_key</span>)
 
-In [6]: data = <span style="font-style:italic">b</span><span style="font-style:italic">&#39;Hello world&#39;</span>
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">6</span>]: <span style="color:#268bd2">data</span> = <span style="color:#2aa198">b</span><span style="color:#2aa198">&#39;Hello world&#39;</span>
 
-In [7]: encrypted_data = encryptor.encrypt(data)
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">7</span>]: <span style="color:#268bd2">encrypted_data</span> = <span style="color:#268bd2">encryptor</span>.<span style="color:#268bd2">encrypt</span>(<span style="color:#268bd2">data</span>)
 
-In [8]: decryptor = PKCS1_OAEP.new(private_key)
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">8</span>]: <span style="color:#268bd2">decryptor</span> = <span style="color:#268bd2">PKCS1_OAEP</span>.<span style="color:#268bd2">new</span>(<span style="color:#268bd2">private_key</span>)
 
-In [9]: decryptor.decrypt(encrypted_data)
-Out[9]: <span style="font-style:italic">b</span><span style="font-style:italic">&#39;Hello world&#39;</span>
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">9</span>]: <span style="color:#268bd2">decryptor</span>.<span style="color:#268bd2">decrypt</span>(<span style="color:#268bd2">encrypted_data</span>)
+<span style="color:#268bd2">Out</span>[<span style="color:#2aa198;font-weight:bold">9</span>]: <span style="color:#2aa198">b</span><span style="color:#2aa198">&#39;Hello world&#39;</span>
 </code></pre></div><h2 id="faq">FAQ</h2>
 <h3 id="可以使用私钥加密公钥解密吗">可以使用私钥加密，公钥解密吗？</h3>
 <p>公钥是对外复数发放的，有不止一个对象可以获得公钥。</p>

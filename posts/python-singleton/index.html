@@ -142,21 +142,21 @@ class Singleton(object): _instance = None def __new__(cls, *args, **kw): if not 
 <h2 id="analysis-the-singleton-with-method-__new__">Analysis the singleton with method <code>__new__</code></h2>
 <h3 id="implementation">Implementation</h3>
 <p>Let us see the code first:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">Singleton</span>(object):
-    _instance = None
-    <span style="font-weight:bold">def</span> __new__(cls, *args, **kw):
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> cls._instance:
-            cls._instance = super(Singleton, cls).__new__(cls, *args, **kw)
-        <span style="font-weight:bold">return</span> cls._instance
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">Singleton</span>(<span style="color:#cb4b16">object</span>):
+    <span style="color:#268bd2">_instance</span> = <span style="color:#268bd2">None</span>
+    <span style="color:#859900">def</span> <span style="color:#268bd2">__new__</span>(<span style="color:#268bd2">cls</span>, *<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kw</span>):
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instance</span>:
+            <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instance</span> = <span style="color:#cb4b16">super</span>(<span style="color:#268bd2">Singleton</span>, <span style="color:#268bd2">cls</span>).<span style="color:#268bd2">__new__</span>(<span style="color:#268bd2">cls</span>, *<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kw</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instance</span>
 </code></pre></div><p>And check the result:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; s1 = Singleton()
-&gt;&gt;&gt; s2 = Singleton()
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#268bd2">s1</span> = <span style="color:#268bd2">Singleton</span>()
+&gt;&gt;&gt; <span style="color:#268bd2">s2</span> = <span style="color:#268bd2">Singleton</span>()
 
-&gt;&gt;&gt; s1 <span style="font-weight:bold">is</span> s2
-True
+&gt;&gt;&gt; <span style="color:#268bd2">s1</span> <span style="color:#859900">is</span> <span style="color:#268bd2">s2</span>
+<span style="color:#268bd2">True</span>
 
-&gt;&gt;&gt; <span style="font-weight:bold">print</span>(id(s1), id(s2))
-4420874480 4420874480
+&gt;&gt;&gt; <span style="color:#859900">print</span>(<span style="color:#cb4b16">id</span>(<span style="color:#268bd2">s1</span>), <span style="color:#cb4b16">id</span>(<span style="color:#268bd2">s2</span>))
+<span style="color:#2aa198;font-weight:bold">4420874480</span> <span style="color:#2aa198;font-weight:bold">4420874480</span>
 </code></pre></div><h3 id="how-does-it-work">How does it work?</h3>
 <p>We should know two feature to understand that:</p>
 <ol>
@@ -168,45 +168,45 @@ True
 <p>After that, all instances of the class <code>Singleton</code> are the same class variable of class <code>Singleton</code>.</p>
 <h2 id="implement-with-decorator">Implement with decorator</h2>
 <h3 id="implementation-1">Implementation</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">def</span> singleton(cls):
-    _instances = dict()
-    <span style="font-weight:bold">def</span> wrapper(*args, **kwargs):
-        <span style="font-weight:bold">if</span> cls <span style="font-weight:bold">not</span> <span style="font-weight:bold">in</span> _instances:
-            _instances[cls] = cls(*args, **kwargs)
-        <span style="font-weight:bold">return</span> _instances[cls]
-    <span style="font-weight:bold">return</span> wrapper
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">def</span> <span style="color:#268bd2">singleton</span>(<span style="color:#268bd2">cls</span>):
+    <span style="color:#268bd2">_instances</span> = <span style="color:#cb4b16">dict</span>()
+    <span style="color:#859900">def</span> <span style="color:#268bd2">wrapper</span>(*<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kwargs</span>):
+        <span style="color:#859900">if</span> <span style="color:#268bd2">cls</span> <span style="color:#859900">not</span> <span style="color:#859900">in</span> <span style="color:#268bd2">_instances</span>:
+            <span style="color:#268bd2">_instances</span>[<span style="color:#268bd2">cls</span>] = <span style="color:#268bd2">cls</span>(*<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kwargs</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">_instances</span>[<span style="color:#268bd2">cls</span>]
+    <span style="color:#859900">return</span> <span style="color:#268bd2">wrapper</span>
 </code></pre></div><p>Let us check the result</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">@singleton
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">MyClass</span>(object):
-    <span style="font-weight:bold">pass</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">@singleton</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">MyClass</span>(<span style="color:#cb4b16">object</span>):
+    <span style="color:#859900">pass</span>
 
-s1 = MyClass()
-s2 = MyClass()
+<span style="color:#268bd2">s1</span> = <span style="color:#268bd2">MyClass</span>()
+<span style="color:#268bd2">s2</span> = <span style="color:#268bd2">MyClass</span>()
 
-s1 <span style="font-weight:bold">is</span> s2  <span style="font-style:italic"># True</span>
+<span style="color:#268bd2">s1</span> <span style="color:#859900">is</span> <span style="color:#268bd2">s2</span>  <span style="color:#93a1a1;font-style:italic"># True</span>
 </code></pre></div><h3 id="how-it-works">How it works?</h3>
 <ul>
 <li>The criticle point is the implementation of <strong>closure</strong> in python. The variable <code>_instances</code> above did not collected by GC after <code>MyClass</code> was called. (You can learn more <a href="https://www.geeksforgeeks.org/python-closures/">here</a>)</li>
 </ul>
 <h2 id="analysis-the-singleton-with-method-metaclass">Analysis the singleton with method <strong>metaclass</strong></h2>
 <h3 id="implementation-2">Implementation</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">Singleton</span>(type):
-    _instances = dict()
-    <span style="font-weight:bold">def</span> __call__(cls, *args, **kwargs):
-        <span style="font-weight:bold">if</span> cls <span style="font-weight:bold">not</span> <span style="font-weight:bold">in</span> cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        <span style="font-weight:bold">return</span> cls._instances[cls]
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">Singleton</span>(<span style="color:#cb4b16">type</span>):
+    <span style="color:#268bd2">_instances</span> = <span style="color:#cb4b16">dict</span>()
+    <span style="color:#859900">def</span> <span style="color:#268bd2">__call__</span>(<span style="color:#268bd2">cls</span>, *<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kwargs</span>):
+        <span style="color:#859900">if</span> <span style="color:#268bd2">cls</span> <span style="color:#859900">not</span> <span style="color:#859900">in</span> <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instances</span>:
+            <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instances</span>[<span style="color:#268bd2">cls</span>] = <span style="color:#cb4b16">super</span>(<span style="color:#268bd2">Singleton</span>, <span style="color:#268bd2">cls</span>).<span style="color:#268bd2">__call__</span>(*<span style="color:#268bd2">args</span>, **<span style="color:#268bd2">kwargs</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_instances</span>[<span style="color:#268bd2">cls</span>]
 </code></pre></div><p>Check the result</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">MyClass</span>(metaclass=Singleton):  <span style="font-style:italic"># in Python 3</span>
-    <span style="font-weight:bold">pass</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">MyClass</span>(<span style="color:#268bd2">metaclass</span>=<span style="color:#268bd2">Singleton</span>):  <span style="color:#93a1a1;font-style:italic"># in Python 3</span>
+    <span style="color:#859900">pass</span>
 
-<span style="font-style:italic"># class MyClass(object):  # in Python 2</span>
-<span style="font-style:italic">#     __metaclass__ = Singleton</span>
+<span style="color:#93a1a1;font-style:italic"># class MyClass(object):  # in Python 2</span>
+<span style="color:#93a1a1;font-style:italic">#     __metaclass__ = Singleton</span>
 
-s1 = MyClass()
-s2 = MyClass()
+<span style="color:#268bd2">s1</span> = <span style="color:#268bd2">MyClass</span>()
+<span style="color:#268bd2">s2</span> = <span style="color:#268bd2">MyClass</span>()
 
-s1 <span style="font-weight:bold">is</span> s2  <span style="font-style:italic"># True</span>
+<span style="color:#268bd2">s1</span> <span style="color:#859900">is</span> <span style="color:#268bd2">s2</span>  <span style="color:#93a1a1;font-style:italic"># True</span>
 </code></pre></div><h3 id="how-it-works-1">How it works?</h3>
 <ul>
 <li>All class is an instance of a metaclass.</li>

@@ -190,7 +190,7 @@ ISO 8601 主要定义了时区0点的规则, 消除各种时间的表达方法. 
 </blockquote>
 <p>计算机中对 ISO 8601 最常见的表达规则是 <a href="https://www.ietf.org/rfc/rfc3339.txt">RFC 3339</a>.</p>
 <p>标准写法为:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">2019-12-08T01:24:12.411112355+00:00
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">2019-12-08T01:24:12.411112355+00:00
 </code></pre></div><p>在 ISO 8601 中, 是不允许 <code>January</code>, <code>Thursday</code> 这样的表示方法的, 所有时间量都是用阿拉伯数字表示和特殊含义字符表示. 我们简单分析一下几种符号:</p>
 <ul>
 <li><code>-</code>: 日期分隔符</li>
@@ -202,7 +202,7 @@ ISO 8601 主要定义了时区0点的规则, 消除各种时间的表达方法. 
 <h2 id="rfc-2822">RFC 2822</h2>
 <p>标准的 ISO 8601 的月份和星期表达方式都是数字, 在英语语境下的使用场景看起来不是那么直观, 所以如果需要在时间字符串中使用 <code>Sun</code>, <code>Dec</code> 这样的表达方式, 需要使用 <a href="https://www.ietf.org/rfc/rfc2822.txt">RFC 2822</a>.</p>
 <p>使用 RFC 2822 表示 ISO 8601 时间 <code>2019-12-08T01:24:12+00:00</code> 应当显示为:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Sun, 08 Dec 2019 01:24:12 +0000
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Sun, 08 Dec 2019 01:24:12 +0000
 </code></pre></div>
       </div>
 

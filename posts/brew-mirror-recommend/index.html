@@ -163,8 +163,8 @@
 </ul>
 <h2 id="另外">另外</h2>
 <p>其实镜像只是一个无奈的选择, 从安全性上来说肯定是不如原生源的. 比如使用 homebrew cask 搭配本地镜像源的下载的时候, 我也遇到过 MD5 不一致的情况, 具体原因并没有查明, 但是毕竟有相关的隐患. 所以如果有其他方法可以建立通道, 尽量不要使用国内镜像源. 其实让 Homebrew 走代理的方法也很简单, 下面给出一例.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ALL_PROXY=socks5://127.0.0.1:8000 brew update
-<span style="font-style:italic"># 其他以此类推</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ <span style="color:#268bd2">ALL_PROXY</span>=socks5://127.0.0.1:8000 brew update
+<span style="color:#93a1a1;font-style:italic"># 其他以此类推</span>
 </code></pre></div>
       </div>
 

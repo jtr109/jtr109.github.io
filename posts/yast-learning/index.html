@@ -150,10 +150,10 @@
 <li>函数 <code>remainder</code> 和 <code>modulo</code> 用于求余数（remainder）。</li>
 <li>函数 <code>sqrt</code> 用于求参数的平方根（square root）。</li>
 </ul>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP">(exact-&gt;inexact (/ 29 3 7))  <span style="font-style:italic">;-&gt; 1.380952380952381</span>
-(quotient 7 3)  <span style="font-style:italic">;→ 2</span>
-(modulo 7 3)  <span style="font-style:italic">;→ 1</span>
-(sqrt 8)  <span style="font-style:italic">;→ 2.8284271247461903</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP">(<span style="color:#268bd2">exact-&gt;inexact</span> (<span style="color:#268bd2">/</span> <span style="color:#2aa198;font-weight:bold">29</span> <span style="color:#2aa198;font-weight:bold">3</span> <span style="color:#2aa198;font-weight:bold">7</span>))  <span style="color:#93a1a1;font-style:italic">;-&gt; 1.380952380952381</span>
+(<span style="color:#268bd2">quotient</span> <span style="color:#2aa198;font-weight:bold">7</span> <span style="color:#2aa198;font-weight:bold">3</span>)  <span style="color:#93a1a1;font-style:italic">;→ 2</span>
+(<span style="color:#268bd2">modulo</span> <span style="color:#2aa198;font-weight:bold">7</span> <span style="color:#2aa198;font-weight:bold">3</span>)  <span style="color:#93a1a1;font-style:italic">;→ 1</span>
+(<span style="color:#268bd2">sqrt</span> <span style="color:#2aa198;font-weight:bold">8</span>)  <span style="color:#93a1a1;font-style:italic">;→ 2.8284271247461903</span>
 </code></pre></div><h3 id="练习">练习</h3>
 <p>练习中发现, 如果创建 scm 文件并写入多个算式, 好像不能得出每个计算的值, 得到的只能是最后一个算式的结果.</p>
 <h2 id="表">表</h2>
@@ -172,50 +172,50 @@
 <p><code>'()</code>这里的空表就是使用了引用(quote)</p>
 <h2 id="list-函数">list 函数</h2>
 <p>特别值得注意的是, list 函数返回的是其中的元素构成的表, 函数中的每个参数都是表的一个元素:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(list &#39;(1 2) &#39;(3 4))
-<span style="font-style:italic">;Value 1: ((1 2) (3 4))</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(<span style="color:#cb4b16">list </span>&#39;(<span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">2</span>) &#39;(<span style="color:#2aa198;font-weight:bold">3</span> <span style="color:#2aa198;font-weight:bold">4</span>))
+<span style="color:#93a1a1;font-style:italic">;Value 1: ((1 2) (3 4))</span>
 
-(cons &#39;(1 2) &#39;(3 4))
-<span style="font-style:italic">;Value 2: ((1 2) 3 4)</span>
+(<span style="color:#cb4b16">cons </span>&#39;(<span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">2</span>) &#39;(<span style="color:#2aa198;font-weight:bold">3</span> <span style="color:#2aa198;font-weight:bold">4</span>))
+<span style="color:#93a1a1;font-style:italic">;Value 2: ((1 2) 3 4)</span>
 </code></pre></div><h2 id="字符串操作">字符串操作</h2>
 <ul>
 <li><code>string-append</code>: 字符串拼接</li>
 </ul>
 <h2 id="函数定义">函数定义</h2>
 <h3 id="定义变量">定义变量</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(<span style="font-weight:bold">define </span>vhello <span style="font-style:italic">&#34;Hello world!&#34;</span>)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(<span style="color:#859900">define </span><span style="color:#268bd2">vhello</span> <span style="color:#2aa198">&#34;Hello world!&#34;</span>)
 </code></pre></div><h3 id="定义函数">定义函数</h3>
 <p>定义函数有两种方式, 一个是 lambda 一个是简写, 暂时不清楚两者的实际区别.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme"><span style="font-style:italic">;;; 定义不带参数的函数</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme"><span style="color:#93a1a1;font-style:italic">;;; 定义不带参数的函数</span>
 
-<span style="font-style:italic">; lambda 定义</span>
-(<span style="font-weight:bold">define </span>hello
-  (<span style="font-weight:bold">lambda </span>()
-    <span style="font-style:italic">&#34;Hello world!&#34;</span>))
+<span style="color:#93a1a1;font-style:italic">; lambda 定义</span>
+(<span style="color:#859900">define </span><span style="color:#268bd2">hello</span>
+  (<span style="color:#859900">lambda </span>()
+    <span style="color:#2aa198">&#34;Hello world!&#34;</span>))
 
-<span style="font-style:italic">; 简写</span>
-<span style="font-style:italic">; (define (hello)</span>
-<span style="font-style:italic">;  (&#34;Hello world!&#34;))</span>
-<span style="font-style:italic">; 不成立</span>
+<span style="color:#93a1a1;font-style:italic">; 简写</span>
+<span style="color:#93a1a1;font-style:italic">; (define (hello)</span>
+<span style="color:#93a1a1;font-style:italic">;  (&#34;Hello world!&#34;))</span>
+<span style="color:#93a1a1;font-style:italic">; 不成立</span>
 
-<span style="font-style:italic">;;; 定义带参数的函数</span>
+<span style="color:#93a1a1;font-style:italic">;;; 定义带参数的函数</span>
 
-<span style="font-style:italic">; lambda</span>
-(<span style="font-weight:bold">define </span>hello
-  (<span style="font-weight:bold">lambda </span>(name)
-    (string-append <span style="font-style:italic">&#34;Hello &#34;</span> name <span style="font-style:italic">&#34;!&#34;</span>)))
+<span style="color:#93a1a1;font-style:italic">; lambda</span>
+(<span style="color:#859900">define </span><span style="color:#268bd2">hello</span>
+  (<span style="color:#859900">lambda </span>(<span style="color:#268bd2">name</span>)
+    (<span style="color:#cb4b16">string-append </span><span style="color:#2aa198">&#34;Hello &#34;</span> <span style="color:#268bd2">name</span> <span style="color:#2aa198">&#34;!&#34;</span>)))
 
-<span style="font-style:italic">; 简写</span>
-(<span style="font-weight:bold">define </span>(hello name)
-  (string-append <span style="font-style:italic">&#34;Hello &#34;</span> name <span style="font-style:italic">&#34;!&#34;</span>))
+<span style="color:#93a1a1;font-style:italic">; 简写</span>
+(<span style="color:#859900">define </span>(<span style="color:#268bd2">hello</span> <span style="color:#268bd2">name</span>)
+  (<span style="color:#cb4b16">string-append </span><span style="color:#2aa198">&#34;Hello &#34;</span> <span style="color:#268bd2">name</span> <span style="color:#2aa198">&#34;!&#34;</span>))
 
 </code></pre></div><h2 id="if-判断">if 判断</h2>
 <h3 id="true-and-false">true and false</h3>
 <p>在 LISP 中 true 用 <code>#t</code> 表示, false 用 <code>#f</code> 表示.</p>
 <h3 id="关于空表的判断">关于空表的判断</h3>
 <p>由于 R4RS 和 R5RS 对空表 <code>'()</code> 是否为 false (<code>#f</code>) 的标准不同, 所以判断表为空应使用 <code>null?</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(null? &#39;())
-<span style="font-style:italic">;Value: #t</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(<span style="color:#cb4b16">null? </span>&#39;())
+<span style="color:#93a1a1;font-style:italic">;Value: #t</span>
 </code></pre></div><h3 id="数字判断">数字判断</h3>
 <ul>
 <li><code>positive?</code>: 判断正数</li>
@@ -277,18 +277,18 @@
 <script src="https://gist.github.com/jtr109/3f8577f07255af1e2b3d9b3fd09e8774.js"></script>
 <h3 id="浅谈-lambda">浅谈 lambda</h3>
 <p>原答案中最让人纠结的地方就是 if&hellip; lambda&hellip; 的组合使用, 由于之前本课程中没有过对于 lambda 的介绍, 只有 define 函数的时候提到过, 所以难免不清楚怎么使用. 其实可以在终端中动手试试, 你会发现 lambda 的用法如下:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">((<span style="font-weight:bold">lambda </span>(x) (* 2 x)) 1)
-<span style="font-style:italic">;Value: 2</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">((<span style="color:#859900">lambda </span>(<span style="color:#268bd2">x</span>) (<span style="color:#cb4b16">* </span><span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#268bd2">x</span>)) <span style="color:#2aa198;font-weight:bold">1</span>)
+<span style="color:#93a1a1;font-style:italic">;Value: 2</span>
 
-((<span style="font-weight:bold">lambda </span>(x y) (* 2 x (+ 1 y))) 2 3)
-<span style="font-style:italic">;Value: 16</span>
+((<span style="color:#859900">lambda </span>(<span style="color:#268bd2">x</span> <span style="color:#268bd2">y</span>) (<span style="color:#cb4b16">* </span><span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#268bd2">x</span> (<span style="color:#cb4b16">+ </span><span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#268bd2">y</span>))) <span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#2aa198;font-weight:bold">3</span>)
+<span style="color:#93a1a1;font-style:italic">;Value: 16</span>
 </code></pre></div><p>以上就是定义 lambda 匿名函数的方法, 在最外层的括号中有两个组成部分, 一个是定义 lambda 匿名函数的括号, 还有一组参数. 再对应到原书中的答案, 就可以发现原答案中是根据判断定义匿名函数, 并作用在 <code>remove x (cdr ls)</code> 上. 这样考虑就简单了许多.</p>
 <h2 id="named-let-and-letrec">named let and letrec</h2>
 <p>named let 用于迭代, 而 letrec 用于递归.</p>
 <p>在 named let 中使用 <code>let</code> 初始化变量, 并在每次执行到命名的函数时循环. <code>letrec</code> 允许递归调用本身.</p>
 <p>从实践来看, named let 解决了 while 类循环在 scheme 中的实现, 但是 <code>letrec</code> 感觉只是为函数定义限制了作用域.</p>
 <h2 id="映射">映射</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(map procedure list1 list2 ...)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Scheme" data-lang="Scheme">(<span style="color:#cb4b16">map </span><span style="color:#268bd2">procedure</span> <span style="color:#268bd2">list1</span> <span style="color:#268bd2">list2</span> ...)
 </code></pre></div><p><code>procedure</code> 是个与某个过程或 lambda 表达式相绑定的符号。作为参数的表的个数视 <code>procedure</code> 需要的参数而定。</p>
 <h2 id="reduce">Reduce</h2>
 <p>关于 reduce 例子, 书里说的十分含糊, 经过资料查找, 可以发现示例来自<a href="https://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Reduction-of-Lists.html">GNU MIT-Scheme</a>的官方文档, 这里可以了解到:</p>

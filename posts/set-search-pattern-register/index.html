@@ -165,13 +165,13 @@
 <h2 id="存储到搜索寄存器">存储到搜索寄存器</h2>
 <p>那么问题就简单了 &ndash; 怎样可以更新搜索寄存器.</p>
 <p>通过 <code>:h registers</code> 可以了解到:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">10. Last search pattern register	&#34;/		*quote_/* *quote/*
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">10. Last search pattern register	&#34;/		*quote_/* *quote/*
 Contains the most recent search-pattern.  This is used for &#34;n&#34; and &#39;hlsearch&#39;.
 It is writable with `:let`, you can change it to have &#39;hlsearch&#39; highlight
 other matches without actually searching.  You can&#39;t yank or delete into this
 register.  The search direction is available in |v:searchforward|.
 </code></pre></div><p>这里可以看到搜索寄存器是可以通过 <code>:let</code> 来修改的. 那具体该怎么修改呢? 参见 <code>:h let-register</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">:let @{reg-name} = {expr1}			*:let-register* *:let-@*
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">:let @{reg-name} = {expr1}			*:let-register* *:let-@*
 			Write the result of the expression {expr1} in register
 			{reg-name}.  {reg-name} must be a single letter, and
 			must be the name of a writable register (see
@@ -191,16 +191,16 @@ register.  The search direction is available in |v:searchforward|.
 </ul>
 <h2 id="将指令保存在-macro-中来调用">将指令保存在 macro 中来调用</h2>
 <p>建议可以存到 macro 中. 这里也不特意展开了, 给一个例子, 设置 <code>@m</code> 为寄存动作:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">qm  # 打开 m macro 的记录功能
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">qm  # 打开 m macro 的记录功能
 :let @/ &lt;c-r&gt;&lt;c-w&gt;  # 或 `:let @/=&#39;\&lt;&#39;.expand(&#34;&lt;cword&gt;&#34;).&#39;\&gt;&#39;`
 q  # 关闭记录
 </code></pre></div><p>之后只要调用 <code>@m</code> 就可以将当前光标下的文字存储到搜索寄存器中. 一个直观的测试方式, <code>:set hlsearch</code> 打开你的搜索高亮, 用 <code>@m</code> 试试吧!</p>
 <h2 id="使用-nmap-映射为永久可用的快捷键">使用 <code>nmap</code> 映射为永久可用的快捷键</h2>
 <p>但是 macro 有一个问题就是随时可能被替代, 那 map 或许是一个好的解决方式.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:nnoremap &lt;Leader&gt;m :<span style="font-weight:bold">let</span> @/=<span style="font-style:italic">&#39;\&lt;&#39;</span>.expand(<span style="font-style:italic">&#34;&lt;cword&gt;&#34;</span>).<span style="font-style:italic">&#39;\&gt;&#39;</span>&lt;CR&gt;<span style="">
-</span><span style=""></span># 或者<span style="">
-</span><span style=""></span>:nnoremap &lt;Leader&gt;m :<span style="font-weight:bold">let</span> @/=<span style="font-style:italic">&#39;&lt;C-r&gt;&lt;C-w&gt;&#39;</span>&lt;CR&gt;<span style="">
-</span></code></pre></div>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:<span style="color:#268bd2">nnoremap</span> &lt;<span style="color:#268bd2">Leader</span>&gt;<span style="color:#268bd2">m</span> :<span style="color:#859900">let</span> @/=<span style="color:#2aa198">&#39;\&lt;&#39;</span>.<span style="color:#268bd2">expand</span>(<span style="color:#2aa198">&#34;&lt;cword&gt;&#34;</span>).<span style="color:#2aa198">&#39;\&gt;&#39;</span>&lt;<span style="color:#268bd2">CR</span>&gt;
+# <span style="color:#268bd2">或者</span>
+:<span style="color:#268bd2">nnoremap</span> &lt;<span style="color:#268bd2">Leader</span>&gt;<span style="color:#268bd2">m</span> :<span style="color:#859900">let</span> @/=<span style="color:#2aa198">&#39;&lt;C-r&gt;&lt;C-w&gt;&#39;</span>&lt;<span style="color:#268bd2">CR</span>&gt;
+</code></pre></div>
       </div>
 
 

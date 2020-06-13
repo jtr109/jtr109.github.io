@@ -168,25 +168,25 @@ now foo here: bar  可以看到, 在环境变量配置文件中使用 export, �
 </code></pre>
 <h3 id="不使用-export">不使用 <code>export</code></h3>
 <p>创建环境变量配置文件 <code>env.conf</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">FOO=bar
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#268bd2">FOO</span>=bar
 </code></pre></div><p>创建执行脚本 <code>subenv.sh</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">source env.conf
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">source</span> env.conf
 
-echo $FOO
+<span style="color:#cb4b16">echo</span> <span style="color:#268bd2">$FOO</span>
 
-envsubst &lt; <span style="font-style:italic">&#34;src.txt&#34;</span> &gt; <span style="font-style:italic">&#34;env-tar.txt&#34;</span>
+envsubst &lt; <span style="color:#2aa198">&#34;src.txt&#34;</span> &gt; <span style="color:#2aa198">&#34;env-tar.txt&#34;</span>
 </code></pre></div><p>执行脚本 <code>[subenv.sh](http://subenv.sh)</code> 查看生成的 <code>env-tar.txt</code> 文件:</p>
 <pre><code>now foo here:
 </code></pre>
 <h3 id="使用-export">使用 <code>export</code></h3>
 <p>创建环境变量配置文件 <code>exp.conf</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">export FOO=bar
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">export</span> <span style="color:#268bd2">FOO</span>=bar
 </code></pre></div><p>创建执行脚本 <code>subexp.sh</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">source exp.conf
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">source</span> exp.conf
 
-echo $FOO
+<span style="color:#cb4b16">echo</span> <span style="color:#268bd2">$FOO</span>
 
-envsubst &lt; <span style="font-style:italic">&#34;src.txt&#34;</span> &gt; <span style="font-style:italic">&#34;exp-tar.txt&#34;</span>
+envsubst &lt; <span style="color:#2aa198">&#34;src.txt&#34;</span> &gt; <span style="color:#2aa198">&#34;exp-tar.txt&#34;</span>
 </code></pre></div><p>执行脚本 <code>[subexp.sh](http://subexp.sh)</code> 查看生成文件 <code>exp-tar.txt</code>:</p>
 <pre><code>now foo here: bar
 </code></pre>
@@ -203,19 +203,19 @@ envsubst &lt; <span style="font-style:italic">&#34;src.txt&#34;</span> &gt; <spa
 <blockquote>
 <p><code>-o allexport</code> enables all following variable definitions to be exported. <code>+o allexport</code> disables this feature.</p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">set -o allexport
-source conf-file
-set +o allexport
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">set</span> -o allexport
+<span style="color:#cb4b16">source</span> conf-file
+<span style="color:#cb4b16">set</span> +o allexport
 </code></pre></div><p>经实践, 如果我们将 <code>subenv.sh</code> 改造成如下:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">set -o allexport
-source env.conf
-set +o allexport
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">set</span> -o allexport
+<span style="color:#cb4b16">source</span> env.conf
+<span style="color:#cb4b16">set</span> +o allexport
 
-echo $FOO
+<span style="color:#cb4b16">echo</span> <span style="color:#268bd2">$FOO</span>
 
-envsubst &lt; <span style="font-style:italic">&#34;src.txt&#34;</span> &gt; <span style="font-style:italic">&#34;env-tar.txt&#34;</span>
+envsubst &lt; <span style="color:#2aa198">&#34;src.txt&#34;</span> &gt; <span style="color:#2aa198">&#34;env-tar.txt&#34;</span>
 </code></pre></div><p>即可在输出文件中获得符合期待的结果:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">new foo here: bar
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">new foo here: bar
 </code></pre></div><h2 id="相关资料">相关资料</h2>
 <p><a href="https://hackjutsu.com/2016/08/04/Difference%20between%20set">Difference between set, export and env in bash</a></p>
 

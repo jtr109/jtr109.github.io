@@ -136,98 +136,98 @@ Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls
       <div>
         
         <h2 id="example-snippet">Example snippet</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">django.db</span> <span style="font-weight:bold">import</span> models
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.db</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">models</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Product</span>(models.Model):
-    <span style="font-weight:bold">pass</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Product</span>(<span style="color:#268bd2">models</span>.<span style="color:#268bd2">Model</span>):
+    <span style="color:#859900">pass</span>
 </code></pre></div><p><em>create a model</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">Product.objects.all()
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">Product</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">all</span>()
 </code></pre></div><p><em>execute model objects all</em></p>
 <h2 id="consideration">Consideration</h2>
 <p>How can we get a queryset from model?</p>
 <h2 id="source-snippet">Source snippet</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># django/db/models/base.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># django/db/models/base.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">ModelBase</span>(type):
-    <span style="font-weight:bold">def</span> __new__(cls, name, bases, attrs):
-        super_new = super(ModelBase, cls).__new__
-        <span style="font-style:italic"># ...</span>
-        new_class = super_new(cls, name, bases, new_attrs)
-        <span style="font-style:italic"># ...</span>
-        new_class.add_to_class(<span style="font-style:italic">&#39;_meta&#39;</span>, Options(meta, app_label))
-        <span style="font-style:italic"># ...</span>
-        new_class._prepare()
-        <span style="font-style:italic"># ...</span>
-        <span style="font-weight:bold">return</span> new_class
+<span style="color:#859900">class</span> <span style="color:#cb4b16">ModelBase</span>(<span style="color:#cb4b16">type</span>):
+    <span style="color:#859900">def</span> <span style="color:#268bd2">__new__</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">bases</span>, <span style="color:#268bd2">attrs</span>):
+        <span style="color:#268bd2">super_new</span> = <span style="color:#cb4b16">super</span>(<span style="color:#268bd2">ModelBase</span>, <span style="color:#268bd2">cls</span>).<span style="color:#268bd2">__new__</span>
+        <span style="color:#93a1a1;font-style:italic"># ...</span>
+        <span style="color:#268bd2">new_class</span> = <span style="color:#268bd2">super_new</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">bases</span>, <span style="color:#268bd2">new_attrs</span>)
+        <span style="color:#93a1a1;font-style:italic"># ...</span>
+        <span style="color:#268bd2">new_class</span>.<span style="color:#268bd2">add_to_class</span>(<span style="color:#2aa198">&#39;_meta&#39;</span>, <span style="color:#268bd2">Options</span>(<span style="color:#268bd2">meta</span>, <span style="color:#268bd2">app_label</span>))
+        <span style="color:#93a1a1;font-style:italic"># ...</span>
+        <span style="color:#268bd2">new_class</span>.<span style="color:#268bd2">_prepare</span>()
+        <span style="color:#93a1a1;font-style:italic"># ...</span>
+        <span style="color:#859900">return</span> <span style="color:#268bd2">new_class</span>
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-    <span style="font-weight:bold">def</span> _prepare(cls):
-        <span style="font-style:italic"># ...</span>
+    <span style="color:#859900">def</span> <span style="color:#268bd2">_prepare</span>(<span style="color:#268bd2">cls</span>):
+        <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> opts.managers <span style="font-weight:bold">or</span> cls._requires_legacy_default_manager():
-            <span style="font-weight:bold">if</span> any(f.name == <span style="font-style:italic">&#39;objects&#39;</span> <span style="font-weight:bold">for</span> f <span style="font-weight:bold">in</span> opts.fields):
-                <span style="font-weight:bold">raise</span> <span style="font-weight:bold">ValueError</span>(
-                    <span style="font-style:italic">&#34;Model </span><span style="font-weight:bold;font-style:italic">%s</span><span style="font-style:italic"> must specify a custom Manager, because it has a &#34;</span>
-                    <span style="font-style:italic">&#34;field named &#39;objects&#39;.&#34;</span> % cls.__name__
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">opts</span>.<span style="color:#268bd2">managers</span> <span style="color:#859900">or</span> <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_requires_legacy_default_manager</span>():
+            <span style="color:#859900">if</span> <span style="color:#cb4b16">any</span>(<span style="color:#268bd2">f</span>.<span style="color:#268bd2">name</span> == <span style="color:#2aa198">&#39;objects&#39;</span> <span style="color:#859900">for</span> <span style="color:#268bd2">f</span> <span style="color:#859900">in</span> <span style="color:#268bd2">opts</span>.<span style="color:#268bd2">fields</span>):
+                <span style="color:#859900">raise</span> <span style="color:#268bd2">ValueError</span>(
+                    <span style="color:#2aa198">&#34;Model </span><span style="color:#2aa198">%s</span><span style="color:#2aa198"> must specify a custom Manager, because it has a &#34;</span>
+                    <span style="color:#2aa198">&#34;field named &#39;objects&#39;.&#34;</span> % <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">__name__</span>
                 )
-            manager = Manager()
-            manager.auto_created = True
-            cls.add_to_class(<span style="font-style:italic">&#39;objects&#39;</span>, manager)
+            <span style="color:#268bd2">manager</span> = <span style="color:#268bd2">Manager</span>()
+            <span style="color:#268bd2">manager</span>.<span style="color:#268bd2">auto_created</span> = <span style="color:#268bd2">True</span>
+            <span style="color:#268bd2">cls</span>.<span style="color:#268bd2">add_to_class</span>(<span style="color:#2aa198">&#39;objects&#39;</span>, <span style="color:#268bd2">manager</span>)
 
-    <span style="font-weight:bold">def</span> add_to_class(cls, name, value):
-        <span style="font-style:italic"># We should call the contribute_to_class method only if it&#39;s bound</span>
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> inspect.isclass(value) <span style="font-weight:bold">and</span> hasattr(value, <span style="font-style:italic">&#39;contribute_to_class&#39;</span>):
-            value.contribute_to_class(cls, name)
-        <span style="font-weight:bold">else</span>:
-            setattr(cls, name, value)
+    <span style="color:#859900">def</span> <span style="color:#268bd2">add_to_class</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">value</span>):
+        <span style="color:#93a1a1;font-style:italic"># We should call the contribute_to_class method only if it&#39;s bound</span>
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">inspect</span>.<span style="color:#268bd2">isclass</span>(<span style="color:#268bd2">value</span>) <span style="color:#859900">and</span> <span style="color:#cb4b16">hasattr</span>(<span style="color:#268bd2">value</span>, <span style="color:#2aa198">&#39;contribute_to_class&#39;</span>):
+            <span style="color:#268bd2">value</span>.<span style="color:#268bd2">contribute_to_class</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">name</span>)
+        <span style="color:#859900">else</span>:
+            <span style="color:#cb4b16">setattr</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">value</span>)
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Model</span>(six.with_metaclass(ModelBase)):
-    <span style="font-style:italic"># ...</span>
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic">### django/db/models/manager.py</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Model</span>(<span style="color:#268bd2">six</span>.<span style="color:#268bd2">with_metaclass</span>(<span style="color:#268bd2">ModelBase</span>)):
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic">### django/db/models/manager.py</span>
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">BaseManager</span>(object):
-    <span style="font-style:italic"># ...</span>
-    <span style="font-weight:bold">def</span> contribute_to_class(self, model, name):
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> self.name:
-            self.name = name
-        self.model = model
+<span style="color:#859900">class</span> <span style="color:#cb4b16">BaseManager</span>(<span style="color:#cb4b16">object</span>):
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
+    <span style="color:#859900">def</span> <span style="color:#268bd2">contribute_to_class</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">model</span>, <span style="color:#268bd2">name</span>):
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">name</span>:
+            <span style="color:#268bd2">self</span>.<span style="color:#268bd2">name</span> = <span style="color:#268bd2">name</span>
+        <span style="color:#268bd2">self</span>.<span style="color:#268bd2">model</span> = <span style="color:#268bd2">model</span>
 
-        setattr(model, name, ManagerDescriptor(self))
+        <span style="color:#cb4b16">setattr</span>(<span style="color:#268bd2">model</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">ManagerDescriptor</span>(<span style="color:#268bd2">self</span>))
 
-        model._meta.add_manager(self)
+        <span style="color:#268bd2">model</span>.<span style="color:#268bd2">_meta</span>.<span style="color:#268bd2">add_manager</span>(<span style="color:#268bd2">self</span>)
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-    @classmethod
-    <span style="font-weight:bold">def</span> from_queryset(cls, queryset_class, class_name=None):
-        <span style="font-weight:bold">if</span> class_name <span style="font-weight:bold">is</span> None:
-            class_name = <span style="font-style:italic">&#39;</span><span style="font-weight:bold;font-style:italic">%s</span><span style="font-style:italic">From</span><span style="font-weight:bold;font-style:italic">%s</span><span style="font-style:italic">&#39;</span> % (cls.__name__, queryset_class.__name__)
-        class_dict = {
-            <span style="font-style:italic">&#39;_queryset_class&#39;</span>: queryset_class,
+    <span style="color:#268bd2">@classmethod</span>
+    <span style="color:#859900">def</span> <span style="color:#268bd2">from_queryset</span>(<span style="color:#268bd2">cls</span>, <span style="color:#268bd2">queryset_class</span>, <span style="color:#268bd2">class_name</span>=<span style="color:#268bd2">None</span>):
+        <span style="color:#859900">if</span> <span style="color:#268bd2">class_name</span> <span style="color:#859900">is</span> <span style="color:#268bd2">None</span>:
+            <span style="color:#268bd2">class_name</span> = <span style="color:#2aa198">&#39;</span><span style="color:#2aa198">%s</span><span style="color:#2aa198">From</span><span style="color:#2aa198">%s</span><span style="color:#2aa198">&#39;</span> % (<span style="color:#268bd2">cls</span>.<span style="color:#268bd2">__name__</span>, <span style="color:#268bd2">queryset_class</span>.<span style="color:#268bd2">__name__</span>)
+        <span style="color:#268bd2">class_dict</span> = {
+            <span style="color:#2aa198">&#39;_queryset_class&#39;</span>: <span style="color:#268bd2">queryset_class</span>,
         }
-        class_dict.update(cls._get_queryset_methods(queryset_class))
-        <span style="font-weight:bold">return</span> type(class_name, (cls,), class_dict)
+        <span style="color:#268bd2">class_dict</span>.<span style="color:#268bd2">update</span>(<span style="color:#268bd2">cls</span>.<span style="color:#268bd2">_get_queryset_methods</span>(<span style="color:#268bd2">queryset_class</span>))
+        <span style="color:#859900">return</span> <span style="color:#cb4b16">type</span>(<span style="color:#268bd2">class_name</span>, (<span style="color:#268bd2">cls</span>,), <span style="color:#268bd2">class_dict</span>)
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-    <span style="font-weight:bold">def</span> get_queryset(self):
-        <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">        Returns a new QuerySet object.  Subclasses can override this method to
-</span><span style="font-style:italic">        easily customize the behavior of the Manager.
-</span><span style="font-style:italic">        &#34;&#34;&#34;</span>
-        <span style="font-weight:bold">return</span> self._queryset_class(model=self.model, using=self._db, hints=self._hints)
+    <span style="color:#859900">def</span> <span style="color:#268bd2">get_queryset</span>(<span style="color:#268bd2">self</span>):
+        <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">        Returns a new QuerySet object.  Subclasses can override this method to
+</span><span style="color:#2aa198">        easily customize the behavior of the Manager.
+</span><span style="color:#2aa198">        &#34;&#34;&#34;</span>
+        <span style="color:#859900">return</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_queryset_class</span>(<span style="color:#268bd2">model</span>=<span style="color:#268bd2">self</span>.<span style="color:#268bd2">model</span>, <span style="color:#268bd2">using</span>=<span style="color:#268bd2">self</span>.<span style="color:#268bd2">_db</span>, <span style="color:#268bd2">hints</span>=<span style="color:#268bd2">self</span>.<span style="color:#268bd2">_hints</span>)
 
-    <span style="font-weight:bold">def</span> all(self):
-        <span style="font-weight:bold">return</span> self.get_request()
+    <span style="color:#859900">def</span> <span style="color:#268bd2">all</span>(<span style="color:#268bd2">self</span>):
+        <span style="color:#859900">return</span> <span style="color:#268bd2">self</span>.<span style="color:#268bd2">get_request</span>()
 
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">Manager</span>(BaseManager.from_queryset(QuerySet)):
-    <span style="font-weight:bold">pass</span>
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># django/db/models/query.py</span>
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">QuerySet</span>(object):
-        <span style="font-weight:bold">def</span> __init__(self, model=None, query=None, using=None, hints=None):
-            <span style="font-style:italic"># ...</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">Manager</span>(<span style="color:#268bd2">BaseManager</span>.<span style="color:#268bd2">from_queryset</span>(<span style="color:#268bd2">QuerySet</span>)):
+    <span style="color:#859900">pass</span>
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># django/db/models/query.py</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">QuerySet</span>(<span style="color:#cb4b16">object</span>):
+        <span style="color:#859900">def</span> <span style="color:#268bd2">__init__</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">model</span>=<span style="color:#268bd2">None</span>, <span style="color:#268bd2">query</span>=<span style="color:#268bd2">None</span>, <span style="color:#268bd2">using</span>=<span style="color:#268bd2">None</span>, <span style="color:#268bd2">hints</span>=<span style="color:#268bd2">None</span>):
+            <span style="color:#93a1a1;font-style:italic"># ...</span>
 </code></pre></div>
       </div>
 

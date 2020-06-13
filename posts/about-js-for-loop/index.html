@@ -153,48 +153,48 @@ let a = {&#39;a&#39;: 1, &#39;b&#39;: 2} let b = [&#39;a&#39;, &#39;b&#39;] let 
 <p><code>for ... of</code> 只能用于 Array, 用于 Object 或者 undefined 均会报错. 所以对于使用对象可能出现 undefined 的情况<strong>不要使用<code>for ... of</code></strong>.</p>
 <h3 id="示例">示例</h3>
 <p>对 Array 使用:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="font-weight:bold">let</span> a = {<span style="font-style:italic">&#39;a&#39;</span>: 1, <span style="font-style:italic">&#39;b&#39;</span>: 2}
-<span style="font-weight:bold">let</span> b = [<span style="font-style:italic">&#39;a&#39;</span>, <span style="font-style:italic">&#39;b&#39;</span>]
-<span style="font-weight:bold">let</span> c = <span style="font-weight:bold">undefined</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#859900">let</span> <span style="color:#268bd2">a</span> = {<span style="color:#2aa198">&#39;a&#39;</span>: <span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198">&#39;b&#39;</span>: <span style="color:#2aa198;font-weight:bold">2</span>}
+<span style="color:#859900">let</span> <span style="color:#268bd2">b</span> = [<span style="color:#2aa198">&#39;a&#39;</span>, <span style="color:#2aa198">&#39;b&#39;</span>]
+<span style="color:#859900">let</span> <span style="color:#268bd2">c</span> = <span style="color:#859900;font-weight:bold">undefined</span>
 
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">in</span> a) {
-  console.log(i)
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">in</span> <span style="color:#268bd2">a</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">i</span>)
 }
-<span style="font-style:italic">// return:
-</span><span style="font-style:italic">// a
-</span><span style="font-style:italic">// b
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">in</span> b) {
-  console.log(i)
+<span style="color:#93a1a1;font-style:italic">// return:
+</span><span style="color:#93a1a1;font-style:italic">// a
+</span><span style="color:#93a1a1;font-style:italic">// b
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">in</span> <span style="color:#268bd2">b</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">i</span>)
 }
-<span style="font-style:italic">// return:
-</span><span style="font-style:italic">// 0
-</span><span style="font-style:italic">// 1
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">in</span> c) {
-  console.log(i)
+<span style="color:#93a1a1;font-style:italic">// return:
+</span><span style="color:#93a1a1;font-style:italic">// 0
+</span><span style="color:#93a1a1;font-style:italic">// 1
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">in</span> <span style="color:#268bd2">c</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">i</span>)
 }
-<span style="font-style:italic">// return:
-</span><span style="font-style:italic">// undefined
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">of</span> a) {
-  console.log(i)
+<span style="color:#93a1a1;font-style:italic">// return:
+</span><span style="color:#93a1a1;font-style:italic">// undefined
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">of</span> <span style="color:#268bd2">a</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">i</span>)
 }
-<span style="font-style:italic">// Error:
-</span><span style="font-style:italic">// Uncaught TypeError: a[Symbol.iterator] is not a function
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">of</span> b) {
-  console.log(i)
+<span style="color:#93a1a1;font-style:italic">// Error:
+</span><span style="color:#93a1a1;font-style:italic">// Uncaught TypeError: a[Symbol.iterator] is not a function
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">of</span> <span style="color:#268bd2">b</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">i</span>)
 }
-<span style="font-style:italic">// return:
-</span><span style="font-style:italic">// a
-</span><span style="font-style:italic">// b
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> i <span style="font-weight:bold">of</span> c) {
-  console.log(<span style="font-style:italic">&#39;i&#39;</span>)
+<span style="color:#93a1a1;font-style:italic">// return:
+</span><span style="color:#93a1a1;font-style:italic">// a
+</span><span style="color:#93a1a1;font-style:italic">// b
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">i</span> <span style="color:#859900">of</span> <span style="color:#268bd2">c</span>) {
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#2aa198">&#39;i&#39;</span>)
 }
-<span style="font-style:italic">// Error:
-</span><span style="font-style:italic">// Uncaught TypeError: Cannot read property &#39;Symbol(Symbol.iterator)&#39; of undefined
+<span style="color:#93a1a1;font-style:italic">// Error:
+</span><span style="color:#93a1a1;font-style:italic">// Uncaught TypeError: Cannot read property &#39;Symbol(Symbol.iterator)&#39; of undefined
 </span></code></pre></div>
       </div>
 

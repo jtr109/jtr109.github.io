@@ -136,41 +136,41 @@
 <li>只要一个 <code>await</code> 语句后面的 Promise 变为 reject, 那么整个 <code>async</code> 函数都会中断执行</li>
 </ul>
 <h3 id="并发异步请求">并发异步请求</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="font-style:italic">// 写法一
-</span><span style="font-style:italic"></span><span style="font-weight:bold">let</span> [foo, bar] = await Promise.all([getFoo(), getBar()]);
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#93a1a1;font-style:italic">// 写法一
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">let</span> [<span style="color:#268bd2">foo</span>, <span style="color:#268bd2">bar</span>] = <span style="color:#268bd2">await</span> <span style="color:#cb4b16">Promise</span>.<span style="color:#268bd2">all</span>([<span style="color:#268bd2">getFoo</span>(), <span style="color:#268bd2">getBar</span>()]);
 
-<span style="font-style:italic">// 写法二
-</span><span style="font-style:italic"></span><span style="font-weight:bold">let</span> fooPromise = getFoo();
-<span style="font-weight:bold">let</span> barPromise = getBar();
-<span style="font-weight:bold">let</span> foo = await fooPromise;
-<span style="font-weight:bold">let</span> bar = await barPromise;
+<span style="color:#93a1a1;font-style:italic">// 写法二
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">let</span> <span style="color:#268bd2">fooPromise</span> = <span style="color:#268bd2">getFoo</span>();
+<span style="color:#859900">let</span> <span style="color:#268bd2">barPromise</span> = <span style="color:#268bd2">getBar</span>();
+<span style="color:#859900">let</span> <span style="color:#268bd2">foo</span> = <span style="color:#268bd2">await</span> <span style="color:#268bd2">fooPromise</span>;
+<span style="color:#859900">let</span> <span style="color:#268bd2">bar</span> = <span style="color:#268bd2">await</span> <span style="color:#268bd2">barPromise</span>;
 </code></pre></div><h3 id="for-循环并发异步请求">for 循环并发异步请求</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">async <span style="font-weight:bold">function</span> dbFuc(db) {
-  <span style="font-weight:bold">let</span> docs = [{}, {}, {}];
-  <span style="font-weight:bold">let</span> promises = docs.map((doc) =&gt; db.post(doc));
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#268bd2">async</span> <span style="color:#859900">function</span> <span style="color:#268bd2">dbFuc</span>(<span style="color:#268bd2">db</span>) {
+  <span style="color:#859900">let</span> <span style="color:#268bd2">docs</span> = [{}, {}, {}];
+  <span style="color:#859900">let</span> <span style="color:#268bd2">promises</span> = <span style="color:#268bd2">docs</span>.<span style="color:#268bd2">map</span>((<span style="color:#268bd2">doc</span>) =&gt; <span style="color:#268bd2">db</span>.<span style="color:#268bd2">post</span>(<span style="color:#268bd2">doc</span>));
 
-  <span style="font-weight:bold">let</span> results = await Promise.all(promises);
-  console.log(results);
+  <span style="color:#859900">let</span> <span style="color:#268bd2">results</span> = <span style="color:#268bd2">await</span> <span style="color:#cb4b16">Promise</span>.<span style="color:#268bd2">all</span>(<span style="color:#268bd2">promises</span>);
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">results</span>);
 }
 
-<span style="font-style:italic">// 或者使用下面的写法
-</span><span style="font-style:italic"></span>
-async <span style="font-weight:bold">function</span> dbFuc(db) {
-  <span style="font-weight:bold">let</span> docs = [{}, {}, {}];
-  <span style="font-weight:bold">let</span> promises = docs.map((doc) =&gt; db.post(doc));
+<span style="color:#93a1a1;font-style:italic">// 或者使用下面的写法
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#268bd2">async</span> <span style="color:#859900">function</span> <span style="color:#268bd2">dbFuc</span>(<span style="color:#268bd2">db</span>) {
+  <span style="color:#859900">let</span> <span style="color:#268bd2">docs</span> = [{}, {}, {}];
+  <span style="color:#859900">let</span> <span style="color:#268bd2">promises</span> = <span style="color:#268bd2">docs</span>.<span style="color:#268bd2">map</span>((<span style="color:#268bd2">doc</span>) =&gt; <span style="color:#268bd2">db</span>.<span style="color:#268bd2">post</span>(<span style="color:#268bd2">doc</span>));
 
-  <span style="font-weight:bold">let</span> results = [];
-  <span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> promise <span style="font-weight:bold">of</span> promises) {
-    results.push(await promise);
+  <span style="color:#859900">let</span> <span style="color:#268bd2">results</span> = [];
+  <span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">promise</span> <span style="color:#859900">of</span> <span style="color:#268bd2">promises</span>) {
+    <span style="color:#268bd2">results</span>.<span style="color:#268bd2">push</span>(<span style="color:#268bd2">await</span> <span style="color:#268bd2">promise</span>);
   }
-  console.log(results);
+  <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#268bd2">results</span>);
 }
 </code></pre></div><h3 id="for-循环继发异步请求">for 循环继发异步请求</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">async <span style="font-weight:bold">function</span> dbFuc(db) {
-  <span style="font-weight:bold">let</span> docs = [{}, {}, {}];
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#268bd2">async</span> <span style="color:#859900">function</span> <span style="color:#268bd2">dbFuc</span>(<span style="color:#268bd2">db</span>) {
+  <span style="color:#859900">let</span> <span style="color:#268bd2">docs</span> = [{}, {}, {}];
 
-  <span style="font-weight:bold">for</span> (<span style="font-weight:bold">let</span> doc <span style="font-weight:bold">of</span> docs) {
-    await db.post(doc);
+  <span style="color:#859900">for</span> (<span style="color:#859900">let</span> <span style="color:#268bd2">doc</span> <span style="color:#859900">of</span> <span style="color:#268bd2">docs</span>) {
+    <span style="color:#268bd2">await</span> <span style="color:#268bd2">db</span>.<span style="color:#268bd2">post</span>(<span style="color:#268bd2">doc</span>);
   }
 }
 </code></pre></div><p>acync 函数中遇到 await 就会等待执行完成后在继续执行接下来的语句, 在 for 循环中也是一样.</p>

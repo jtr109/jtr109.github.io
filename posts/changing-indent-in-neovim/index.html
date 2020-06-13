@@ -10,9 +10,8 @@
     <meta name="description" content="问题描述 使用 NeoVim 编辑 .sql 文件的时候发现默认的换行是一个 8 space 的 tab. 希望能将其改成 4 spaces.
 问题拆解 这其实会涉及到两个问题:
  Vim (NeoVim) 中如何修改缩进 如何对指定文件类型修改配置  修改缩进 关于修改缩进的需要做几个配置, 在这篇提问中可以找到解答:
-filetype plugin indent on&#34; On pressing tab, insert 2 spacesset expandtab&#34; show existing tab with 2 spaces widthset tabstop=2set softtabstop=2&#34; when indenting with &#39;&gt;&#39;, use 2 spaces widthset shiftwidth=2我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
-查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型. 可以在 Normal 状态下使用命令:
-:set filetype?">
+filetype plugin indent on &#34; On pressing tab, insert 2 spaces set expandtab &#34; show existing tab with 2 spaces width set tabstop=2 set softtabstop=2 &#34; when indenting with &#39;&gt;&#39;, use 2 spaces width set shiftwidth=2 我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
+查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
@@ -22,17 +21,15 @@ filetype plugin indent on&#34; On pressing tab, insert 2 spacesset expandtab&#34
 <meta name="twitter:description" content="问题描述 使用 NeoVim 编辑 .sql 文件的时候发现默认的换行是一个 8 space 的 tab. 希望能将其改成 4 spaces.
 问题拆解 这其实会涉及到两个问题:
  Vim (NeoVim) 中如何修改缩进 如何对指定文件类型修改配置  修改缩进 关于修改缩进的需要做几个配置, 在这篇提问中可以找到解答:
-filetype plugin indent on&#34; On pressing tab, insert 2 spacesset expandtab&#34; show existing tab with 2 spaces widthset tabstop=2set softtabstop=2&#34; when indenting with &#39;&gt;&#39;, use 2 spaces widthset shiftwidth=2我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
-查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型. 可以在 Normal 状态下使用命令:
-:set filetype?"/>
+filetype plugin indent on &#34; On pressing tab, insert 2 spaces set expandtab &#34; show existing tab with 2 spaces width set tabstop=2 set softtabstop=2 &#34; when indenting with &#39;&gt;&#39;, use 2 spaces width set shiftwidth=2 我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
+查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型."/>
 
     <meta property="og:title" content="在 NeoVim 中修改指定文件类型的缩进" />
 <meta property="og:description" content="问题描述 使用 NeoVim 编辑 .sql 文件的时候发现默认的换行是一个 8 space 的 tab. 希望能将其改成 4 spaces.
 问题拆解 这其实会涉及到两个问题:
  Vim (NeoVim) 中如何修改缩进 如何对指定文件类型修改配置  修改缩进 关于修改缩进的需要做几个配置, 在这篇提问中可以找到解答:
-filetype plugin indent on&#34; On pressing tab, insert 2 spacesset expandtab&#34; show existing tab with 2 spaces widthset tabstop=2set softtabstop=2&#34; when indenting with &#39;&gt;&#39;, use 2 spaces widthset shiftwidth=2我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
-查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型. 可以在 Normal 状态下使用命令:
-:set filetype?" />
+filetype plugin indent on &#34; On pressing tab, insert 2 spaces set expandtab &#34; show existing tab with 2 spaces width set tabstop=2 set softtabstop=2 &#34; when indenting with &#39;&gt;&#39;, use 2 spaces width set shiftwidth=2 我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
+查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jtr109.github.io/posts/changing-indent-in-neovim/" />
 <meta property="article:published_time" content="2019-11-07T22:41:13+00:00" />
@@ -154,36 +151,36 @@ filetype plugin indent on&#34; On pressing tab, insert 2 spacesset expandtab&#34
 </ul>
 <h2 id="修改缩进">修改缩进</h2>
 <p>关于修改缩进的需要做几个配置, 在<a href="https://vi.stackexchange.com/questions/13080/setting-tab-to-2-spaces">这篇提问</a>中可以找到解答:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">filetype plugin indent on<span style="">
-</span><span style=""></span><span style="font-style:italic">&#34; On pressing tab, insert 2 spaces</span><span style="">
-</span><span style=""></span>set expandtab<span style="">
-</span><span style=""></span><span style="font-style:italic">&#34; show existing tab with 2 spaces width</span><span style="">
-</span><span style=""></span>set tabstop=2<span style="">
-</span><span style=""></span>set softtabstop=2<span style="">
-</span><span style=""></span><span style="font-style:italic">&#34; when indenting with &#39;&gt;&#39;, use 2 spaces width</span><span style="">
-</span><span style=""></span>set shiftwidth=2<span style="">
-</span></code></pre></div><p>我们只要将 <code>2</code> 改成 <code>4</code> 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#268bd2">filetype</span> <span style="color:#268bd2">plugin</span> <span style="color:#268bd2">indent</span> <span style="color:#268bd2">on</span>
+<span style="color:#93a1a1;font-style:italic">&#34; On pressing tab, insert 2 spaces</span>
+<span style="color:#268bd2">set</span> <span style="color:#268bd2">expandtab</span>
+<span style="color:#93a1a1;font-style:italic">&#34; show existing tab with 2 spaces width</span>
+<span style="color:#268bd2">set</span> <span style="color:#268bd2">tabstop</span>=<span style="color:#2aa198;font-weight:bold">2</span>
+<span style="color:#268bd2">set</span> <span style="color:#268bd2">softtabstop</span>=<span style="color:#2aa198;font-weight:bold">2</span>
+<span style="color:#93a1a1;font-style:italic">&#34; when indenting with &#39;&gt;&#39;, use 2 spaces width</span>
+<span style="color:#268bd2">set</span> <span style="color:#268bd2">shiftwidth</span>=<span style="color:#2aa198;font-weight:bold">2</span>
+</code></pre></div><p>我们只要将 <code>2</code> 改成 <code>4</code> 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.</p>
 <h2 id="查看文件类型">查看文件类型</h2>
 <p>为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型. 可以在 Normal 状态下使用命令:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:set filetype?<span style="">
-</span></code></pre></div><p>如果在 <code>.sql</code> 文件中使用命令, 会得到结果:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">filetype=sql<span style="">
-</span></code></pre></div><p>即 <code>filetype</code> 是 <code>sql</code></p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:<span style="color:#268bd2">set</span> <span style="color:#268bd2">filetype</span>?
+</code></pre></div><p>如果在 <code>.sql</code> 文件中使用命令, 会得到结果:</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#268bd2">filetype</span>=<span style="color:#268bd2">sql</span>
+</code></pre></div><p>即 <code>filetype</code> 是 <code>sql</code></p>
 <h2 id="配置指定文件类型">配置指定文件类型</h2>
 <p>在 Vim 的配置目录 <code>~/.config/nvim</code> (Vim为 <code>~/.vimrc</code>) 下新建 <code>ftplugin</code> 目录, 根据文件类型 (上面示例中为 <code>sql</code>) 新建配置文件, 在其中添加配置.</p>
 <p>这里需要注意的是, 配置参数时使用 <code>setlocal</code> 而非 <code>set</code> 来控制影响范围. 具体用法请参考<a href="https://vi.stackexchange.com/a/9435">这篇回答</a>.</p>
 <p>所以我们需要在 <code>~/.config/nvim/ftplugin/sql.vim</code> 中写入配置:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="font-style:italic">&#34; On pressing tab, insert 4 spaces</span><span style="">
-</span><span style=""></span>setlocal expandtab<span style="">
-</span><span style=""></span><span style="font-style:italic">&#34; show existing tab with 4 spaces width</span><span style="">
-</span><span style=""></span>setlocal tabstop=4<span style="">
-</span><span style=""></span>setlocal softtabstop=4<span style="">
-</span><span style=""></span><span style="font-style:italic">&#34; when indenting with &#39;&gt;&#39;, use 4 spaces width</span><span style="">
-</span><span style=""></span>setlocal shiftwidth=4<span style="">
-</span></code></pre></div><h2 id="重载编辑器">重载编辑器</h2>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#93a1a1;font-style:italic">&#34; On pressing tab, insert 4 spaces</span>
+<span style="color:#268bd2">setlocal</span> <span style="color:#268bd2">expandtab</span>
+<span style="color:#93a1a1;font-style:italic">&#34; show existing tab with 4 spaces width</span>
+<span style="color:#268bd2">setlocal</span> <span style="color:#268bd2">tabstop</span>=<span style="color:#2aa198;font-weight:bold">4</span>
+<span style="color:#268bd2">setlocal</span> <span style="color:#268bd2">softtabstop</span>=<span style="color:#2aa198;font-weight:bold">4</span>
+<span style="color:#93a1a1;font-style:italic">&#34; when indenting with &#39;&gt;&#39;, use 4 spaces width</span>
+<span style="color:#268bd2">setlocal</span> <span style="color:#268bd2">shiftwidth</span>=<span style="color:#2aa198;font-weight:bold">4</span>
+</code></pre></div><h2 id="重载编辑器">重载编辑器</h2>
 <p>如果想在不关闭编辑器的情况下重载, 可以使用 <code>source</code> 命令加载主配置文件, 已 <code>~/.config/nvim/init.vim</code> 为例:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">source ~<span style="font-style:italic">/.config/</span>nvim/init.vim<span style="">
-</span></code></pre></div><p>#tech/vim</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#268bd2">source</span> ~<span style="color:#2aa198">/.config/</span><span style="color:#268bd2">nvim</span>/<span style="color:#268bd2">init</span>.<span style="color:#268bd2">vim</span>
+</code></pre></div><p>#tech/vim</p>
 
       </div>
 

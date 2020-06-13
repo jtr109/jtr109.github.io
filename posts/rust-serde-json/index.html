@@ -140,35 +140,35 @@
         
         <h2 id="背景">背景</h2>
 <p>今天学习 The Rust Cookbook 的时候看到一段 JSON 解码的代码:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="">#[macro_use]</span>
-<span style="font-weight:bold">extern</span> <span style="font-weight:bold">crate</span> serde_json;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">#[macro_use]</span>
+<span style="color:#859900">extern</span> <span style="color:#859900">crate</span> <span style="color:#268bd2">serde_json</span>;
 
-<span style="font-weight:bold">use</span> serde_json::{Value, Error};
+<span style="color:#859900">use</span> <span style="color:#268bd2">serde_json</span>::{<span style="color:#268bd2">Value</span>, <span style="color:#268bd2">Error</span>};
 
-<span style="font-weight:bold">fn</span> main() -&gt; Result&lt;(), Error&gt; {
-    <span style="font-weight:bold">let</span> j = r<span style="">#&#34;</span>{
-                 <span style="font-style:italic">&#34;userid&#34;</span>: 103609,
-                 <span style="font-style:italic">&#34;verified&#34;</span>: <span style="font-weight:bold">true</span>,
-                 <span style="font-style:italic">&#34;access_privileges&#34;</span>: [
-                   <span style="font-style:italic">&#34;user&#34;</span>,
-                   <span style="font-style:italic">&#34;admin&#34;</span>
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">Error</span>&gt; {
+    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#268bd2">r</span>#&#34;{
+                 <span style="color:#2aa198">&#34;userid&#34;</span>: <span style="color:#2aa198;font-weight:bold">103609</span>,
+                 <span style="color:#2aa198">&#34;verified&#34;</span>: <span style="color:#cb4b16">true</span>,
+                 <span style="color:#2aa198">&#34;access_privileges&#34;</span>: [
+                   <span style="color:#2aa198">&#34;user&#34;</span>,
+                   <span style="color:#2aa198">&#34;admin&#34;</span>
                  ]
-               }<span style="">&#34;#</span>;
+               }&#34;#;
 
-    <span style="font-weight:bold">let</span> parsed: <span style="font-weight:bold">Value</span> = serde_json::from_str(j)?;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">parsed</span>: <span style="color:#cb4b16">Value</span> = <span style="color:#268bd2">serde_json</span>::<span style="color:#268bd2">from_str</span>(<span style="color:#268bd2">j</span>)?;
 
-    <span style="font-weight:bold">let</span> expected = json!({
-        <span style="font-style:italic">&#34;userid&#34;</span>: 103609,
-        <span style="font-style:italic">&#34;verified&#34;</span>: <span style="font-weight:bold">true</span>,
-        <span style="font-style:italic">&#34;access_privileges&#34;</span>: [
-            <span style="font-style:italic">&#34;user&#34;</span>,
-            <span style="font-style:italic">&#34;admin&#34;</span>
+    <span style="color:#859900">let</span> <span style="color:#268bd2">expected</span> = <span style="color:#268bd2">json</span>!({
+        <span style="color:#2aa198">&#34;userid&#34;</span>: <span style="color:#2aa198;font-weight:bold">103609</span>,
+        <span style="color:#2aa198">&#34;verified&#34;</span>: <span style="color:#cb4b16">true</span>,
+        <span style="color:#2aa198">&#34;access_privileges&#34;</span>: [
+            <span style="color:#2aa198">&#34;user&#34;</span>,
+            <span style="color:#2aa198">&#34;admin&#34;</span>
         ]
     });
 
-    assert_eq!(parsed, expected);
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">parsed</span>, <span style="color:#268bd2">expected</span>);
 
-    Ok(())
+    <span style="color:#cb4b16">Ok</span>(())
 }
 </code></pre></div><h2 id="疑问">疑问</h2>
 <p>这里衍生出一个问题: &ldquo;变量 <code>expected</code> 被一个宏 <code>json!</code> 的结果赋值, 那这个 <code>expected</code> 到底是什么类型?&rdquo;</p>
@@ -178,36 +178,36 @@
 <!-- more -->
 <h2 id="提取字段值">提取字段值</h2>
 <p>文档中说明了可以显式指定转换类型, 生成对应类型的值, 例如 <code>T</code>: <code>Option&lt;T&gt;</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq!(expected[<span style="font-style:italic">&#34;userid&#34;</span>].as_u64().unwrap(), 103609);
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">expected</span>[<span style="color:#2aa198">&#34;userid&#34;</span>].<span style="color:#268bd2">as_u64</span>().<span style="color:#268bd2">unwrap</span>(), <span style="color:#2aa198;font-weight:bold">103609</span>);
 </code></pre></div><h2 id="转换为结构体">转换为结构体</h2>
 <p>虽然对单一字段可以这样操作, 但是将读取的 json 字符串转换为一个结构体是更合适的选择:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-weight:bold">extern</span> <span style="font-weight:bold">crate</span> serde_json;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">extern</span> <span style="color:#859900">crate</span> <span style="color:#268bd2">serde_json</span>;
 
-<span style="font-weight:bold">use</span> serde::Deserialize;
-<span style="font-weight:bold">use</span> serde_json::Error;
+<span style="color:#859900">use</span> <span style="color:#268bd2">serde</span>::<span style="color:#268bd2">Deserialize</span>;
+<span style="color:#859900">use</span> <span style="color:#268bd2">serde_json</span>::<span style="color:#268bd2">Error</span>;
 
-<span style="">#[derive(Debug, Deserialize)]</span>
-<span style="font-weight:bold">struct</span> <span style="font-weight:bold">User</span> {
-    userid: <span style="">u64</span>,
-    verified: <span style="">bool</span>,
-    access_privileges: Vec&lt;String&gt;,
+<span style="color:#93a1a1;font-style:italic">#[derive(Debug, Deserialize)]</span>
+<span style="color:#859900">struct</span> <span style="color:#cb4b16">User</span> {
+    <span style="color:#268bd2">userid</span>: <span style="color:#859900;font-weight:bold">u64</span>,
+    <span style="color:#268bd2">verified</span>: <span style="color:#859900;font-weight:bold">bool</span>,
+    <span style="color:#268bd2">access_privileges</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#cb4b16">String</span>&gt;,
 }
 
-<span style="font-weight:bold">fn</span> main() -&gt; Result&lt;(), Error&gt; {
-    <span style="font-weight:bold">let</span> j = r<span style="">#&#34;</span>{
-        <span style="font-style:italic">&#34;userid&#34;</span>: 103609,
-        <span style="font-style:italic">&#34;verified&#34;</span>: <span style="font-weight:bold">true</span>,
-        <span style="font-style:italic">&#34;access_privileges&#34;</span>: [
-            <span style="font-style:italic">&#34;user&#34;</span>,
-            <span style="font-style:italic">&#34;admin&#34;</span>
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">Error</span>&gt; {
+    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#268bd2">r</span>#&#34;{
+        <span style="color:#2aa198">&#34;userid&#34;</span>: <span style="color:#2aa198;font-weight:bold">103609</span>,
+        <span style="color:#2aa198">&#34;verified&#34;</span>: <span style="color:#cb4b16">true</span>,
+        <span style="color:#2aa198">&#34;access_privileges&#34;</span>: [
+            <span style="color:#2aa198">&#34;user&#34;</span>,
+            <span style="color:#2aa198">&#34;admin&#34;</span>
         ]
-    }<span style="">&#34;#</span>;
+    }&#34;#;
 
-    <span style="font-weight:bold">let</span> parsed: <span style="font-weight:bold">User</span> = serde_json::from_str(j)?;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">parsed</span>: <span style="color:#cb4b16">User</span> = <span style="color:#268bd2">serde_json</span>::<span style="color:#268bd2">from_str</span>(<span style="color:#268bd2">j</span>)?;
 
-    assert_eq!(parsed.userid, 103609);
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">parsed</span>.<span style="color:#268bd2">userid</span>, <span style="color:#2aa198;font-weight:bold">103609</span>);
 
-    Ok(())
+    <span style="color:#cb4b16">Ok</span>(())
 }
 </code></pre></div>
       </div>

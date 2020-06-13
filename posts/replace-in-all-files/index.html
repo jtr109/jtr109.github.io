@@ -158,27 +158,27 @@
 <p>目前想到的办法是通过 <code>ripgrep</code> 和 <code>sed</code> 实现, 具体方法可以参照 ripgrep 的<a href="https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#how-can-i-search-and-replace-with-ripgrep">文档</a>.</p>
 <h2 id="工作流">工作流</h2>
 <h3 id="全局查找">全局查找</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="font-style:italic">&#34;println&#34;</span> .
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="color:#2aa198">&#34;println&#34;</span> .
 ./src/main.rs
-2:    println!(<span style="font-style:italic">&#34;Hello world!&#34;</span>);
+2:    println!(<span style="color:#2aa198">&#34;Hello world!&#34;</span>);
 
 ./backend/src/bin/todo.rs
-8:    println!(<span style="font-style:italic">&#34;subcommands&#34;</span>);
-9:    println!(<span style="font-style:italic">&#34;    new&lt;title&gt;: create a new task&#34;</span>);
-33:        println!(<span style="font-style:italic">&#34;new: missing &lt;title&gt;&#34;</span>);
-44:        println!(<span style="font-style:italic">&#34;show: unexpected argument&#34;</span>);
-50:    println!(<span style="font-style:italic">&#34;TASKS\n-----&#34;</span>);
-52:        println!(<span style="font-style:italic">&#34;{}|{}|{}&#34;</span>, task.id, task.title, task.done);
-58:        println!(<span style="font-style:italic">&#34;accomplish: missing &lt;id&gt;&#34;</span>);
-67:            println!(<span style="font-style:italic">&#34;accomplish: &lt;id&gt; must be i32&#34;</span>);
-76:        println!(<span style="font-style:italic">&#34;acco: missing &lt;title&gt;&#34;</span>);
-88:        println!(<span style="font-style:italic">&#34;remove: missing &lt;title&gt;&#34;</span>);
+8:    println!(<span style="color:#2aa198">&#34;subcommands&#34;</span>);
+9:    println!(<span style="color:#2aa198">&#34;    new&lt;title&gt;: create a new task&#34;</span>);
+33:        println!(<span style="color:#2aa198">&#34;new: missing &lt;title&gt;&#34;</span>);
+44:        println!(<span style="color:#2aa198">&#34;show: unexpected argument&#34;</span>);
+50:    println!(<span style="color:#2aa198">&#34;TASKS\n-----&#34;</span>);
+52:        println!(<span style="color:#2aa198">&#34;{}|{}|{}&#34;</span>, task.id, task.title, task.done);
+58:        println!(<span style="color:#2aa198">&#34;accomplish: missing &lt;id&gt;&#34;</span>);
+67:            println!(<span style="color:#2aa198">&#34;accomplish: &lt;id&gt; must be i32&#34;</span>);
+76:        println!(<span style="color:#2aa198">&#34;acco: missing &lt;title&gt;&#34;</span>);
+88:        println!(<span style="color:#2aa198">&#34;remove: missing &lt;title&gt;&#34;</span>);
 </code></pre></div><h3 id="文件名筛选">文件名筛选</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="font-style:italic">&#34;println&#34;</span> . --files-with-matches
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="color:#2aa198">&#34;println&#34;</span> . --files-with-matches
 ./src/main.rs
 ./backend/src/bin/todo.rs
 </code></pre></div><h3 id="全局替换">全局替换</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="font-style:italic">&#34;println&#34;</span> . --files-with-matches -0 | xargs -0 sed -i <span style="font-style:italic">&#39;&#39;</span> <span style="font-style:italic">&#39;s/println/pp/g&#39;</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="color:#2aa198">&#34;println&#34;</span> . --files-with-matches -0 | xargs -0 sed -i <span style="color:#2aa198">&#39;&#39;</span> <span style="color:#2aa198">&#39;s/println/pp/g&#39;</span>
 </code></pre></div><p>#tech/shell</p>
 
       </div>

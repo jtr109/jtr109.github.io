@@ -156,33 +156,33 @@ def MessageToDict( message, including_default_value_fields=False, preserving_pro
 </ul>
 <h2 id="源码分析">源码分析</h2>
 <p>以 <code>MessageToDict</code> 为例, 我们看一下函数的定义.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">def</span> MessageToDict(
-    message,
-    including_default_value_fields=False,
-    preserving_proto_field_name=False,
-    use_integers_for_enums=False,
-    descriptor_pool=None):
-  <span style="font-style:italic">&#34;&#34;&#34;Converts protobuf message to a dictionary.
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">  When the dictionary is encoded to JSON, it conforms to proto3 JSON spec.
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">  Args:
-</span><span style="font-style:italic">    message: The protocol buffers message instance to serialize.
-</span><span style="font-style:italic">    including_default_value_fields: If True, singular primitive fields,
-</span><span style="font-style:italic">        repeated fields, and map fields will always be serialized.  If
-</span><span style="font-style:italic">        False, only serialize non-empty fields.  Singular message fields
-</span><span style="font-style:italic">        and oneof fields are not affected by this option.
-</span><span style="font-style:italic">    preserving_proto_field_name: If True, use the original proto field
-</span><span style="font-style:italic">        names as defined in the .proto file. If False, convert the field
-</span><span style="font-style:italic">        names to lowerCamelCase.
-</span><span style="font-style:italic">    use_integers_for_enums: If true, print integers instead of enum names.
-</span><span style="font-style:italic">    descriptor_pool: A Descriptor Pool for resolving types. If None use the
-</span><span style="font-style:italic">        default.
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">  Returns:
-</span><span style="font-style:italic">    A dict representation of the protocol buffer message.
-</span><span style="font-style:italic">  &#34;&#34;&#34;</span>
-      <span style="font-style:italic"># ...</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">def</span> <span style="color:#268bd2">MessageToDict</span>(
+    <span style="color:#268bd2">message</span>,
+    <span style="color:#268bd2">including_default_value_fields</span>=<span style="color:#268bd2">False</span>,
+    <span style="color:#268bd2">preserving_proto_field_name</span>=<span style="color:#268bd2">False</span>,
+    <span style="color:#268bd2">use_integers_for_enums</span>=<span style="color:#268bd2">False</span>,
+    <span style="color:#268bd2">descriptor_pool</span>=<span style="color:#268bd2">None</span>):
+  <span style="color:#2aa198">&#34;&#34;&#34;Converts protobuf message to a dictionary.
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">  When the dictionary is encoded to JSON, it conforms to proto3 JSON spec.
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">  Args:
+</span><span style="color:#2aa198">    message: The protocol buffers message instance to serialize.
+</span><span style="color:#2aa198">    including_default_value_fields: If True, singular primitive fields,
+</span><span style="color:#2aa198">        repeated fields, and map fields will always be serialized.  If
+</span><span style="color:#2aa198">        False, only serialize non-empty fields.  Singular message fields
+</span><span style="color:#2aa198">        and oneof fields are not affected by this option.
+</span><span style="color:#2aa198">    preserving_proto_field_name: If True, use the original proto field
+</span><span style="color:#2aa198">        names as defined in the .proto file. If False, convert the field
+</span><span style="color:#2aa198">        names to lowerCamelCase.
+</span><span style="color:#2aa198">    use_integers_for_enums: If true, print integers instead of enum names.
+</span><span style="color:#2aa198">    descriptor_pool: A Descriptor Pool for resolving types. If None use the
+</span><span style="color:#2aa198">        default.
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">  Returns:
+</span><span style="color:#2aa198">    A dict representation of the protocol buffer message.
+</span><span style="color:#2aa198">  &#34;&#34;&#34;</span>
+      <span style="color:#93a1a1;font-style:italic"># ...</span>
 </code></pre></div><p>所以自动忽略 zero value 和 field 转换分别是由 <code>including_default_value_fields</code> 和 <code>preserving_proto_field_name</code> 两个参数控制.</p>
 <h2 id="结论">结论</h2>
 <p>在调用 <code>MessageToDict</code> 函数时, 将以上两个参数指定为 <code>True</code> 即可解决问题. <a href="https://github.com/jtr109/zero-value-in-protos/blob/master/example.ipynb">代码示例</a>如下:</p>

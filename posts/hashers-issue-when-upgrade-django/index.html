@@ -147,105 +147,105 @@ Different behavior of User.check_password between objects from fixture and creat
 <h2 id="different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual">Different behavior of <code>User.check_password</code> between objects from fixture and created manual</h2>
 <p>I found when I use the official <code>check_password</code> on a user object from fixtures, the value of the object changed. But when I execute it on which I created recently. It did! I was confused about the difference.</p>
 <p><em>code in <code>django/contrib/auth/base_user</code></em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">django.contrib.auth.hashers</span> <span style="font-weight:bold">import</span> (
-    check_password, is_password_usable, make_password,
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.contrib.auth.hashers</span> <span style="color:#dc322f;font-weight:bold">import</span> (
+    <span style="color:#268bd2">check_password</span>, <span style="color:#268bd2">is_password_usable</span>, <span style="color:#268bd2">make_password</span>,
 )
 
-<span style="font-style:italic"># ...</span>
+<span style="color:#93a1a1;font-style:italic"># ...</span>
 
-@python_2_unicode_compatible
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">AbstractBaseUser</span>(models.Model):
-    password = models.CharField(_(<span style="font-style:italic">&#39;password&#39;</span>), max_length=128)
+<span style="color:#268bd2">@python_2_unicode_compatible</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">AbstractBaseUser</span>(<span style="color:#268bd2">models</span>.<span style="color:#268bd2">Model</span>):
+    <span style="color:#268bd2">password</span> = <span style="color:#268bd2">models</span>.<span style="color:#268bd2">CharField</span>(<span style="color:#268bd2">_</span>(<span style="color:#2aa198">&#39;password&#39;</span>), <span style="color:#268bd2">max_length</span>=<span style="color:#2aa198;font-weight:bold">128</span>)
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-    <span style="font-weight:bold">def</span> set_password(self, raw_password):
-        self.password = make_password(raw_password)
-        self._password = raw_password
+    <span style="color:#859900">def</span> <span style="color:#268bd2">set_password</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">raw_password</span>):
+        <span style="color:#268bd2">self</span>.<span style="color:#268bd2">password</span> = <span style="color:#268bd2">make_password</span>(<span style="color:#268bd2">raw_password</span>)
+        <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_password</span> = <span style="color:#268bd2">raw_password</span>
 
-    <span style="font-weight:bold">def</span> check_password(self, raw_password):
-        <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">        Return a boolean of whether the raw_password was correct. Handles
-</span><span style="font-style:italic">        hashing formats behind the scenes.
-</span><span style="font-style:italic">        &#34;&#34;&#34;</span>
-        <span style="font-weight:bold">def</span> setter(raw_password):
-            self.set_password(raw_password)
-            <span style="font-style:italic"># Password hash upgrades shouldn&#39;t be considered password changes.</span>
-            self._password = None
-            self.save(update_fields=[<span style="font-style:italic">&#34;password&#34;</span>])
-        <span style="font-weight:bold">return</span> check_password(raw_password, self.password, setter)
+    <span style="color:#859900">def</span> <span style="color:#268bd2">check_password</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">raw_password</span>):
+        <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">        Return a boolean of whether the raw_password was correct. Handles
+</span><span style="color:#2aa198">        hashing formats behind the scenes.
+</span><span style="color:#2aa198">        &#34;&#34;&#34;</span>
+        <span style="color:#859900">def</span> <span style="color:#268bd2">setter</span>(<span style="color:#268bd2">raw_password</span>):
+            <span style="color:#268bd2">self</span>.<span style="color:#268bd2">set_password</span>(<span style="color:#268bd2">raw_password</span>)
+            <span style="color:#93a1a1;font-style:italic"># Password hash upgrades shouldn&#39;t be considered password changes.</span>
+            <span style="color:#268bd2">self</span>.<span style="color:#268bd2">_password</span> = <span style="color:#268bd2">None</span>
+            <span style="color:#268bd2">self</span>.<span style="color:#268bd2">save</span>(<span style="color:#268bd2">update_fields</span>=[<span style="color:#2aa198">&#34;password&#34;</span>])
+        <span style="color:#859900">return</span> <span style="color:#268bd2">check_password</span>(<span style="color:#268bd2">raw_password</span>, <span style="color:#268bd2">self</span>.<span style="color:#268bd2">password</span>, <span style="color:#268bd2">setter</span>)
 </code></pre></div><p><em>code in <code>django/contrib/auth/hasher.py</code></em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">def</span> check_password(password, encoded, setter=None, preferred=<span style="font-style:italic">&#39;default&#39;</span>):
-    <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">    Returns a boolean of whether the raw password matches the three
-</span><span style="font-style:italic">    part encoded digest.
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">    If setter is specified, it&#39;ll be called when you need to
-</span><span style="font-style:italic">    regenerate the password.
-</span><span style="font-style:italic">    &#34;&#34;&#34;</span>
-    <span style="font-weight:bold">if</span> password <span style="font-weight:bold">is</span> None <span style="font-weight:bold">or</span> <span style="font-weight:bold">not</span> is_password_usable(encoded):
-        <span style="font-weight:bold">return</span> False
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">def</span> <span style="color:#268bd2">check_password</span>(<span style="color:#268bd2">password</span>, <span style="color:#268bd2">encoded</span>, <span style="color:#268bd2">setter</span>=<span style="color:#268bd2">None</span>, <span style="color:#268bd2">preferred</span>=<span style="color:#2aa198">&#39;default&#39;</span>):
+    <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">    Returns a boolean of whether the raw password matches the three
+</span><span style="color:#2aa198">    part encoded digest.
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">    If setter is specified, it&#39;ll be called when you need to
+</span><span style="color:#2aa198">    regenerate the password.
+</span><span style="color:#2aa198">    &#34;&#34;&#34;</span>
+    <span style="color:#859900">if</span> <span style="color:#268bd2">password</span> <span style="color:#859900">is</span> <span style="color:#268bd2">None</span> <span style="color:#859900">or</span> <span style="color:#859900">not</span> <span style="color:#268bd2">is_password_usable</span>(<span style="color:#268bd2">encoded</span>):
+        <span style="color:#859900">return</span> <span style="color:#268bd2">False</span>
 
-    preferred = get_hasher(preferred)
-    hasher = identify_hasher(encoded)
+    <span style="color:#268bd2">preferred</span> = <span style="color:#268bd2">get_hasher</span>(<span style="color:#268bd2">preferred</span>)
+    <span style="color:#268bd2">hasher</span> = <span style="color:#268bd2">identify_hasher</span>(<span style="color:#268bd2">encoded</span>)
 
-    hasher_changed = hasher.algorithm != preferred.algorithm
-    must_update = hasher_changed <span style="font-weight:bold">or</span> preferred.must_update(encoded)
-    is_correct = hasher.verify(password, encoded)
+    <span style="color:#268bd2">hasher_changed</span> = <span style="color:#268bd2">hasher</span>.<span style="color:#268bd2">algorithm</span> != <span style="color:#268bd2">preferred</span>.<span style="color:#268bd2">algorithm</span>
+    <span style="color:#268bd2">must_update</span> = <span style="color:#268bd2">hasher_changed</span> <span style="color:#859900">or</span> <span style="color:#268bd2">preferred</span>.<span style="color:#268bd2">must_update</span>(<span style="color:#268bd2">encoded</span>)
+    <span style="color:#268bd2">is_correct</span> = <span style="color:#268bd2">hasher</span>.<span style="color:#268bd2">verify</span>(<span style="color:#268bd2">password</span>, <span style="color:#268bd2">encoded</span>)
 
-    <span style="font-style:italic"># If the hasher didn&#39;t change (we don&#39;t protect against enumeration if it</span>
-    <span style="font-style:italic"># does) and the password should get updated, try to close the timing gap</span>
-    <span style="font-style:italic"># between the work factor of the current encoded password and the default</span>
-    <span style="font-style:italic"># work factor.</span>
-    <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> is_correct <span style="font-weight:bold">and</span> <span style="font-weight:bold">not</span> hasher_changed <span style="font-weight:bold">and</span> must_update:
-        hasher.harden_runtime(password, encoded)
+    <span style="color:#93a1a1;font-style:italic"># If the hasher didn&#39;t change (we don&#39;t protect against enumeration if it</span>
+    <span style="color:#93a1a1;font-style:italic"># does) and the password should get updated, try to close the timing gap</span>
+    <span style="color:#93a1a1;font-style:italic"># between the work factor of the current encoded password and the default</span>
+    <span style="color:#93a1a1;font-style:italic"># work factor.</span>
+    <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">is_correct</span> <span style="color:#859900">and</span> <span style="color:#859900">not</span> <span style="color:#268bd2">hasher_changed</span> <span style="color:#859900">and</span> <span style="color:#268bd2">must_update</span>:
+        <span style="color:#268bd2">hasher</span>.<span style="color:#268bd2">harden_runtime</span>(<span style="color:#268bd2">password</span>, <span style="color:#268bd2">encoded</span>)
 
-    <span style="font-weight:bold">if</span> setter <span style="font-weight:bold">and</span> is_correct <span style="font-weight:bold">and</span> must_update:
-        setter(password)
-    <span style="font-weight:bold">return</span> is_correct
+    <span style="color:#859900">if</span> <span style="color:#268bd2">setter</span> <span style="color:#859900">and</span> <span style="color:#268bd2">is_correct</span> <span style="color:#859900">and</span> <span style="color:#268bd2">must_update</span>:
+        <span style="color:#268bd2">setter</span>(<span style="color:#268bd2">password</span>)
+    <span style="color:#859900">return</span> <span style="color:#268bd2">is_correct</span>
 </code></pre></div><p>We can find when executed <code>check_password</code> of <code>User</code> object. The setter will be called when the password <code>is_correct</code> and <code>must_update</code>. And I find the <code>must_update</code> is <code>False</code> when checking the one I creatd but <code>True</code> in fixtures.</p>
 <h2 id="why-must_update">Why <code>must_update</code>?</h2>
 <p>The variable <code>preferred</code> with attribute <code>must_update</code> is declared by <code>get_hasher</code> and we can find it is an instance of <code>PBKDF2PasswordHasher</code> as default. So the dependence of updating is the <code>iterations</code> in decoded password.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">PBKDF2PasswordHasher</span>(BasePasswordHasher):
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">PBKDF2PasswordHasher</span>(<span style="color:#268bd2">BasePasswordHasher</span>):
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 
-    <span style="font-weight:bold">def</span> must_update(self, encoded):
-        algorithm, iterations, salt, hash = encoded.split(<span style="font-style:italic">&#39;$&#39;</span>, 3)
-        <span style="font-weight:bold">return</span> int(iterations) != self.iterations
+    <span style="color:#859900">def</span> <span style="color:#268bd2">must_update</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">encoded</span>):
+        <span style="color:#268bd2">algorithm</span>, <span style="color:#268bd2">iterations</span>, <span style="color:#268bd2">salt</span>, <span style="color:#cb4b16">hash</span> = <span style="color:#268bd2">encoded</span>.<span style="color:#268bd2">split</span>(<span style="color:#2aa198">&#39;$&#39;</span>, <span style="color:#2aa198;font-weight:bold">3</span>)
+        <span style="color:#859900">return</span> <span style="color:#cb4b16">int</span>(<span style="color:#268bd2">iterations</span>) != <span style="color:#268bd2">self</span>.<span style="color:#268bd2">iterations</span>
 </code></pre></div><p>I printed the decoded password and found the iterations in fixtures is 24000 and was changed into 36000 after <code>check_password</code>. And here is the truth that the iterations of <code>PBKDF2PasswordHasher</code> in version 1.9.10 of Django is 24000 and is changed into 36000 in the version 1.11.14. But of couse it will not make any trouble when <code>check_password</code> in the new version, just changing the decoded password of user object.</p>
 <details><summary>snippet of `PBKDF2PasswordHasher` in Django 1.9.10</summary>
 <p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">PBKDF2PasswordHasher</span>(BasePasswordHasher):
-    <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">    Secure password hashing using the PBKDF2 algorithm (recommended)
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">    Configured to use PBKDF2 + HMAC + SHA256.
-</span><span style="font-style:italic">    The result is a 64 byte binary string.  Iterations may be changed
-</span><span style="font-style:italic">    safely but you must rename the algorithm if you change SHA256.
-</span><span style="font-style:italic">    &#34;&#34;&#34;</span>
-    algorithm = <span style="font-style:italic">&#34;pbkdf2_sha256&#34;</span>
-    iterations = 24000
-    digest = hashlib.sha256
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">PBKDF2PasswordHasher</span>(<span style="color:#268bd2">BasePasswordHasher</span>):
+    <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">    Secure password hashing using the PBKDF2 algorithm (recommended)
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">    Configured to use PBKDF2 + HMAC + SHA256.
+</span><span style="color:#2aa198">    The result is a 64 byte binary string.  Iterations may be changed
+</span><span style="color:#2aa198">    safely but you must rename the algorithm if you change SHA256.
+</span><span style="color:#2aa198">    &#34;&#34;&#34;</span>
+    <span style="color:#268bd2">algorithm</span> = <span style="color:#2aa198">&#34;pbkdf2_sha256&#34;</span>
+    <span style="color:#268bd2">iterations</span> = <span style="color:#2aa198;font-weight:bold">24000</span>
+    <span style="color:#268bd2">digest</span> = <span style="color:#268bd2">hashlib</span>.<span style="color:#268bd2">sha256</span>
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 </code></pre></div></p>
 </details>
 <details><summary>snippet of `PBKDF2PasswordHasher` in Django 1.11.14</summary>
 <p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">class</span> <span style="font-weight:bold">PBKDF2PasswordHasher</span>(BasePasswordHasher):
-    <span style="font-style:italic">&#34;&#34;&#34;
-</span><span style="font-style:italic">    Secure password hashing using the PBKDF2 algorithm (recommended)
-</span><span style="font-style:italic">
-</span><span style="font-style:italic">    Configured to use PBKDF2 + HMAC + SHA256.
-</span><span style="font-style:italic">    The result is a 64 byte binary string.  Iterations may be changed
-</span><span style="font-style:italic">    safely but you must rename the algorithm if you change SHA256.
-</span><span style="font-style:italic">    &#34;&#34;&#34;</span>
-    algorithm = <span style="font-style:italic">&#34;pbkdf2_sha256&#34;</span>
-    iterations = 36000
-    digest = hashlib.sha256
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#859900">class</span> <span style="color:#cb4b16">PBKDF2PasswordHasher</span>(<span style="color:#268bd2">BasePasswordHasher</span>):
+    <span style="color:#2aa198">&#34;&#34;&#34;
+</span><span style="color:#2aa198">    Secure password hashing using the PBKDF2 algorithm (recommended)
+</span><span style="color:#2aa198">
+</span><span style="color:#2aa198">    Configured to use PBKDF2 + HMAC + SHA256.
+</span><span style="color:#2aa198">    The result is a 64 byte binary string.  Iterations may be changed
+</span><span style="color:#2aa198">    safely but you must rename the algorithm if you change SHA256.
+</span><span style="color:#2aa198">    &#34;&#34;&#34;</span>
+    <span style="color:#268bd2">algorithm</span> = <span style="color:#2aa198">&#34;pbkdf2_sha256&#34;</span>
+    <span style="color:#268bd2">iterations</span> = <span style="color:#2aa198;font-weight:bold">36000</span>
+    <span style="color:#268bd2">digest</span> = <span style="color:#268bd2">hashlib</span>.<span style="color:#268bd2">sha256</span>
 
-    <span style="font-style:italic"># ...</span>
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
 </code></pre></div></p>
 </details>
 <p>After figuring out the cause of changing in password, I found the tip in the section <a href="https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading">Password upgrading</a> in Django documentation.</p>

@@ -180,12 +180,12 @@ Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
 <p>在 HTML 中，我们可以使用 Ruby Tag 来实现这个需求。</p>
 <h3 id="ruby-tag-概述">Ruby Tag 概述</h3>
 <p>这里简单解释一下 ruby tag 的整体结构：</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="font-weight:bold">ruby</span>&gt;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#268bd2;font-weight:bold">ruby</span>&gt;
   计算过程
-  &lt;<span style="font-weight:bold">rp</span>&gt;（&lt;/<span style="font-weight:bold">rp</span>&gt;
-  &lt;<span style="font-weight:bold">rt</span>&gt;computational process&lt;/<span style="font-weight:bold">rt</span>&gt;
-  &lt;<span style="font-weight:bold">rp</span>&gt;）&lt;/<span style="font-weight:bold">rp</span>&gt;
-&lt;/<span style="font-weight:bold">ruby</span>&gt;
+  &lt;<span style="color:#268bd2;font-weight:bold">rp</span>&gt;（&lt;/<span style="color:#268bd2;font-weight:bold">rp</span>&gt;
+  &lt;<span style="color:#268bd2;font-weight:bold">rt</span>&gt;computational process&lt;/<span style="color:#268bd2;font-weight:bold">rt</span>&gt;
+  &lt;<span style="color:#268bd2;font-weight:bold">rp</span>&gt;）&lt;/<span style="color:#268bd2;font-weight:bold">rp</span>&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">ruby</span>&gt;
 </code></pre></div><p><code>&lt;ruby&gt;</code> 中的元素主要分为几部分：</p>
 <ul>
 <li>主体，即示例中的「计算过程」。这部分是正常显示在段落中的内容，其格式继承自 <code>&lt;ruby&gt;</code> 外部的格式。</li>
@@ -193,7 +193,7 @@ Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
 <li><code>&lt;rt&gt;</code> 用来包裹注释信息，注释会以小字形式显示在主体内容的上方。</li>
 </ul>
 <h3 id="实践示例">实践示例</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">我们将要学习&lt;ruby&gt;计算过程&lt;rp&gt;（&lt;/rp&gt;&lt;rt&gt;computational process&lt;/rt&gt;&lt;rp&gt;）&lt;/rp&gt;&lt;/ruby&gt;的概念。
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">我们将要学习&lt;ruby&gt;计算过程&lt;rp&gt;（&lt;/rp&gt;&lt;rt&gt;computational process&lt;/rt&gt;&lt;rp&gt;）&lt;/rp&gt;&lt;/ruby&gt;的概念。
 </code></pre></div><p>实现的效果如下：</p>
 <blockquote>
 <p>我们将要学习<ruby>计算过程<rp>（</rp><rt>computational process</rt><rp>）</rp></ruby>的概念。</p>

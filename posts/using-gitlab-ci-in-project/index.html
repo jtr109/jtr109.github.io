@@ -160,20 +160,20 @@ docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/git
 <p>工具<a href="https://docs.gitlab.com/runner/install/docker.html#docker-image-installation">文档</a>安装好 Docker CE 和 <code>gitlab-runner</code>, 意味着你拉起了一个 runners 调度器.</p>
 <h3 id="配置-runner">配置 Runner</h3>
 <p>根据<a href="https://docs.gitlab.com/runner/register/index.html#docker">文档</a>触发 Runner 注册:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register
 </code></pre></div><p>注册时需要指定 URL 和 registration token, 可以在项目 <strong>Settings -&gt; CI / CD -&gt; Runners</strong> 中查到. 注册时可以指定这个 Runner 的 Tag, 如果项目配置的 Job 中有对应的 Tag, 就会触发该 Runner 的执行.</p>
 <h2 id="python-集成">Python 集成</h2>
 <p>以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在<a href="https://docs.gitlab.com/ee/ci/yaml/">文档</a>中找到.</p>
 <h3 id="编写配置">编写配置</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="font-weight:bold">image</span>: python:3.7.4  <span style="font-style:italic"># 指定使用的基础镜像</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#859900">image</span>: python:<span style="color:#2aa198;font-weight:bold">3.7.4</span>  <span style="color:#93a1a1;font-style:italic"># 指定使用的基础镜像</span>
 
-<span style="font-weight:bold">job1</span>:
-  <span style="font-weight:bold">stage</span>: test
-  <span style="font-weight:bold">script</span>:
-    - python -c <span style="font-style:italic">&#34;print(&#39;hello&#39;)&#34;</span>  <span style="font-style:italic"># 执行语句</span>
-    - python -c <span style="font-style:italic">&#34;print(&#39;world&#39;)&#34;</span>
-  <span style="font-weight:bold">tags</span>:
-    - pyservice  <span style="font-style:italic"># 指定 runner 对应的 tag</span>
+<span style="color:#859900">job1</span>:
+  <span style="color:#859900">stage</span>: test
+  <span style="color:#859900">script</span>:
+    - python -c <span style="color:#2aa198">&#34;print(&#39;hello&#39;)&#34;</span>  <span style="color:#93a1a1;font-style:italic"># 执行语句</span>
+    - python -c <span style="color:#2aa198">&#34;print(&#39;world&#39;)&#34;</span>
+  <span style="color:#859900">tags</span>:
+    - pyservice  <span style="color:#93a1a1;font-style:italic"># 指定 runner 对应的 tag</span>
 </code></pre></div><p>需要注意的是 <code>image</code>, <code>before_script</code> 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 <code>before_script</code>, 那这个 job 被触发的时候, 不会读取和执行全局的 <code>before_script</code>.</p>
 <h3 id="设置缓存">设置缓存</h3>
 <p>在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考<a href="https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies">文档 Caching Python dependencies</a>中的方案进行配置.</p>

@@ -148,44 +148,44 @@
 </blockquote>
 <p>大部分语言中, 书写形式是递归, 但是处理逻辑是迭代的.</p>
 <h4 id="练习-19">练习 1.9</h4>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp"><span style="">#</span> 题干
-(define (+ a b)
-  (<span style="font-weight:bold">if</span> (= a 0)
-      b
-      (inc (+ (dec a) b))))
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp"># <span style="color:#268bd2">题干</span>
+(<span style="color:#268bd2">define</span> (<span style="color:#268bd2">+</span> <span style="color:#268bd2">a</span> <span style="color:#268bd2">b</span>)
+  (<span style="color:#859900">if</span> (<span style="color:#268bd2">=</span> <span style="color:#268bd2">a</span> <span style="color:#2aa198;font-weight:bold">0</span>)
+      <span style="color:#268bd2">b</span>
+      (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">+</span> (<span style="color:#268bd2">dec</span> <span style="color:#268bd2">a</span>) <span style="color:#268bd2">b</span>))))
 
-(define (+ a b)
-  (<span style="font-weight:bold">if</span> (= a 0)
-      b
-      (+ (dec a) (inc b))))
+(<span style="color:#268bd2">define</span> (<span style="color:#268bd2">+</span> <span style="color:#268bd2">a</span> <span style="color:#268bd2">b</span>)
+  (<span style="color:#859900">if</span> (<span style="color:#268bd2">=</span> <span style="color:#268bd2">a</span> <span style="color:#2aa198;font-weight:bold">0</span>)
+      <span style="color:#268bd2">b</span>
+      (<span style="color:#268bd2">+</span> (<span style="color:#268bd2">dec</span> <span style="color:#268bd2">a</span>) (<span style="color:#268bd2">inc</span> <span style="color:#268bd2">b</span>))))
 
-<span style="">#</span> 计算 (+ 4 5)
-<span style="">#</span> 计算过程是递归的或者迭代的吗
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp"><span style="">#</span> 定义1
+# <span style="color:#268bd2">计算</span> (<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">4</span> <span style="color:#2aa198;font-weight:bold">5</span>)
+# <span style="color:#268bd2">计算过程是递归的或者迭代的吗</span>
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp"># <span style="color:#268bd2">定义1</span>
 
-(+ 4 5)
-(inc (+ 3 5))
-(inc (inc (+ 2 5)))
-(inc (inc (inc (+ 1 5))))
-(inc (inc (inc (inc (+ 0 5)))))
-(inc (inc (inc (inc 5))))
-(inc (inc (inc 6)))
-(inc (inc 7))
-(inc 8)
-9
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">4</span> <span style="color:#2aa198;font-weight:bold">5</span>)
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">3</span> <span style="color:#2aa198;font-weight:bold">5</span>))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#2aa198;font-weight:bold">5</span>)))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">5</span>))))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">0</span> <span style="color:#2aa198;font-weight:bold">5</span>)))))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> <span style="color:#2aa198;font-weight:bold">5</span>))))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> <span style="color:#2aa198;font-weight:bold">6</span>)))
+(<span style="color:#268bd2">inc</span> (<span style="color:#268bd2">inc</span> <span style="color:#2aa198;font-weight:bold">7</span>))
+(<span style="color:#268bd2">inc</span> <span style="color:#2aa198;font-weight:bold">8</span>)
+<span style="color:#2aa198;font-weight:bold">9</span>
 
-<span style="">#</span> 结论: 以上递归过程属于线性递归计算过程
+# <span style="color:#268bd2">结论:</span> <span style="color:#268bd2">以上递归过程属于线性递归计算过程</span>
 
-<span style="">#</span> 定义 2
+# <span style="color:#268bd2">定义</span> <span style="color:#2aa198;font-weight:bold">2</span>
 
-(+ 4 5)
-(+ 3 6)
-(+ 2 7)
-(+ 1 8)
-(+ 0 9)
-0
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">4</span> <span style="color:#2aa198;font-weight:bold">5</span>)
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">3</span> <span style="color:#2aa198;font-weight:bold">6</span>)
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#2aa198;font-weight:bold">7</span>)
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">8</span>)
+(<span style="color:#268bd2">+</span> <span style="color:#2aa198;font-weight:bold">0</span> <span style="color:#2aa198;font-weight:bold">9</span>)
+<span style="color:#2aa198;font-weight:bold">0</span>
 
-<span style="">#</span> 结论: 以上递归过程属于线性迭代计算过程
+# <span style="color:#268bd2">结论:</span> <span style="color:#268bd2">以上递归过程属于线性迭代计算过程</span>
 </code></pre></div><p>引用 <a href="http://sicp.readthedocs.io/en/latest/chp1/9.html">SICP 习题集</a> 中的话:</p>
 <blockquote>
 <ul>
@@ -194,25 +194,25 @@
 </ul>
 </blockquote>
 <h4 id="联系-110">联系 1.10</h4>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP"><span style="">#</span> (A 1 10)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP"># (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">10</span>)
 
-(A 1 10)
-(A 0 (A 1 9))
-(A 0 (A 0 (A 1 8)))
-<span style="">#</span> ...
-(A 0 (A 0 ... (A 0(A 1 1))))  <span style="">#</span> 9 个 (A 0 ...)
-(A 0 (A 0 ... (A 0 2)))  <span style="">#</span> 9 个 (A 0 ...)
-2^10
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP">(define (f n)
-  (* 2 n))
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP"><span style="">#</span> (define (g n)
-<span style="">#</span>   (A 1 n))
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">10</span>)
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">9</span>))
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">8</span>)))
+# ...
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> ... (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span>(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#2aa198;font-weight:bold">1</span>))))  # <span style="color:#2aa198;font-weight:bold">9</span> <span style="color:#268bd2">个</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> ...)
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> ... (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> <span style="color:#2aa198;font-weight:bold">2</span>)))  # <span style="color:#2aa198;font-weight:bold">9</span> <span style="color:#268bd2">个</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> ...)
+<span style="color:#268bd2">2^10</span>
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP">(<span style="color:#268bd2">define</span> (<span style="color:#268bd2">f</span> <span style="color:#268bd2">n</span>)
+  (<span style="color:#268bd2">*</span> <span style="color:#2aa198;font-weight:bold">2</span> <span style="color:#268bd2">n</span>))
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-LISP" data-lang="LISP"># (<span style="color:#268bd2">define</span> (<span style="color:#268bd2">g</span> <span style="color:#268bd2">n</span>)
+#   (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#268bd2">n</span>))
 
-(g n)
-(A 1 n)
-(A 0 (A 1 (- n 1)))
+(<span style="color:#268bd2">g</span> <span style="color:#268bd2">n</span>)
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> <span style="color:#268bd2">n</span>)
+(<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">0</span> (<span style="color:#268bd2">A</span> <span style="color:#2aa198;font-weight:bold">1</span> (<span style="color:#268bd2">-</span> <span style="color:#268bd2">n</span> <span style="color:#2aa198;font-weight:bold">1</span>)))
 ...
-<span style="">#</span> 2^n
+# <span style="color:#268bd2">2^n</span>
 </code></pre></div><h3 id="树形递归">树形递归</h3>
 <blockquote>
 <p>一般来说, 树形递归计算过程里所需的步骤数将正比于树中的节点数, 其空间需求正比于数的最大深度.</p>

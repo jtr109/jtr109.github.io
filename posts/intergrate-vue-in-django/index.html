@@ -145,180 +145,180 @@ Why We Build Such A Project If we seperate frond-end and back-end and all router
 <p>If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.</p>
 <p>So we consider to use front-end service to control the router and use back-end for access control.</p>
 <h2 id="initial-repository">Initial Repository</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir vid &amp;&amp; cd vid
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir vid &amp;&amp; <span style="color:#cb4b16">cd</span> vid
 git init
 </code></pre></div><h2 id="create-virtual-environment">Create Virtual Environment</h2>
 <h3 id="specify-python-version">Specify Python Version</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
 </code></pre></div><h3 id="change-mirror-optional">Change Mirror (Optional)</h3>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">[[source]]
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">[[source]]
 name = &#34;pypi&#34;
 url = &#34;https://mirrors.aliyun.com/pypi/simple/&#34;
 verify_ssl = true
 </code></pre></div><h2 id="install-dependencies">Install Dependencies</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv install django==2.2.1
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv install <span style="color:#268bd2">django</span>==2.2.1
 </code></pre></div><h2 id="start-django-project">Start Django Project</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run django-admin startproject vid
-mv vid vid-dir &amp;&amp; mv ./vid-dir/* . &amp;&amp; rmdir vid-dir  <span style="font-style:italic"># move project to current path</span>
-pipenv run python manage.py runserver 127.0.0.1:8000  <span style="font-style:italic"># check django project works</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run django-admin startproject vid
+mv vid vid-dir &amp;&amp; mv ./vid-dir/* . &amp;&amp; rmdir vid-dir  <span style="color:#93a1a1;font-style:italic"># move project to current path</span>
+pipenv run python manage.py runserver 127.0.0.1:8000  <span style="color:#93a1a1;font-style:italic"># check django project works</span>
 </code></pre></div><h2 id="create-authorization-api-in-django">Create Authorization API in Django</h2>
 <p>You should always create a custom user model in Django. <a href="https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model">Here</a> is why.</p>
 <p><em>Remember not migrating until the custom user model is registered correctly.</em></p>
 <h3 id="create-custom-user-model">Create Custom User Model</h3>
 <p>First, let us create an app.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pipenv run python manage.py startapp account
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">pipenv</span> <span style="color:#268bd2">run</span> <span style="color:#268bd2">python</span> <span style="color:#268bd2">manage</span>.<span style="color:#268bd2">py</span> <span style="color:#268bd2">startapp</span> <span style="color:#268bd2">account</span>
 </code></pre></div><p>We must install it in <code>INSTALLED_APPS</code> in settings.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/settings.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/settings.py</span>
 
-INSTALLED_APPS = [
-    <span style="font-style:italic"># ...</span>
-    <span style="font-style:italic">&#39;account&#39;</span>,  <span style="font-style:italic"># install account app</span>
+<span style="color:#268bd2">INSTALLED_APPS</span> = [
+    <span style="color:#93a1a1;font-style:italic"># ...</span>
+    <span style="color:#2aa198">&#39;account&#39;</span>,  <span style="color:#93a1a1;font-style:italic"># install account app</span>
 ]
 </code></pre></div><p>Then we need to create a custom user model.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># account/model.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># account/model.py</span>
 
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.db</span> <span style="font-weight:bold">import</span> models
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.contrib.auth.models</span> <span style="font-weight:bold">import</span> AbstractUser
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.db</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">models</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.contrib.auth.models</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">AbstractUser</span>
 
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">User</span>(AbstractUser):
-    <span style="font-weight:bold">pass</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">User</span>(<span style="color:#268bd2">AbstractUser</span>):
+    <span style="color:#859900">pass</span>
 </code></pre></div><p>And replace the default one by registering it.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/settings.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/settings.py</span>
 
-AUTH_USER_MODEL = <span style="font-style:italic">&#39;account.User&#39;</span>
+<span style="color:#268bd2">AUTH_USER_MODEL</span> = <span style="color:#2aa198">&#39;account.User&#39;</span>
 </code></pre></div><p>After all, migrating the user model.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run python manage.py makemigrations
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run python manage.py makemigrations
 pipenv run python manage.py migrate
 </code></pre></div><h3 id="create-logining-and-checking-views">Create Logining and Checking Views</h3>
 <p>Let&rsquo;s create <a href="https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views">class-based views</a> with json responses.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># account/apis.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># account/apis.py</span>
 
-<span style="font-weight:bold">import</span> <span style="font-weight:bold">json</span>
+<span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">json</span>
 
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.contrib.auth</span> <span style="font-weight:bold">import</span> authenticate, login, logout
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.http</span> <span style="font-weight:bold">import</span> HttpRequest, HttpResponse, JsonResponse
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.views</span> <span style="font-weight:bold">import</span> View
-
-
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">LoginView</span>(View):
-
-    <span style="font-weight:bold">def</span> post(self, request: HttpRequest) -&gt; JsonResponse:
-        body = json.loads(request.body)  <span style="font-style:italic"># TODO: request validation</span>
-        user = authenticate(**body)
-        <span style="font-weight:bold">if</span> user <span style="font-weight:bold">is</span> None:
-            <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;error&#39;</span>, message=<span style="font-style:italic">&#39;wrong password&#39;</span>))
-        login(request, user)
-        <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;success&#39;</span>))
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.contrib.auth</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">authenticate</span>, <span style="color:#268bd2">login</span>, <span style="color:#268bd2">logout</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.http</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">HttpRequest</span>, <span style="color:#268bd2">HttpResponse</span>, <span style="color:#268bd2">JsonResponse</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.views</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">View</span>
 
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">GetUserInfoView</span>(View):
+<span style="color:#859900">class</span> <span style="color:#cb4b16">LoginView</span>(<span style="color:#268bd2">View</span>):
 
-    <span style="font-weight:bold">def</span> get(self, request: HttpRequest) -&gt; JsonResponse:
-        user = request.user
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> user.is_authenticated:
-            <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;error&#39;</span>, message=<span style="font-style:italic">&#39;not login&#39;</span>))
-        <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;success&#39;</span>,data=dict(username=user.username)))
+    <span style="color:#859900">def</span> <span style="color:#268bd2">post</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">request</span>: <span style="color:#268bd2">HttpRequest</span>) -&gt; <span style="color:#268bd2">JsonResponse</span>:
+        <span style="color:#268bd2">body</span> = <span style="color:#268bd2">json</span>.<span style="color:#268bd2">loads</span>(<span style="color:#268bd2">request</span>.<span style="color:#268bd2">body</span>)  <span style="color:#93a1a1;font-style:italic"># TODO: request validation</span>
+        <span style="color:#268bd2">user</span> = <span style="color:#268bd2">authenticate</span>(**<span style="color:#268bd2">body</span>)
+        <span style="color:#859900">if</span> <span style="color:#268bd2">user</span> <span style="color:#859900">is</span> <span style="color:#268bd2">None</span>:
+            <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;error&#39;</span>, <span style="color:#268bd2">message</span>=<span style="color:#2aa198">&#39;wrong password&#39;</span>))
+        <span style="color:#268bd2">login</span>(<span style="color:#268bd2">request</span>, <span style="color:#268bd2">user</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;success&#39;</span>))
 
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">LogoutView</span>(View):
+<span style="color:#859900">class</span> <span style="color:#cb4b16">GetUserInfoView</span>(<span style="color:#268bd2">View</span>):
 
-    <span style="font-weight:bold">def</span> get(self, request: HttpRequest) -&gt; JsonResponse:
-        user = request.user
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> user.is_authenticated:
-            <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;error&#39;</span>, message=<span style="font-style:italic">&#39;not login&#39;</span>))
+    <span style="color:#859900">def</span> <span style="color:#268bd2">get</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">request</span>: <span style="color:#268bd2">HttpRequest</span>) -&gt; <span style="color:#268bd2">JsonResponse</span>:
+        <span style="color:#268bd2">user</span> = <span style="color:#268bd2">request</span>.<span style="color:#268bd2">user</span>
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">user</span>.<span style="color:#268bd2">is_authenticated</span>:
+            <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;error&#39;</span>, <span style="color:#268bd2">message</span>=<span style="color:#2aa198">&#39;not login&#39;</span>))
+        <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;success&#39;</span>,<span style="color:#268bd2">data</span>=<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">username</span>=<span style="color:#268bd2">user</span>.<span style="color:#268bd2">username</span>)))
 
-        logout(request)
-        <span style="font-weight:bold">return</span> JsonResponse(dict(status=<span style="font-style:italic">&#39;success&#39;</span>))
+
+<span style="color:#859900">class</span> <span style="color:#cb4b16">LogoutView</span>(<span style="color:#268bd2">View</span>):
+
+    <span style="color:#859900">def</span> <span style="color:#268bd2">get</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">request</span>: <span style="color:#268bd2">HttpRequest</span>) -&gt; <span style="color:#268bd2">JsonResponse</span>:
+        <span style="color:#268bd2">user</span> = <span style="color:#268bd2">request</span>.<span style="color:#268bd2">user</span>
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">user</span>.<span style="color:#268bd2">is_authenticated</span>:
+            <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;error&#39;</span>, <span style="color:#268bd2">message</span>=<span style="color:#2aa198">&#39;not login&#39;</span>))
+
+        <span style="color:#268bd2">logout</span>(<span style="color:#268bd2">request</span>)
+        <span style="color:#859900">return</span> <span style="color:#268bd2">JsonResponse</span>(<span style="color:#cb4b16">dict</span>(<span style="color:#268bd2">status</span>=<span style="color:#2aa198">&#39;success&#39;</span>))
 </code></pre></div><p>Then, make router for it.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># account/urls.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># account/urls.py</span>
 
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.urls</span> <span style="font-weight:bold">import</span> include, path
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">.apis</span> <span style="font-weight:bold">import</span> LoginView, LogoutView, GetUserInfoView
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.urls</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">include</span>, <span style="color:#268bd2">path</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">.apis</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">LoginView</span>, <span style="color:#268bd2">LogoutView</span>, <span style="color:#268bd2">GetUserInfoView</span>
 
-urlpatterns = [
-    path(<span style="font-style:italic">&#39;login/&#39;</span>, LoginView.as_view(), name=<span style="font-style:italic">&#39;login&#39;</span>),
-    path(<span style="font-style:italic">&#39;logout/&#39;</span>, LogoutView.as_view(), name=<span style="font-style:italic">&#39;logout&#39;</span>),
-    path(<span style="font-style:italic">&#39;get_user_info/&#39;</span>, GetUserInfoView.as_view(), name=<span style="font-style:italic">&#39;get_user_info&#39;</span>),
+<span style="color:#268bd2">urlpatterns</span> = [
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;login/&#39;</span>, <span style="color:#268bd2">LoginView</span>.<span style="color:#268bd2">as_view</span>(), <span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;login&#39;</span>),
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;logout/&#39;</span>, <span style="color:#268bd2">LogoutView</span>.<span style="color:#268bd2">as_view</span>(), <span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;logout&#39;</span>),
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;get_user_info/&#39;</span>, <span style="color:#268bd2">GetUserInfoView</span>.<span style="color:#268bd2">as_view</span>(), <span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;get_user_info&#39;</span>),
 ]
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/urls.py</span>
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/urls.py</span>
 
-<span style="font-style:italic"># ----- snip -----</span>
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.urls</span> <span style="font-weight:bold">import</span> include, path
+<span style="color:#93a1a1;font-style:italic"># ----- snip -----</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.urls</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">include</span>, <span style="color:#268bd2">path</span>
 
-urlpatterns = [
-		<span style="font-style:italic"># ----- snip -----</span>
-    path(<span style="font-style:italic">&#39;api/account/&#39;</span>, include(<span style="font-style:italic">&#39;account.urls&#39;</span>)),
+<span style="color:#268bd2">urlpatterns</span> = [
+		<span style="color:#93a1a1;font-style:italic"># ----- snip -----</span>
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;api/account/&#39;</span>, <span style="color:#268bd2">include</span>(<span style="color:#2aa198">&#39;account.urls&#39;</span>)),
 ]
 </code></pre></div><h2 id="creating-vue-project-with-multiple-pages">Creating Vue Project with Multiple Pages</h2>
 <h3 id="initializing-a-vue-project">Initializing a Vue Project</h3>
 <p>Frist of all, let us initialize a vue project.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">vue create frontend
-cd frontend
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">vue create frontend
+<span style="color:#cb4b16">cd</span> frontend
 yarn install
 </code></pre></div><p>Then we run the vue development service.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run serve
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run serve
 </code></pre></div><p>Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually <code>localhost:8080</code>).</p>
 <h3 id="satisfication-for-multiple-pages">Satisfication for Multiple Pages</h3>
 <p>Move the entry into appropriate path.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="font-style:italic"># in the frontend directory</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#93a1a1;font-style:italic"># in the frontend directory</span>
 mkdir -p src/pages/login
 mv main.js src/pages/login/app.js
 mv App.vue src/pages/login/app.vue
 </code></pre></div><p>Change relative path in <code>app.vue</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="font-style:italic">&lt;!--</span> src/pages/login/app.vue --&gt;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#93a1a1;font-style:italic">&lt;!--</span> <span style="color:#268bd2">src</span>/<span style="color:#268bd2">pages</span>/<span style="color:#268bd2">login</span>/<span style="color:#268bd2">app</span>.<span style="color:#268bd2">vue</span> --&gt;
 
-&lt;<span style="font-weight:bold">template</span>&gt;
-  &lt;<span style="font-weight:bold">div</span> id=<span style="font-style:italic">&#34;app&#34;</span>&gt;
-    &lt;<span style="font-weight:bold">img</span> alt=<span style="font-style:italic">&#34;Vue logo&#34;</span> src=<span style="font-style:italic">&#34;../../assets/logo.png&#34;</span>&gt;
-    &lt;<span style="font-weight:bold">HelloWorld</span> msg=<span style="font-style:italic">&#34;Welcome to Your Vue.js App&#34;</span>/&gt;
-  &lt;/<span style="font-weight:bold">div</span>&gt;
-&lt;/<span style="font-weight:bold">template</span>&gt;
+&lt;<span style="color:#268bd2;font-weight:bold">template</span>&gt;
+  &lt;<span style="color:#268bd2;font-weight:bold">div</span> <span style="color:#268bd2">id</span>=<span style="color:#2aa198">&#34;app&#34;</span>&gt;
+    &lt;<span style="color:#268bd2;font-weight:bold">img</span> <span style="color:#268bd2">alt</span>=<span style="color:#2aa198">&#34;Vue logo&#34;</span> <span style="color:#268bd2">src</span>=<span style="color:#2aa198">&#34;../../assets/logo.png&#34;</span>&gt;
+    &lt;<span style="color:#268bd2;font-weight:bold">HelloWorld</span> <span style="color:#268bd2">msg</span>=<span style="color:#2aa198">&#34;Welcome to Your Vue.js App&#34;</span>/&gt;
+  &lt;/<span style="color:#268bd2;font-weight:bold">div</span>&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">template</span>&gt;
 
-&lt;<span style="font-weight:bold">script</span>&gt;
-<span style="font-weight:bold">import</span> HelloWorld from <span style="font-style:italic">&#39;../../components/HelloWorld.vue&#39;</span>
+&lt;<span style="color:#268bd2;font-weight:bold">script</span>&gt;
+<span style="color:#859900">import</span> <span style="color:#268bd2">HelloWorld</span> <span style="color:#268bd2">from</span> <span style="color:#2aa198">&#39;../../components/HelloWorld.vue&#39;</span>
 
-<span style="font-weight:bold">export</span> <span style="font-weight:bold">default</span> {
-  <span style="font-style:italic">// remove the &#39;name&#39; field
-</span><span style="font-style:italic"></span>  components: {
-    HelloWorld
+<span style="color:#859900">export</span> <span style="color:#859900">default</span> {
+  <span style="color:#93a1a1;font-style:italic">// remove the &#39;name&#39; field
+</span><span style="color:#93a1a1;font-style:italic"></span>  <span style="color:#268bd2">components</span>: {
+    <span style="color:#268bd2">HelloWorld</span>
   }
 }
-&lt;/<span style="font-weight:bold">script</span>&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">script</span>&gt;
 
-<span style="font-style:italic">&lt;!--</span> snipped --&gt;
+<span style="color:#93a1a1;font-style:italic">&lt;!--</span> <span style="color:#268bd2">snipped</span> --&gt;
 </code></pre></div><p>Copy a new page named &ldquo;user&rdquo;.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cp -r src/pages/login src/pages/user
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cp -r src/pages/login src/pages/user
 </code></pre></div><p>Edit parameter <code>msg</code> in <code>src/pages/user</code> to make difference between pages.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="font-style:italic">&lt;!--</span> snipped --&gt;
-&lt;<span style="font-weight:bold">HelloWorld</span> msg=<span style="font-style:italic">&#34;This Is The User Page&#34;</span>/&gt;
-<span style="font-style:italic">&lt;!--</span> snipped --&gt;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#93a1a1;font-style:italic">&lt;!--</span> <span style="color:#268bd2">snipped</span> --&gt;
+&lt;<span style="color:#268bd2;font-weight:bold">HelloWorld</span> <span style="color:#268bd2">msg</span>=<span style="color:#2aa198">&#34;This Is The User Page&#34;</span>/&gt;
+<span style="color:#93a1a1;font-style:italic">&lt;!--</span> <span style="color:#268bd2">snipped</span> --&gt;
 
 </code></pre></div><p>Create <code>vue.config.js</code> for build multiple pages.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="font-style:italic"># in the frontend directory</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#93a1a1;font-style:italic"># in the frontend directory</span>
 touch vue.config.js
 </code></pre></div><p>Parsing and registering all pages in config file.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="font-style:italic">&#39;use strict&#39;</span>
-<span style="font-weight:bold">const</span> titles = require(<span style="font-style:italic">&#39;./src/titles.js&#39;</span>)
-<span style="font-weight:bold">const</span> glob = require(<span style="font-style:italic">&#39;glob&#39;</span>)
-<span style="font-weight:bold">const</span> pages = {}
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#2aa198">&#39;use strict&#39;</span>
+<span style="color:#859900">const</span> <span style="color:#268bd2">titles</span> = <span style="color:#268bd2">require</span>(<span style="color:#2aa198">&#39;./src/titles.js&#39;</span>)
+<span style="color:#859900">const</span> <span style="color:#268bd2">glob</span> = <span style="color:#268bd2">require</span>(<span style="color:#2aa198">&#39;glob&#39;</span>)
+<span style="color:#859900">const</span> <span style="color:#268bd2">pages</span> = {}
 
-glob.sync(<span style="font-style:italic">&#39;./src/pages/**/app.js&#39;</span>).forEach(path =&gt; {
-  <span style="font-weight:bold">const</span> chunk = path.split(<span style="font-style:italic">&#39;./src/pages/&#39;</span>)[1].split(<span style="font-style:italic">&#39;/app.js&#39;</span>)[0]
-  pages[chunk] = {
-    entry: path,
-    template: <span style="font-style:italic">&#39;public/index.html&#39;</span>,
-    title: titles[chunk],
-    chunks: [<span style="font-style:italic">&#39;chunk-vendors&#39;</span>, <span style="font-style:italic">&#39;chunk-common&#39;</span>, chunk]
+<span style="color:#268bd2">glob</span>.<span style="color:#268bd2">sync</span>(<span style="color:#2aa198">&#39;./src/pages/**/app.js&#39;</span>).<span style="color:#268bd2">forEach</span>(<span style="color:#268bd2">path</span> =&gt; {
+  <span style="color:#859900">const</span> <span style="color:#268bd2">chunk</span> = <span style="color:#268bd2">path</span>.<span style="color:#268bd2">split</span>(<span style="color:#2aa198">&#39;./src/pages/&#39;</span>)[<span style="color:#2aa198;font-weight:bold">1</span>].<span style="color:#268bd2">split</span>(<span style="color:#2aa198">&#39;/app.js&#39;</span>)[<span style="color:#2aa198;font-weight:bold">0</span>]
+  <span style="color:#268bd2">pages</span>[<span style="color:#268bd2">chunk</span>] = {
+    <span style="color:#268bd2">entry</span>: <span style="color:#268bd2">path</span>,
+    <span style="color:#268bd2">template</span>: <span style="color:#2aa198">&#39;public/index.html&#39;</span>,
+    <span style="color:#268bd2">title</span>: <span style="color:#268bd2">titles</span>[<span style="color:#268bd2">chunk</span>],
+    <span style="color:#268bd2">chunks</span>: [<span style="color:#2aa198">&#39;chunk-vendors&#39;</span>, <span style="color:#2aa198">&#39;chunk-common&#39;</span>, <span style="color:#268bd2">chunk</span>]
   }
 })
 
-module.exports = {
-  pages,
-  chainWebpack: config =&gt; config.plugins.<span style="font-weight:bold">delete</span>(<span style="font-style:italic">&#39;named-chunks&#39;</span>),
+<span style="color:#268bd2">module</span>.<span style="color:#268bd2">exports</span> = {
+  <span style="color:#268bd2">pages</span>,
+  <span style="color:#268bd2">chainWebpack</span>: <span style="color:#268bd2">config</span> =&gt; <span style="color:#268bd2">config</span>.<span style="color:#268bd2">plugins</span>.<span style="color:#859900">delete</span>(<span style="color:#2aa198">&#39;named-chunks&#39;</span>),
 }
 </code></pre></div><p>Run the service again.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run serve
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run serve
 </code></pre></div><p>Now you can view the login and user pages corresponding url, such as <code>localhost:8080/login/</code> and <code>localhost:8080/user/</code>.</p>
 <p>Login page:</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png" alt="image-20190529202025524"></p>
@@ -327,264 +327,264 @@ module.exports = {
 <h2 id="inject-vue-page-into-django-template">Inject Vue Page Into Django Template</h2>
 <h3 id="build-vue-dist">Build Vue Dist</h3>
 <p>Build the vue project first.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run build
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run build
 </code></pre></div><p>And now, you get <code>login.html</code> and <code>user.html</code> in the path <code>frontend/dist</code>.</p>
 <h3 id="show-login-page-in-django-view">Show Login Page in Django View</h3>
 <p>Let us show login page by <code>TemplateView</code> in Django.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/urls.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/urls.py</span>
 
-<span style="font-style:italic"># ----- snipped -----</span>
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.views.generic</span> <span style="font-weight:bold">import</span> TemplateView
+<span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.views.generic</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">TemplateView</span>
 
-<span style="font-style:italic"># ----- snipped -----</span>
-urlpatterns = [
-    <span style="font-style:italic"># ----- snipped -----</span>
-    path(<span style="font-style:italic">&#39;login/&#39;</span>, TemplateView.as_view(template_name=<span style="font-style:italic">&#39;login.html&#39;</span>)),
+<span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+<span style="color:#268bd2">urlpatterns</span> = [
+    <span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;login/&#39;</span>, <span style="color:#268bd2">TemplateView</span>.<span style="color:#268bd2">as_view</span>(<span style="color:#268bd2">template_name</span>=<span style="color:#2aa198">&#39;login.html&#39;</span>)),
 ]
 </code></pre></div><p>Change template directory in settings.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/settings.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/settings.py</span>
 
-<span style="font-style:italic"># ----- snipped -----</span>
-TEMPLATES = [
+<span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+<span style="color:#268bd2">TEMPLATES</span> = [
     {
-        <span style="font-style:italic"># ----- snipped -----</span>
-        <span style="font-style:italic">&#39;DIRS&#39;</span>: [os.path.join(BASE_DIR, <span style="font-style:italic">&#39;frontend&#39;</span>, <span style="font-style:italic">&#39;dist&#39;</span>)],
-        <span style="font-style:italic"># ----- snipped -----</span>
+        <span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+        <span style="color:#2aa198">&#39;DIRS&#39;</span>: [<span style="color:#268bd2">os</span>.<span style="color:#268bd2">path</span>.<span style="color:#268bd2">join</span>(<span style="color:#268bd2">BASE_DIR</span>, <span style="color:#2aa198">&#39;frontend&#39;</span>, <span style="color:#2aa198">&#39;dist&#39;</span>)],
+        <span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
     },
 ]
 </code></pre></div><p>After Changing template path, the login view works well. But we find the static files is not found.</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529205044695.png" alt="image-20190529205044695"></p>
 <p>We setting <code>assetsDir</code> as <code>'static'</code> in <code>vue.config.js</code> will ask vue-cli to build all assets in the same directory <code>frontend/dist/static</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="font-style:italic">// frontend/vue.config.js
-</span><span style="font-style:italic"></span>
-<span style="font-style:italic">// ----- snipped -----
-</span><span style="font-style:italic"></span>module.exports = {
-  assetsDir: <span style="font-style:italic">&#39;static&#39;</span>,
-  <span style="font-style:italic">// ----- snipped -----
-</span><span style="font-style:italic"></span>}
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#93a1a1;font-style:italic">// frontend/vue.config.js
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#93a1a1;font-style:italic">// ----- snipped -----
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#268bd2">module</span>.<span style="color:#268bd2">exports</span> = {
+  <span style="color:#268bd2">assetsDir</span>: <span style="color:#2aa198">&#39;static&#39;</span>,
+  <span style="color:#93a1a1;font-style:italic">// ----- snipped -----
+</span><span style="color:#93a1a1;font-style:italic"></span>}
 </code></pre></div><p>And then, registering the path in the Django settings.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/settings.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/settings.py</span>
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, <span style="font-style:italic">&#39;frontend/dist/static&#39;</span>),
+<span style="color:#268bd2">STATICFILES_DIRS</span> = [
+    <span style="color:#268bd2">os</span>.<span style="color:#268bd2">path</span>.<span style="color:#268bd2">join</span>(<span style="color:#268bd2">BASE_DIR</span>, <span style="color:#2aa198">&#39;frontend/dist/static&#39;</span>),
 ]
 </code></pre></div><p>Now, we can rebuild the vue project and refresh the page.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run build
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn run build
 </code></pre></div><p>After that, all files can be load correctly.</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png" alt="image-20190529210423475"></p>
 <h3 id="render-user-page">Render User Page</h3>
 <p>Now, we already have the HTML file <code>frontend/dist/user.html</code> . Let us render it in a Django view.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># account/views.py</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># account/views.py</span>
 
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.http</span> <span style="font-weight:bold">import</span> HttpRequest, HttpResponse, HttpResponseRedirect
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.shortcuts</span> <span style="font-weight:bold">import</span> render
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.urls</span> <span style="font-weight:bold">import</span> reverse
-<span style="font-weight:bold">from</span> <span style="font-weight:bold">django.views</span> <span style="font-weight:bold">import</span> View
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.http</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">HttpRequest</span>, <span style="color:#268bd2">HttpResponse</span>, <span style="color:#268bd2">HttpResponseRedirect</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.shortcuts</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">render</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.urls</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">reverse</span>
+<span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.views</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">View</span>
 
 
-<span style="font-weight:bold">class</span> <span style="font-weight:bold">UserPageView</span>(View):
-    <span style="font-weight:bold">def</span> get(self, request: HttpRequest) -&gt; HttpResponse:
-        <span style="font-weight:bold">if</span> <span style="font-weight:bold">not</span> request.user.is_authenticated:
-            <span style="font-weight:bold">return</span> HttpResponseRedirect(reverse(<span style="font-style:italic">&#39;login_page&#39;</span>))
-        <span style="font-weight:bold">return</span> render(request, template_name=<span style="font-style:italic">&#39;user.html&#39;</span>)
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-style:italic"># vid/urls.py</span>
+<span style="color:#859900">class</span> <span style="color:#cb4b16">UserPageView</span>(<span style="color:#268bd2">View</span>):
+    <span style="color:#859900">def</span> <span style="color:#268bd2">get</span>(<span style="color:#268bd2">self</span>, <span style="color:#268bd2">request</span>: <span style="color:#268bd2">HttpRequest</span>) -&gt; <span style="color:#268bd2">HttpResponse</span>:
+        <span style="color:#859900">if</span> <span style="color:#859900">not</span> <span style="color:#268bd2">request</span>.<span style="color:#268bd2">user</span>.<span style="color:#268bd2">is_authenticated</span>:
+            <span style="color:#859900">return</span> <span style="color:#268bd2">HttpResponseRedirect</span>(<span style="color:#268bd2">reverse</span>(<span style="color:#2aa198">&#39;login_page&#39;</span>))
+        <span style="color:#859900">return</span> <span style="color:#268bd2">render</span>(<span style="color:#268bd2">request</span>, <span style="color:#268bd2">template_name</span>=<span style="color:#2aa198">&#39;user.html&#39;</span>)
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#93a1a1;font-style:italic"># vid/urls.py</span>
 
-urlpatterns = [
-    <span style="font-style:italic"># ----- snipped -----</span>
-    path(<span style="font-style:italic">&#39;user/&#39;</span>, UserPageView.as_view(), name=<span style="font-style:italic">&#39;user_page&#39;</span>),
-    <span style="font-style:italic"># ----- snipped -----</span>
+<span style="color:#268bd2">urlpatterns</span> = [
+    <span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
+    <span style="color:#268bd2">path</span>(<span style="color:#2aa198">&#39;user/&#39;</span>, <span style="color:#268bd2">UserPageView</span>.<span style="color:#268bd2">as_view</span>(), <span style="color:#268bd2">name</span>=<span style="color:#2aa198">&#39;user_page&#39;</span>),
+    <span style="color:#93a1a1;font-style:italic"># ----- snipped -----</span>
 ]
 </code></pre></div><p>Let us try browsing the URL of user page (usually <code>localhost:8000/user</code>). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png" alt="image-20190530095235106"></p>
 <h2 id="create-a-login-form-in-user-page">Create a Login Form in User Page</h2>
 <h3 id="login-form-with-ant-design">Login Form with Ant Design</h3>
 <p>First, let us install the ant design vue package. <a href="https://vue.ant.design/docs/vue/use-with-vue-cli/">Here</a> is the way to install and register ant design vue.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn add ant-design-vue
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn add ant-design-vue
 </code></pre></div><p>Import style in <code>frontend/src/pages/login/app.js</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="font-weight:bold">import</span> <span style="font-style:italic">&#34;ant-design-vue/dist/antd.css&#34;</span>;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#859900">import</span> <span style="color:#2aa198">&#34;ant-design-vue/dist/antd.css&#34;</span>;
 </code></pre></div><p>Create a new file in <code>frontend/src/components</code>, copy the login form from <a href="https://vue.ant.design/components/form/#components-form-demo-horizontal-login-form">doc</a>. Then:</p>
 <ul>
 <li>import components from ant design vue</li>
 <li>register components required</li>
 <li>disable actions in mounted (optional)</li>
 </ul>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="">#</span> frontend/src/components/LoginForm.vue
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"># <span style="color:#268bd2">frontend</span>/<span style="color:#268bd2">src</span>/<span style="color:#268bd2">components</span>/<span style="color:#268bd2">LoginForm</span>.<span style="color:#268bd2">vue</span>
 
-&lt;<span style="font-weight:bold">template</span>&gt;
-  &lt;<span style="font-weight:bold">a-form</span>
-    layout=<span style="font-style:italic">&#34;inline&#34;</span>
-    <span style="font-weight:bold">:form</span><span style="font-style:italic">=&#34;form&#34;</span>
-    <span style="font-weight:bold">@submit</span><span style="font-style:italic">=&#34;handleSubmit&#34;</span>
+&lt;<span style="color:#268bd2;font-weight:bold">template</span>&gt;
+  &lt;<span style="color:#268bd2;font-weight:bold">a-form</span>
+    <span style="color:#268bd2">layout</span>=<span style="color:#2aa198">&#34;inline&#34;</span>
+    <span style="color:#268bd2;font-weight:bold">:form</span><span style="color:#2aa198">=&#34;form&#34;</span>
+    <span style="color:#268bd2;font-weight:bold">@submit</span><span style="color:#2aa198">=&#34;handleSubmit&#34;</span>
   &gt;
-    &lt;<span style="font-weight:bold">a-form-item</span>
-      :validate<span style="font-weight:bold">-status</span><span style="">=&#34;</span>userNameError<span style="">()</span> <span style="">?</span> <span style="">&#39;</span>error<span style="">&#39;</span> : <span style="">&#39;&#39;&#34;</span>
-      :help=<span style="font-style:italic">&#34;userNameError() || &#39;&#39;&#34;</span>
+    &lt;<span style="color:#268bd2;font-weight:bold">a-form-item</span>
+      :<span style="color:#268bd2">validate</span><span style="color:#268bd2;font-weight:bold">-status</span>=&#34;<span style="color:#268bd2">userNameError</span>() ? &#39;<span style="color:#268bd2">error</span>&#39; : &#39;&#39;&#34;
+      :<span style="color:#268bd2">help</span>=<span style="color:#2aa198">&#34;userNameError() || &#39;&#39;&#34;</span>
     &gt;
-      &lt;<span style="font-weight:bold">a-input</span>
-        v<span style="font-weight:bold">-decorator</span><span style="">=&#34;[</span>
-          <span style="">&#39;</span>userName<span style="">&#39;,</span>
-          {rules: <span style="">[</span>{ required: true<span style="">,</span> message: <span style="">&#39;</span>Please input your username<span style="">!&#39;</span> }<span style="">]</span>}
-        <span style="">]&#34;</span>
-        placeholder=<span style="font-style:italic">&#34;Username&#34;</span>
+      &lt;<span style="color:#268bd2;font-weight:bold">a-input</span>
+        <span style="color:#268bd2">v</span><span style="color:#268bd2;font-weight:bold">-decorator</span>=&#34;[
+          &#39;<span style="color:#268bd2">userName</span>&#39;,
+          {<span style="color:#268bd2">rules</span>: [{ <span style="color:#268bd2">required</span>: <span style="color:#268bd2">true</span>, <span style="color:#268bd2">message</span>: &#39;<span style="color:#268bd2">Please</span> <span style="color:#268bd2">input</span> <span style="color:#268bd2">your</span> <span style="color:#268bd2">username</span>!&#39; }]}
+        ]&#34;
+        <span style="color:#268bd2">placeholder</span>=<span style="color:#2aa198">&#34;Username&#34;</span>
       &gt;
-        &lt;<span style="font-weight:bold">a-icon</span>
-          slot=<span style="font-style:italic">&#34;prefix&#34;</span>
-          type=<span style="font-style:italic">&#34;user&#34;</span>
-          style=<span style="font-style:italic">&#34;color:rgba(0,0,0,.25)&#34;</span>
+        &lt;<span style="color:#268bd2;font-weight:bold">a-icon</span>
+          <span style="color:#268bd2">slot</span>=<span style="color:#2aa198">&#34;prefix&#34;</span>
+          <span style="color:#268bd2">type</span>=<span style="color:#2aa198">&#34;user&#34;</span>
+          <span style="color:#268bd2">style</span>=<span style="color:#2aa198">&#34;color:rgba(0,0,0,.25)&#34;</span>
         /&gt;
-      &lt;<span style="">/a-input&gt;</span>
-    &lt;<span style="">/a-form-item&gt;</span>
-    &lt;<span style="font-weight:bold">a-form-item</span>
-      :validate<span style="font-weight:bold">-status</span><span style="">=&#34;</span>passwordError<span style="">()</span> <span style="">?</span> <span style="">&#39;</span>error<span style="">&#39;</span> : <span style="">&#39;&#39;&#34;</span>
-      :help=<span style="font-style:italic">&#34;passwordError() || &#39;&#39;&#34;</span>
+      &lt;/a-input&gt;
+    &lt;/a-form-item&gt;
+    &lt;<span style="color:#268bd2;font-weight:bold">a-form-item</span>
+      :<span style="color:#268bd2">validate</span><span style="color:#268bd2;font-weight:bold">-status</span>=&#34;<span style="color:#268bd2">passwordError</span>() ? &#39;<span style="color:#268bd2">error</span>&#39; : &#39;&#39;&#34;
+      :<span style="color:#268bd2">help</span>=<span style="color:#2aa198">&#34;passwordError() || &#39;&#39;&#34;</span>
     &gt;
-      &lt;<span style="font-weight:bold">a-input</span>
-        v<span style="font-weight:bold">-decorator</span><span style="">=&#34;[</span>
-          <span style="">&#39;</span>password<span style="">&#39;,</span>
-          {rules: <span style="">[</span>{ required: true<span style="">,</span> message: <span style="">&#39;</span>Please input your Password<span style="">!&#39;</span> }<span style="">]</span>}
-        <span style="">]&#34;</span>
-        type=<span style="font-style:italic">&#34;password&#34;</span>
-        placeholder=<span style="font-style:italic">&#34;Password&#34;</span>
+      &lt;<span style="color:#268bd2;font-weight:bold">a-input</span>
+        <span style="color:#268bd2">v</span><span style="color:#268bd2;font-weight:bold">-decorator</span>=&#34;[
+          &#39;<span style="color:#268bd2">password</span>&#39;,
+          {<span style="color:#268bd2">rules</span>: [{ <span style="color:#268bd2">required</span>: <span style="color:#268bd2">true</span>, <span style="color:#268bd2">message</span>: &#39;<span style="color:#268bd2">Please</span> <span style="color:#268bd2">input</span> <span style="color:#268bd2">your</span> <span style="color:#268bd2">Password</span>!&#39; }]}
+        ]&#34;
+        <span style="color:#268bd2">type</span>=<span style="color:#2aa198">&#34;password&#34;</span>
+        <span style="color:#268bd2">placeholder</span>=<span style="color:#2aa198">&#34;Password&#34;</span>
       &gt;
-        &lt;<span style="font-weight:bold">a-icon</span>
-          slot=<span style="font-style:italic">&#34;prefix&#34;</span>
-          type=<span style="font-style:italic">&#34;lock&#34;</span>
-          style=<span style="font-style:italic">&#34;color:rgba(0,0,0,.25)&#34;</span>
+        &lt;<span style="color:#268bd2;font-weight:bold">a-icon</span>
+          <span style="color:#268bd2">slot</span>=<span style="color:#2aa198">&#34;prefix&#34;</span>
+          <span style="color:#268bd2">type</span>=<span style="color:#2aa198">&#34;lock&#34;</span>
+          <span style="color:#268bd2">style</span>=<span style="color:#2aa198">&#34;color:rgba(0,0,0,.25)&#34;</span>
         /&gt;
-      &lt;<span style="">/a-input&gt;</span>
-    &lt;<span style="">/a-form-item&gt;</span>
-    &lt;<span style="font-weight:bold">a-form-item</span>&gt;
-      &lt;<span style="font-weight:bold">a-button</span>
-        type=<span style="font-style:italic">&#34;primary&#34;</span>
-        html<span style="font-weight:bold">-type</span><span style="">=&#34;</span>submit<span style="">&#34;</span>
-        <span style="font-weight:bold">:disabled</span><span style="font-style:italic">=&#34;hasErrors(form.getFieldsError())&#34;</span>
+      &lt;/a-input&gt;
+    &lt;/a-form-item&gt;
+    &lt;<span style="color:#268bd2;font-weight:bold">a-form-item</span>&gt;
+      &lt;<span style="color:#268bd2;font-weight:bold">a-button</span>
+        <span style="color:#268bd2">type</span>=<span style="color:#2aa198">&#34;primary&#34;</span>
+        <span style="color:#268bd2">html</span><span style="color:#268bd2;font-weight:bold">-type</span>=&#34;<span style="color:#268bd2">submit</span>&#34;
+        <span style="color:#268bd2;font-weight:bold">:disabled</span><span style="color:#2aa198">=&#34;hasErrors(form.getFieldsError())&#34;</span>
       &gt;
-        Log <span style="font-weight:bold">in</span>
-      &lt;<span style="">/a-button&gt;</span>
-    &lt;<span style="">/a-form-item&gt;</span>
-  &lt;<span style="">/a-form&gt;</span>
-&lt;/<span style="font-weight:bold">template</span>&gt;
+        <span style="color:#268bd2">Log</span> <span style="color:#859900">in</span>
+      &lt;/a-button&gt;
+    &lt;/a-form-item&gt;
+  &lt;/a-form&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">template</span>&gt;
 
-&lt;<span style="font-weight:bold">script</span>&gt;
-<span style="font-weight:bold">import</span> { Form, Button, Input, Icon } from <span style="font-style:italic">&#39;ant-design-vue&#39;</span>
-<span style="font-weight:bold">import</span> ant from <span style="font-style:italic">&#39;ant-design-vue&#39;</span>
-console.log(<span style="font-style:italic">&#39;ant&#39;</span>, ant)  <span style="font-style:italic">// eslint-disable-line
-</span><span style="font-style:italic"></span>
-<span style="font-weight:bold">function</span> hasErrors (fieldsError) {
-  <span style="font-weight:bold">return</span> Object.keys(fieldsError).some(field =&gt; fieldsError[field])
+&lt;<span style="color:#268bd2;font-weight:bold">script</span>&gt;
+<span style="color:#859900">import</span> { <span style="color:#268bd2">Form</span>, <span style="color:#268bd2">Button</span>, <span style="color:#268bd2">Input</span>, <span style="color:#268bd2">Icon</span> } <span style="color:#268bd2">from</span> <span style="color:#2aa198">&#39;ant-design-vue&#39;</span>
+<span style="color:#859900">import</span> <span style="color:#268bd2">ant</span> <span style="color:#268bd2">from</span> <span style="color:#2aa198">&#39;ant-design-vue&#39;</span>
+<span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#2aa198">&#39;ant&#39;</span>, <span style="color:#268bd2">ant</span>)  <span style="color:#93a1a1;font-style:italic">// eslint-disable-line
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#859900">function</span> <span style="color:#268bd2">hasErrors</span> (<span style="color:#268bd2">fieldsError</span>) {
+  <span style="color:#859900">return</span> <span style="color:#cb4b16">Object</span>.<span style="color:#268bd2">keys</span>(<span style="color:#268bd2">fieldsError</span>).<span style="color:#268bd2">some</span>(<span style="color:#268bd2">field</span> =&gt; <span style="color:#268bd2">fieldsError</span>[<span style="color:#268bd2">field</span>])
 }
 
-<span style="font-weight:bold">export</span> <span style="font-weight:bold">default</span> {
-  components: {
-    <span style="font-style:italic">&#39;a-button&#39;</span>: Button,
-    <span style="font-style:italic">&#39;a-form&#39;</span>: Form,
-    <span style="font-style:italic">&#39;a-form-item&#39;</span>: Form.Item,
-    <span style="font-style:italic">&#39;a-input&#39;</span>: Input,
-    <span style="font-style:italic">&#39;a-icon&#39;</span>: Icon,
+<span style="color:#859900">export</span> <span style="color:#859900">default</span> {
+  <span style="color:#268bd2">components</span>: {
+    <span style="color:#2aa198">&#39;a-button&#39;</span>: <span style="color:#268bd2">Button</span>,
+    <span style="color:#2aa198">&#39;a-form&#39;</span>: <span style="color:#268bd2">Form</span>,
+    <span style="color:#2aa198">&#39;a-form-item&#39;</span>: <span style="color:#268bd2">Form</span>.<span style="color:#268bd2">Item</span>,
+    <span style="color:#2aa198">&#39;a-input&#39;</span>: <span style="color:#268bd2">Input</span>,
+    <span style="color:#2aa198">&#39;a-icon&#39;</span>: <span style="color:#268bd2">Icon</span>,
   },
-  data () {
-    <span style="font-weight:bold">return</span> {
-      hasErrors,
-      form: <span style="font-weight:bold">this</span>.$form.createForm(<span style="font-weight:bold">this</span>),
+  <span style="color:#268bd2">data</span> () {
+    <span style="color:#859900">return</span> {
+      <span style="color:#268bd2">hasErrors</span>,
+      <span style="color:#268bd2">form</span>: <span style="color:#859900">this</span>.<span style="color:#268bd2">$form</span>.<span style="color:#268bd2">createForm</span>(<span style="color:#859900">this</span>),
     }
   },
-  mounted () {
-    <span style="font-weight:bold">this</span>.$nextTick(() =&gt; {
-      <span style="font-style:italic">// To disabled submit button at the beginning.
-</span><span style="font-style:italic"></span>      <span style="font-style:italic">// this.form.validateFields()
-</span><span style="font-style:italic"></span>    })
+  <span style="color:#268bd2">mounted</span> () {
+    <span style="color:#859900">this</span>.<span style="color:#268bd2">$nextTick</span>(() =&gt; {
+      <span style="color:#93a1a1;font-style:italic">// To disabled submit button at the beginning.
+</span><span style="color:#93a1a1;font-style:italic"></span>      <span style="color:#93a1a1;font-style:italic">// this.form.validateFields()
+</span><span style="color:#93a1a1;font-style:italic"></span>    })
   },
-  methods: {
-    <span style="font-style:italic">// Only show error after a field is touched.
-</span><span style="font-style:italic"></span>    userNameError () {
-      <span style="font-weight:bold">const</span> { getFieldError, isFieldTouched } = <span style="font-weight:bold">this</span>.form
-      <span style="font-weight:bold">return</span> isFieldTouched(<span style="font-style:italic">&#39;userName&#39;</span>) &amp;&amp; getFieldError(<span style="font-style:italic">&#39;userName&#39;</span>)
+  <span style="color:#268bd2">methods</span>: {
+    <span style="color:#93a1a1;font-style:italic">// Only show error after a field is touched.
+</span><span style="color:#93a1a1;font-style:italic"></span>    <span style="color:#268bd2">userNameError</span> () {
+      <span style="color:#859900">const</span> { <span style="color:#268bd2">getFieldError</span>, <span style="color:#268bd2">isFieldTouched</span> } = <span style="color:#859900">this</span>.<span style="color:#268bd2">form</span>
+      <span style="color:#859900">return</span> <span style="color:#268bd2">isFieldTouched</span>(<span style="color:#2aa198">&#39;userName&#39;</span>) &amp;&amp; <span style="color:#268bd2">getFieldError</span>(<span style="color:#2aa198">&#39;userName&#39;</span>)
     },
-    <span style="font-style:italic">// Only show error after a field is touched.
-</span><span style="font-style:italic"></span>    passwordError () {
-      <span style="font-weight:bold">const</span> { getFieldError, isFieldTouched } = <span style="font-weight:bold">this</span>.form
-      <span style="font-weight:bold">return</span> isFieldTouched(<span style="font-style:italic">&#39;password&#39;</span>) &amp;&amp; getFieldError(<span style="font-style:italic">&#39;password&#39;</span>)
+    <span style="color:#93a1a1;font-style:italic">// Only show error after a field is touched.
+</span><span style="color:#93a1a1;font-style:italic"></span>    <span style="color:#268bd2">passwordError</span> () {
+      <span style="color:#859900">const</span> { <span style="color:#268bd2">getFieldError</span>, <span style="color:#268bd2">isFieldTouched</span> } = <span style="color:#859900">this</span>.<span style="color:#268bd2">form</span>
+      <span style="color:#859900">return</span> <span style="color:#268bd2">isFieldTouched</span>(<span style="color:#2aa198">&#39;password&#39;</span>) &amp;&amp; <span style="color:#268bd2">getFieldError</span>(<span style="color:#2aa198">&#39;password&#39;</span>)
     },
-    handleSubmit  (e) {
-      e.preventDefault()
-      <span style="font-weight:bold">this</span>.form.validateFields((err, values) =&gt; {
-        <span style="font-weight:bold">if</span> (!err) {
-          console.log(<span style="font-style:italic">&#39;Received values of form: &#39;</span>, values)
+    <span style="color:#268bd2">handleSubmit</span>  (<span style="color:#268bd2">e</span>) {
+      <span style="color:#268bd2">e</span>.<span style="color:#268bd2">preventDefault</span>()
+      <span style="color:#859900">this</span>.<span style="color:#268bd2">form</span>.<span style="color:#268bd2">validateFields</span>((<span style="color:#268bd2">err</span>, <span style="color:#268bd2">values</span>) =&gt; {
+        <span style="color:#859900">if</span> (!<span style="color:#268bd2">err</span>) {
+          <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#2aa198">&#39;Received values of form: &#39;</span>, <span style="color:#268bd2">values</span>)
         }
       })
     },
   },
 }
-&lt;/<span style="font-weight:bold">script</span>&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">script</span>&gt;
 </code></pre></div><p>Now we have a login form.</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png" alt="image-20190530115347454"></p>
 <h3 id="using-axios-to-send-login-request">Using Axios to Send Login Request</h3>
 <p>First let add proxy in vue project.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="font-style:italic">// frontend/vue.config.js
-</span><span style="font-style:italic"></span>
-module.exports = {
-  <span style="">#</span> ----- snipped -----
-  devServer: {
-    proxy: {
-      <span style="font-style:italic">&#39;/api&#39;</span>: {
-        target: <span style="font-style:italic">&#39;http://127.0.0.1:8000&#39;</span>,  <span style="font-style:italic">// the host of your django service
-</span><span style="font-style:italic"></span>        changeOrigin: <span style="font-weight:bold">true</span>,
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#93a1a1;font-style:italic">// frontend/vue.config.js
+</span><span style="color:#93a1a1;font-style:italic"></span>
+<span style="color:#268bd2">module</span>.<span style="color:#268bd2">exports</span> = {
+  # ----- <span style="color:#268bd2">snipped</span> -----
+  <span style="color:#268bd2">devServer</span>: {
+    <span style="color:#268bd2">proxy</span>: {
+      <span style="color:#2aa198">&#39;/api&#39;</span>: {
+        <span style="color:#268bd2">target</span>: <span style="color:#2aa198">&#39;http://127.0.0.1:8000&#39;</span>,  <span style="color:#93a1a1;font-style:italic">// the host of your django service
+</span><span style="color:#93a1a1;font-style:italic"></span>        <span style="color:#268bd2">changeOrigin</span>: <span style="color:#859900;font-weight:bold">true</span>,
       }
     }
   }
 }
 </code></pre></div><p>Install Axios.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn add axios
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">yarn add axios
 </code></pre></div><p>Have a try to request by Axios.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="font-style:italic">// frontend/src/components/LoginForm.vue
-</span><span style="font-style:italic"></span>
-&lt;<span style="font-weight:bold">script</span>&gt;
-<span style="font-weight:bold">import</span> axios from <span style="font-style:italic">&#39;axios&#39;</span>
-<span style="font-weight:bold">import</span> { Form, Button, Input, Icon, message } from <span style="font-style:italic">&#39;ant-design-vue&#39;</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="color:#93a1a1;font-style:italic">// frontend/src/components/LoginForm.vue
+</span><span style="color:#93a1a1;font-style:italic"></span>
+&lt;<span style="color:#268bd2;font-weight:bold">script</span>&gt;
+<span style="color:#859900">import</span> <span style="color:#268bd2">axios</span> <span style="color:#268bd2">from</span> <span style="color:#2aa198">&#39;axios&#39;</span>
+<span style="color:#859900">import</span> { <span style="color:#268bd2">Form</span>, <span style="color:#268bd2">Button</span>, <span style="color:#268bd2">Input</span>, <span style="color:#268bd2">Icon</span>, <span style="color:#268bd2">message</span> } <span style="color:#268bd2">from</span> <span style="color:#2aa198">&#39;ant-design-vue&#39;</span>
  
-<span style="font-style:italic">// ----- snipped -----
-</span><span style="font-style:italic"></span><span style="font-weight:bold">export</span> <span style="font-weight:bold">default</span> {
-  methods: {
-    handleSubmit (e) {
-      e.preventDefault()
-      <span style="font-weight:bold">this</span>.form.validateFields((err, values) =&gt; {
-        <span style="font-weight:bold">if</span> (!err) {
-          console.log(<span style="font-style:italic">&#39;Received values of form: &#39;</span>, values)  <span style="font-style:italic">// eslint-disable-line
-</span><span style="font-style:italic"></span>          <span style="font-weight:bold">this</span>.login(values.userName, values.password)
+<span style="color:#93a1a1;font-style:italic">// ----- snipped -----
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">export</span> <span style="color:#859900">default</span> {
+  <span style="color:#268bd2">methods</span>: {
+    <span style="color:#268bd2">handleSubmit</span> (<span style="color:#268bd2">e</span>) {
+      <span style="color:#268bd2">e</span>.<span style="color:#268bd2">preventDefault</span>()
+      <span style="color:#859900">this</span>.<span style="color:#268bd2">form</span>.<span style="color:#268bd2">validateFields</span>((<span style="color:#268bd2">err</span>, <span style="color:#268bd2">values</span>) =&gt; {
+        <span style="color:#859900">if</span> (!<span style="color:#268bd2">err</span>) {
+          <span style="color:#268bd2">console</span>.<span style="color:#268bd2">log</span>(<span style="color:#2aa198">&#39;Received values of form: &#39;</span>, <span style="color:#268bd2">values</span>)  <span style="color:#93a1a1;font-style:italic">// eslint-disable-line
+</span><span style="color:#93a1a1;font-style:italic"></span>          <span style="color:#859900">this</span>.<span style="color:#268bd2">login</span>(<span style="color:#268bd2">values</span>.<span style="color:#268bd2">userName</span>, <span style="color:#268bd2">values</span>.<span style="color:#268bd2">password</span>)
         }
       })
     },
-    async login (username, password) {
-      <span style="font-weight:bold">let</span> { data: { status, message: msg } } = await axios.post(<span style="font-style:italic">&#39;/api/account/login/&#39;</span>, {username, password})
-      <span style="font-weight:bold">if</span> (status !== <span style="font-style:italic">&#39;success&#39;</span>) {
-        message.error(msg)
-      } <span style="font-weight:bold">else</span> {
-        window.location = <span style="font-style:italic">&#39;/user/&#39;</span>
+    <span style="color:#268bd2">async</span> <span style="color:#268bd2">login</span> (<span style="color:#268bd2">username</span>, <span style="color:#268bd2">password</span>) {
+      <span style="color:#859900">let</span> { <span style="color:#268bd2">data</span>: { <span style="color:#268bd2">status</span>, <span style="color:#268bd2">message</span>: <span style="color:#268bd2">msg</span> } } = <span style="color:#268bd2">await</span> <span style="color:#268bd2">axios</span>.<span style="color:#268bd2">post</span>(<span style="color:#2aa198">&#39;/api/account/login/&#39;</span>, {<span style="color:#268bd2">username</span>, <span style="color:#268bd2">password</span>})
+      <span style="color:#859900">if</span> (<span style="color:#268bd2">status</span> !== <span style="color:#2aa198">&#39;success&#39;</span>) {
+        <span style="color:#268bd2">message</span>.<span style="color:#268bd2">error</span>(<span style="color:#268bd2">msg</span>)
+      } <span style="color:#859900">else</span> {
+        <span style="color:#cb4b16">window</span>.<span style="color:#268bd2">location</span> = <span style="color:#2aa198">&#39;/user/&#39;</span>
       }
     }
 }
-&lt;/<span style="font-weight:bold">script</span>&gt;
+&lt;/<span style="color:#268bd2;font-weight:bold">script</span>&gt;
 </code></pre></div><p>You will find CSRF token error.</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530143518162.png" alt="image-20190530143518162"></p>
 <p>I do not find a better way to resolve it. Let disable CSRF token middleware until we find a solution.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="">#</span> vid/settings.py
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"># <span style="color:#268bd2">vid</span>/<span style="color:#268bd2">settings</span>.<span style="color:#268bd2">py</span>
 
-MIDDLEWARE = [
-    <span style="">#</span> ----- snipped -----
-    <span style="">#</span> <span style="font-style:italic">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span>,
-    <span style="">#</span> ----- snipped -----
+<span style="color:#268bd2">MIDDLEWARE</span> = [
+    # ----- <span style="color:#268bd2">snipped</span> -----
+    # <span style="color:#2aa198">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span>,
+    # ----- <span style="color:#268bd2">snipped</span> -----
 ]
 </code></pre></div><h3 id="create-user-and-test-redirection">Create User and Test Redirection</h3>
 <p>Let us create a user in django shell.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run python manage.py shell
-</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">In [1]: <span style="font-weight:bold">from</span> <span style="font-weight:bold">account.models</span> <span style="font-weight:bold">import</span> User
-In [2]: User.objects.create_user(username=<span style="font-style:italic">&#39;john&#39;</span>, email=<span style="font-style:italic">&#39;john@vid.com&#39;</span>, password=<span style="font-style:italic">&#39;weakpwd&#39;</span>)
-Out[2]: &lt;User: john&gt;
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pipenv run python manage.py shell
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">1</span>]: <span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">account.models</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">User</span>
+<span style="color:#268bd2">In</span> [<span style="color:#2aa198;font-weight:bold">2</span>]: <span style="color:#268bd2">User</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">create_user</span>(<span style="color:#268bd2">username</span>=<span style="color:#2aa198">&#39;john&#39;</span>, <span style="color:#268bd2">email</span>=<span style="color:#2aa198">&#39;john@vid.com&#39;</span>, <span style="color:#268bd2">password</span>=<span style="color:#2aa198">&#39;weakpwd&#39;</span>)
+<span style="color:#268bd2">Out</span>[<span style="color:#2aa198;font-weight:bold">2</span>]: &lt;<span style="color:#268bd2">User</span>: <span style="color:#268bd2">john</span>&gt;
 </code></pre></div><p>And now we can use the account on vue service (usually <code>localhost:8080/login/</code>) go to the user page (usually <code>localhost:8080/user/</code>).</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png" alt="image-20190530150502432"></p>
 <h3 id="rebuild-frontend-and-have-a-try-in-django-service">Rebuild Frontend and Have A Try in Django Service</h3>
 <p>Now let&rsquo;s rebuild the frontend.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="font-style:italic"># in frontend directory</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#93a1a1;font-style:italic"># in frontend directory</span>
 yarn run build
 </code></pre></div><p>Now we can login and see the user page (<code>localhost:8000/user/</code>).</p>
 <p><img src="https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png" alt="image-20190530153935383"></p>

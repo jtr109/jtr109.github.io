@@ -148,21 +148,21 @@ $ pip install -e git&#43;https://git.example.com/example/foo.git#egg=0.0.1 $ pip
         <h2 id="包安装">包安装</h2>
 <h3 id="问题">问题</h3>
 <p>在公司项目开发过程中, 我们构建了一些自定义的 Python packages. 如果直接使用如下方式安装, 可以正常使用, 但是 <code>pip freeze</code> 的时候只会显示包名称和版本. 无法在实际生产中使用.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install git+https://git.example.com/example/foo.git
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install git+https://git.example.com/example/foo.git
 ...
 $ pip freeze &gt; requirements.txt
 $ cat requirements.txt
 dm-utils==1.0
 </code></pre></div><h3 id="解决方案">解决方案</h3>
 <p>需要参考<a href="https://github.com/pypa/pip/issues/335#issuecomment-1774484">这个 issue</a>实现:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1
 $ pip freeze &gt; requirements.txt
 $ cat requirements.txt
 -e git+https://git.example.com/example/foo.git@2c2ed2b3df2084d1b1ebfa87c9fe703072eded7b#egg=dm_utils
 </code></pre></div><h3 id="docker-build">Docker Build</h3>
 <p>上面的示例可以解决大部分 public 项目的拉取和安装问题, 但如果在 private 项目中使用上面的方案, 在 <code>docker build</code> 时会报错, 原因是构建镜像的时候, 镜像中没有我们的 git 用户信息, 无法拉取私有仓库.</p>
 <p>需要向项目仓库所有者请求一个 <a href="https://docs.gitlab.com/ee/user/project/deploy_tokens/">deploy token</a>, 使用提供的用户名和 token 执行 <code>pip install</code>, 例如:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install -e git+https://gitlab+deploy-token-23:KdCjd8-mM1i9DzBZnXTz@git.example.com/example/foo.git#egg=0.0.1
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ pip install -e git+https://gitlab+deploy-token-23:KdCjd8-mM1i9DzBZnXTz@git.example.com/example/foo.git#egg=0.0.1
 $ pip freeze &gt; requirements.txt
 $ cat requirements.txt
 -e git+https://gitlab+deploy-token-20:KP9N8J-mM1i9DzBZnXTz@git.example.com/example/foo.git@2c2ed2b3df2084d1b1ebfa87c9fe703072eded7b#egg=dm_utils

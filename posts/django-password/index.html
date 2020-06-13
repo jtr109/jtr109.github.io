@@ -134,27 +134,27 @@ from django.contrib.auth.hashers import make_password user = User( username=&#39
         
         <h2 id="set-password-manually">Set Password Manually</h2>
 <p>It is easy to set password with the instance of <code>User</code> by <code>set_password</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">user = User.objects.create(username=<span style="font-style:italic">&#39;my_username&#39;</span>)
-user.set_password(<span style="font-style:italic">&#39;my_password&#39;</span>)
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#268bd2">user</span> = <span style="color:#268bd2">User</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">create</span>(<span style="color:#268bd2">username</span>=<span style="color:#2aa198">&#39;my_username&#39;</span>)
+<span style="color:#268bd2">user</span>.<span style="color:#268bd2">set_password</span>(<span style="color:#2aa198">&#39;my_password&#39;</span>)
 </code></pre></div><p>But sometimes we want to bulk create users of we want to create an <code>User</code> model before saving into database. Your can create user model and set password manually.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">django.contrib.auth.hashers</span> <span style="font-weight:bold">import</span> make_password
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.contrib.auth.hashers</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">make_password</span>
 
-user = User(
-    username=<span style="font-style:italic">&#39;my_username&#39;</span>,
-    password=make_password(<span style="font-style:italic">&#39;my_password&#39;</span>)
+<span style="color:#268bd2">user</span> = <span style="color:#268bd2">User</span>(
+    <span style="color:#268bd2">username</span>=<span style="color:#2aa198">&#39;my_username&#39;</span>,
+    <span style="color:#268bd2">password</span>=<span style="color:#268bd2">make_password</span>(<span style="color:#2aa198">&#39;my_password&#39;</span>)
 )
-<span style="font-style:italic"># now you get the instance of User model</span>
+<span style="color:#93a1a1;font-style:italic"># now you get the instance of User model</span>
 </code></pre></div><h2 id="how-to-create-an-raw-password-automatically">How to Create an Raw Password Automatically?</h2>
 <p>Django provide a method <a href="https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password"><code>make_random_password</code></a> in the <code>BaseUserManager</code>. So you can generate a password like this.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">django.contrib.auth.models</span> <span style="font-weight:bold">import</span> User
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.contrib.auth.models</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">User</span>
 
-User.objects.make_random_password()  <span style="font-style:italic"># not a good idea</span>
+<span style="color:#268bd2">User</span>.<span style="color:#268bd2">objects</span>.<span style="color:#268bd2">make_random_password</span>()  <span style="color:#93a1a1;font-style:italic"># not a good idea</span>
 </code></pre></div><p>But what if we just want to create a password without <code>User</code> involved? You can find the method <code>make_random_password</code> just call the function <code>get_random_string</code> defined in <a href="https://github.com/django/django/blob/master/django/utils/crypto.py"><code>django.utils.crypto</code></a>. So we make it easy like this.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="font-weight:bold">from</span> <span style="font-weight:bold">django.utils.crypto</span> <span style="font-weight:bold">import</span> get_random_string
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#dc322f;font-weight:bold">from</span> <span style="color:#268bd2">django.utils.crypto</span> <span style="color:#dc322f;font-weight:bold">import</span> <span style="color:#268bd2">get_random_string</span>
 
-raw_password = get_random_string()  <span style="font-style:italic"># try this one</span>
-raw_password = get_random_string(length=16)
-raw_password = get_random_string(length=16, allowed_chars=<span style="font-style:italic">&#39;abcdef0123456789&#39;</span>)
+<span style="color:#268bd2">raw_password</span> = <span style="color:#268bd2">get_random_string</span>()  <span style="color:#93a1a1;font-style:italic"># try this one</span>
+<span style="color:#268bd2">raw_password</span> = <span style="color:#268bd2">get_random_string</span>(<span style="color:#268bd2">length</span>=<span style="color:#2aa198;font-weight:bold">16</span>)
+<span style="color:#268bd2">raw_password</span> = <span style="color:#268bd2">get_random_string</span>(<span style="color:#268bd2">length</span>=<span style="color:#2aa198;font-weight:bold">16</span>, <span style="color:#268bd2">allowed_chars</span>=<span style="color:#2aa198">&#39;abcdef0123456789&#39;</span>)
 </code></pre></div><h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers">https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers</a></li>

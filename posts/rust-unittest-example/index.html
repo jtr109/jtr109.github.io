@@ -137,32 +137,32 @@ pub fn add(a: i32, b: i32) -&gt; i32 { a &#43; b } // This is a really bad addin
         
         <h2 id="起因">起因</h2>
 <p>一个标准的单元测试写法为:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="font-weight:bold">pub</span> <span style="font-weight:bold">fn</span> add(a: <span style="">i32</span>, b: <span style="">i32</span>) -&gt; <span style="">i32</span> {
-    a + b
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">pub</span> <span style="color:#859900">fn</span> <span style="color:#268bd2">add</span>(<span style="color:#268bd2">a</span>: <span style="color:#859900;font-weight:bold">i32</span>, <span style="color:#268bd2">b</span>: <span style="color:#859900;font-weight:bold">i32</span>) -&gt; <span style="color:#859900;font-weight:bold">i32</span> {
+    <span style="color:#268bd2">a</span> + <span style="color:#268bd2">b</span>
 }
 
-<span style="font-style:italic">// This is a really bad adding function, its purpose is to fail in this
-</span><span style="font-style:italic">// example.
-</span><span style="font-style:italic"></span><span style="">#[allow(dead_code)]</span>
-<span style="font-weight:bold">fn</span> bad_add(a: <span style="">i32</span>, b: <span style="">i32</span>) -&gt; <span style="">i32</span> {
-    a - b
+<span style="color:#93a1a1;font-style:italic">// This is a really bad adding function, its purpose is to fail in this
+</span><span style="color:#93a1a1;font-style:italic">// example.
+</span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#93a1a1;font-style:italic">#[allow(dead_code)]</span>
+<span style="color:#859900">fn</span> <span style="color:#268bd2">bad_add</span>(<span style="color:#268bd2">a</span>: <span style="color:#859900;font-weight:bold">i32</span>, <span style="color:#268bd2">b</span>: <span style="color:#859900;font-weight:bold">i32</span>) -&gt; <span style="color:#859900;font-weight:bold">i32</span> {
+    <span style="color:#268bd2">a</span> - <span style="color:#268bd2">b</span>
 }
 
-<span style="">#[cfg(test)]</span>
-<span style="font-weight:bold">mod</span> <span style="font-weight:bold">tests</span> {
-    <span style="font-style:italic">// Note this useful idiom: importing names from outer (for mod tests) scope.
-</span><span style="font-style:italic"></span>    <span style="font-weight:bold">use</span> <span style="font-weight:bold">super</span>::*;
+<span style="color:#93a1a1;font-style:italic">#[cfg(test)]</span>
+<span style="color:#859900">mod</span> <span style="color:#268bd2">tests</span> {
+    <span style="color:#93a1a1;font-style:italic">// Note this useful idiom: importing names from outer (for mod tests) scope.
+</span><span style="color:#93a1a1;font-style:italic"></span>    <span style="color:#859900">use</span> <span style="color:#859900">super</span>::*;
 
-    <span style="">#[test]</span>
-    <span style="font-weight:bold">fn</span> test_add() {
-        assert_eq!(add(1, 2), 3);
+    <span style="color:#93a1a1;font-style:italic">#[test]</span>
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">test_add</span>() {
+        <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">add</span>(<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>), <span style="color:#2aa198;font-weight:bold">3</span>);
     }
 
-    <span style="">#[test]</span>
-    <span style="font-weight:bold">fn</span> test_bad_add() {
-        <span style="font-style:italic">// This assert would fire and test will fail.
-</span><span style="font-style:italic"></span>        <span style="font-style:italic">// Please note, that private functions can be tested too!
-</span><span style="font-style:italic"></span>        assert_eq!(bad_add(1, 2), 3);
+    <span style="color:#93a1a1;font-style:italic">#[test]</span>
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">test_bad_add</span>() {
+        <span style="color:#93a1a1;font-style:italic">// This assert would fire and test will fail.
+</span><span style="color:#93a1a1;font-style:italic"></span>        <span style="color:#93a1a1;font-style:italic">// Please note, that private functions can be tested too!
+</span><span style="color:#93a1a1;font-style:italic"></span>        <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">bad_add</span>(<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>), <span style="color:#2aa198;font-weight:bold">3</span>);
     }
 }
 </code></pre></div><p>这里让我产生了一个疑问: 什么要在 <code>mod test</code> 前加 <code>#[cfg(test)]</code>.</p>
