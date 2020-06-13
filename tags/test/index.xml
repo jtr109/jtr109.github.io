@@ -6,10 +6,20 @@
     <description>Recent content in test on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 21 Aug 2018 17:33:29 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 07 Nov 2019 22:38:24 +0000</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/test/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rust Unit Test Example</title>
+      <link>https://jtr109.github.io/posts/rust-unittest-example/</link>
+      <pubDate>Thu, 07 Nov 2019 22:38:24 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-unittest-example/</guid>
+      <description>起因 一个标准的单元测试写法为:
+pub fn add(a: i32, b: i32) -&amp;gt; i32 { a + b } // This is a really bad adding function, its purpose is to fail in this // example. #[allow(dead_code)] fn bad_add(a: i32, b: i32) -&amp;gt; i32 { a - b } #[cfg(test)] mod tests { // Note this useful idiom: importing names from outer (for mod tests) scope.  use super::*; #[test] fn test_add() { assert_eq!(add(1, 2), 3); } #[test] fn test_bad_add() { // This assert would fire and test will fail.</description>
+    </item>
     
     <item>
       <title>Unit test of Golang</title>

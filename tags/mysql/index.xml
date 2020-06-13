@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>mysql on jtr109&#39;s Castle</title>
+    <title>MySQL on jtr109&#39;s Castle</title>
     <link>https://jtr109.github.io/tags/mysql/</link>
-    <description>Recent content in mysql on jtr109&#39;s Castle</description>
+    <description>Recent content in MySQL on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 13 Aug 2017 14:08:41 +0800</lastBuildDate>
@@ -28,7 +28,7 @@ MySQL Server 密码重置  本机环境 Mac OS X EI Capitan 官网 Community 版
     </item>
     
     <item>
-      <title>Mysql Dump 笔记</title>
+      <title>MySQL Dump 笔记</title>
       <link>https://jtr109.github.io/posts/mysql-dump-note/</link>
       <pubDate>Sun, 13 Aug 2017 14:04:20 +0800</pubDate>
       

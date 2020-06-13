@@ -140,10 +140,13 @@
               1-minute read
             </span>
           </div>
-          
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
           <div class="tags">
   <i class="fas fa-tag"></i>
-    <a href="https://jtr109.github.io/tags/vim/">vim</a>
+    <a href="https://jtr109.github.io/tags/vim/">Vim</a>
       <span class="separator">•</span>
     <a href="https://jtr109.github.io/tags/ripgrep/">ripgrep</a></div>
 
@@ -190,9 +193,10 @@
 ./src/main.rs
 ./backend/src/bin/todo.rs
 </code></pre></div><h3 id="全局替换">全局替换</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="color:#2aa198">&#34;println&#34;</span> . --files-with-matches | xargs sed -i <span style="color:#2aa198">&#39;&#39;</span> <span style="color:#2aa198">&#39;s/println/pp/g&#39;</span>
+</code></pre></div><p>或者</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">❯ rg <span style="color:#2aa198">&#34;println&#34;</span> . --files-with-matches -0 | xargs -0 sed -i <span style="color:#2aa198">&#39;&#39;</span> <span style="color:#2aa198">&#39;s/println/pp/g&#39;</span>
-</code></pre></div><p>#tech/shell</p>
-
+</code></pre></div>
       </div>
 
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>vim on jtr109&#39;s Castle</title>
+    <title>Vim on jtr109&#39;s Castle</title>
     <link>https://jtr109.github.io/tags/vim/</link>
-    <description>Recent content in vim on jtr109&#39;s Castle</description>
+    <description>Recent content in Vim on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 07 Nov 2019 22:41:13 +0000</lastBuildDate>
@@ -37,12 +37,12 @@ filetype plugin indent on &amp;#34; On pressing tab, insert 2 spaces set expandt
     </item>
     
     <item>
-      <title>在 VIM 中赋值搜索寄存器</title>
+      <title>在 Vim 中赋值搜索寄存器</title>
       <link>https://jtr109.github.io/posts/set-search-pattern-register/</link>
       <pubDate>Wed, 25 Oct 2017 20:07:41 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/set-search-pattern-register/</guid>
-      <description>In English Highlight the search pattern register in VIM.
+      <description>In English Highlight the search pattern register in Vim.
 实现的目的 有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 jedi 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:
 将光标下的单词能在另一个文件下通过最简单的方式定位到.
 简单做法 最简单的做法, 当然是在 normal mode 下使用 * 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &amp;lt;c-o&amp;gt; 跳转回刚刚的位置.

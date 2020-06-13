@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tech on jtr109&#39;s Castle</title>
+    <title>tech on jtr109&#39;s Castle</title>
     <link>https://jtr109.github.io/categories/tech/</link>
-    <description>Recent content in Tech on jtr109&#39;s Castle</description>
+    <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 13 Jun 2020 12:02:11 +0800</lastBuildDate>
@@ -169,6 +169,15 @@ $ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1 $ pip fre
     </item>
     
     <item>
+      <title>运维技巧随手记</title>
+      <link>https://jtr109.github.io/posts/ops-note/</link>
+      <pubDate>Mon, 11 Nov 2019 10:59:57 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/ops-note/</guid>
+      <description>服务器登录方式 启用 &amp;ldquo;使用密码方式登录服务器&amp;rdquo;, 被攻击只是时间问题. 应该仅允许使用 key 登录. 参考方案</description>
+    </item>
+    
+    <item>
       <title>Django `get_or_create` 创建重复条目问题分析和处理</title>
       <link>https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/</link>
       <pubDate>Sat, 09 Nov 2019 22:09:45 +0000</pubDate>
@@ -179,6 +188,45 @@ $ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1 $ pip fre
 以下面这部分代码为例:
 # models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&amp;#39;c53b8ba212ef4f15b2365e1bb3d524fe&amp;#39;, defaults=dict(name=&amp;#39;foo&amp;#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.</description>
+    </item>
+    
+    <item>
+      <title>Using Gitlab CI in Project</title>
+      <link>https://jtr109.github.io/posts/using-gitlab-ci-in-project/</link>
+      <pubDate>Fri, 08 Nov 2019 09:44:11 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/using-gitlab-ci-in-project/</guid>
+      <description>GitLab 的 CI 功能有非常完备的文档, 本文旨在介绍一些常用概念和可能遇到的问题, 帮助大家更好的接入和使用.
+背景 公司项目中有大量 Python 项目构建的微服务, 在合并的过程中需要实现持续集成来获取信息.
+服务搭建 名词解释  Runner: Runner 是任务的执行单元, 实际上就是一个 OS, 它可以是一个主机, 虚拟机 Docker 或者 Kubernetes.  Runner 搭建和配置 Shell Runner 有一个麻烦的问题, 就是所有操作都会影响主机的文件, 依赖等, 而且基于主机 OS 的 runner 导致他是独一无二的, 所以无法实现环境区分. 已经 9102 年了, 建议使用 Docker Runner.
+配置 Runner 调度器 工具文档安装好 Docker CE 和 gitlab-runner, 意味着你拉起了一个 runners 调度器.
+配置 Runner 根据文档触发 Runner 注册:
+docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register 注册时需要指定 URL 和 registration token, 可以在项目 Settings -&amp;gt; CI / CD -&amp;gt; Runners 中查到.</description>
+    </item>
+    
+    <item>
+      <title>在 NeoVim 中修改指定文件类型的缩进</title>
+      <link>https://jtr109.github.io/posts/changing-indent-in-neovim/</link>
+      <pubDate>Thu, 07 Nov 2019 22:41:13 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/changing-indent-in-neovim/</guid>
+      <description>问题描述 使用 NeoVim 编辑 .sql 文件的时候发现默认的换行是一个 8 space 的 tab. 希望能将其改成 4 spaces.
+问题拆解 这其实会涉及到两个问题:
+ Vim (NeoVim) 中如何修改缩进 如何对指定文件类型修改配置  修改缩进 关于修改缩进的需要做几个配置, 在这篇提问中可以找到解答:
+filetype plugin indent on &amp;#34; On pressing tab, insert 2 spaces set expandtab &amp;#34; show existing tab with 2 spaces width set tabstop=2 set softtabstop=2 &amp;#34; when indenting with &amp;#39;&amp;gt;&amp;#39;, use 2 spaces width set shiftwidth=2 我们只要将 2 改成 4 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.
+查看文件类型 为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型.</description>
+    </item>
+    
+    <item>
+      <title>Replace In All Files</title>
+      <link>https://jtr109.github.io/posts/replace-in-all-files/</link>
+      <pubDate>Thu, 07 Nov 2019 22:40:05 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/replace-in-all-files/</guid>
+      <description>背景 在项目开发过程中, 有时需要全局替换一些变量名. 如果使用 VSCode 这类现代编辑器, 可以十分便利地办到. 但是使用 Vim (or NeoVim) 就没有那么容易了.
+方案 我们需要一个方案来实现全局替换的需求. 需要满足如下要求:
+ 可以自定义查找范围. 包括:   选择根路径 筛选符合指定 pattern 的文件 排除符合指定 pattern 的文件  查看确认筛选结果后, 执行修改  目前想到的办法是通过 ripgrep 和 sed 实现, 具体方法可以参照 ripgrep 的文档.
+工作流 全局查找 ❯ rg &amp;#34;println&amp;#34; . ./src/main.rs 2: println!(&amp;#34;Hello world!&amp;#34;); ./backend/src/bin/todo.rs 8: println!(&amp;#34;subcommands&amp;#34;); 9: println!(&amp;#34; new&amp;lt;title&amp;gt;: create a new task&amp;#34;); 33: println!(&amp;#34;new: missing &amp;lt;title&amp;gt;&amp;#34;); 44: println!(&amp;#34;show: unexpected argument&amp;#34;); 50: println!(&amp;#34;TASKS\n-----&amp;#34;); 52: println!</description>
     </item>
     
     <item>
@@ -199,6 +247,377 @@ pub fn add(a: i32, b: i32) -&amp;gt; i32 { a + b } // This is a really bad addin
       <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
       <description>背景描述 在使用 Diesel 和 uuid 开发的过程中, 使用发生报错:
 error[E0277]: the trait bound `uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not satisfied --&amp;gt; src/models.rs:45:14 | 45 | .load::&amp;lt;App&amp;gt;(conn) | ^^^^ the trait `diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not implemented for `uuid::Uuid` | = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `(uuid::Uuid, std::string::String)` = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `models::App` = note: required because of the requirements on the impl of `diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;` for `diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;` 代码如下:</description>
+    </item>
+    
+    <item>
+      <title>Python gRPC Json Format 的小坑</title>
+      <link>https://jtr109.github.io/posts/python-grpc-json-format/</link>
+      <pubDate>Thu, 07 Nov 2019 22:31:12 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-grpc-json-format/</guid>
+      <description>背景 最近在开发一个网关项目, 需要将外部的 JSON 请求转换成 gRPC 请求向后转发, 并将 gRPC 响应转换为 JSON 格式的响应返回.
+实现过程中发现使用 google.protobuf.json_format.MessageToDict 的时候 ( google.protobuf.json_format.MessageToJson 同理) 有一些需要注意留意的细节.
+遇到问题 当使用 MessageToDict 对 messge 转换时, 发现两个不符合预期的问题:
+ 如果一个 message field 对应的值为 zero value, 对应的 dict 中不会显示该键值对 field 名称会从 snake_case 被转换成 lowerCamelCase  源码分析 以 MessageToDict 为例, 我们看一下函数的定义.
+def MessageToDict( message, including_default_value_fields=False, preserving_proto_field_name=False, use_integers_for_enums=False, descriptor_pool=None): &amp;#34;&amp;#34;&amp;#34;Converts protobuf message to a dictionary. When the dictionary is encoded to JSON, it conforms to proto3 JSON spec.</description>
+    </item>
+    
+    <item>
+      <title>Post Blog with Hexo with Next</title>
+      <link>https://jtr109.github.io/posts/hexo-typora-github/</link>
+      <pubDate>Thu, 07 Nov 2019 19:48:56 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/hexo-typora-github/</guid>
+      <description>Install Hexo Asset Image npm install https://github.com/CodeFalling/hexo-asset-image -save Configure Hexo 编辑 _config.yml, 设置 titlecase, 该功能使你在 hexo new &amp;quot;My New Post&amp;quot; 的时候创建的文件自动带上 -, 形如 My-New-Post:
+titlecase: true Create Post with Hexo 打开 _config.yml , 修改配置为 post_asset_folder: true
+使用 Hexo 创建 post:
+hexo new hexo-typora-github 这时 source/_posts 目录下会生成一个 hexo-typora-github.md 文件和一个 hexo-typora-github 目录, 这个目录就是图片的存放地址.
+需要注意的是, 这里需要使用 hexo-typora-github 这样的格式生成. 如果使用 hexo new &amp;quot;Hexo Typora Github&amp;quot;, 生成的图片目录名为 Hexo Typora Github, 无法和文件映射.
+Editing with Typora Typora 可以直接将图片复制到 .</description>
+    </item>
+    
+    <item>
+      <title>Intergate Vue in Django</title>
+      <link>https://jtr109.github.io/posts/intergrate-vue-in-django/</link>
+      <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
+      <description>Intergate Vue in Django What Project Will We Build We want to build a vue project with multiple pages. The Django view render these pages as templates.
+Why We Build Such A Project If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.</description>
+    </item>
+    
+    <item>
+      <title>Django Password</title>
+      <link>https://jtr109.github.io/posts/django-password/</link>
+      <pubDate>Wed, 27 Mar 2019 13:59:45 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/django-password/</guid>
+      <description>Set Password Manually It is easy to set password with the instance of User by set_password:
+user = User.objects.create(username=&amp;#39;my_username&amp;#39;) user.set_password(&amp;#39;my_password&amp;#39;) But sometimes we want to bulk create users of we want to create an User model before saving into database. Your can create user model and set password manually.
+from django.contrib.auth.hashers import make_password user = User( username=&amp;#39;my_username&amp;#39;, password=make_password(&amp;#39;my_password&amp;#39;) ) # now you get the instance of User model How to Create an Raw Password Automatically?</description>
+    </item>
+    
+    <item>
+      <title>Python Singleton</title>
+      <link>https://jtr109.github.io/posts/python-singleton/</link>
+      <pubDate>Fri, 07 Sep 2018 07:34:23 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-singleton/</guid>
+      <description>Ways to use singleton in Python  using module using method __new__ using decorator using metaclass  Analysis the singleton with method __new__ Implementation Let us see the code first:
+class Singleton(object): _instance = None def __new__(cls, *args, **kw): if not cls._instance: cls._instance = super(Singleton, cls).__new__(cls, *args, **kw) return cls._instance And check the result:
+&amp;gt;&amp;gt;&amp;gt; s1 = Singleton() &amp;gt;&amp;gt;&amp;gt; s2 = Singleton() &amp;gt;&amp;gt;&amp;gt; s1 is s2 True &amp;gt;&amp;gt;&amp;gt; print(id(s1), id(s2)) 4420874480 4420874480 How does it work?</description>
+    </item>
+    
+    <item>
+      <title>Hashers Issue When Upgrade Django</title>
+      <link>https://jtr109.github.io/posts/hashers-issue-when-upgrade-django/</link>
+      <pubDate>Sun, 02 Sep 2018 11:11:23 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/hashers-issue-when-upgrade-django/</guid>
+      <description>Note for check_password in Django
+Background We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.
+I tried to fork the logic of User.check_password and create an async one. But the new one does not work as my wrong exception. But I learn something from that at least.
+Different behavior of User.check_password between objects from fixture and created manual I found when I use the official check_password on a user object from fixtures, the value of the object changed.</description>
+    </item>
+    
+    <item>
+      <title>What Happen When Model Objects All</title>
+      <link>https://jtr109.github.io/posts/what-happen-when-model-objects-all/</link>
+      <pubDate>Mon, 27 Aug 2018 17:01:12 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/what-happen-when-model-objects-all/</guid>
+      <description>Example snippet from django.db import models class Product(models.Model): pass create a model
+Product.objects.all() execute model objects all
+Consideration How can we get a queryset from model?
+Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls, name, bases, attrs): super_new = super(ModelBase, cls).__new__ # ... new_class = super_new(cls, name, bases, new_attrs) # ... new_class.add_to_class(&amp;#39;_meta&amp;#39;, Options(meta, app_label)) # ... new_class._prepare() # ... return new_class # ... def _prepare(cls): # ... if not opts.managers or cls.</description>
+    </item>
+    
+    <item>
+      <title>Asyncio Note</title>
+      <link>https://jtr109.github.io/posts/asyncio-note/</link>
+      <pubDate>Fri, 24 Aug 2018 07:08:11 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/asyncio-note/</guid>
+      <description>Starting async function without await Async function in asyncio cannot start directly. It should be wrapped in asyncio.create_task.
+The asyncio.ensure_future can also be used. But
+ create_task() (added in Python 3.7) is the preferable way for spawning new tasks.
+ Call usual function asynchronously with event loop  start on next tick: loop.call_soon(func) delay for some time before start: loop.call_later(delay, func) start at a time: loop.call_at(when, func)  See in asyncio event loop.</description>
+    </item>
+    
+    <item>
+      <title>Unit test of Golang</title>
+      <link>https://jtr109.github.io/posts/unit-test-of-golang/</link>
+      <pubDate>Tue, 21 Aug 2018 17:33:29 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/unit-test-of-golang/</guid>
+      <description>notes 测试最重要的就是处理依赖, 覆盖所有的流程, 合理的 assertion.
+我们在一个测试中, 不应对其依赖的实现做测试, 所以我们需要 mock 掉相应的实现. 由于 Golang 中 first class function 的存在, 我们可以通过在 package 中定义变量 (var) 的方式将依赖提到包级作用域中, 在测试中替换对应的逻辑, 从而不会对包中的执行代码产生影响.
+依赖返回的类型主要有两种: 基本类型组合, interface
+对于基本类型及其组合, 我们可以直接定义一个简单的工厂函数来生成他的返回值.
+而如果依赖返回的是一个相对复杂的 interface, we need to implement an structure satisfy the interface.
+Links  Golang unit testing interfaces MX record First class function in Golang  </description>
+    </item>
+    
+    <item>
+      <title>Golang Init Function</title>
+      <link>https://jtr109.github.io/posts/golang-init-function/</link>
+      <pubDate>Thu, 16 Aug 2018 18:06:30 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/golang-init-function/</guid>
+      <description>When is the init function called?  After all the variable declarations in the package have evaluated their initializers. Only after all the imported packages have been initialized.  Order of package initialization  initialization of imported packages (recursive definition) computing and assigning initial values for variables declared in a package block executing init functions inside the package  Usecase of init function  The initializations can not be expressed as declarations.</description>
+    </item>
+    
+    <item>
+      <title>LISP 中的各种相等表示</title>
+      <link>https://jtr109.github.io/posts/equal-in-lisp/</link>
+      <pubDate>Tue, 28 Nov 2017 07:52:09 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/equal-in-lisp/</guid>
+      <description>简述 LISP 中描述相等的断言主要有 eq, eql, equal 和 equalp. 他们对应的判断条件各不相同.
+逐个分析 断言 eq (eq x y) 仅当 x 和 y 是同一对象时才返回 true</description>
+    </item>
+    
+    <item>
+      <title>在 Vim 中赋值搜索寄存器</title>
+      <link>https://jtr109.github.io/posts/set-search-pattern-register/</link>
+      <pubDate>Wed, 25 Oct 2017 20:07:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/set-search-pattern-register/</guid>
+      <description>In English Highlight the search pattern register in Vim.
+实现的目的 有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 jedi 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:
+将光标下的单词能在另一个文件下通过最简单的方式定位到.
+简单做法 最简单的做法, 当然是在 normal mode 下使用 * 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &amp;lt;c-o&amp;gt; 跳转回刚刚的位置.
+然后 :b# 切换到另一个文件 (希望你和我一样设置了映射, 我的是 &amp;lt;leader-b&amp;gt;). 文件切换我们这里不做展开.
+这样的做法比较简单, 但是不够优雅.
+存储到搜索寄存器 那么问题就简单了 &amp;ndash; 怎样可以更新搜索寄存器.
+通过 :h registers 可以了解到:
+10. Last search pattern register	&amp;#34;/	*quote_/* *quote/* Contains the most recent search-pattern. This is used for &amp;#34;n&amp;#34; and &amp;#39;hlsearch&amp;#39;.</description>
+    </item>
+    
+    <item>
+      <title>Homebrew 自动更新 PostgreSQL 后对应数据库的更新处理</title>
+      <link>https://jtr109.github.io/posts/after-postgresql-upgrade/</link>
+      <pubDate>Wed, 18 Oct 2017 10:08:27 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/after-postgresql-upgrade/</guid>
+      <description>今天 PostgreSQL 更新到了 10.0, 对于我这样的新手, 可以说是悲喜交加. Server 本身更新了, 但是数据库还是老的, 会导致无法使用的问题. 在这里分享一下数据库的无痛恢复过程.
+问题描述 今天执行 $brew upgrade 的时候, 发现 postgresql 也更新了, 心里生出一丝不详的预感. 打开本地开发的 web 服务:
+$/usr/local/bin/pg_ctl -D /usr/local/var/postgres restart 返回如下
+waiting for server to shut down.... done server stopped waiting for server to start..../bin/sh: /usr/local/Cellar/postgresql/9.6.5/bin/postgres: No such file or directory /bin/sh: line 0: exec: /usr/local/Cellar/postgresql/0.6.5/bin/postgres: cannot execute: No such file or directory stopped waiting pg_ctl: could not start server 于是再运行
+$/usr/local/bin/pg_ctl -D /user/local/var/postgres start 想要启动数据库时, 就会发现出问题了:</description>
+    </item>
+    
+    <item>
+      <title>ES6 学习笔记</title>
+      <link>https://jtr109.github.io/posts/es6-note/</link>
+      <pubDate>Thu, 07 Sep 2017 16:41:23 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/es6-note/</guid>
+      <description>async 函数  async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果。 async 函数的返回值是一个 Promise 对象, 可以使用 then 指定下一步操作. 只要一个 await 语句后面的 Promise 变为 reject, 那么整个 async 函数都会中断执行  并发异步请求 // 写法一 let [foo, bar] = await Promise.all([getFoo(), getBar()]); // 写法二 let fooPromise = getFoo(); let barPromise = getBar(); let foo = await fooPromise; let bar = await barPromise; for 循环并发异步请求 async function dbFuc(db) { let docs = [{}, {}, {}]; let promises = docs.map((doc) =&amp;gt; db.</description>
+    </item>
+    
+    <item>
+      <title>Homebrew 报错汇总</title>
+      <link>https://jtr109.github.io/posts/brew-curl-error/</link>
+      <pubDate>Wed, 06 Sep 2017 11:50:17 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/brew-curl-error/</guid>
+      <description>curl 超限错误 curl: (18) transfer closed with ** bytes remaining to read 这个报错是由于 mac 自带的 curl 请求头中长度的限制导致的, 我们需要按照由 homebrew 管理的 curl 和 git 来避免这个问题:
+$ brew install curl --with-openssl $ brew install git --with-curl --with-openssl 暂时解决方法不详</description>
+    </item>
+    
+    <item>
+      <title>emacs 上手笔记</title>
+      <link>https://jtr109.github.io/posts/emacs-again/</link>
+      <pubDate>Thu, 24 Aug 2017 09:43:28 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/emacs-again/</guid>
+      <description>简述 再次尝试上手 emacs
+配置文件 .spacemacs file 按照好 spacemacs 的相关组件, 会显示 Quick Help. 建议看完.
+其中写到了配置文件 .spancemacs 的打开方式: [SPC f e d]</description>
+    </item>
+    
+    <item>
+      <title>Yet Another Scheme Tutorial 学习笔记</title>
+      <link>https://jtr109.github.io/posts/yast-learning/</link>
+      <pubDate>Wed, 23 Aug 2017 07:30:11 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/yast-learning/</guid>
+      <description>算数操作 基本算数操作  函数 exact-&amp;gt;inexact 用于把分数转换为浮点数. 函数 quotient 用于求商数（quotient）。 函数 remainder 和 modulo 用于求余数（remainder）。 函数 sqrt 用于求参数的平方根（square root）。  (exact-&amp;gt;inexact (/ 29 3 7)) ;-&amp;gt; 1.380952380952381 (quotient 7 3) ;→ 2 (modulo 7 3) ;→ 1 (sqrt 8) ;→ 2.8284271247461903 练习 练习中发现, 如果创建 scm 文件并写入多个算式, 好像不能得出每个计算的值, 得到的只能是最后一个算式的结果.
+表 空表 &#39;() 即为空表
+有两种非常类似的 value, 实现的方式却是不同的:
+ (3 2 . 1):  (1 2 3):   其实主要的差异是最后一个 cons 的 cdr 指向地址的不同, 上面一个是指向 1 所在的地址, 最后一个是指向一个空表 &#39;()</description>
+    </item>
+    
+    <item>
+      <title>SICP 学习摸索</title>
+      <link>https://jtr109.github.io/posts/sicp-learning/</link>
+      <pubDate>Wed, 23 Aug 2017 06:58:42 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/sicp-learning/</guid>
+      <description>以前学习过 MIT 6.00.1X, 也可以算是 SICP 的 Python 版. 在最近的开始的 SICP 学习中, 发现对 scheme 语法几乎为零, 用到再学的思路遇到了补上坎. 经常为了研究语法而打断思路. 所以工欲善其事, 必先利其器. 现在先暂停 SICP 的学习.
+在网上可以很方便地找到这样一些关于 SICP 的有用资源, 在这里做一下罗列.
+ SICP 解题集: 非常不错的中文解题集项目, 目前可能已经不维护, 有一些地方得不到更新, 需要的同学可以在项目 issue 中查找和添加相关问题, 不过现有资源也非常值得学习了. SICP 公开课中文化项目: 翻译了完整的 SICP 课程视频, 可以说是一个伟大的项目. 也是目前结合 SICP 学习的优秀素材. Scheme 入门教程: 也是公开课中文化项目的维护者 DeathKing 的翻译项目, 目前刚刚开始学习.  </description>
+    </item>
+    
+    <item>
+      <title>SICP 学习笔记 (一)</title>
+      <link>https://jtr109.github.io/posts/sicp-note-1/</link>
+      <pubDate>Sat, 19 Aug 2017 07:38:15 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/sicp-note-1/</guid>
+      <description>目前从 1.2 开始做笔记, 之前的可能会, 也可能不会补上.
+1.2 1.2.1 线性的递归和迭代  在各种常见语言的大部分实现的设计中, 对于任何递归过程的解释, 所消耗的存储量总与过程调用 数目成正比, 即使它所描述的计算过程从原理上来看是迭代的.
+ 大部分语言中, 书写形式是递归, 但是处理逻辑是迭代的.
+练习 1.9 # 题干 (define (+ a b) (if (= a 0) b (inc (+ (dec a) b)))) (define (+ a b) (if (= a 0) b (+ (dec a) (inc b)))) # 计算 (+ 4 5) # 计算过程是递归的或者迭代的吗 # 定义1 (+ 4 5) (inc (+ 3 5)) (inc (inc (+ 2 5))) (inc (inc (inc (+ 1 5)))) (inc (inc (inc (inc (+ 0 5))))) (inc (inc (inc (inc 5)))) (inc (inc (inc 6))) (inc (inc 7)) (inc 8) 9 # 结论: 以上递归过程属于线性递归计算过程 # 定义 2 (+ 4 5) (+ 3 6) (+ 2 7) (+ 1 8) (+ 0 9) 0 # 结论: 以上递归过程属于线性迭代计算过程 引用 SICP 习题集 中的话:</description>
+    </item>
+    
+    <item>
+      <title>Homebrew 镜像推荐</title>
+      <link>https://jtr109.github.io/posts/brew-mirror-recommend/</link>
+      <pubDate>Fri, 18 Aug 2017 09:03:47 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/brew-mirror-recommend/</guid>
+      <description>镜像选择 国内比较优秀的镜像源有豆瓣, 清华以及中科大.
+镜像说白了, 只是把国外节点上的文件缓存在国内服务器, 加快国内下载速度. 所以理论上速度都不可能有多大差距, 至于安全性, 就不得而知了.
+这里推荐中科大的主要原因是 &amp;ndash; 他家的文档比较清晰, 还有如何重置的说明.
+镜像地址链接  Homebrew Core 源 Homebrew 源 Homebrew Bottles 源 Homebrew Cask 源  简介 Homebrew, core, bottle 和 cask 的作用各不相同, 需要根据需求修改.
+ Homebrew: Homebrew 的整体框架. 对应 brew upgrade 下载数据的源, 如果下载其他程序速度慢, 可以考虑修改此源地址. Homebrew Core: Homebrew 的核心框架, brew update 如果速度极慢, 需要修改的就是这个源地址. Homebrew Bottles: 没有使用过, 从文档上看是对应二进制的包, 也就是预编译版本, 感觉没什么用. Homebrew Cask: 重头戏, 这是用于安装带界面 App 的 tap. 有了它, 你就可以通过 brew 下载和更新这些 App.</description>
+    </item>
+    
+    <item>
+      <title>Javascript 中 for 循环的使用方式</title>
+      <link>https://jtr109.github.io/posts/about-js-for-loop/</link>
+      <pubDate>Wed, 16 Aug 2017 10:51:52 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/about-js-for-loop/</guid>
+      <description>关于 for ... in 和 for ... of 简单记忆 由于 es6 中 for ... of 的加入, 对于记得不是很清楚的人会很容易产生混淆.
+for ... in 可以理解为获取 &amp;ldquo;index&amp;rdquo;. 在 Array 类型中, 调用 for ... in 获取的确实就是每个元素对应的 index, 而在 Object 中, 就是对应相应的 key 值.
+for ... of  只可以用于 Array.
+特别注意 for ... of 只能用于 Array, 用于 Object 或者 undefined 均会报错. 所以对于使用对象可能出现 undefined 的情况不要使用for ... of.
+示例 对 Array 使用:
+let a = {&amp;#39;a&amp;#39;: 1, &amp;#39;b&amp;#39;: 2} let b = [&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;] let c = undefined for (let i in a) { console.</description>
+    </item>
+    
+    <item>
+      <title>Install MySQLdb in virtualenv，从入门到放弃</title>
+      <link>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</link>
+      <pubDate>Sun, 13 Aug 2017 14:08:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</guid>
+      <description>本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。
+MySQL Server 密码重置  本机环境 Mac OS X EI Capitan 官网 Community 版 MySQL Server 虚拟环境 virtualenv pwd: /User/jtr109/qs/
+ 密码重置的方式多种多样，用很多我尝试之后这个是我唯一可行的，和我有相同环境、情况的朋友可以参考：数据库之mac上mysql root密码忘记或权限错误的解决办法。
+遇到这个问题主要是我装MySQL的时候不专心，传说官方dmg装完后是会提示设定密码的，不知道怎么回事，反正我本地的MySQL Server就完全进不去了，只能改密码。这篇文章讲的非常清晰，简单易懂，不做过多评论。只要每一步照做就好。此文最大的优点是不用终端运行MySQL Server，也不用考虑 kill 进程，非常适合刚刚接触相关内容的朋友。
+安装 MySQLdb 首先进入你需要的路径，我们以 /User/jtr109/qs/ 为例。执行 virtualenv venv 创建虚拟环境包， source venv/bin/activate 进入虚拟环境。
+注意安装模块名 我不知道为什么这个模块叫 MySQLdb，import 语句也是 import MySQLdb。但是你要注意，pip 安装语句为： pip install MySQL-python。千万不要写错。不过因为你在虚拟环境，所以玩脱了就这个环境包删了就好。这也是我为什么推崇为每个项目创建虚拟环境的原因之一。
+修改 _mysql.so 追踪路径 现在你可以试着进入 python， 然后运行：
+&amp;gt;&amp;gt;&amp;gt; import MySQLdb Traceback (most recent call last): File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt; File &amp;quot;/Users/jtr109/qs/venv/lib/python2.</description>
+    </item>
+    
+    <item>
+      <title>关于flask-sqlalchemy中数据库操作的问题整理</title>
+      <link>https://jtr109.github.io/posts/flask-sqlalchemy-database-problems/</link>
+      <pubDate>Sun, 13 Aug 2017 14:06:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/flask-sqlalchemy-database-problems/</guid>
+      <description>此文为本人原创，最早发布于求助《Flask Web 开发》第五章关于数据库db.session.add()和db.session.commit()问题。
+问题简述：
+ 当加入了SQLALCHEMY_COMMIT_ON_TEARDOWN=True，在什么情况下仍然要执行db.session.commit()
+ 解答整理如下：
+config是在app/__init__.py中调用的，所以执行model.py中的方法时，SQLALCHEMY_COMMIT_ON_TEARDOWN = True已经生效了。即请求结束后自动commit。
+后面几个章节中出现db.session.commit()的主要作用都是为了生成id来使用。
+你可以结合源码看一下。
+session的原理就请参考Flask 源码阅读笔记。
+SQLALCHEMY_ON_TEARDOWN在flask-sqlalchemy 2.0之后已经被删除了，需要用SQLALCHEMY_TRACK_MODIFICATIONS替代，想必你运行的时候应该看到过相关提示。
+参考文章：Flask-SQLAlchemy 配置问题
+这个新熟悉我还没掌握，抽空看下documentation再来分析。
+继续回到SQLALCHEMY_ON_TEARDOWN。按照书上的说法：
+ 将其设为True时，每次请求结束后都会自动提交数据库中的变动。
+ 因为v1.0的如果这里的documentation已经找不到了，没有依据，我就在这推测一下：
+只有当请求结束的时候，才会自动commit，而直接操作数据库是不行的，需要手动commit。
+回到model.py中看，insert_roles()被@staticmethod包装，是一个静态方法，它执行的位置是在python manage.py shell中，而非请求中，所以需要手动commit。
+你可以验证一下，方法也很简单，保证写入SQLALCHEMY_ON_TEARDONW=True后，在shell中尝试：
+&amp;gt;&amp;gt;&amp;gt; user = User(username=&#39;test&#39;) &amp;gt;&amp;gt;&amp;gt; db.session.add(user) &amp;gt;&amp;gt;&amp;gt; quit()  再次进入shell，查找&amp;lt;User u&#39;test&#39;&amp;gt;，不存在，即推断合理：shell中执行的用于操作数据库的方法还是要加commit。</description>
+    </item>
+    
+    <item>
+      <title>MySQL Dump 笔记</title>
+      <link>https://jtr109.github.io/posts/mysql-dump-note/</link>
+      <pubDate>Sun, 13 Aug 2017 14:04:20 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/mysql-dump-note/</guid>
+      <description>目前的配置环境均为 Windows，其他环境会在稍后补充
+1. 全量备份 2. 增量备份及恢复 2.1 备份 2.1.1 启用二进制备份 开启 binlog 日志 mysql -hlocalhost -uroot -pjue -e &amp;#34;set global sql_log_bin=1&amp;#34;; mysql -hlocalhost -uroot -pjue -e &amp;#34;show global variables like &amp;#39;sql_log_bin&amp;#39;\G&amp;#34;; 实测需要将 global 替换为 session
+在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置 log-bin=D:/Program Files (x86)/MySQL/mylog/jlog 2.1.2 重启 MySQL 服务 2.1.3 执行一次全量备份 $ mysqldump -hlocalhost -uroot -p -l -F test &amp;gt; testtt.sql 全量备份除了新建 sql 备份意外，还会新建一个 binlog 文件，完成后可以删除早先的 binlog 文件。 转移全量备份的 sql 并保存。</description>
+    </item>
+    
+    <item>
+      <title>vim 插件配置笔记</title>
+      <link>https://jtr109.github.io/posts/vim-plugs-note/</link>
+      <pubDate>Sun, 13 Aug 2017 13:20:52 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/vim-plugs-note/</guid>
+      <description>1. 使用技巧 2. VIM 配置 2.1 vim-airline 2.1.1 airline 显示问题 在安装 airline 的过程中, 你很有可能会和我一样踩到很多坑, 这里就和大家分享一下我的经验.
+安装成功后 airline 未显示 遇到这个问题是因为没有为 airline 配置设施的行数, 请在 .vimrc 中做如下配置:
+set laststatus=2 airline 箭头, 符号显示乱码 airline 的乱码问题主要是由于字体问题, 需要通过安装字体和配置 .vimrc 解决. 笔者在安装的过程中也遇到了这个问题, 寻找半天, 终于找到了最平滑易懂的解决办法. 编辑并与大家分享:
+作者：八云 原文地址: 如何在 Ubuntu 下正确显示 vim-airline 的箭头符号？
+** 字体补丁安装 **
+  首先你要安装了补丁字体 powerline/fonts - GitHub, 克隆下来.    运行 ./install.sh 重新设定字体(for gvim)比如 终端也要相应设定(for vim) set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 11 &amp;quot;config font for gvim&amp;quot; for gvim  注: 我没有看明白上面最后一句的配置, 所以并没有执行, 但仍达到了效果.</description>
+    </item>
+    
+    <item>
+      <title>flask 数据库迁移与部署的一些经验</title>
+      <link>https://jtr109.github.io/posts/flask-database-deploy/</link>
+      <pubDate>Sun, 13 Aug 2017 13:04:28 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/flask-database-deploy/</guid>
+      <description>最早发布于flask开发的第五章关于创建迁移脚本的问题(已解决) - cocode.cc。内容并不完善，基本不会再维护.
+分享一点经验，主要是自己的理解，希望能有所帮助。千辛万苦部署好的数据库，就不为了答题一一验证了，全凭记忆回答，有不对的地方欢迎指出，会及时修改。
+以下内容以执行文件名为manage.py举例，请自行调整。
+  影响 migrate 的是数据库的结构。
+ 比方说你的 User 类中添加了一个 Column - nickname ，那么在保存 Model 之后建议执行 python manage.py db migrate -m &amp;quot;add nickname； 而给 table 加入了新的方法，例如 def change_nick_name() ，是不需要 migrate 的。如果 migrate ，结果也是 No change； 这一点可以留意一下，比较保险的办法是觉得有必要的时候就尝试一下 migrate，反正 No changes 对你的迁移也没有影响。    在创建本地数据库的时候，不要在 py shell 环境下执行 db.create_all()
+ 请使用python manage.py db init, python manage.py db upgrade 来创建本地数据库。 通常我会模仿书本上在上面两条指令之间再做一次migrate，但经验告诉我，结果好像都是No changes，毕竟，我init之后没有做过调整啊。 init指令会根据Model.py中的结构创建迁移文件夹migrations，而upgrade会根据migrations下的内容，通过config.py在找到正确的位置，并创建SQL，并在SQL中创建一个名为versions的table来存放和迁移文件夹中相同的版本号。（重要） 在开始的尝试中，特别是往heroku上部署的过程中，经常会遇到许多数据库的坑，如果实在走投无路，又确定是数据库迁移问题，并且无法优雅地解决。你需要做的就是以下几步： (1). 休息一下，我知道你很累了 (2). 执行python manage.</description>
+    </item>
+    
+    <item>
+      <title>CSS 学习笔记</title>
+      <link>https://jtr109.github.io/posts/css-note/</link>
+      <pubDate>Sun, 13 Aug 2017 12:30:45 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/css-note/</guid>
+      <description>居中 1. 文字居中  水平居中: text-align: center 垂直居中: vertical-align: middle  2. div 居中 div 居中是一个比较坑的实现, 没有什么特别优秀的办法, 这里只举部分较实用的例子.
+具体方法可以参考知乎上的这一篇回答, 这里暂时只介绍其中 absolute 的使用.
+2.1 absolute 居中 // 假设我们要做一个 200px 见方的 div .middle { position: absolute; width: 200px; height: 200px; top: 50%; left: 50%; margin-top: -100px; margin-left: -100px; background: red; } 这是一个比较稳妥的实现, 这里很明显, 是通过 top: 50% 来实现的垂直居中, 不过如果单单使用 top=50%, 会发现 div 的顶部位于父级元素 50% 位置处, 所以需要使用 margin-top=-100px 来实现元素的便宜. 该示例中的水平居中方法同理.
+如果在确认设置无误的情况下, 发现 div 的位置不对, 请检查父级是否正确设置了 position: relative.</description>
+    </item>
+    
+    <item>
+      <title>vim 使用技巧</title>
+      <link>https://jtr109.github.io/posts/vim-skills/</link>
+      <pubDate>Sun, 13 Aug 2017 11:50:29 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/vim-skills/</guid>
+      <description>删除行末的空格 :%s/\s\+$//e 有几点值得注意:
+ e tag 的作用是 error no display, 这里加入的目的是为了在没有可替换内容的时候不发出错误提示. 可以发现这里的正则表达式中, &amp;ldquo;多个空格&amp;rdquo; 的处理是 \s\+, 这里需要留意, + 也是需要转义的.  </description>
+    </item>
+    
+    <item>
+      <title>Hexo 搭建笔记</title>
+      <link>https://jtr109.github.io/posts/hexo-da-jian-bi-ji/</link>
+      <pubDate>Fri, 11 Aug 2017 07:41:21 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/hexo-da-jian-bi-ji/</guid>
+      <description>项目搭建 项目搭建可以参考这篇 limedroid 的Hexo 博客搭建指南.
+提供一条 bash one line:
+$ hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 上面的代码可以快捷地拉起项目服务器.
+语言设置 如果你和我一样按照上面的文章配置了 Hexo, 你会发现自己的时间文字显示为德语 &amp;ldquo;Veröffentlicht am&amp;rdquo;.
+这是由于默认配置的语言不符. 首先确认 theme/next/languages/ 目录下有 zh-Hans.yml 文件, 另外我们需要将 _config.yml 中配置语言:
+language: zh-Hans 需要注意, 修改好配置文件后请使用 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 重新编译后再查看效果.
+参考:
+ 使用Hexo踩坑小记 (文章中还有其他使用技巧, 值得学习.)  关于文章更新 通常如果只是修改文章内容, 可以保持 hexo server 出于运行状态, 修改的内容会自动更新到我们本地的 localhost:4000 页面上. 不过在提交文章之前, 请务必再使用 hexo g 重新编译.
+同样提供一条代码:
+$ hexo g &amp;amp;&amp;amp; hexo d 编译报错 在执行 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 时遇到过这样一个问题:</description>
     </item>
     
     <item>

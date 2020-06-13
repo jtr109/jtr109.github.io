@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Language" content="en">
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="In English Highlight the search pattern register in VIM.
+    <meta name="description" content="In English Highlight the search pattern register in Vim.
 实现的目的 有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 jedi 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:
 将光标下的单词能在另一个文件下通过最简单的方式定位到.
 简单做法 最简单的做法, 当然是在 normal mode 下使用 * 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &lt;c-o&gt; 跳转回刚刚的位置.
@@ -21,8 +21,8 @@
     
 
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="在 VIM 中赋值搜索寄存器"/>
-<meta name="twitter:description" content="In English Highlight the search pattern register in VIM.
+<meta name="twitter:title" content="在 Vim 中赋值搜索寄存器"/>
+<meta name="twitter:description" content="In English Highlight the search pattern register in Vim.
 实现的目的 有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 jedi 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:
 将光标下的单词能在另一个文件下通过最简单的方式定位到.
 简单做法 最简单的做法, 当然是在 normal mode 下使用 * 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &lt;c-o&gt; 跳转回刚刚的位置.
@@ -32,8 +32,8 @@
 通过 :h registers 可以了解到:
 10. Last search pattern register	&#34;/	*quote_/* *quote/* Contains the most recent search-pattern. This is used for &#34;n&#34; and &#39;hlsearch&#39;."/>
 
-    <meta property="og:title" content="在 VIM 中赋值搜索寄存器" />
-<meta property="og:description" content="In English Highlight the search pattern register in VIM.
+    <meta property="og:title" content="在 Vim 中赋值搜索寄存器" />
+<meta property="og:description" content="In English Highlight the search pattern register in Vim.
 实现的目的 有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 jedi 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:
 将光标下的单词能在另一个文件下通过最简单的方式定位到.
 简单做法 最简单的做法, 当然是在 normal mode 下使用 * 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &lt;c-o&gt; 跳转回刚刚的位置.
@@ -52,7 +52,7 @@
       <base href="https://jtr109.github.io/posts/set-search-pattern-register/">
     
     <title>
-  在 VIM 中赋值搜索寄存器 · jtr109&#39;s Castle
+  在 Vim 中赋值搜索寄存器 · jtr109&#39;s Castle
 </title>
 
     
@@ -140,7 +140,7 @@
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">在 VIM 中赋值搜索寄存器</h1>
+          <h1 class="title">在 Vim 中赋值搜索寄存器</h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -155,10 +155,13 @@
               2-minute read
             </span>
           </div>
-          
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
           <div class="tags">
   <i class="fas fa-tag"></i>
-    <a href="https://jtr109.github.io/tags/vim/">vim</a></div>
+    <a href="https://jtr109.github.io/tags/vim/">Vim</a></div>
 
         </div>
       </header>
@@ -166,7 +169,7 @@
       <div>
         
         <h2 id="in-english">In English</h2>
-<p>Highlight the search pattern register in VIM.</p>
+<p>Highlight the search pattern register in Vim.</p>
 <h2 id="实现的目的">实现的目的</h2>
 <p>有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 <a href="https://github.com/davidhalter/jedi-vim">jedi</a> 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:</p>
 <p><em>将光标下的单词能在另一个文件下通过最简单的方式定位到.</em></p>
