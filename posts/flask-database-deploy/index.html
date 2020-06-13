@@ -13,7 +13,7 @@
   影响 migrate 的是数据库的结构。
  比方说你的 User 类中添加了一个 Column - nickname ，那么在保存 Model 之后建议执行 python manage.py db migrate -m &quot;add nickname； 而给 table 加入了新的方法，例如 def change_nick_name() ，是不需要 migrate 的。如果 migrate ，结果也是 No change； 这一点可以留意一下，比较保险的办法是觉得有必要的时候就尝试一下 migrate，反正 No changes 对你的迁移也没有影响。    在创建本地数据库的时候，不要在 py shell 环境下执行 db.create_all()
  请使用python manage.py db init, python manage.py db upgrade 来创建本地数据库。 通常我会模仿书本上在上面两条指令之间再做一次migrate，但经验告诉我，结果好像都是No changes，毕竟，我init之后没有做过调整啊。 init指令会根据Model.py中的结构创建迁移文件夹migrations，而upgrade会根据migrations下的内容，通过config.py在找到正确的位置，并创建SQL，并在SQL中创建一个名为versions的table来存放和迁移文件夹中相同的版本号。（重要） 在开始的尝试中，特别是往heroku上部署的过程中，经常会遇到许多数据库的坑，如果实在走投无路，又确定是数据库迁移问题，并且无法优雅地解决。你需要做的就是以下几步： (1). 休息一下，我知道你很累了 (2). 执行python manage.">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
 

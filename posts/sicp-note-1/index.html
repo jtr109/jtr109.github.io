@@ -11,7 +11,7 @@
 1.2 1.2.1 线性的递归和迭代  在各种常见语言的大部分实现的设计中, 对于任何递归过程的解释, 所消耗的存储量总与过程调用 数目成正比, 即使它所描述的计算过程从原理上来看是迭代的.
  大部分语言中, 书写形式是递归, 但是处理逻辑是迭代的.
 练习 1.9 # 题干 (define (&#43; a b) (if (= a 0) b (inc (&#43; (dec a) b)))) (define (&#43; a b) (if (= a 0) b (&#43; (dec a) (inc b)))) # 计算 (&#43; 4 5) # 计算过程是递归的或者迭代的吗 # 定义1 (&#43; 4 5) (inc (&#43; 3 5)) (inc (inc (&#43; 2 5))) (inc (inc (inc (&#43; 1 5)))) (inc (inc (inc (inc (&#43; 0 5))))) (inc (inc (inc (inc 5)))) (inc (inc (inc 6))) (inc (inc 7)) (inc 8) 9 # 结论: 以上递归过程属于线性递归计算过程 # 定义 2 (&#43; 4 5) (&#43; 3 6) (&#43; 2 7) (&#43; 1 8) (&#43; 0 9) 0 # 结论: 以上递归过程属于线性迭代计算过程 引用 SICP 习题集 中的话:">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
 

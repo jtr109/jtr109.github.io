@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shell on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/shell/</link>
+    <description>Recent content in Shell on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 10 Dec 2019 11:00:25 +0000</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Export or Not Export in Environment File</title>
+      <link>https://jtr109.github.io/posts/export-or-not-in-env-file/</link>
+      <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/export-or-not-in-env-file/</guid>
+      <description>背景 在项目中需要使用 envsubst 从模板生成配置文件. 发现如果在环境变量文件 env.conf (或 .env 等) 中不使用 export 命令, envsubst 无法获取到所需的环境变量.
+实验 构建模板文件 src.txt
+now foo here: ${FOO}  不使用 export 创建环境变量配置文件 env.conf:
+FOO=bar 创建执行脚本 subenv.sh:
+source env.conf echo $FOO envsubst &amp;lt; &amp;#34;src.txt&amp;#34; &amp;gt; &amp;#34;env-tar.txt&amp;#34; 执行脚本 [subenv.sh](http://subenv.sh) 查看生成的 env-tar.txt 文件:
+now foo here:  使用 export 创建环境变量配置文件 exp.conf
+export FOO=bar 创建执行脚本 subexp.sh:
+source exp.conf echo $FOO envsubst &amp;lt; &amp;#34;src.txt&amp;#34; &amp;gt; &amp;#34;exp-tar.txt&amp;#34; 执行脚本 [subexp.sh](http://subexp.sh) 查看生成文件 exp-tar.txt:
+now foo here: bar  可以看到, 在环境变量配置文件中使用 export, 在脚本中使用 envsubst 才能获取到所需的环境变量.</description>
+    </item>
+    
+  </channel>
+</rss>

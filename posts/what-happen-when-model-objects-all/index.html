@@ -11,7 +11,7 @@
 Product.objects.all() execute model objects all
 Consideration How can we get a queryset from model?
 Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls, name, bases, attrs): super_new = super(ModelBase, cls).__new__ # ... new_class = super_new(cls, name, bases, new_attrs) # ... new_class.add_to_class(&#39;_meta&#39;, Options(meta, app_label)) # ... new_class._prepare() # ... return new_class # ... def _prepare(cls): # ... if not opts.managers or cls.">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
 

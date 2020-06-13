@@ -21,7 +21,7 @@
     </item>
     
     <item>
-      <title>cryptographic</title>
+      <title>Cryptographic</title>
       <link>https://jtr109.github.io/tags/cryptographic/</link>
       <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
       
@@ -30,7 +30,7 @@
     </item>
     
     <item>
-      <title>rsa</title>
+      <title>RSA</title>
       <link>https://jtr109.github.io/tags/rsa/</link>
       <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
       
@@ -66,7 +66,7 @@
     </item>
     
     <item>
-      <title>blog</title>
+      <title>Blog</title>
       <link>https://jtr109.github.io/tags/blog/</link>
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
@@ -75,7 +75,7 @@
     </item>
     
     <item>
-      <title>hugo</title>
+      <title>Hugo</title>
       <link>https://jtr109.github.io/tags/hugo/</link>
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
@@ -102,11 +102,38 @@
     </item>
     
     <item>
-      <title>security</title>
+      <title>Security</title>
       <link>https://jtr109.github.io/tags/security/</link>
       <pubDate>Tue, 07 Jan 2020 23:45:24 +0000</pubDate>
       
       <guid>https://jtr109.github.io/tags/security/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bash</title>
+      <link>https://jtr109.github.io/tags/bash/</link>
+      <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/bash/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Env</title>
+      <link>https://jtr109.github.io/tags/env/</link>
+      <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/env/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shell</title>
+      <link>https://jtr109.github.io/tags/shell/</link>
+      <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/shell/</guid>
       <description></description>
     </item>
     
@@ -120,7 +147,7 @@
     </item>
     
     <item>
-      <title>pypi</title>
+      <title>PyPI</title>
       <link>https://jtr109.github.io/tags/pypi/</link>
       <pubDate>Wed, 27 Nov 2019 17:27:14 +0000</pubDate>
       
@@ -129,7 +156,7 @@
     </item>
     
     <item>
-      <title>python</title>
+      <title>Python</title>
       <link>https://jtr109.github.io/tags/python/</link>
       <pubDate>Wed, 27 Nov 2019 17:27:14 +0000</pubDate>
       
@@ -138,7 +165,7 @@
     </item>
     
     <item>
-      <title>git</title>
+      <title>Git</title>
       <link>https://jtr109.github.io/tags/git/</link>
       <pubDate>Thu, 14 Nov 2019 14:06:16 +0000</pubDate>
       
@@ -147,7 +174,7 @@
     </item>
     
     <item>
-      <title>gitlab</title>
+      <title>Gitlab</title>
       <link>https://jtr109.github.io/tags/gitlab/</link>
       <pubDate>Thu, 14 Nov 2019 14:06:16 +0000</pubDate>
       
@@ -156,7 +183,7 @@
     </item>
     
     <item>
-      <title>movie</title>
+      <title>Movie</title>
       <link>https://jtr109.github.io/tags/movie/</link>
       <pubDate>Tue, 12 Nov 2019 08:09:52 +0000</pubDate>
       

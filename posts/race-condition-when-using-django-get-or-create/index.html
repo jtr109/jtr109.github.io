@@ -12,7 +12,7 @@
 以下面这部分代码为例:
 # models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&#39;c53b8ba212ef4f15b2365e1bb3d524fe&#39;, defaults=dict(name=&#39;foo&#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
 
@@ -133,13 +133,13 @@
           </div>
           <div class="categories">
   <i class="fas fa-folder"></i>
-    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+    <a href="https://jtr109.github.io/categories/tech/">Tech</a></div>
 
           <div class="tags">
   <i class="fas fa-tag"></i>
-    <a href="https://jtr109.github.io/tags/python/">python</a>
+    <a href="https://jtr109.github.io/tags/python/">Python</a>
       <span class="separator">•</span>
-    <a href="https://jtr109.github.io/tags/django/">django</a></div>
+    <a href="https://jtr109.github.io/tags/django/">Django</a></div>
 
         </div>
       </header>

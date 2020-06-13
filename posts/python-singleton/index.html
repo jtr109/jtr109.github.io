@@ -10,7 +10,7 @@
     <meta name="description" content="Ways to use singleton in Python  using module using method __new__ using decorator using metaclass  Analysis the singleton with method __new__ Implementation Let us see the code first:
 class Singleton(object): _instance = None def __new__(cls, *args, **kw): if not cls._instance: cls._instance = super(Singleton, cls).__new__(cls, *args, **kw) return cls._instance And check the result:
 &gt;&gt;&gt; s1 = Singleton() &gt;&gt;&gt; s2 = Singleton() &gt;&gt;&gt; s1 is s2 True &gt;&gt;&gt; print(id(s1), id(s2)) 4420874480 4420874480 How does it work?">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
 
     
 

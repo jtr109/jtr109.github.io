@@ -6,10 +6,77 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 07 Jan 2020 23:45:24 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 12:02:11 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>在博客或文档中使用 Ruby Tag 实现注解效果</title>
+      <link>https://jtr109.github.io/posts/using-ruby-tag-both-in-typora-and-hugo/</link>
+      <pubDate>Sat, 13 Jun 2020 12:02:11 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/using-ruby-tag-both-in-typora-and-hugo/</guid>
+      <description>背景 在博客或文档中，我们有时候会希望对自己的文字做注解。例如为一个专业术语加上标注，便于读者理解：
+ We are about to study the idea of a computational process.
+ 我们会翻译为：
+ 我们将要学习计算过程的概念。
+ 如果我们想要引述原文来增加准确性，一个简单的做法是在后面加上括号：
+ 我们将要学习计算过程 (computational process) 的概念。
+ 有没有更好的方法呢？
+使用 HTML 元素 Ruby Tag 在 HTML 中，我们可以使用 Ruby Tag 来实现这个需求。
+Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
+&amp;lt;ruby&amp;gt; 计算过程 &amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt; &amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt; &amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt; &amp;lt;/ruby&amp;gt; &amp;lt;ruby&amp;gt; 中的元素主要分为几部分：
+ 主体，即示例中的「计算过程」。这部分是正常显示在段落中的内容，其格式继承自 &amp;lt;ruby&amp;gt; 外部的格式。 &amp;lt;rp&amp;gt; 用来包裹括号。这是为了兼容性，在不支持 &amp;lt;ruby&amp;gt; 的浏览器中显示为「计算过程（computational process）」 &amp;lt;rt&amp;gt; 用来包裹注释信息，注释会以小字形式显示在主体内容的上方。  实践示例 我们将要学习&amp;lt;ruby&amp;gt;计算过程&amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt;&amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt;&amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt;&amp;lt;/ruby&amp;gt;的概念。 实现的效果如下：</description>
+    </item>
+    
+    <item>
+      <title>在 Python 中使用 RSA 2048</title>
+      <link>https://jtr109.github.io/posts/python-rsa-2048/</link>
+      <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-rsa-2048/</guid>
+      <description>使用 OpenSSL 生成公私钥对 生成私钥：
+openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
+openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
+from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&amp;#34;private.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&amp;#34;receiver.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
+In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA.</description>
+    </item>
+    
+    <item>
+      <title>开发过程中的时间和时区问题</title>
+      <link>https://jtr109.github.io/posts/time-zone-between-systems/</link>
+      <pubDate>Tue, 09 Jun 2020 12:03:19 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/time-zone-between-systems/</guid>
+      <description>背景 Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。
+Naive Datetime &amp;amp; Timezone-awared Datetime 在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：
+  Naive dateime
+ 2020-06-09T12:10:19.805    Timezone-awared datetime
+  2020-06-09T04:10:19.805Z
+  2020-06-09T04:10:19.805+00:00
+    Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，绝对不能使用 naive datetime。
+而 Timezone-awared datetime 最后的 Z 或 +00:00 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。
+ISO Format &amp;amp; Timestamp ISO Format String 和 Timestamp 各自的特点 首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：
+ ISO formated timezone-awared datetime  字符串形式 可读性强 对时区表达方式不唯一（Z 或 +00:00）   timestamp  整型数字 不同程序对 timestamp 精度的定义不同  如 Java 和 JavaScript 中为 millisecond 而 Unix 和 Python 中为 second      前端对时间的处理 如果浏览器当前时区为东八区，取一个北京时间 2020-06-09T14:56:00.</description>
+    </item>
+    
+    <item>
+      <title>在 Typora 和 Hugo 中正确显示图片</title>
+      <link>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</link>
+      <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</guid>
+      <description>背景 Typora 可以便捷地将文件保存在本地，但是如果不合理配置，无法适应静态网页生成器（如：Hugo）的静态文件存储方式。所以需要通过 Typora 强大的配置方式解决这个问题。
+目标 将文件存放在项目目录中的 static/images 目录下，同时保证能在 Typora 和 Hugo 生成的网站中可见。
+配置 Typora Typora 有两个选项需要配置：
+ 图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。 图片的自动存放路径。  指定图片根路径 点击 Use Image Root Path，选择 static 目录作为根路径。
+设置图片自动存放路径 在设置中选择 Image 栏，将 static/images 的绝对路径设置为图片插入地址。
+也可以通过语法加入图片子目录，更好地管理图片。
+经过如上配置，截图便可通过 command+v 自动保存在 static/images 目录中。
+配置 Hugo 但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 static，符合要求。此时拉起站点，就可以正常显示图片了！
+参考  使用hugo搭建博客系统 Images in Typora  </description>
+    </item>
     
     <item>
       <title>一次性密码</title>
@@ -112,6 +179,17 @@ $ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1 $ pip fre
 以下面这部分代码为例:
 # models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&amp;#39;c53b8ba212ef4f15b2365e1bb3d524fe&amp;#39;, defaults=dict(name=&amp;#39;foo&amp;#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.</description>
+    </item>
+    
+    <item>
+      <title>小程序踩坑记录</title>
+      <link>https://jtr109.github.io/posts/xiao-cheng-xu-cai-keng-ji-lu/</link>
+      <pubDate>Fri, 11 Aug 2017 06:34:06 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/xiao-cheng-xu-cai-keng-ji-lu/</guid>
+      <description>&amp;lt;picker&amp;gt; 选择器 小程序的 picker 有几个主要的属性参数:
+ bindchange: 返回发生 change 之后的 index value: 当前选中项的 index range: 选取项对应的范围  基础用法可以参考文档. 值得注意的是, 这里的 value 和 bindchange 返回的 event.detail.value 都是且只能是元素在 array 中的序号, 即 index 值 (从 0 开始). 即使是我们下面提到的 objectArray 目前也没有发现其他可以用来作为元素 key 的方法.
+但是文档中提供的方法只能用于一元数组的显示和选择, 虽然文档提到了 objectArray 的使用, 但是并未清晰地给出明确的使用方式. 如果我们还是按照文档的方法, 只定义 bindchagne, value and range, 会发现所有的选项都是 [object Object] 而非内容, 这是因为对于 picker 而言, 他将 range 被赋值的 objectArray 当作一个普通的一元数组, 取到的自然是整个 object. 正确的使用方法, 需要参考这篇小程序 picker 对于 objArray 怎么取值.</description>
     </item>
     
   </channel>
