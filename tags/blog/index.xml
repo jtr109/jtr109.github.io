@@ -6,10 +6,23 @@
     <description>Recent content in blog on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2020 12:02:11 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 20:28:42 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Superscript Comment in Markdown</title>
+      <link>https://jtr109.github.io/posts/superscript-reference-in-markdown/</link>
+      <pubDate>Sat, 13 Jun 2020 20:28:42 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/superscript-reference-in-markdown/</guid>
+      <description>If we want to comment to an object like we saw in book, we can implement it with Markdown syntax like below.
+The object[^1] we motioned. [^1]: Comment satisfied to the object above Let&amp;rsquo;s have a try:
+The object1 we motioned.
+  Comment satisfied to the object above &amp;#x21a9;&amp;#xfe0e;
+   </description>
+    </item>
     
     <item>
       <title>在博客或文档中使用 Ruby Tag 实现注解效果</title>
