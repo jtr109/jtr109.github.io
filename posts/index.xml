@@ -20,7 +20,7 @@
       <description>背景 在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。
 图片来自 Shades of Purple
 实践 字体选择 在 Shades of Purple 提供的推荐配置中可以了解到，截图中使用的字体是 Operator Mono。可以在 CUFON Fonts 网站免费下载1。
-安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。
+安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体，全选拖拽到 Font Book 中。
 配置 VSCode 使用的字体 打开 VSCode，打开设置，搜索 font family，将 Operator Mono 设置在最前。
 下载和使用合适的 Theme 如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。
 如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
