@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="背景 在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。
+图片来自 Shades of Purple
+实践 字体选择 在 Shades of Purple 提供的推荐配置中可以了解到，截图中使用的字体是 Operator Mono。可以在 CUFON Fonts 网站免费下载1。
+安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。
+配置 VSCode 使用的字体 打开 VSCode，打开设置，搜索 font family，将 Operator Mono 设置在最前。
+下载和使用合适的 Theme 如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。
+如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
+图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。
+中文字体 大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="VSCode 字体配置"/>
+<meta name="twitter:description" content="背景 在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。
+图片来自 Shades of Purple
+实践 字体选择 在 Shades of Purple 提供的推荐配置中可以了解到，截图中使用的字体是 Operator Mono。可以在 CUFON Fonts 网站免费下载1。
+安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。
+配置 VSCode 使用的字体 打开 VSCode，打开设置，搜索 font family，将 Operator Mono 设置在最前。
+下载和使用合适的 Theme 如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。
+如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
+图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。
+中文字体 大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。"/>
+
+    <meta property="og:title" content="VSCode 字体配置" />
+<meta property="og:description" content="背景 在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。
+图片来自 Shades of Purple
+实践 字体选择 在 Shades of Purple 提供的推荐配置中可以了解到，截图中使用的字体是 Operator Mono。可以在 CUFON Fonts 网站免费下载1。
+安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。
+配置 VSCode 使用的字体 打开 VSCode，打开设置，搜索 font family，将 Operator Mono 设置在最前。
+下载和使用合适的 Theme 如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。
+如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
+图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。
+中文字体 大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/vscode-font-configuration/" />
+<meta property="article:published_time" content="2020-06-13T20:44:59+08:00" />
+<meta property="article:modified_time" content="2020-06-13T20:44:59+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/vscode-font-configuration/">
+    
+    <title>
+  VSCode 字体配置 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/vscode-font-configuration/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="colorscheme-auto"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">VSCode 字体配置</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-06-13T20:44:59&#43;08:00'>
+                June 13, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/vscode/">VSCode</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/font/">font</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/editor/">editor</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">背景</h2>
+<p>在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。</p>
+<p><img src="https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png" alt="https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png"></p>
+<p>图片来自 <a href="https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple">Shades of Purple</a></p>
+<h2 id="实践">实践</h2>
+<h3 id="字体选择">字体选择</h3>
+<p>在 Shades of Purple 提供的<a href="https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple#best-custom-settings">推荐配置</a>中可以了解到，截图中使用的字体是 <a href="https://www.typography.com/fonts/operator/overview">Operator Mono</a>。可以在 <a href="https://www.cufonfonts.com/font/operator-mono">CUFON Fonts</a> 网站免费下载<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
+<h3 id="安装字体">安装字体</h3>
+<p>下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。</p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/Untitled.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled.png"></p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/1.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%201.png"></p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/2.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%202.png"></p>
+<h3 id="配置-vscode-使用的字体">配置 VSCode 使用的字体</h3>
+<p>打开 VSCode，打开设置，搜索 <em>font family</em>，将 Operator Mono 设置在最前。</p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/3.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%203.png"></p>
+<h3 id="下载和使用合适的-theme">下载和使用合适的 Theme</h3>
+<p>如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。</p>
+<p>如果不知道用什么 theme 比较好，可以考虑尝试 <a href="https://marketplace.visualstudio.com/items?itemName=sdras.night-owl">Night Owl</a> 或者 <a href="https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple">Shade of Purple</a>。</p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/4.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%204.png"></p>
+<p>图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。</p>
+<h3 id="中文字体">中文字体</h3>
+<p>大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。</p>
+<p>我使用的是方正和可口可乐推出的<a href="https://www.foundertype.com/index.php/FontInfo/index/id/4792">在乎体</a>。个人可免费使用。感兴趣的朋友可以尝试一下。</p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/5.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%205.png"></p>
+<h2 id="补充说明">补充说明</h2>
+<h3 id="字体差异">字体差异</h3>
+<p>在这里简单说明一下几种字体的差异：</p>
+<p>文字粗细从粗到细：</p>
+<ul>
+<li>Bold</li>
+<li>Medium</li>
+<li>Book</li>
+<li>Light</li>
+<li>XLight</li>
+</ul>
+<h3 id="italic-后缀字体">Italic 后缀字体</h3>
+<p><em>Italic</em> 后缀说明了这个字体是否是纯斜体，而非 italic 字体提示同时包含了正体和斜体字形。</p>
+<p><img src="https://jtr109.github.io/images/vscode-font-configuration.assets/6.png" alt="VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%206.png"></p>
+<p>如果直接使用 italic 后缀的字体，你的界面会变成全斜体。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>官方字体需要购买，不清楚为何 CUFON Fonts 可以直接免费下载。下载是否侵权，请各位自行判断。懂行的朋友可以评论指导一下，如果涉嫌侵权，可联系我删除链接。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+    
+
+  </body>
+
+</html>

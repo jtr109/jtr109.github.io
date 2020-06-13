@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>editor on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/editor/</link>
-    <description>Recent content in editor on jtr109&#39;s Castle</description>
+    <title>font on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/font/</link>
+    <description>Recent content in font on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/editor/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://jtr109.github.io/tags/font/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -26,17 +26,6 @@
 如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
 图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。
 中文字体 大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。</description>
-    </item>
-    
-    <item>
-      <title>emacs 上手笔记</title>
-      <link>https://jtr109.github.io/posts/emacs-again/</link>
-      <pubDate>Thu, 24 Aug 2017 09:43:28 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/posts/emacs-again/</guid>
-      <description>简述 再次尝试上手 emacs
-配置文件 .spacemacs file 按照好 spacemacs 的相关组件, 会显示 Quick Help. 建议看完.
-其中写到了配置文件 .spancemacs 的打开方式: [SPC f e d]</description>
     </item>
     
   </channel>

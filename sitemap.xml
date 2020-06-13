@@ -3,6 +3,51 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jtr109.github.io/categories/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/editor/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/font/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/categories/tech/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/vscode/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/vscode-font-configuration/</loc>
+    <lastmod>2020-06-13T20:44:59+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jtr109.github.io/tags/blog/</loc>
     <lastmod>2020-06-13T20:28:42+08:00</lastmod>
   </url>
@@ -13,22 +58,7 @@
   </url>
   
   <url>
-    <loc>https://jtr109.github.io/categories/</loc>
-    <lastmod>2020-06-13T20:28:42+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/</loc>
-    <lastmod>2020-06-13T20:28:42+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://jtr109.github.io/tags/markdown/</loc>
-    <lastmod>2020-06-13T20:28:42+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/posts/</loc>
     <lastmod>2020-06-13T20:28:42+08:00</lastmod>
   </url>
   
@@ -39,16 +69,6 @@
   
   <url>
     <loc>https://jtr109.github.io/posts/superscript-reference-in-markdown/</loc>
-    <lastmod>2020-06-13T20:28:42+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/</loc>
-    <lastmod>2020-06-13T20:28:42+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/categories/tech/</loc>
     <lastmod>2020-06-13T20:28:42+08:00</lastmod>
   </url>
   
@@ -440,11 +460,6 @@
   <url>
     <loc>https://jtr109.github.io/posts/brew-curl-error/</loc>
     <lastmod>2017-09-06T11:50:17+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/editor/</loc>
-    <lastmod>2017-08-24T09:43:28+08:00</lastmod>
   </url>
   
   <url>

@@ -6,10 +6,27 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2020 20:28:42 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VSCode 字体配置</title>
+      <link>https://jtr109.github.io/posts/vscode-font-configuration/</link>
+      <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/vscode-font-configuration/</guid>
+      <description>背景 在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。
+图片来自 Shades of Purple
+实践 字体选择 在 Shades of Purple 提供的推荐配置中可以了解到，截图中使用的字体是 Operator Mono。可以在 CUFON Fonts 网站免费下载1。
+安装字体 下载并解压字体包，可以看到各种 Operator Mono 字体。逐一双击安装。
+配置 VSCode 使用的字体 打开 VSCode，打开设置，搜索 font family，将 Operator Mono 设置在最前。
+下载和使用合适的 Theme 如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。
+如果不知道用什么 theme 比较好，可以考虑尝试 Night Owl 或者 Shade of Purple。
+图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。
+中文字体 大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。</description>
+    </item>
     
     <item>
       <title>Superscript Comment in Markdown</title>

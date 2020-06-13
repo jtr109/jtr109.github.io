@@ -6,10 +6,37 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2020 20:28:42 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>editor</title>
+      <link>https://jtr109.github.io/tags/editor/</link>
+      <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/editor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>font</title>
+      <link>https://jtr109.github.io/tags/font/</link>
+      <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/font/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VSCode</title>
+      <link>https://jtr109.github.io/tags/vscode/</link>
+      <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/vscode/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>blog</title>
@@ -395,15 +422,6 @@
       <pubDate>Wed, 18 Oct 2017 10:08:27 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/postgresql/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>editor</title>
-      <link>https://jtr109.github.io/tags/editor/</link>
-      <pubDate>Thu, 24 Aug 2017 09:43:28 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/editor/</guid>
       <description></description>
     </item>
     
