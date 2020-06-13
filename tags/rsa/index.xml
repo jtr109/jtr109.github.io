@@ -17,11 +17,50 @@
       <pubDate>Wed, 10 Jun 2020 14:54:41 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-rsa-2048/</guid>
-      <description>使用 OpenSSL 生成公私钥对 生成私钥：
-openssl genrsa -out private_key.pem 2048 通过私钥生成公钥：
-openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Python 生成公私钥对 参考官方文档
-from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&amp;#34;private.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&amp;#34;receiver.pem&amp;#34;, &amp;#34;wb&amp;#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
-In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA.</description>
+      <description>&lt;h2 id=&#34;使用-openssl-生成公私钥对&#34;&gt;使用 OpenSSL 生成公私钥对&lt;/h2&gt;
+&lt;p&gt;生成私钥：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt; openssl genrsa -out private_key.pem &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2048&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;通过私钥生成公钥：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;使用-python-生成公私钥对&#34;&gt;使用 Python 生成公私钥对&lt;/h2&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key&#34;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Crypto.PublicKey&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;RSA&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;key&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;RSA&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;generate&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2048&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;private_key&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;key&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;export_key&lt;/span&gt;()
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;open&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;private.pem&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;wb&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;write&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;private_key&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;close&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;public_key&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;key&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;publickey&lt;/span&gt;().&lt;span style=&#34;color:#268bd2&#34;&gt;export_key&lt;/span&gt;()
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;open&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;receiver.pem&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;wb&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;write&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;public_key&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;file_out&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;close&lt;/span&gt;()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;使用-python-加解密&#34;&gt;使用 Python 加解密&lt;/h2&gt;
+&lt;p&gt;使用 &lt;a href=&#34;https://pycryptodome.readthedocs.io/en/latest/index.html&#34;&gt;PyCryptodome&lt;/a&gt; 实现 RSA-2048 加解密。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Crypto.PublicKey&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;RSA&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Crypto.Cipher&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;PKCS1_OAEP&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;private_key&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;RSA&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;import_key&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;open&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/Downloads/private_key.pem&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;read&lt;/span&gt;())
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;public_key&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;RSA&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;import_key&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;open&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/Downloads/public_key.pem&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;read&lt;/span&gt;())
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;5&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;encryptor&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;PKCS1_OAEP&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;new&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;public_key&lt;/span&gt;)
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;6&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;b&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Hello world&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;7&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;encrypted_data&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;encryptor&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;encrypt&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt;)
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;8&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;decryptor&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;PKCS1_OAEP&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;new&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;private_key&lt;/span&gt;)
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;9&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;decryptor&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;decrypt&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;encrypted_data&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;9&lt;/span&gt;]: &lt;span style=&#34;color:#2aa198&#34;&gt;b&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Hello world&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;faq&#34;&gt;FAQ&lt;/h2&gt;
+&lt;h3 id=&#34;可以使用私钥加密公钥解密吗&#34;&gt;可以使用私钥加密，公钥解密吗？&lt;/h3&gt;
+&lt;p&gt;公钥是对外复数发放的，有不止一个对象可以获得公钥。&lt;/p&gt;
+&lt;p&gt;一般的操作方式是公钥加密、私钥解密。另一种用法是私钥签名、公钥验证。&lt;/p&gt;
+</description>
     </item>
     
   </channel>

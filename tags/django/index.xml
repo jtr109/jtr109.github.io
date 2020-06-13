@@ -17,11 +17,129 @@
       <pubDate>Sat, 09 Nov 2019 22:09:45 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/</guid>
-      <description>名词解释  Data Race &amp;amp; Race Condition: 待补充, 可参考这个 StackOverflow 回答  问题描述 Django 的 ORM 操作中有一个非常实用的功能: get_or_create, 可以判断数据库中是否有符合条件的条目, 没有则创建.
-但是在使用过程中如果不加留意, 会发生 race condition. 导致数据库中创建出的条目不符合预期.
-以下面这部分代码为例:
-# models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
-# tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&amp;#39;c53b8ba212ef4f15b2365e1bb3d524fe&amp;#39;, defaults=dict(name=&amp;#39;foo&amp;#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.</description>
+      <description>&lt;h2 id=&#34;名词解释&#34;&gt;名词解释&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Data Race &amp;amp; Race Condition: 待补充, 可参考&lt;a href=&#34;https://stackoverflow.com/a/58161437/6522746&#34;&gt;这个 StackOverflow 回答&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;Django 的 ORM 操作中有一个非常实用的功能: &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt;, 可以判断数据库中是否有符合条件的条目, 没有则创建.&lt;/p&gt;
+&lt;p&gt;但是在使用过程中如果不加留意, 会发生 race condition. 导致数据库中创建出的条目不符合预期.&lt;/p&gt;
+&lt;p&gt;以下面这部分代码为例:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# models.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Race&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Model&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;user_id&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;)
+    &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# tests.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;RaceTestCase&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;TestCase&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;test_race&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;):
+
+        &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;():
+            &lt;span style=&#34;color:#268bd2&#34;&gt;Race&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;(
+                &lt;span style=&#34;color:#268bd2&#34;&gt;user_id&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;c53b8ba212ef4f15b2365e1bb3d524fe&amp;#39;&lt;/span&gt;,
+                &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;age&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;),
+            )
+
+        &lt;span style=&#34;color:#268bd2&#34;&gt;threads&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;list&lt;/span&gt;()
+        &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;range&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;10&lt;/span&gt;):
+            &lt;span style=&#34;color:#268bd2&#34;&gt;threads&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;append&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;threading&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Thread&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;target&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;))
+        &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;threads&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2&#34;&gt;t&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;start&lt;/span&gt;()
+        &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;threads&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2&#34;&gt;t&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;join&lt;/span&gt;()
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;assertNotEqual&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;Race&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;count&lt;/span&gt;(), &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果执行测试, 有一定概率会返回如下信息:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ python manage.py &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt;
+...
+Exception in thread Thread-7:
+Traceback (most recent call last):
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 926, in _bootstrap_inner
+    self.run()
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&amp;#34;&lt;/span&gt;, line 20, in get_or_create
+    &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=dict(&lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;age&lt;/span&gt;=1),
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&amp;#34;&lt;/span&gt;, line 82, in manager_method
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; getattr(self.get_queryset(), name)(*args, **kwargs)
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&amp;#34;&lt;/span&gt;, line 538, in get_or_create
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; self.get(**kwargs), False
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&amp;#34;&lt;/span&gt;, line 412, in get
+    (self.model._meta.object_name, num)
+race.models.Race.MultipleObjectsReturned: get() returned more than one Race -- it returned 2!
+
+Exception in thread Thread-9:
+Traceback (most recent call last):
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 926, in _bootstrap_inner
+    self.run()
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 870, in run
+    self._target(*self._args, **self._kwargs)
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/race/tests.py&amp;#34;&lt;/span&gt;, line 20, in get_or_create
+    &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=dict(&lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;age&lt;/span&gt;=1),
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/manager.py&amp;#34;&lt;/span&gt;, line 82, in manager_method
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; getattr(self.get_queryset(), name)(*args, **kwargs)
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&amp;#34;&lt;/span&gt;, line 538, in get_or_create
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; self.get(**kwargs), False
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/mystuff/learn/django-update-or-create-example/venv/lib/python3.7/site-packages/django/db/models/query.py&amp;#34;&lt;/span&gt;, line 412, in get
+    (self.model._meta.object_name, num)
+race.models.Race.MultipleObjectsReturned: get() returned more than one Race -- it returned 2!
+
+.
+----------------------------------------------------------------------
+Ran &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; in 0.107s
+
+OK
+Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;alias&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;由于使用 &lt;code&gt;threading&lt;/code&gt; 实现并发, 所以不一定每次执行都会出现如上状况. 如果没有复现, 请重试几次.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;从上面的信息可以看到, 数据库中生成了不止一个条目, 而且有的 threading 在执行时报 &lt;code&gt;get() returned more than one Race&lt;/code&gt; 错误.&lt;/p&gt;
+&lt;h2 id=&#34;原因分析&#34;&gt;原因分析&lt;/h2&gt;
+&lt;p&gt;查看 &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt; 源码可以看到, 这个操作分为两步: 查询和创建. 所以在异步场景下, 可能出现多个读操作都没有查到条目, 触发 &lt;code&gt;DoesNotExist&lt;/code&gt; 报错, 写入多条, 而非预期中的始终只有一条.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Look up an object with the given kwargs, creating one if necessary.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Return a tuple of (object, created), where created is a boolean
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    specifying whether an object was created.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# The get() needs to be targeted at the write database in order&lt;/span&gt;
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# to avoid potential transaction consistency problems.&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_for_write&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;True&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;try&lt;/span&gt;:
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(**&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;), &lt;span style=&#34;color:#268bd2&#34;&gt;False&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;DoesNotExist&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_extract_model_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_create_object_from_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;p&gt;这个问题其实在文档中&lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/querysets/#get-or-create&#34;&gt;已经指出&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This method is atomic assuming that the database enforces uniqueness of the keyword arguments (see &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.unique&#34;&gt;&lt;code&gt;unique&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/options/#django.db.models.Options.unique_together&#34;&gt;&lt;code&gt;unique_together&lt;/code&gt;&lt;/a&gt;). If the fields used in the keyword arguments do not have a uniqueness constraint, concurrent calls to this method may result in multiple rows with the same parameters being inserted.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以如果希望避免条目冲突, 需要将 &lt;code&gt;get_or_create&lt;/code&gt; 参照的列设置为 unique. 对于多列参照的情况, 必须保证 &lt;code&gt;unique_together&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;以 &lt;code&gt;Race&lt;/code&gt;为例进行改造:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# models.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Solution&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Model&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;user_id&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;unique&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;True&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# declaring `user_id` uniqueness&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;补充一个 &lt;code&gt;unique_together&lt;/code&gt; 示例:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# models.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Together&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Model&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;user_id&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;)
+    &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;32&lt;/span&gt;)
+    &lt;span style=&#34;color:#268bd2&#34;&gt;age&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;PositiveIntegerField&lt;/span&gt;()
+
+    &lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Meta&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;unique_together&lt;/span&gt; = [
+            &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# declaring the combination of `user_id` and `name` is unique&lt;/span&gt;
+            [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user_id&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;],
+        ]
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完整示例可以参考&lt;a href=&#34;https://github.com/jtr109/django-update-or-create-example&#34;&gt;示例项目&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;p&gt;在源码中是如何使用 &lt;code&gt;translation.atom&lt;/code&gt; 解决这个错误的, 待后续分析.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -30,8 +148,472 @@
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
-      <description>Intergate Vue in Django What Project Will We Build We want to build a vue project with multiple pages. The Django view render these pages as templates.
-Why We Build Such A Project If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.</description>
+      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;Intergate Vue in Django&lt;/h1&gt;
+&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;What Project Will We Build&lt;/h2&gt;
+&lt;p&gt;We want to build a vue project with multiple pages. The Django view render these pages as templates.&lt;/p&gt;
+&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;Why We Build Such A Project&lt;/h2&gt;
+&lt;p&gt;If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.&lt;/p&gt;
+&lt;p&gt;So we consider to use front-end service to control the router and use back-end for access control.&lt;/p&gt;
+&lt;h2 id=&#34;initial-repository&#34;&gt;Initial Repository&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir vid &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; vid
+git init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;Create Virtual Environment&lt;/h2&gt;
+&lt;h3 id=&#34;specify-python-version&#34;&gt;Specify Python Version&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;Change Mirror (Optional)&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[[source]]
+name = &amp;#34;pypi&amp;#34;
+url = &amp;#34;https://mirrors.aliyun.com/pypi/simple/&amp;#34;
+verify_ssl = true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;Install Dependencies&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv install &lt;span style=&#34;color:#268bd2&#34;&gt;django&lt;/span&gt;==2.2.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;Start Django Project&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run django-admin startproject vid
+mv vid vid-dir &amp;amp;&amp;amp; mv ./vid-dir/* . &amp;amp;&amp;amp; rmdir vid-dir  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# move project to current path&lt;/span&gt;
+pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# check django project works&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;Create Authorization API in Django&lt;/h2&gt;
+&lt;p&gt;You should always create a custom user model in Django. &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model&#34;&gt;Here&lt;/a&gt; is why.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Remember not migrating until the custom user model is registered correctly.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;create-custom-user-model&#34;&gt;Create Custom User Model&lt;/h3&gt;
+&lt;p&gt;First, let us create an app.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;pipenv&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;manage&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;startapp&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We must install it in &lt;code&gt;INSTALLED_APPS&lt;/code&gt; in settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;INSTALLED_APPS&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# install account app&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we need to create a custom user model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/model.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.db&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;AbstractUser&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;AbstractUser&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;pass&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And replace the default one by registering it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;AUTH_USER_MODEL&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.User&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all, migrating the user model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py makemigrations
+pipenv run python manage.py migrate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;Create Logining and Checking Views&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s create &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views&#34;&gt;class-based views&lt;/a&gt; with json responses.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/apis.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;json&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;authenticate&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;logout&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.http&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;LoginView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;json&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;loads&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# TODO: request validation&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;authenticate&lt;/span&gt;(**&lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;wrong password&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;))
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;GetUserInfoView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;not login&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt;=&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;)))
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;LogoutView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;not login&amp;#39;&lt;/span&gt;))
+
+        &lt;span style=&#34;color:#268bd2&#34;&gt;logout&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, make router for it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;.apis&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;LoginView&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LogoutView&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;GetUserInfoView&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LoginView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;logout/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LogoutView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;logout&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;get_user_info/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;GetUserInfoView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;get_user_info&amp;#39;&lt;/span&gt;),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+		&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;api/account/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.urls&amp;#39;&lt;/span&gt;)),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;Creating Vue Project with Multiple Pages&lt;/h2&gt;
+&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;Initializing a Vue Project&lt;/h3&gt;
+&lt;p&gt;Frist of all, let us initialize a vue project.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;vue create frontend
+&lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; frontend
+yarn install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we run the vue development service.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually &lt;code&gt;localhost:8080&lt;/code&gt;).&lt;/p&gt;
+&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;Satisfication for Multiple Pages&lt;/h3&gt;
+&lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
+mkdir -p src/pages/login
+mv main.js src/pages/login/app.js
+mv App.vue src/pages/login/app.vue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Change relative path in &lt;code&gt;app.vue&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;vue&lt;/span&gt; --&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;app&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;img&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;alt&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Vue logo&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;../../assets/logo.png&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Welcome to Your Vue.js App&amp;#34;&lt;/span&gt;/&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;../../components/HelloWorld.vue&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// remove the &amp;#39;name&amp;#39; field
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;HelloWorld&lt;/span&gt;
+  }
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Copy a new page named &amp;ldquo;user&amp;rdquo;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cp -r src/pages/login src/pages/user
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Edit parameter &lt;code&gt;msg&lt;/code&gt; in &lt;code&gt;src/pages/user&lt;/code&gt; to make difference between pages.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;This Is The User Page&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create &lt;code&gt;vue.config.js&lt;/code&gt; for build multiple pages.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
+touch vue.config.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Parsing and registering all pages in config file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;use strict&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;titles&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/titles.js&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;glob&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;glob&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt; = {}
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;glob&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;sync&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/pages/**/app.js&amp;#39;&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;forEach&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt; =&amp;gt; {
+  &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/pages/&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;].&lt;span style=&#34;color:#268bd2&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/app.js&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;0&lt;/span&gt;]
+  &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;] = {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;entry&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;template&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;public/index.html&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;title&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;titles&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;],
+    &lt;span style=&#34;color:#268bd2&#34;&gt;chunks&lt;/span&gt;: [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;chunk-vendors&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;chunk-common&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;]
+  }
+})
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2&#34;&gt;chainWebpack&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;config&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;config&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;plugins&lt;/span&gt;.&lt;span style=&#34;color:#859900&#34;&gt;delete&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;named-chunks&amp;#39;&lt;/span&gt;),
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Run the service again.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now you can view the login and user pages corresponding url, such as &lt;code&gt;localhost:8080/login/&lt;/code&gt; and &lt;code&gt;localhost:8080/user/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Login page:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
+&lt;p&gt;User page:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;Inject Vue Page Into Django Template&lt;/h2&gt;
+&lt;h3 id=&#34;build-vue-dist&#34;&gt;Build Vue Dist&lt;/h3&gt;
+&lt;p&gt;Build the vue project first.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, you get &lt;code&gt;login.html&lt;/code&gt; and &lt;code&gt;user.html&lt;/code&gt; in the path &lt;code&gt;frontend/dist&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;Show Login Page in Django View&lt;/h3&gt;
+&lt;p&gt;Let us show login page by &lt;code&gt;TemplateView&lt;/code&gt; in Django.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views.generic&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;TemplateView&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;TemplateView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;template_name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login.html&amp;#39;&lt;/span&gt;)),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Change template directory in settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;TEMPLATES&lt;/span&gt; = [
+    {
+        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;DIRS&amp;#39;&lt;/span&gt;: [&lt;span style=&#34;color:#268bd2&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;join&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BASE_DIR&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;frontend&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;dist&amp;#39;&lt;/span&gt;)],
+        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    },
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After Changing template path, the login view works well. But we find the static files is not found.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529205044695.png&#34; alt=&#34;image-20190529205044695&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We setting &lt;code&gt;assetsDir&lt;/code&gt; as &lt;code&gt;&#39;static&#39;&lt;/code&gt; in &lt;code&gt;vue.config.js&lt;/code&gt; will ask vue-cli to build all assets in the same directory &lt;code&gt;frontend/dist/static&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;assetsDir&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;static&amp;#39;&lt;/span&gt;,
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And then, registering the path in the Django settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;STATICFILES_DIRS&lt;/span&gt; = [
+    &lt;span style=&#34;color:#268bd2&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;join&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BASE_DIR&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;frontend/dist/static&amp;#39;&lt;/span&gt;),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now, we can rebuild the vue project and refresh the page.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;render-user-page&#34;&gt;Render User Page&lt;/h3&gt;
+&lt;p&gt;Now, we already have the HTML file &lt;code&gt;frontend/dist/user.html&lt;/code&gt; . Let us render it in a Django view.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/views.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.http&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponseRedirect&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.shortcuts&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;render&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;reverse&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;UserPageView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponseRedirect&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;reverse&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login_page&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;render&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;template_name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user.html&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;UserPageView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user_page&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;Create a Login Form in User Page&lt;/h2&gt;
+&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;Login Form with Ant Design&lt;/h3&gt;
+&lt;p&gt;First, let us install the ant design vue package. &lt;a href=&#34;https://vue.ant.design/docs/vue/use-with-vue-cli/&#34;&gt;Here&lt;/a&gt; is the way to install and register ant design vue.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add ant-design-vue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Import style in &lt;code&gt;frontend/src/pages/login/app.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;ant-design-vue/dist/antd.css&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create a new file in &lt;code&gt;frontend/src/components&lt;/code&gt;, copy the login form from &lt;a href=&#34;https://vue.ant.design/components/form/#components-form-demo-horizontal-login-form&#34;&gt;doc&lt;/a&gt;. Then:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;import components from ant design vue&lt;/li&gt;
+&lt;li&gt;register components required&lt;/li&gt;
+&lt;li&gt;disable actions in mounted (optional)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;frontend&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;LoginForm&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;vue&lt;/span&gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;layout&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;inline&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;:form&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;form&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;@submit&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;handleSubmit&amp;#34;&lt;/span&gt;
+  &amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;validate&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-status&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;userNameError&lt;/span&gt;() ? &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;&amp;#39; : &amp;#39;&amp;#39;&amp;#34;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;help&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userNameError() || &amp;#39;&amp;#39;&amp;#34;&lt;/span&gt;
+    &amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-input&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;v&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-decorator&lt;/span&gt;=&amp;#34;[
+          &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;userName&lt;/span&gt;&amp;#39;,
+          {&lt;span style=&#34;color:#268bd2&#34;&gt;rules&lt;/span&gt;: [{ &lt;span style=&#34;color:#268bd2&#34;&gt;required&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;Please&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;your&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;!&amp;#39; }]}
+        ]&amp;#34;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;placeholder&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Username&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-icon&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;slot&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;prefix&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;style&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;color:rgba(0,0,0,.25)&amp;#34;&lt;/span&gt;
+        /&amp;gt;
+      &amp;lt;/a-input&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;validate&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-status&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;passwordError&lt;/span&gt;() ? &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;&amp;#39; : &amp;#39;&amp;#39;&amp;#34;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;help&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;passwordError() || &amp;#39;&amp;#39;&amp;#34;&lt;/span&gt;
+    &amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-input&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;v&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-decorator&lt;/span&gt;=&amp;#34;[
+          &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;&amp;#39;,
+          {&lt;span style=&#34;color:#268bd2&#34;&gt;rules&lt;/span&gt;: [{ &lt;span style=&#34;color:#268bd2&#34;&gt;required&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;Please&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;your&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Password&lt;/span&gt;!&amp;#39; }]}
+        ]&amp;#34;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;placeholder&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Password&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-icon&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;slot&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;prefix&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;lock&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;style&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;color:rgba(0,0,0,.25)&amp;#34;&lt;/span&gt;
+        /&amp;gt;
+      &amp;lt;/a-input&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;&amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-button&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;primary&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;html&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-type&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;submit&lt;/span&gt;&amp;#34;
+        &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;:disabled&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;hasErrors(form.getFieldsError())&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;Log&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt;
+      &amp;lt;/a-button&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+  &amp;lt;/a-form&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt; } &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;ant&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;ant&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// eslint-disable-line
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;hasErrors&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;) {
+  &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Object&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;keys&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;some&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;field&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;field&lt;/span&gt;])
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;: {
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-button&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-form&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-form-item&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Item&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-input&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-icon&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt;,
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt; () {
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;hasErrors&lt;/span&gt;,
+      &lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;$form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;createForm&lt;/span&gt;(&lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;),
+    }
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;mounted&lt;/span&gt; () {
+    &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;$nextTick&lt;/span&gt;(() =&amp;gt; {
+      &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// To disabled submit button at the beginning.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// this.form.validateFields()
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    })
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;methods&lt;/span&gt;: {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Only show error after a field is touched.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;userNameError&lt;/span&gt; () {
+      &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt; } = &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;
+      &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;userName&amp;#39;&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;userName&amp;#39;&lt;/span&gt;)
+    },
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Only show error after a field is touched.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;passwordError&lt;/span&gt; () {
+      &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt; } = &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;
+      &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;)
+    },
+    &lt;span style=&#34;color:#268bd2&#34;&gt;handleSubmit&lt;/span&gt;  (&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;preventDefault&lt;/span&gt;()
+      &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;validateFields&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;) =&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (!&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;) {
+          &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Received values of form: &amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;)
+        }
+      })
+    },
+  },
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;Using Axios to Send Login Request&lt;/h3&gt;
+&lt;p&gt;First let add proxy in vue project.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+  &lt;span style=&#34;color:#268bd2&#34;&gt;devServer&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;proxy&lt;/span&gt;: {
+      &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/api&amp;#39;&lt;/span&gt;: {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;target&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;http://127.0.0.1:8000&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// the host of your django service
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#268bd2&#34;&gt;changeOrigin&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;,
+      }
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Install Axios.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add axios
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Have a try to request by Axios.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/src/components/LoginForm.vue
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;axios&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;axios&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt; } &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+ 
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;methods&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;handleSubmit&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;preventDefault&lt;/span&gt;()
+      &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;validateFields&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;) =&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (!&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;) {
+          &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Received values of form: &amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// eslint-disable-line
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;          &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;userName&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;)
+        }
+      })
+    },
+    &lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;) {
+      &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt;: { &lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt; } } = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;axios&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/api/account/login/&amp;#39;&lt;/span&gt;, {&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;})
+      &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt; !== &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;) {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;)
+      } &lt;span style=&#34;color:#859900&#34;&gt;else&lt;/span&gt; {
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;window&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;location&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/user/&amp;#39;&lt;/span&gt;
+      }
+    }
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You will find CSRF token error.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530143518162.png&#34; alt=&#34;image-20190530143518162&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I do not find a better way to resolve it. Let disable CSRF token middleware until we find a solution.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;vid&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;settings&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;MIDDLEWARE&lt;/span&gt; = [
+    # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+    # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
+    # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;Create User and Test Redirection&lt;/h3&gt;
+&lt;p&gt;Let us create a user in django shell.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py shell
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create_user&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;email&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john@vid.com&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;weakpwd&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;Rebuild Frontend and Have A Try in Django Service&lt;/h3&gt;
+&lt;p&gt;Now let&amp;rsquo;s rebuild the frontend.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
+yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference:&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/25080236&#34;&gt;https://zhuanlan.zhihu.com/p/25080236&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Resolve the static not found problem: &lt;a href=&#34;https://blog.csdn.net/Amio_/article/details/88354438&#34;&gt;https://blog.csdn.net/Amio_/article/details/88354438&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To build vue project into multiple pages: &lt;a href=&#34;https://github.com/Plortinus/vue-multiple-pages/blob/master/src/pages/customer/home/app.vue&#34;&gt;https://github.com/Plortinus/vue-multiple-pages/blob/master/src/pages/customer/home/app.vue&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Avoid CSRF Error: &lt;a href=&#34;https://vsupalov.com/avoid-csrf-errors-axios-django/&#34;&gt;https://vsupalov.com/avoid-csrf-errors-axios-django/&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -40,9 +622,35 @@ Why We Build Such A Project If we seperate frond-end and back-end and all router
       <pubDate>Wed, 27 Mar 2019 13:59:45 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/django-password/</guid>
-      <description>Set Password Manually It is easy to set password with the instance of User by set_password:
-user = User.objects.create(username=&amp;#39;my_username&amp;#39;) user.set_password(&amp;#39;my_password&amp;#39;) But sometimes we want to bulk create users of we want to create an User model before saving into database. Your can create user model and set password manually.
-from django.contrib.auth.hashers import make_password user = User( username=&amp;#39;my_username&amp;#39;, password=make_password(&amp;#39;my_password&amp;#39;) ) # now you get the instance of User model How to Create an Raw Password Automatically?</description>
+      <description>&lt;h2 id=&#34;set-password-manually&#34;&gt;Set Password Manually&lt;/h2&gt;
+&lt;p&gt;It is easy to set password with the instance of &lt;code&gt;User&lt;/code&gt; by &lt;code&gt;set_password&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_username&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;set_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But sometimes we want to bulk create users of we want to create an &lt;code&gt;User&lt;/code&gt; model before saving into database. Your can create user model and set password manually.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.hashers&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;(
+    &lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_username&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
+)
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# now you get the instance of User model&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;how-to-create-an-raw-password-automatically&#34;&gt;How to Create an Raw Password Automatically?&lt;/h2&gt;
+&lt;p&gt;Django provide a method &lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;&lt;code&gt;make_random_password&lt;/code&gt;&lt;/a&gt; in the &lt;code&gt;BaseUserManager&lt;/code&gt;. So you can generate a password like this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;make_random_password&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# not a good idea&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But what if we just want to create a password without &lt;code&gt;User&lt;/code&gt; involved? You can find the method &lt;code&gt;make_random_password&lt;/code&gt; just call the function &lt;code&gt;get_random_string&lt;/code&gt; defined in &lt;a href=&#34;https://github.com/django/django/blob/master/django/utils/crypto.py&#34;&gt;&lt;code&gt;django.utils.crypto&lt;/code&gt;&lt;/a&gt;. So we make it easy like this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.utils.crypto&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# try this one&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;allowed_chars&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;abcdef0123456789&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -51,10 +659,123 @@ from django.contrib.auth.hashers import make_password user = User( username=&amp
       <pubDate>Sun, 02 Sep 2018 11:11:23 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/hashers-issue-when-upgrade-django/</guid>
-      <description>Note for check_password in Django
-Background We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.
-I tried to fork the logic of User.check_password and create an async one. But the new one does not work as my wrong exception. But I learn something from that at least.
-Different behavior of User.check_password between objects from fixture and created manual I found when I use the official check_password on a user object from fixtures, the value of the object changed.</description>
+      <description>&lt;p&gt;&lt;em&gt;Note for &lt;code&gt;check_password&lt;/code&gt; in Django&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.&lt;/p&gt;
+&lt;p&gt;I tried to fork the logic of &lt;code&gt;User.check_password&lt;/code&gt; and create an async one. But the new one does not work as my &lt;em&gt;wrong&lt;/em&gt; exception. But I learn something from that at least.&lt;/p&gt;
+&lt;h2 id=&#34;different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;Different behavior of &lt;code&gt;User.check_password&lt;/code&gt; between objects from fixture and created manual&lt;/h2&gt;
+&lt;p&gt;I found when I use the official &lt;code&gt;check_password&lt;/code&gt; on a user object from fixtures, the value of the object changed. But when I execute it on which I created recently. It did! I was confused about the difference.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;code in &lt;code&gt;django/contrib/auth/base_user&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.hashers&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#268bd2&#34;&gt;check_password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;is_password_usable&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;,
+)
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;@python_2_unicode_compatible&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;AbstractBaseUser&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Model&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;CharField&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;_&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;), &lt;span style=&#34;color:#268bd2&#34;&gt;max_length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;128&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;set_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;):
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;)
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;check_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;):
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        Return a boolean of whether the raw_password was correct. Handles
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        hashing formats behind the scenes.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;):
+            &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;set_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;)
+            &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# Password hash upgrades shouldn&amp;#39;t be considered password changes.&lt;/span&gt;
+            &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;
+            &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;save&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;update_fields&lt;/span&gt;=[&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;])
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;check_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;code in &lt;code&gt;django/contrib/auth/hasher.py&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;check_password&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;preferred&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;):
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Returns a boolean of whether the raw password matches the three
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    part encoded digest.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    If setter is specified, it&amp;#39;ll be called when you need to
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    regenerate the password.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_password_usable&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;):
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;False&lt;/span&gt;
+
+    &lt;span style=&#34;color:#268bd2&#34;&gt;preferred&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_hasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;preferred&lt;/span&gt;)
+    &lt;span style=&#34;color:#268bd2&#34;&gt;hasher&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;identify_hasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#268bd2&#34;&gt;hasher_changed&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;hasher&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;algorithm&lt;/span&gt; != &lt;span style=&#34;color:#268bd2&#34;&gt;preferred&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;algorithm&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;must_update&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;hasher_changed&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;preferred&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;must_update&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;)
+    &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;hasher&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;verify&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# If the hasher didn&amp;#39;t change (we don&amp;#39;t protect against enumeration if it&lt;/span&gt;
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# does) and the password should get updated, try to close the timing gap&lt;/span&gt;
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# between the work factor of the current encoded password and the default&lt;/span&gt;
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# work factor.&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;hasher_changed&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;must_update&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;hasher&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;harden_runtime&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;must_update&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;)
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can find when executed &lt;code&gt;check_password&lt;/code&gt; of &lt;code&gt;User&lt;/code&gt; object. The setter will be called when the password &lt;code&gt;is_correct&lt;/code&gt; and &lt;code&gt;must_update&lt;/code&gt;. And I find the &lt;code&gt;must_update&lt;/code&gt; is &lt;code&gt;False&lt;/code&gt; when checking the one I creatd but &lt;code&gt;True&lt;/code&gt; in fixtures.&lt;/p&gt;
+&lt;h2 id=&#34;why-must_update&#34;&gt;Why &lt;code&gt;must_update&lt;/code&gt;?&lt;/h2&gt;
+&lt;p&gt;The variable &lt;code&gt;preferred&lt;/code&gt; with attribute &lt;code&gt;must_update&lt;/code&gt; is declared by &lt;code&gt;get_hasher&lt;/code&gt; and we can find it is an instance of &lt;code&gt;PBKDF2PasswordHasher&lt;/code&gt; as default. So the dependence of updating is the &lt;code&gt;iterations&lt;/code&gt; in decoded password.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;PBKDF2PasswordHasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BasePasswordHasher&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;must_update&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;):
+        &lt;span style=&#34;color:#268bd2&#34;&gt;algorithm&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;iterations&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;salt&lt;/span&gt;, &lt;span style=&#34;color:#cb4b16&#34;&gt;hash&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;encoded&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;$&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;int&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;iterations&lt;/span&gt;) != &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;iterations&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I printed the decoded password and found the iterations in fixtures is 24000 and was changed into 36000 after &lt;code&gt;check_password&lt;/code&gt;. And here is the truth that the iterations of &lt;code&gt;PBKDF2PasswordHasher&lt;/code&gt; in version 1.9.10 of Django is 24000 and is changed into 36000 in the version 1.11.14. But of couse it will not make any trouble when &lt;code&gt;check_password&lt;/code&gt; in the new version, just changing the decoded password of user object.&lt;/p&gt;
+&lt;details&gt;&lt;summary&gt;snippet of `PBKDF2PasswordHasher` in Django 1.9.10&lt;/summary&gt;
+&lt;p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;PBKDF2PasswordHasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BasePasswordHasher&lt;/span&gt;):
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Secure password hashing using the PBKDF2 algorithm (recommended)
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Configured to use PBKDF2 + HMAC + SHA256.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    The result is a 64 byte binary string.  Iterations may be changed
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    safely but you must rename the algorithm if you change SHA256.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;algorithm&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;pbkdf2_sha256&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;iterations&lt;/span&gt; = &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;24000&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;digest&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;hashlib&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;sha256&lt;/span&gt;
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;details&gt;&lt;summary&gt;snippet of `PBKDF2PasswordHasher` in Django 1.11.14&lt;/summary&gt;
+&lt;p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;PBKDF2PasswordHasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BasePasswordHasher&lt;/span&gt;):
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Secure password hashing using the PBKDF2 algorithm (recommended)
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    Configured to use PBKDF2 + HMAC + SHA256.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    The result is a 64 byte binary string.  Iterations may be changed
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    safely but you must rename the algorithm if you change SHA256.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;algorithm&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;pbkdf2_sha256&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;iterations&lt;/span&gt; = &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;36000&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;digest&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;hashlib&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;sha256&lt;/span&gt;
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;/details&gt;
+&lt;p&gt;After figuring out the cause of changing in password, I found the tip in the section &lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading&#34;&gt;Password upgrading&lt;/a&gt; in Django documentation.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hashed passwords will be updated when increasing (or decreasing) the number of PBKDF2 iterations or bcrypt rounds.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading&#34;&gt;Password upgrading - Django&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>

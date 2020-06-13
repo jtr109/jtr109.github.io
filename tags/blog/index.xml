@@ -17,11 +17,21 @@
       <pubDate>Sat, 13 Jun 2020 20:28:42 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/superscript-reference-in-markdown/</guid>
-      <description>If we want to comment to an object like we saw in book, we can implement it with Markdown syntax like below.
-The object[^1] we motioned. [^1]: Comment satisfied to the object above Let&amp;rsquo;s have a try:
-The object1 we motioned.
-  Comment satisfied to the object above &amp;#x21a9;&amp;#xfe0e;
-   </description>
+      <description>&lt;p&gt;If we want to comment to an object like we saw in book, we can implement it with Markdown syntax like below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;The object[^1] we motioned.
+
+[^1]: Comment satisfied to the object above
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s have a try:&lt;/p&gt;
+&lt;p&gt;The object&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; we motioned.&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Comment satisfied to the object above &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
     </item>
     
     <item>
@@ -30,17 +40,56 @@ The object1 we motioned.
       <pubDate>Sat, 13 Jun 2020 12:02:11 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/using-ruby-tag-both-in-typora-and-hugo/</guid>
-      <description>背景 在博客或文档中，我们有时候会希望对自己的文字做注解。例如为一个专业术语加上标注，便于读者理解：
- We are about to study the idea of a computational process.
- 我们会翻译为：
- 我们将要学习计算过程的概念。
- 如果我们想要引述原文来增加准确性，一个简单的做法是在后面加上括号：
- 我们将要学习计算过程 (computational process) 的概念。
- 有没有更好的方法呢？
-使用 HTML 元素 Ruby Tag 在 HTML 中，我们可以使用 Ruby Tag 来实现这个需求。
-Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
-&amp;lt;ruby&amp;gt; 计算过程 &amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt; &amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt; &amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt; &amp;lt;/ruby&amp;gt; &amp;lt;ruby&amp;gt; 中的元素主要分为几部分：
- 主体，即示例中的「计算过程」。这部分是正常显示在段落中的内容，其格式继承自 &amp;lt;ruby&amp;gt; 外部的格式。 &amp;lt;rp&amp;gt; 用来包裹括号。这是为了兼容性，在不支持 &amp;lt;ruby&amp;gt; 的浏览器中显示为「计算过程（computational process）」 &amp;lt;rt&amp;gt; 用来包裹注释信息，注释会以小字形式显示在主体内容的上方。  实践示例 我们将要学习&amp;lt;ruby&amp;gt;计算过程&amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt;&amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt;&amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt;&amp;lt;/ruby&amp;gt;的概念。 实现的效果如下：</description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;在博客或文档中，我们有时候会希望对自己的文字做注解。例如为一个专业术语加上标注，便于读者理解：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We are about to study the idea of a &lt;em&gt;computational process&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们会翻译为：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我们将要学习计算过程的概念。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果我们想要引述原文来增加准确性，一个简单的做法是在后面加上括号：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我们将要学习计算过程 (computational process) 的概念。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;有没有更好的方法呢？&lt;/p&gt;
+&lt;h2 id=&#34;使用-html-元素-ruby-tag&#34;&gt;使用 HTML 元素 Ruby Tag&lt;/h2&gt;
+&lt;p&gt;在 HTML 中，我们可以使用 Ruby Tag 来实现这个需求。&lt;/p&gt;
+&lt;h3 id=&#34;ruby-tag-概述&#34;&gt;Ruby Tag 概述&lt;/h3&gt;
+&lt;p&gt;这里简单解释一下 ruby tag 的整体结构：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;ruby&lt;/span&gt;&amp;gt;
+  计算过程
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rp&lt;/span&gt;&amp;gt;（&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rp&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rt&lt;/span&gt;&amp;gt;computational process&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rt&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rp&lt;/span&gt;&amp;gt;）&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;rp&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;ruby&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 中的元素主要分为几部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主体，即示例中的「计算过程」。这部分是正常显示在段落中的内容，其格式继承自 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 外部的格式。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;rp&amp;gt;&lt;/code&gt; 用来包裹括号。这是为了兼容性，在不支持 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 的浏览器中显示为「计算过程（computational process）」&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;rt&amp;gt;&lt;/code&gt; 用来包裹注释信息，注释会以小字形式显示在主体内容的上方。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;实践示例&#34;&gt;实践示例&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;我们将要学习&amp;lt;ruby&amp;gt;计算过程&amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt;&amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt;&amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt;&amp;lt;/ruby&amp;gt;的概念。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;实现的效果如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我们将要学习&lt;ruby&gt;计算过程&lt;rp&gt;（&lt;/rp&gt;&lt;rt&gt;computational process&lt;/rt&gt;&lt;rp&gt;）&lt;/rp&gt;&lt;/ruby&gt;的概念。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;在-hugo-中使用-ruby-tag&#34;&gt;在 Hugo 中使用 Ruby Tag&lt;/h2&gt;
+&lt;p&gt;经过上述处理，注释可以在 Typora 中完美显示，但是 Hugo 中却遇到了问题：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/using-ruby-tag-both-in-typora-and-hugo.assets/image-20200613174707353.png&#34; alt=&#34;注释内容直接显示在了括号里&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 并没有生效。&lt;/p&gt;
+&lt;p&gt;查找后发现原因是渲染模块 Goldmark 默认不转换 Markdown 中大部分的 HTML 标记。所以为了让 &lt;code&gt;&amp;lt;ruby&amp;gt;&lt;/code&gt; 可以显示，需要在配置中加入：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;markup&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;goldmark&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;renderer&lt;/span&gt;]
+&lt;span style=&#34;color:#268bd2&#34;&gt;unsafe&lt;/span&gt;= &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;显式声明支持 unsafe HTML 的渲染。服务重新渲染后，即可正常显示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/using-ruby-tag-both-in-typora-and-hugo.assets/image-20200613180726704.png&#34; alt=&#34;注释显示在目标内容的上方&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ruby&#34;&gt;https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ruby&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -49,15 +98,34 @@ Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</guid>
-      <description>背景 Typora 可以便捷地将文件保存在本地，但是如果不合理配置，无法适应静态网页生成器（如：Hugo）的静态文件存储方式。所以需要通过 Typora 强大的配置方式解决这个问题。
-目标 将文件存放在项目目录中的 static/images 目录下，同时保证能在 Typora 和 Hugo 生成的网站中可见。
-配置 Typora Typora 有两个选项需要配置：
- 图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。 图片的自动存放路径。  指定图片根路径 点击 Use Image Root Path，选择 static 目录作为根路径。
-设置图片自动存放路径 在设置中选择 Image 栏，将 static/images 的绝对路径设置为图片插入地址。
-也可以通过语法加入图片子目录，更好地管理图片。
-经过如上配置，截图便可通过 command+v 自动保存在 static/images 目录中。
-配置 Hugo 但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 static，符合要求。此时拉起站点，就可以正常显示图片了！
-参考  使用hugo搭建博客系统 Images in Typora  </description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;Typora 可以便捷地将文件保存在本地，但是如果不合理配置，无法适应静态网页生成器（如：Hugo）的静态文件存储方式。所以需要通过 Typora 强大的配置方式解决这个问题。&lt;/p&gt;
+&lt;h2 id=&#34;目标&#34;&gt;目标&lt;/h2&gt;
+&lt;p&gt;将文件存放在项目目录中的 &lt;code&gt;static/images&lt;/code&gt; 目录下，同时保证能在 Typora 和 Hugo 生成的网站中可见。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;配置-typora&#34;&gt;配置 Typora&lt;/h2&gt;
+&lt;p&gt;Typora 有两个选项需要配置：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。&lt;/li&gt;
+&lt;li&gt;图片的自动存放路径。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;指定图片根路径&#34;&gt;指定图片根路径&lt;/h3&gt;
+&lt;p&gt;点击 Use Image Root Path，选择 &lt;code&gt;static&lt;/code&gt; 目录作为根路径。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195608916.png&#34; alt=&#34;image-20200607195608916&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;设置图片自动存放路径&lt;/h3&gt;
+&lt;p&gt;在设置中选择 Image 栏，将 &lt;code&gt;static/images&lt;/code&gt; 的绝对路径设置为图片插入地址。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195835475.png&#34; alt=&#34;image-20200607195835475&#34;&gt;&lt;/p&gt;
+&lt;p&gt;也可以通过语法加入图片子目录，更好地管理图片。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200608112923095.png&#34; alt=&#34;image-20200608112923095&#34;&gt;&lt;/p&gt;
+&lt;p&gt;经过如上配置，截图便可通过 command+v 自动保存在 &lt;code&gt;static/images&lt;/code&gt; 目录中。&lt;/p&gt;
+&lt;h2 id=&#34;配置-hugo&#34;&gt;配置 Hugo&lt;/h2&gt;
+&lt;p&gt;但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 &lt;code&gt;static&lt;/code&gt;，符合要求。此时拉起站点，就可以正常显示图片了！&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.dianduidian.com/post/%E4%BD%BF%E7%94%A8hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/&#34;&gt;使用hugo搭建博客系统&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://support.typora.io/Images/&#34;&gt;Images in Typora&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -66,16 +134,43 @@ Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
       <pubDate>Fri, 11 Aug 2017 07:41:21 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/hexo-da-jian-bi-ji/</guid>
-      <description>项目搭建 项目搭建可以参考这篇 limedroid 的Hexo 博客搭建指南.
-提供一条 bash one line:
-$ hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 上面的代码可以快捷地拉起项目服务器.
-语言设置 如果你和我一样按照上面的文章配置了 Hexo, 你会发现自己的时间文字显示为德语 &amp;ldquo;Veröffentlicht am&amp;rdquo;.
-这是由于默认配置的语言不符. 首先确认 theme/next/languages/ 目录下有 zh-Hans.yml 文件, 另外我们需要将 _config.yml 中配置语言:
-language: zh-Hans 需要注意, 修改好配置文件后请使用 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 重新编译后再查看效果.
-参考:
- 使用Hexo踩坑小记 (文章中还有其他使用技巧, 值得学习.)  关于文章更新 通常如果只是修改文章内容, 可以保持 hexo server 出于运行状态, 修改的内容会自动更新到我们本地的 localhost:4000 页面上. 不过在提交文章之前, 请务必再使用 hexo g 重新编译.
-同样提供一条代码:
-$ hexo g &amp;amp;&amp;amp; hexo d 编译报错 在执行 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 时遇到过这样一个问题:</description>
+      <description>&lt;h2 id=&#34;项目搭建&#34;&gt;项目搭建&lt;/h2&gt;
+&lt;p&gt;项目搭建可以参考这篇 limedroid 的&lt;a href=&#34;https://github.com/limedroid/HexoLearning&#34;&gt;Hexo 博客搭建指南&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;提供一条 bash one line:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上面的代码可以快捷地拉起项目服务器.&lt;/p&gt;
+&lt;h2 id=&#34;语言设置&#34;&gt;语言设置&lt;/h2&gt;
+&lt;p&gt;如果你和我一样按照上面的文章配置了 Hexo, 你会发现自己的时间文字显示为德语 &amp;ldquo;Veröffentlicht am&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;这是由于默认配置的语言不符. 首先确认 &lt;code&gt;theme/next/languages/&lt;/code&gt; 目录下有 &lt;code&gt;zh-Hans.yml&lt;/code&gt; 文件, 另外我们需要将 &lt;code&gt;_config.yml&lt;/code&gt; 中配置语言:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;language: zh-Hans
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;需要注意, 修改好配置文件后请使用 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 重新编译后再查看效果.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;参考:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://supermaryy.com/2016/07/02/Obstacles_I_Met_When_Using_Hexo/&#34;&gt;使用Hexo踩坑小记&lt;/a&gt; (文章中还有其他使用技巧, 值得学习.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;关于文章更新&#34;&gt;关于文章更新&lt;/h2&gt;
+&lt;p&gt;通常如果只是修改文章内容, 可以保持 hexo server 出于运行状态, 修改的内容会自动更新到我们本地的 &lt;code&gt;localhost:4000&lt;/code&gt; 页面上. 不过在提交文章之前, 请务必再使用 &lt;code&gt;hexo g&lt;/code&gt; 重新编译.&lt;/p&gt;
+&lt;p&gt;同样提供一条代码:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ hexo g &amp;amp;&amp;amp; hexo d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;编译报错&#34;&gt;编译报错&lt;/h2&gt;
+&lt;p&gt;在执行 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 时遇到过这样一个问题:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;Error: Module version mismatch. Excepted 48, got 51.
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;具体原因不详, 有说法是由于 node 更新导致版本不一致导致的. 下面提供几种处理方式, 或许能解决问题.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;rm-rf node_modules &amp;amp;&amp;amp; npm install --no-optional&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;npm rebuild hexo&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;npm uninstall hexo-cli -g &amp;amp;&amp;amp; npm install hexo-cli  -g&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;参考&#34;&gt;参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;基本所有解决方式都可以在&lt;a href=&#34;https://github.com/hexojs/hexo/issues/1939&#34;&gt;官方 issue&lt;/a&gt; 中找到解答.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;页面请求极慢情况&#34;&gt;页面请求极慢情况&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;hexo s&lt;/code&gt; 在本地跑项目的时候, 发现主页加载极慢, 即使加载成功, 进入新的页面也加载极慢.&lt;/p&gt;
+&lt;p&gt;按理说本地请求静态文件是不可能有如此大的延迟的. 查看请求可以发现有一个对 fonts.googleapis.com 的请求, 经过了解, 发现这个请求是我们的 next theme 去请求的字体.&lt;/p&gt;
+&lt;p&gt;由于众所周知的原因, 这个网址是不存在的. 所以我们需要指定正确的 font resource. 这里我选择了&lt;a href=&#34;https://lug.ustc.edu.cn/wiki/lug/services/googlefonts#%E4%BD%BF%E7%94%A8&#34;&gt;中科大的镜像&lt;/a&gt; 经过尝试, 可以秒开主页.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

@@ -17,9 +17,13 @@
       <pubDate>Thu, 24 Aug 2017 09:43:28 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/emacs-again/</guid>
-      <description>简述 再次尝试上手 emacs
-配置文件 .spacemacs file 按照好 spacemacs 的相关组件, 会显示 Quick Help. 建议看完.
-其中写到了配置文件 .spancemacs 的打开方式: [SPC f e d]</description>
+      <description>&lt;h2 id=&#34;简述&#34;&gt;简述&lt;/h2&gt;
+&lt;p&gt;再次尝试上手 emacs&lt;/p&gt;
+&lt;h2 id=&#34;配置文件&#34;&gt;配置文件&lt;/h2&gt;
+&lt;h3 id=&#34;spacemacs-file&#34;&gt;.spacemacs file&lt;/h3&gt;
+&lt;p&gt;按照好 spacemacs 的相关组件, 会显示 Quick Help. 建议看完.&lt;/p&gt;
+&lt;p&gt;其中写到了配置文件 &lt;code&gt;.spancemacs&lt;/code&gt; 的打开方式: &lt;code&gt;[SPC f e d]&lt;/code&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

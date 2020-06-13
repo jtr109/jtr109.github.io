@@ -17,13 +17,36 @@
       <pubDate>Tue, 07 Jan 2020 23:45:24 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/one-time-password/</guid>
-      <description>背景 很多大型网站都提供了一种动态数字密码作为两步认证（2FA）的方案。你只要通过常用的密码管理器（例如 1Password，Authy 等）扫描二维码，就可以获得一个动态数字 token。我们来一起探索一下这门技术。
-TOTP TOTP 即 Time-Based One-Time Password Algorithm。顾名思义这是一种基于时间的 token 算法，从宏观来看就是基于时间和共享的密钥（shared secret key）生成随机数字 token。
-与之类似的算法还有HOTP（Event-Based One-Time Password Algorithm）。
-Google Authenticator Google Authenticator 也是一种 TOTP，只不过它的 secret key 必须使用 base32 的1。
-Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考我的 fork2； rust-oath：使用数最多的相关 crate，功能全面；  Have A Try  在项目中尝试了生成 secret （secret.rs），生成二维码（qr_code.rs）以及生成 token（code.rs）。  Reference   Google Authenticator 的特殊性参考这个项目中的说明 &amp;#x21a9;&amp;#xfe0e;
- 已提交 pull request &amp;#x21a9;&amp;#xfe0e;
-   </description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;很多大型网站都提供了一种动态数字密码作为两步认证（2FA）的方案。你只要通过常用的密码管理器（例如 1Password，Authy 等）扫描二维码，就可以获得一个动态数字 token。我们来一起探索一下这门技术。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;totp&#34;&gt;TOTP&lt;/h2&gt;
+&lt;p&gt;TOTP 即 &lt;a href=&#34;https://tools.ietf.org/html/rfc6238&#34;&gt;Time-Based One-Time Password Algorithm&lt;/a&gt;。顾名思义这是一种基于时间的 token 算法，从宏观来看就是基于时间和共享的密钥（shared secret key）生成随机数字 token。&lt;/p&gt;
+&lt;p&gt;与之类似的算法还有HOTP（&lt;a href=&#34;http://tools.ietf.org/html/rfc4226&#34;&gt;Event-Based One-Time Password Algorithm&lt;/a&gt;）。&lt;/p&gt;
+&lt;h2 id=&#34;google-authenticator&#34;&gt;Google Authenticator&lt;/h2&gt;
+&lt;p&gt;Google Authenticator 也是一种 TOTP，只不过它的 secret key 必须使用 base32 的&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;rust-implement&#34;&gt;Rust Implement&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://crates.io/crates/google-authenticator&#34;&gt;Google Authenticator Rust&lt;/a&gt;：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考&lt;a href=&#34;https://github.com/jtr109/google-authenticator-rust&#34;&gt;我的 fork&lt;/a&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://crates.io/crates/oath&#34;&gt;rust-oath&lt;/a&gt;：使用数最多的相关 crate，功能全面；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;have-a-try&#34;&gt;Have A Try&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在&lt;a href=&#34;https://github.com/jtr109/rust-play/tree/otp/src/bin&#34;&gt;项目&lt;/a&gt;中尝试了生成 secret （&lt;code&gt;secret.rs&lt;/code&gt;），生成二维码（&lt;code&gt;qr_code.rs&lt;/code&gt;）以及生成 token（&lt;code&gt;code.rs&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Google Authenticator 的特殊性参考&lt;a href=&#34;https://github.com/avacariu/rust-oath#google-authenticator&#34;&gt;这个项目中的说明&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/hanskorg/google-authenticator-rust/pull/3&#34;&gt;已提交 pull request&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
     </item>
     
     <item>
@@ -32,9 +55,98 @@ Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，
       <pubDate>Mon, 06 Jan 2020 22:51:41 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-recommanded-project-structure/</guid>
-      <description>Background The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
-. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib The elements want be used outside should start with pub (which means publish) in src/lib.rs.
-pub fn hello(s: &amp;amp;str) -&amp;gt; String { format!</description>
+      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://doc.rust-lang.org/cargo/index.html&#34;&gt;The Cargo Book&lt;/a&gt; recommand the &lt;a href=&#34;https://doc.rust-lang.org/cargo/guide/project-layout.html#package-layout&#34;&gt;package layout&lt;/a&gt; of rust project. Here is &lt;a href=&#34;https://github.com/jtr109/rust-play/tree/recommand-structure&#34;&gt;an example project&lt;/a&gt; implemented with it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;.
+├── Cargo.lock
+├── Cargo.toml
+├── benches
+│   └── large-input.rs
+├── examples
+│   └── simple.rs
+├── src
+│   ├── bin
+│   │   └── another_executable.rs
+│   ├── lib.rs
+│   └── main.rs
+└── tests
+    └── some-integration-tests.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- more --&gt;
+&lt;h2 id=&#34;lib&#34;&gt;Lib&lt;/h2&gt;
+&lt;p&gt;The elements want be used outside should start with &lt;code&gt;pub&lt;/code&gt; (which means &lt;strong&gt;publish&lt;/strong&gt;) in &lt;code&gt;src/lib.rs&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;s&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;format&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello, {}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;main&#34;&gt;Main&lt;/h2&gt;
+&lt;p&gt;The &lt;code&gt;src/lib.rs&lt;/code&gt; can be used as a module in project.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// src/main.rs
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;mod&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;lib&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;lib&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;main&amp;#34;&lt;/span&gt;));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can get expected result by running with &lt;code&gt;play&lt;/code&gt;, the package name in this example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ cargo run --bin play
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+     Running &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;target/debug/play&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+hello, main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;bin&#34;&gt;Bin&lt;/h2&gt;
+&lt;p&gt;It is easy to create other executables by adding them in directory &lt;code&gt;src/bin&lt;/code&gt;. Cargo will find all executables in it. So it is unnecessary to config &lt;code&gt;Cargo.toml&lt;/code&gt; like &lt;a href=&#34;https://stackoverflow.com/a/26946705/6522746&#34;&gt;that&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But there are some difference from &lt;code&gt;src/main.rs&lt;/code&gt; that we cannot find module named &lt;code&gt;lib&lt;/code&gt; in the scope of &lt;code&gt;src/bin/another_executable.rs&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// src/bin/another_executable.rs
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;mod&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;lib&lt;/span&gt;; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// not work!
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;lib&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;another_executable&amp;#34;&lt;/span&gt;));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If we try code above, we will get errors below:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ cargo check
+    Checking play v0.1.0 (/Users/jtr109/mystuff/learn/rust/play)
+error[E0583]: file not found &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; module &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;lib&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+ --&amp;gt; src/bin/another_executable.rs:5:5
+  |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;5&lt;/span&gt; | mod lib;
+  |     ^^^
+  |
+  = help: name the file either lib.rs or lib/mod.rs inside the directory &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src/bin&amp;#34;&lt;/span&gt;
+
+error: aborting due to previous error
+
+For more information about this error, try &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;rustc --explain E0583&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;.
+error: could not compile &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;play&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;.
+warning: build failed, waiting &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; other &lt;span style=&#34;color:#cb4b16&#34;&gt;jobs&lt;/span&gt; to finish...
+error: build failed
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We need to use &lt;code&gt;src/lib.rs&lt;/code&gt; as an extern crate:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// src/bin/another_executable.rs
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;play&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;play&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;another_executable&amp;#34;&lt;/span&gt;));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And it will works well:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ cargo run --bin another_executable
+   Compiling play v0.1.0 (/Users/jtr109/mystuff/learn/rust/play)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.37s
+     Running &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;target/debug/another_executable&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+hello, another_executable
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tests&#34;&gt;Tests&lt;/h2&gt;
+&lt;p&gt;It is similar with using &lt;code&gt;src/lib.rs&lt;/code&gt; in &lt;code&gt;src/bin&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// tests/some-integration-tests.rs
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;play&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;play&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[test]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;test_hello&lt;/span&gt;() {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello, foo&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;));
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -43,9 +155,78 @@ pub fn hello(s: &amp;amp;str) -&amp;gt; String { format!</description>
       <pubDate>Tue, 24 Dec 2019 23:34:10 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-serde-json/</guid>
-      <description>背景 今天学习 The Rust Cookbook 的时候看到一段 JSON 解码的代码:
-#[macro_use] extern crate serde_json; use serde_json::{Value, Error}; fn main() -&amp;gt; Result&amp;lt;(), Error&amp;gt; { let j = r#&amp;#34;{ &amp;#34;userid&amp;#34;: 103609, &amp;#34;verified&amp;#34;: true, &amp;#34;access_privileges&amp;#34;: [ &amp;#34;user&amp;#34;, &amp;#34;admin&amp;#34; ] }&amp;#34;#; let parsed: Value = serde_json::from_str(j)?; let expected = json!({ &amp;#34;userid&amp;#34;: 103609, &amp;#34;verified&amp;#34;: true, &amp;#34;access_privileges&amp;#34;: [ &amp;#34;user&amp;#34;, &amp;#34;admin&amp;#34; ] }); assert_eq!(parsed, expected); Ok(()) } 疑问 这里衍生出一个问题: &amp;ldquo;变量 expected 被一个宏 json! 的结果赋值, 那这个 expected 到底是什么类型?&amp;rdquo;
-查看文档可以了解到这是一个 serde_json::value::Value.</description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;今天学习 The Rust Cookbook 的时候看到一段 JSON 解码的代码:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[macro_use]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;Value&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;};
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
+                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
+                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
+                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
+                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
+                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
+                 ]
+               }&amp;#34;#;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Value&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;expected&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;json&lt;/span&gt;!({
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
+            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
+        ]
+    });
+
+    &lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;expected&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;疑问&#34;&gt;疑问&lt;/h2&gt;
+&lt;p&gt;这里衍生出一个问题: &amp;ldquo;变量 &lt;code&gt;expected&lt;/code&gt; 被一个宏 &lt;code&gt;json!&lt;/code&gt; 的结果赋值, 那这个 &lt;code&gt;expected&lt;/code&gt; 到底是什么类型?&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;查看&lt;a href=&#34;https://docs.serde.rs/serde_json/value/enum.Value.html&#34;&gt;文档&lt;/a&gt;可以了解到这是一个 &lt;code&gt;serde_json::value::Value&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;那随之而来的就是另一个问题: 怎么把 &lt;code&gt;Value&lt;/code&gt; 转换为实际类型.&lt;/p&gt;
+&lt;p&gt;举个例子, &lt;code&gt;expected&lt;/code&gt; 中的 &lt;code&gt;userid&lt;/code&gt; 的 &lt;code&gt;u64&lt;/code&gt; 版本应该怎么获取?&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;提取字段值&#34;&gt;提取字段值&lt;/h2&gt;
+&lt;p&gt;文档中说明了可以显式指定转换类型, 生成对应类型的值, 例如 &lt;code&gt;T&lt;/code&gt;: &lt;code&gt;Option&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#268bd2&#34;&gt;expected&lt;/span&gt;[&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;].&lt;span style=&#34;color:#268bd2&#34;&gt;as_u64&lt;/span&gt;().&lt;span style=&#34;color:#268bd2&#34;&gt;unwrap&lt;/span&gt;(), &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;转换为结构体&#34;&gt;转换为结构体&lt;/h2&gt;
+&lt;p&gt;虽然对单一字段可以这样操作, 但是将读取的 json 字符串转换为一个结构体是更合适的选择:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Deserialize&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[derive(Debug, Deserialize)]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;userid&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;u64&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;verified&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;bool&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;access_privileges&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Vec&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;&amp;gt;,
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
+            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
+        ]
+    }&amp;#34;#;
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
+
+    &lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;userid&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -54,8 +235,55 @@ pub fn hello(s: &amp;amp;str) -&amp;gt; String { format!</description>
       <pubDate>Thu, 07 Nov 2019 22:38:24 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-unittest-example/</guid>
-      <description>起因 一个标准的单元测试写法为:
-pub fn add(a: i32, b: i32) -&amp;gt; i32 { a + b } // This is a really bad adding function, its purpose is to fail in this // example. #[allow(dead_code)] fn bad_add(a: i32, b: i32) -&amp;gt; i32 { a - b } #[cfg(test)] mod tests { // Note this useful idiom: importing names from outer (for mod tests) scope.  use super::*; #[test] fn test_add() { assert_eq!(add(1, 2), 3); } #[test] fn test_bad_add() { // This assert would fire and test will fail.</description>
+      <description>&lt;h2 id=&#34;起因&#34;&gt;起因&lt;/h2&gt;
+&lt;p&gt;一个标准的单元测试写法为:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;add&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; + &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// This is a really bad adding function, its purpose is to fail in this
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// example.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[allow(dead_code)]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bad_add&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; - &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[cfg(test)]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;mod&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;tests&lt;/span&gt; {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Note this useful idiom: importing names from outer (for mod tests) scope.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;super&lt;/span&gt;::*;
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[test]&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;test_add&lt;/span&gt;() {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#268bd2&#34;&gt;add&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;), &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;);
+    }
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[test]&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;test_bad_add&lt;/span&gt;() {
+        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// This assert would fire and test will fail.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Please note, that private functions can be tested too!
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#268bd2&#34;&gt;assert_eq&lt;/span&gt;!(&lt;span style=&#34;color:#268bd2&#34;&gt;bad_add&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;), &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里让我产生了一个疑问: 什么要在 &lt;code&gt;mod test&lt;/code&gt; 前加 &lt;code&gt;#[cfg(test)]&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;过程&#34;&gt;过程&lt;/h2&gt;
+&lt;p&gt;在 &lt;a href=&#34;https://doc.rust-lang.org/book/ch11-01-writing-tests.html&#34;&gt;How to Write Tests - The Rust Programming Language&lt;/a&gt; 和 &lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/testing/unit_testing.html&#34;&gt;Unit testing - Rust By Example&lt;/a&gt;  章节中都可以看到这种写法的一致性, 但是都没有说明为什么要这么写.&lt;/p&gt;
+&lt;p&gt;但是至少 Rust By Example 中提到了这样一句:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Most unit tests go into a tests  &lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/mod.html&#34;&gt;mod&lt;/a&gt;  with the &lt;code&gt;#[cfg(test)]&lt;/code&gt;  &lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/attribute.html&#34;&gt;attribute&lt;/a&gt; . Test functions are marked with the &lt;code&gt;#[test]&lt;/code&gt; attribute.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们就去标准库中查看一下 &lt;a href=&#34;https://doc.rust-lang.org/std/macro.cfg.html&#34;&gt;std::cfg - Rust&lt;/a&gt; 的用法.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Evaluates boolean combinations of configuration flags at compile-time.&lt;br&gt;
+In addition to the &lt;code&gt;#[cfg]&lt;/code&gt; attribute, this macro is provided to allow boolean expression evaluation of configuration flags. This frequently leads to less duplicated code.&lt;br&gt;
+The syntax given to this macro is the same syntax as the  &lt;a href=&#34;https://doc.rust-lang.org/reference/conditional-compilation.html#the-cfg-attribute&#34;&gt;cfg&lt;/a&gt;  attribute.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;通过描述可以看到, &lt;code&gt;#[cfg]&lt;/code&gt; 是在编译时用来判断是否加载其下包含代码的. 那 &lt;code&gt;#[cfg(test)]&lt;/code&gt; 的意义也就很明显了, 即其下包含的代码只有在测试时会加载.&lt;/p&gt;
+&lt;p&gt;在 &lt;a href=&#34;https://doc.rust-lang.org/reference/conditional-compilation.html#test&#34;&gt;Conditional compilation - The Rust Reference&lt;/a&gt; 中我们可以找到答案.&lt;/p&gt;
+&lt;h2 id=&#34;结果&#34;&gt;结果&lt;/h2&gt;
+&lt;p&gt;编写测试的时候, 应该将测试用例使用 &lt;code&gt;#[cfg(test)] mod test{}&lt;/code&gt; 的方式包裹起来. 可以保证相关代码只有在测试时会被编译.&lt;/p&gt;
+&lt;p&gt;#tech/rust&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -64,8 +292,87 @@ pub fn add(a: i32, b: i32) -&amp;gt; i32 { a + b } // This is a really bad addin
       <pubDate>Thu, 07 Nov 2019 22:36:29 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
-      <description>背景描述 在使用 Diesel 和 uuid 开发的过程中, 使用发生报错:
-error[E0277]: the trait bound `uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not satisfied --&amp;gt; src/models.rs:45:14 | 45 | .load::&amp;lt;App&amp;gt;(conn) | ^^^^ the trait `diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not implemented for `uuid::Uuid` | = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `(uuid::Uuid, std::string::String)` = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `models::App` = note: required because of the requirements on the impl of `diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;` for `diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;` 代码如下:</description>
+      <description>&lt;h2 id=&#34;背景描述&#34;&gt;背景描述&lt;/h2&gt;
+&lt;p&gt;在使用 &lt;a href=&#34;http://diesel.rs/&#34;&gt;Diesel&lt;/a&gt; 和 &lt;a href=&#34;https://crates.io/crates/uuid&#34;&gt;uuid&lt;/a&gt; 开发的过程中, 使用发生报错:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0277]: the trait bound &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; is not satisfied
+  --&amp;gt; src/models.rs:45:14
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;45&lt;/span&gt; |             .load::&amp;lt;App&amp;gt;(conn)
+   |              ^^^^ the trait &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; is not implemented &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   |
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;(uuid::Uuid, std::string::String)&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;models::App&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies
+el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query
+_builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Cargo.toml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;dependencies&lt;/span&gt;]
+&lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1.4.2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;postgres&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuid&amp;#34;&lt;/span&gt;] }
+&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.4&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;v4&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;schema.rs&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;! {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;) {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Uuid&lt;/span&gt;,
+        &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Varchar&lt;/span&gt;,
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;models.rs&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;pg&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;PgConnection&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;prelude&lt;/span&gt;::*;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Uuid&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;token&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;create_claims&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;create_jwt_secret&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encode_token&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Claims&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;TokenError&lt;/span&gt;};
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[derive(Queryable)]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;App&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Uuid&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;,
+}
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[derive(Insertable)]&lt;/span&gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[table_name = &lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;app&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;NewApp&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;,
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;impl&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_by_id&lt;/span&gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;conn&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;PgConnection&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Vec&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt;&amp;gt; {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;limit&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;)
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;load&lt;/span&gt;::&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;conn&lt;/span&gt;)
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;expect&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Error loading app&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;经过&#34;&gt;经过&lt;/h2&gt;
+&lt;p&gt;在往上查询未果, 经人提点可能是项目中 uuid 和版本不一致的问题导致的.&lt;/p&gt;
+&lt;h3 id=&#34;uuid-降级&#34;&gt;UUID 降级&lt;/h3&gt;
+&lt;p&gt;查看 Diesel 的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml&#34;&gt;diesel/Cargo.toml at 1.4.x · diesel-rs/diesel · GitHub&lt;/a&gt; 发现 Diesel 依赖的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L26&#34;&gt;uuid 版本&lt;/a&gt;为 &lt;code&gt;&amp;gt;=0.2.0, &amp;lt;0.7.0&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;gt;=0.2.0, &amp;lt;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;use_std&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而我在项目中使用的 &lt;code&gt;uuid&lt;/code&gt; 为 &lt;code&gt;0.7.4&lt;/code&gt;. 尝试将 uuid 降级到 &lt;code&gt;0.6&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;上述问题不再报错, 不过有一个新的报错出现:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0599]: no method named &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;to_simple&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; found &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; in the current scope
+  --&amp;gt; src/models.rs:37:45
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;37&lt;/span&gt; |         &lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;claims&lt;/span&gt; = create_claims(&amp;amp;self.id.to_simple().to_string());
+   |                                             ^^^^^^^^^ help: there is a method with a similar name: &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;simple&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以推断, uuid 在 0.6 到 0.7 的过程中有较大的功能改变. 那新问题就来了:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;我希望使用 uuid 最新版本的能力.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改-dependence&#34;&gt;修改 Dependence&lt;/h3&gt;
+&lt;p&gt;好消息是我在 &lt;code&gt;Cargo.toml&lt;/code&gt; 紧接着的一行发现了一个 dependence: &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L27&#34;&gt;uuidv07&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuidv07&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;package&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuid&amp;#34;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从配置信息可以看到, 这个 &lt;code&gt;uuidv07&lt;/code&gt; 同样使用的是 uuid 包 (&lt;code&gt;package = &amp;quot;uuid&amp;quot;&lt;/code&gt;). 但是版本为 &amp;ldquo;0.7.0&amp;rdquo; (&lt;code&gt;version = &amp;quot;0.7.0&amp;quot;&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;尝试修改本地项目的 &lt;code&gt;Cargo.toml&lt;/code&gt; 文件:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;dependencies&lt;/span&gt;]
+&lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1.4.2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;postgres&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuidv07&amp;#34;&lt;/span&gt;] }
+&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.4&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;v4&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;测试通过!&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
+&lt;p&gt;网上几乎没法找到这个&lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md#fixed-3&#34;&gt;改动&lt;/a&gt;相关的问题和解决方案, 甚至文档中都没有提及.&lt;/p&gt;
+&lt;p&gt;定位问题的能力还是有待提高.&lt;/p&gt;
+&lt;p&gt;#tech/rust&lt;/p&gt;
+</description>
     </item>
     
   </channel>

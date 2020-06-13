@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/docker/</link>
+    <description>Recent content in Docker on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 17 Jun 2019 11:40:44 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Changing Timezone in Docker</title>
+      <link>https://jtr109.github.io/posts/changing-timezone-in-docker/</link>
+      <pubDate>Mon, 17 Jun 2019 11:40:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/changing-timezone-in-docker/</guid>
+      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;I created a script and it ran well in my local environment. But after it was built in the docker container the string of time was not shown as I expected.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;The difference of timezone between the docker container and host make the problem. Time is always a problem in digital world it always causes problems. So let us resolve it in docker container with dockerfile.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;changing the environment value &lt;code&gt;TZ&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;changing localtime and timezone in image&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;ENV &lt;span style=&#34;color:#268bd2&#34;&gt;TZ&lt;/span&gt;=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/&lt;span style=&#34;color:#268bd2&#34;&gt;$TZ&lt;/span&gt; /etc/localtime &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$TZ&lt;/span&gt; &amp;gt; /etc/timezone
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;script src=&#34;https://gist.github.com/jtr109/21cb7ef7c79034b2ad63df8afb03e7cb.js&#34;&gt;&lt;/script&gt;
+&lt;h2 id=&#34;note&#34;&gt;Note&lt;/h2&gt;
+&lt;p&gt;When I searched the solution, I found some difference in alpine base images.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: if you are using an alpine based image you have to install the &lt;code&gt;tzdata&lt;/code&gt; first. (see this issue &lt;a href=&#34;https://github.com/gliderlabs/docker-alpine/issues/136&#34;&gt;here&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Looks like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;RUN apk add --no-cache tzdata
+ENV TZ America/Los_Angeles
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://serverfault.com/a/683651&#34;&gt;Changing Timezone in Dockerfile&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://bobcares.com/blog/change-time-in-docker-container/&#34;&gt;Five Ways to Change Time in Docker Container&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

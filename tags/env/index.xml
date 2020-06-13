@@ -17,15 +17,65 @@
       <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/export-or-not-in-env-file/</guid>
-      <description>背景 在项目中需要使用 envsubst 从模板生成配置文件. 发现如果在环境变量文件 env.conf (或 .env 等) 中不使用 export 命令, envsubst 无法获取到所需的环境变量.
-实验 构建模板文件 src.txt
-now foo here: ${FOO}  不使用 export 创建环境变量配置文件 env.conf:
-FOO=bar 创建执行脚本 subenv.sh:
-source env.conf echo $FOO envsubst &amp;lt; &amp;#34;src.txt&amp;#34; &amp;gt; &amp;#34;env-tar.txt&amp;#34; 执行脚本 [subenv.sh](http://subenv.sh) 查看生成的 env-tar.txt 文件:
-now foo here:  使用 export 创建环境变量配置文件 exp.conf
-export FOO=bar 创建执行脚本 subexp.sh:
-source exp.conf echo $FOO envsubst &amp;lt; &amp;#34;src.txt&amp;#34; &amp;gt; &amp;#34;exp-tar.txt&amp;#34; 执行脚本 [subexp.sh](http://subexp.sh) 查看生成文件 exp-tar.txt:
-now foo here: bar  可以看到, 在环境变量配置文件中使用 export, 在脚本中使用 envsubst 才能获取到所需的环境变量.</description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;在项目中需要使用 &lt;code&gt;envsubst&lt;/code&gt; 从模板生成配置文件. 发现如果在环境变量文件 &lt;code&gt;env.conf&lt;/code&gt; (或 &lt;code&gt;.env&lt;/code&gt; 等) 中不使用 &lt;code&gt;export&lt;/code&gt; 命令, &lt;code&gt;envsubst&lt;/code&gt; 无法获取到所需的环境变量.&lt;/p&gt;
+&lt;h2 id=&#34;实验&#34;&gt;实验&lt;/h2&gt;
+&lt;p&gt;构建模板文件 &lt;code&gt;src.txt&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;now foo here: ${FOO}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;不使用-export&#34;&gt;不使用 &lt;code&gt;export&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;创建环境变量配置文件 &lt;code&gt;env.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;FOO&lt;/span&gt;=bar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建执行脚本 &lt;code&gt;subenv.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;source&lt;/span&gt; env.conf
+
+&lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FOO&lt;/span&gt;
+
+envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp;#34;&lt;/span&gt; &amp;gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;env-tar.txt&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行脚本 &lt;code&gt;[subenv.sh](http://subenv.sh)&lt;/code&gt; 查看生成的 &lt;code&gt;env-tar.txt&lt;/code&gt; 文件:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;now foo here:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;使用-export&#34;&gt;使用 &lt;code&gt;export&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;创建环境变量配置文件 &lt;code&gt;exp.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FOO&lt;/span&gt;=bar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建执行脚本 &lt;code&gt;subexp.sh&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;source&lt;/span&gt; exp.conf
+
+&lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FOO&lt;/span&gt;
+
+envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp;#34;&lt;/span&gt; &amp;gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;exp-tar.txt&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行脚本 &lt;code&gt;[subexp.sh](http://subexp.sh)&lt;/code&gt; 查看生成文件 &lt;code&gt;exp-tar.txt&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;now foo here: bar
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;可以看到, 在环境变量配置文件中使用 &lt;code&gt;export&lt;/code&gt;, 在脚本中使用 &lt;code&gt;envsubst&lt;/code&gt; 才能获取到所需的环境变量.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;其他发现&#34;&gt;其他发现&lt;/h3&gt;
+&lt;p&gt;如果使用上面的脚本测试时, 可以发现无论是否使用 &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;echo&lt;/code&gt; 都能正确地拿到所需的环境变量.&lt;/p&gt;
+&lt;h2 id=&#34;是否应该在配置文件中使用-export&#34;&gt;是否应该在配置文件中使用 &lt;code&gt;export&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;在配置文件中是否应该使用 &lt;code&gt;export&lt;/code&gt;, 也存在着不同的声音. 在一个&lt;a href=&#34;https://stackoverflow.com/a/19331521/6522746&#34;&gt;相关高票回答&lt;/a&gt;下, 就有这么一个评论:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If using this .env file between systems, inserting &lt;code&gt;export&lt;/code&gt; would break it for things like Java, SystemD, or other tools&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;且不关心什么方案是更好的实践, 我们希望能找到一个通用的方案.&lt;/p&gt;
+&lt;p&gt;在&lt;a href=&#34;https://stackoverflow.com/a/30969768/6522746&#34;&gt;这个回答&lt;/a&gt;中, 我们找到了目前最好的解决方案:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;-o allexport&lt;/code&gt; enables all following variable definitions to be exported. &lt;code&gt;+o allexport&lt;/code&gt; disables this feature.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;set&lt;/span&gt; -o allexport
+&lt;span style=&#34;color:#cb4b16&#34;&gt;source&lt;/span&gt; conf-file
+&lt;span style=&#34;color:#cb4b16&#34;&gt;set&lt;/span&gt; +o allexport
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;经实践, 如果我们将 &lt;code&gt;subenv.sh&lt;/code&gt; 改造成如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;set&lt;/span&gt; -o allexport
+&lt;span style=&#34;color:#cb4b16&#34;&gt;source&lt;/span&gt; env.conf
+&lt;span style=&#34;color:#cb4b16&#34;&gt;set&lt;/span&gt; +o allexport
+
+&lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FOO&lt;/span&gt;
+
+envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp;#34;&lt;/span&gt; &amp;gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;env-tar.txt&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即可在输出文件中获得符合期待的结果:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-txt&#34; data-lang=&#34;txt&#34;&gt;new foo here: bar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;相关资料&#34;&gt;相关资料&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://hackjutsu.com/2016/08/04/Difference%20between%20set&#34;&gt;Difference between set, export and env in bash&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

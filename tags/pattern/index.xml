@@ -17,9 +17,93 @@
       <pubDate>Fri, 07 Sep 2018 07:34:23 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-singleton/</guid>
-      <description>Ways to use singleton in Python  using module using method __new__ using decorator using metaclass  Analysis the singleton with method __new__ Implementation Let us see the code first:
-class Singleton(object): _instance = None def __new__(cls, *args, **kw): if not cls._instance: cls._instance = super(Singleton, cls).__new__(cls, *args, **kw) return cls._instance And check the result:
-&amp;gt;&amp;gt;&amp;gt; s1 = Singleton() &amp;gt;&amp;gt;&amp;gt; s2 = Singleton() &amp;gt;&amp;gt;&amp;gt; s1 is s2 True &amp;gt;&amp;gt;&amp;gt; print(id(s1), id(s2)) 4420874480 4420874480 How does it work?</description>
+      <description>&lt;h2 id=&#34;ways-to-use-singleton-in-python&#34;&gt;Ways to use singleton in Python&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;using module&lt;/li&gt;
+&lt;li&gt;using method &lt;code&gt;__new__&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;using decorator&lt;/li&gt;
+&lt;li&gt;using metaclass&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;analysis-the-singleton-with-method-__new__&#34;&gt;Analysis the singleton with method &lt;code&gt;__new__&lt;/code&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;implementation&#34;&gt;Implementation&lt;/h3&gt;
+&lt;p&gt;Let us see the code first:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Singleton&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;object&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;_instance&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__new__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;, *&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kw&lt;/span&gt;):
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instance&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instance&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;super&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;Singleton&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;__new__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;, *&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kw&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instance&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And check the result:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;Singleton&lt;/span&gt;()
+&amp;gt;&amp;gt;&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;Singleton&lt;/span&gt;()
+
+&amp;gt;&amp;gt;&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;True&lt;/span&gt;
+
+&amp;gt;&amp;gt;&amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;id&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt;), &lt;span style=&#34;color:#cb4b16&#34;&gt;id&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;))
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4420874480&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4420874480&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-does-it-work&#34;&gt;How does it work?&lt;/h3&gt;
+&lt;p&gt;We should know two feature to understand that:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Class variables&lt;/strong&gt; are shared by all instances of the class. (Learn more in &lt;a href=&#34;https://docs.python.org/2/tutorial/classes.html#class-and-instance-variables&#34;&gt;document&lt;/a&gt;.)&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;__new__&lt;/code&gt; method &lt;strong&gt;return a instance&lt;/strong&gt; of class which will be used as &lt;code&gt;self&lt;/code&gt; in &lt;code&gt;__init__&lt;/code&gt; and other methods. (Learn more in &lt;a href=&#34;https://docs.python.org/3/reference/datamodel.html#object.__new__&#34;&gt;document&lt;/a&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;here-we-go&#34;&gt;Here we go&lt;/h3&gt;
+&lt;p&gt;When declaring a new instance, the &lt;a href=&#34;https://docs.python.org/3/reference/datamodel.html#object.__new__&#34;&gt;&lt;code&gt;__new__&lt;/code&gt;&lt;/a&gt; method check the existance of the class variable &lt;code&gt;_instance&lt;/code&gt;. Return it if exists. Otherwise, the class creates a new one, assigns to &lt;code&gt;_instance&lt;/code&gt; and return.&lt;/p&gt;
+&lt;p&gt;After that, all instances of the class &lt;code&gt;Singleton&lt;/code&gt; are the same class variable of class &lt;code&gt;Singleton&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;implement-with-decorator&#34;&gt;Implement with decorator&lt;/h2&gt;
+&lt;h3 id=&#34;implementation-1&#34;&gt;Implementation&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;singleton&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;()
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;wrapper&lt;/span&gt;(*&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;] = &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;(*&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;]
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;wrapper&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us check the result&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;@singleton&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;MyClass&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;object&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;pass&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
+&lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works&#34;&gt;How it works?&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;The criticle point is the implementation of &lt;strong&gt;closure&lt;/strong&gt; in python. The variable &lt;code&gt;_instances&lt;/code&gt; above did not collected by GC after &lt;code&gt;MyClass&lt;/code&gt; was called. (You can learn more &lt;a href=&#34;https://www.geeksforgeeks.org/python-closures/&#34;&gt;here&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;analysis-the-singleton-with-method-metaclass&#34;&gt;Analysis the singleton with method &lt;strong&gt;metaclass&lt;/strong&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;implementation-2&#34;&gt;Implementation&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Singleton&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt;):
+    &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;()
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__call__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;, *&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;] = &lt;span style=&#34;color:#cb4b16&#34;&gt;super&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;Singleton&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;__call__&lt;/span&gt;(*&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Check the result&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;MyClass&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;metaclass&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;Singleton&lt;/span&gt;):  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in Python 3&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;pass&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# class MyClass(object):  # in Python 2&lt;/span&gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#     __metaclass__ = Singleton&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
+&lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works-1&#34;&gt;How it works?&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;All class is an instance of a metaclass.&lt;/li&gt;
+&lt;li&gt;When the class is called it return the result which the &lt;code&gt;__call__&lt;/code&gt; method of metaclass return. (If not be overrided.)&lt;/li&gt;
+&lt;li&gt;So we return the same instance by means of the shared class variable &lt;code&gt;_instances&lt;/code&gt; in metaclass &lt;code&gt;Singleton&lt;/code&gt; to return a same instance.&lt;/li&gt;
+&lt;li&gt;By the way, the parent of metaclass should be the class &lt;code&gt;type&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000008141049&#34;&gt;Python 中的单例模式&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>

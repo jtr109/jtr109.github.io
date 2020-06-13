@@ -17,11 +17,57 @@
       <pubDate>Thu, 07 Nov 2019 22:31:12 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-grpc-json-format/</guid>
-      <description>背景 最近在开发一个网关项目, 需要将外部的 JSON 请求转换成 gRPC 请求向后转发, 并将 gRPC 响应转换为 JSON 格式的响应返回.
-实现过程中发现使用 google.protobuf.json_format.MessageToDict 的时候 ( google.protobuf.json_format.MessageToJson 同理) 有一些需要注意留意的细节.
-遇到问题 当使用 MessageToDict 对 messge 转换时, 发现两个不符合预期的问题:
- 如果一个 message field 对应的值为 zero value, 对应的 dict 中不会显示该键值对 field 名称会从 snake_case 被转换成 lowerCamelCase  源码分析 以 MessageToDict 为例, 我们看一下函数的定义.
-def MessageToDict( message, including_default_value_fields=False, preserving_proto_field_name=False, use_integers_for_enums=False, descriptor_pool=None): &amp;#34;&amp;#34;&amp;#34;Converts protobuf message to a dictionary. When the dictionary is encoded to JSON, it conforms to proto3 JSON spec.</description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;最近在开发一个网关项目, 需要将外部的 JSON 请求转换成 gRPC 请求向后转发, 并将 gRPC 响应转换为 JSON 格式的响应返回.&lt;/p&gt;
+&lt;p&gt;实现过程中发现使用 &lt;code&gt;google.protobuf.json_format.MessageToDict&lt;/code&gt; 的时候 ( &lt;code&gt;google.protobuf.json_format.MessageToJson&lt;/code&gt; 同理) 有一些需要注意留意的细节.&lt;/p&gt;
+&lt;h2 id=&#34;遇到问题&#34;&gt;遇到问题&lt;/h2&gt;
+&lt;p&gt;当使用 &lt;code&gt;MessageToDict&lt;/code&gt;  对 messge 转换时, 发现两个不符合预期的问题:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果一个 message field 对应的值为 zero value, 对应的 &lt;code&gt;dict&lt;/code&gt; 中不会显示该键值对&lt;/li&gt;
+&lt;li&gt;field 名称会从 snake_case 被转换成 lowerCamelCase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;p&gt;以 &lt;code&gt;MessageToDict&lt;/code&gt; 为例, 我们看一下函数的定义.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;MessageToDict&lt;/span&gt;(
+    &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;including_default_value_fields&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;False&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;preserving_proto_field_name&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;False&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;use_integers_for_enums&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;False&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;descriptor_pool&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;):
+  &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Converts protobuf message to a dictionary.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;  When the dictionary is encoded to JSON, it conforms to proto3 JSON spec.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;  Args:
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    message: The protocol buffers message instance to serialize.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    including_default_value_fields: If True, singular primitive fields,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        repeated fields, and map fields will always be serialized.  If
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        False, only serialize non-empty fields.  Singular message fields
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        and oneof fields are not affected by this option.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    preserving_proto_field_name: If True, use the original proto field
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        names as defined in the .proto file. If False, convert the field
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        names to lowerCamelCase.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    use_integers_for_enums: If true, print integers instead of enum names.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    descriptor_pool: A Descriptor Pool for resolving types. If None use the
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        default.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;  Returns:
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    A dict representation of the protocol buffer message.
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;  &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以自动忽略 zero value 和 field 转换分别是由 &lt;code&gt;including_default_value_fields&lt;/code&gt; 和 &lt;code&gt;preserving_proto_field_name&lt;/code&gt; 两个参数控制.&lt;/p&gt;
+&lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
+&lt;p&gt;在调用 &lt;code&gt;MessageToDict&lt;/code&gt; 函数时, 将以上两个参数指定为 &lt;code&gt;True&lt;/code&gt; 即可解决问题. &lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos/blob/master/example.ipynb&#34;&gt;代码示例&lt;/a&gt;如下:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/python-grpc-json-format.assets/1570964227734-2317f63a-ba36-476a-8a80-58947a84aac4.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;示例代码可以在&lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos&#34;&gt;这个项目&lt;/a&gt;中查看&lt;/p&gt;
+&lt;h2 id=&#34;思考&#34;&gt;思考&lt;/h2&gt;
+&lt;p&gt;这个问题会令人在意的主要原因是因为 Python 是一个弱类型语言, 或许 protobuf 在传输和存储过程中, 为了考虑性能, 确实会用省略字段的方式来表达零值, 就像&lt;a href=&#34;https://github.com/protocolbuffers/protobuf/issues/2796#issuecomment-284872746&#34;&gt;这个回答&lt;/a&gt;中说到的那样. 只要在将 protobuf 转换为特定语言的 struct 时再对应调整成恰当的结构就能满足需求, 但是在转换成 JSON 的时候默认将这个字段抹去, 我仍然认为是不合理的.&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;python grpc package tutorial: &lt;a href=&#34;https://grpc.io/docs/tutorials/basic/python/&#34;&gt;https://grpc.io/docs/tutorials/basic/python/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;关于 zero value 默认忽略的解释: &lt;a href=&#34;https://github.com/protocolbuffers/protobuf/issues/2796&#34;&gt;https://github.com/protocolbuffers/protobuf/issues/2796&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>

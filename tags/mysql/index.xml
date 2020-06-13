@@ -17,14 +17,59 @@
       <pubDate>Sun, 13 Aug 2017 14:08:41 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</guid>
-      <description>本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。
-MySQL Server 密码重置  本机环境 Mac OS X EI Capitan 官网 Community 版 MySQL Server 虚拟环境 virtualenv pwd: /User/jtr109/qs/
- 密码重置的方式多种多样，用很多我尝试之后这个是我唯一可行的，和我有相同环境、情况的朋友可以参考：数据库之mac上mysql root密码忘记或权限错误的解决办法。
-遇到这个问题主要是我装MySQL的时候不专心，传说官方dmg装完后是会提示设定密码的，不知道怎么回事，反正我本地的MySQL Server就完全进不去了，只能改密码。这篇文章讲的非常清晰，简单易懂，不做过多评论。只要每一步照做就好。此文最大的优点是不用终端运行MySQL Server，也不用考虑 kill 进程，非常适合刚刚接触相关内容的朋友。
-安装 MySQLdb 首先进入你需要的路径，我们以 /User/jtr109/qs/ 为例。执行 virtualenv venv 创建虚拟环境包， source venv/bin/activate 进入虚拟环境。
-注意安装模块名 我不知道为什么这个模块叫 MySQLdb，import 语句也是 import MySQLdb。但是你要注意，pip 安装语句为： pip install MySQL-python。千万不要写错。不过因为你在虚拟环境，所以玩脱了就这个环境包删了就好。这也是我为什么推崇为每个项目创建虚拟环境的原因之一。
-修改 _mysql.so 追踪路径 现在你可以试着进入 python， 然后运行：
-&amp;gt;&amp;gt;&amp;gt; import MySQLdb Traceback (most recent call last): File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt; File &amp;quot;/Users/jtr109/qs/venv/lib/python2.</description>
+      <description>&lt;p&gt;本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。&lt;/p&gt;
+&lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;MySQL Server 密码重置&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本机环境
+Mac OS X EI Capitan
+官网 Community 版 MySQL Server
+虚拟环境 virtualenv
+pwd: &lt;code&gt;/User/jtr109/qs/&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;密码重置的方式多种多样，用很多我尝试之后这个是我唯一可行的，和我有相同环境、情况的朋友可以参考：&lt;a href=&#34;http://blog.csdn.net/u014410695/article/details/50630233&#34;&gt;数据库之mac上mysql root密码忘记或权限错误的解决办法&lt;/a&gt;。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;遇到这个问题主要是我装MySQL的时候不专心，传说官方dmg装完后是会&lt;strong&gt;提示设定密码&lt;/strong&gt;的，不知道怎么回事，反正我本地的MySQL Server就完全进不去了，只能改密码。这篇文章讲的非常清晰，简单易懂，不做过多评论。只要每一步照做就好。此文最大的优点是不用终端运行MySQL Server，也不用考虑 kill 进程，非常适合刚刚接触相关内容的朋友。&lt;/p&gt;
+&lt;h1 id=&#34;安装-mysqldb&#34;&gt;安装 MySQLdb&lt;/h1&gt;
+&lt;p&gt;首先进入你需要的路径，我们以 &lt;code&gt;/User/jtr109/qs/&lt;/code&gt; 为例。执行 &lt;code&gt;virtualenv venv&lt;/code&gt; 创建虚拟环境包， &lt;code&gt;source venv/bin/activate&lt;/code&gt; 进入虚拟环境。&lt;/p&gt;
+&lt;h2 id=&#34;注意安装模块名&#34;&gt;注意安装模块名&lt;/h2&gt;
+&lt;p&gt;我不知道为什么这个模块叫 MySQLdb，&lt;code&gt;import&lt;/code&gt; 语句也是 &lt;code&gt;import MySQLdb&lt;/code&gt;。但是你要&lt;strong&gt;注意&lt;/strong&gt;，&lt;code&gt;pip&lt;/code&gt; 安装语句为： &lt;code&gt;pip install MySQL-python&lt;/code&gt;。千万不要写错。不过因为你在虚拟环境，所以玩脱了就这个环境包删了就好。这也是我为什么推崇为每个项目创建虚拟环境的原因之一。&lt;/p&gt;
+&lt;h2 id=&#34;修改-_mysqlso-追踪路径&#34;&gt;修改 &lt;code&gt;_mysql.so&lt;/code&gt; 追踪路径&lt;/h2&gt;
+&lt;p&gt;现在你可以试着进入 python， 然后运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import MySQLdb
+Traceback (most recent call last):
+  File &amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+  File &amp;quot;/Users/jtr109/qs/venv/lib/python2.7/site-packages/MySQLdb/__init__.py&amp;quot;, line 19, in &amp;lt;module&amp;gt;
+    import _mysql
+ImportError: dlopen(/Users/qs/venv/lib/python2.7/site-packages/_mysql.so, 2): Library not loaded: /usr/local/opt/mysql/lib/libmysqlclient.20.dylib
+  Referenced from: /Users/jtr109/qs/venv/lib/python2.7/site-packages/_mysql.so
+  Reason: image not found
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;很好，你跟我遇到一样的问题了。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;此时你需要的是这篇文章：&lt;a href=&#34;http://www.jianshu.com/p/e196d25a8e31&#34;&gt;Mac OS X下修复Reason: image not found&lt;/a&gt;。当然，更重要的是里面给的另一个链接： &lt;a href=&#34;http://stackoverflow.com/a/13421926&#34;&gt;Python mysqldb: Library not loaded: libmysqlclient.18.dylib&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;试着执行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ otool -L /Users/jtr109/qs/venv/lib/python2.7/site-packages/_mysql.so
+/Users/jtr109/mystuff/qstrategy/venv/lib/python2.7/site-packages/_mysql.so:
+    /usr/local/opt/mysql/lib/libmysqlclient.20.dylib (compatibility version 20.0.0, current version 20.0.0)
+    /usr/local/opt/openssl/lib/libssl.1.0.0.dylib (compatibility version 1.0.0, current version 1.0.0)
+    /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib (compatibility version 1.0.0, current version 1.0.0)
+    /usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1226.10.1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;我的 &lt;code&gt;dylib&lt;/code&gt; 是 &lt;code&gt;20&lt;/code&gt; 的，请根据自身调整。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;来分析一下。第一个链接讲的比较清楚了，根据报错提示也可以看出，其实就是 &lt;code&gt;MySQLdb&lt;/code&gt; 调用了 &lt;code&gt;_mysql&lt;/code&gt; ，但是 &lt;code&gt;_mysql.so&lt;/code&gt; 并没有在默认路径 &lt;code&gt;/usr/local/opt/mysql/lib/libmysqlclient.20.dylib&lt;/code&gt; 找到这个文件。那接下来我们要做的就是改变他的搜索路径：&lt;/p&gt;
+&lt;p&gt;注意我们需要用到的 &lt;code&gt;install_name_tool&lt;/code&gt; 语句的规则如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;install_name_tool [-change old new] input
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;几个参数的对应关系：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dylib&lt;/code&gt; 文件默认查找路径（&lt;code&gt;old&lt;/code&gt;）: &lt;code&gt;usr/local/opt/mysql/lib/libmysqlclient.20.dylib&lt;/code&gt;
+我们需要 &lt;code&gt;dylib&lt;/code&gt; 查找的路径（&lt;code&gt;new&lt;/code&gt;）: &lt;code&gt;usr/local/mysql/lib/libmysqlclient.20.dylib&lt;/code&gt;
+修改的 &lt;code&gt;_mysql.so&lt;/code&gt; 文件位置： &lt;code&gt;/Users/jtr109/qs/venv/lib/python2.7/site-packages/_mysql.so&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;所以执行如下语句：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo install_name_tool -change /usr/local/opt/mysql/lib/libmysqlclient.20.dylib /usr/local/mysql/lib/libmysqlclient.20.dylib /Users/jtr109/qs/venv/lib/python2.7/site-packages/_mysql.so
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;这里有个很奇怪的点，两篇参考文章的 &lt;code&gt;old&lt;/code&gt; 路径给的都只是文件名，我尝试下来并不能够改变 &lt;code&gt;_mysql.so&lt;/code&gt; 中的查找路径。所以无论你是否按照我的语句改变查找路径，&lt;strong&gt;请务必&lt;/strong&gt;再次执行 &lt;code&gt;otool&lt;/code&gt; 确定 &lt;code&gt;_mysql.so&lt;/code&gt; 中的查找路径是否更新了！&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;确认更新后，再试试在python中运行 &lt;code&gt;import MySQLdb&lt;/code&gt;。问题解决！&lt;/p&gt;
+&lt;p&gt;Tips: 这种解决方法意味着每次你新创建的 virtuanenv 中需要用到 MySQL，你都必须修改 &lt;code&gt;_mysql.so&lt;/code&gt;。第一个链接中有一个自制的脚本用来执行这一操作，我没细看，大家可以参考一下。&lt;/p&gt;
+&lt;p&gt;那就写到这里吧，希望大家都能跑通。&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -33,9 +78,54 @@ MySQL Server 密码重置  本机环境 Mac OS X EI Capitan 官网 Community 版
       <pubDate>Sun, 13 Aug 2017 14:04:20 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/mysql-dump-note/</guid>
-      <description>目前的配置环境均为 Windows，其他环境会在稍后补充
-1. 全量备份 2. 增量备份及恢复 2.1 备份 2.1.1 启用二进制备份 开启 binlog 日志 mysql -hlocalhost -uroot -pjue -e &amp;#34;set global sql_log_bin=1&amp;#34;; mysql -hlocalhost -uroot -pjue -e &amp;#34;show global variables like &amp;#39;sql_log_bin&amp;#39;\G&amp;#34;; 实测需要将 global 替换为 session
-在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置 log-bin=D:/Program Files (x86)/MySQL/mylog/jlog 2.1.2 重启 MySQL 服务 2.1.3 执行一次全量备份 $ mysqldump -hlocalhost -uroot -p -l -F test &amp;gt; testtt.sql 全量备份除了新建 sql 备份意外，还会新建一个 binlog 文件，完成后可以删除早先的 binlog 文件。 转移全量备份的 sql 并保存。</description>
+      <description>&lt;p&gt;目前的配置环境均为 Windows，其他环境会在稍后补充&lt;/p&gt;
+&lt;h2 id=&#34;1-全量备份&#34;&gt;1. 全量备份&lt;/h2&gt;
+&lt;h2 id=&#34;2-增量备份及恢复&#34;&gt;2. 增量备份及恢复&lt;/h2&gt;
+&lt;h3 id=&#34;21-备份&#34;&gt;2.1 备份&lt;/h3&gt;
+&lt;h4 id=&#34;211-启用二进制备份&#34;&gt;2.1.1 启用二进制备份&lt;/h4&gt;
+&lt;h5 id=&#34;开启-binlog-日志&#34;&gt;开启 binlog 日志&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;set global sql_log_bin=1&amp;#34;&lt;/span&gt;;  
+mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;show global variables like &amp;#39;sql_log_bin&amp;#39;\G&amp;#34;&lt;/span&gt;;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;实测需要将 global 替换为 session&lt;/p&gt;
+&lt;h5 id=&#34;在系统-mysql-配置文件-myini-中加入修改存储-log-bin-的位置&#34;&gt;在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;log-bin=D:/Program Files (x86)/MySQL/mylog/jlog
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;212-重启-mysql-服务&#34;&gt;2.1.2 重启 MySQL 服务&lt;/h4&gt;
+&lt;h4 id=&#34;213-执行一次全量备份&#34;&gt;2.1.3 执行一次全量备份&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqldump -hlocalhost -uroot -p -l -F &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; &amp;gt; testtt.sql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;全量备份除了新建 sql 备份意外，还会新建一个 binlog 文件，完成后可以删除早先的 binlog 文件。
+转移全量备份的 sql 并保存。&lt;/p&gt;
+&lt;h4 id=&#34;214-定期备份-binlog-文件&#34;&gt;2.1.4 定期备份 binlog 文件&lt;/h4&gt;
+&lt;h5 id=&#34;拆分-binlog-文件&#34;&gt;拆分 binlog 文件&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysql -hlocalhost -uroot -p -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;flush logs;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行语句会生成新的 binlog 文件用于记录， 原先的 binlog 文件可以转移并保存&lt;/p&gt;
+&lt;h3 id=&#34;22-恢复&#34;&gt;2.2 恢复&lt;/h3&gt;
+&lt;h3 id=&#34;221-单增量恢复&#34;&gt;2.2.1 单增量恢复&lt;/h3&gt;
+&lt;p&gt;找到全量恢复之前的所有 binlog 文件， 同时导入&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果出现&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ERROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;则需要重新导入全量&lt;/p&gt;
+&lt;h3 id=&#34;222-复合导入&#34;&gt;2.2.2 复合导入&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 导入全量&lt;/span&gt;
+$ mysql -hlocalhost -uroot -p &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; &amp;lt; testtt.sql
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 增量导入&lt;/span&gt;
+$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样的导入方法只能完整地导入整个 binlog 文件中的数据， 我们还可以加入参数来完成部分导入：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 根据时间导入&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;23-问题汇总&#34;&gt;2.3 问题汇总&lt;/h3&gt;
+&lt;h4 id=&#34;231-mysql配置文件-myini-位置&#34;&gt;2.3.1 MySQL配置文件 my.ini 位置&lt;/h4&gt;
+&lt;p&gt;打开“服务”，找到 MySQL 相关服务（如 MySQL57），点击属性。“可执行文件的路径”的显示即为 my.ini 位置。&lt;/p&gt;
+&lt;h2 id=&#34;3-参考文档&#34;&gt;3. 参考文档&lt;/h2&gt;
+&lt;h3 id=&#34;31-全量备份&#34;&gt;3.1 全量备份&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/jueblog/article/details/9878191&#34;&gt;【SQL】MySQL之使用mysqldump全备份及恢复过程详解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;32-增量备份&#34;&gt;3.2 增量备份&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/jueblog/article/details/9909669&#34;&gt;【SQL】MySQL之使用mysqlbinlog进行增量备份及恢复详解&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000002408168&#34;&gt;MySQL增量备份与恢复实例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>

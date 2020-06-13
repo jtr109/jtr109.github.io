@@ -17,10 +17,48 @@
       <pubDate>Thu, 07 Nov 2019 22:40:05 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/replace-in-all-files/</guid>
-      <description>背景 在项目开发过程中, 有时需要全局替换一些变量名. 如果使用 VSCode 这类现代编辑器, 可以十分便利地办到. 但是使用 Vim (or NeoVim) 就没有那么容易了.
-方案 我们需要一个方案来实现全局替换的需求. 需要满足如下要求:
- 可以自定义查找范围. 包括:   选择根路径 筛选符合指定 pattern 的文件 排除符合指定 pattern 的文件  查看确认筛选结果后, 执行修改  目前想到的办法是通过 ripgrep 和 sed 实现, 具体方法可以参照 ripgrep 的文档.
-工作流 全局查找 ❯ rg &amp;#34;println&amp;#34; . ./src/main.rs 2: println!(&amp;#34;Hello world!&amp;#34;); ./backend/src/bin/todo.rs 8: println!(&amp;#34;subcommands&amp;#34;); 9: println!(&amp;#34; new&amp;lt;title&amp;gt;: create a new task&amp;#34;); 33: println!(&amp;#34;new: missing &amp;lt;title&amp;gt;&amp;#34;); 44: println!(&amp;#34;show: unexpected argument&amp;#34;); 50: println!(&amp;#34;TASKS\n-----&amp;#34;); 52: println!</description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;在项目开发过程中, 有时需要全局替换一些变量名. 如果使用 VSCode 这类现代编辑器, 可以十分便利地办到. 但是使用 Vim (or NeoVim) 就没有那么容易了.&lt;/p&gt;
+&lt;h2 id=&#34;方案&#34;&gt;方案&lt;/h2&gt;
+&lt;p&gt;我们需要一个方案来实现全局替换的需求. 需要满足如下要求:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;可以自定义查找范围. 包括:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;选择根路径&lt;/li&gt;
+&lt;li&gt;筛选符合指定 pattern 的文件&lt;/li&gt;
+&lt;li&gt;排除符合指定 pattern 的文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;查看确认筛选结果后, 执行修改&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;目前想到的办法是通过 &lt;code&gt;ripgrep&lt;/code&gt; 和 &lt;code&gt;sed&lt;/code&gt; 实现, 具体方法可以参照 ripgrep 的&lt;a href=&#34;https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#how-can-i-search-and-replace-with-ripgrep&#34;&gt;文档&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;工作流&#34;&gt;工作流&lt;/h2&gt;
+&lt;h3 id=&#34;全局查找&#34;&gt;全局查找&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; .
+./src/main.rs
+2:    println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;);
+
+./backend/src/bin/todo.rs
+8:    println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;subcommands&amp;#34;&lt;/span&gt;);
+9:    println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;    new&amp;lt;title&amp;gt;: create a new task&amp;#34;&lt;/span&gt;);
+33:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;new: missing &amp;lt;title&amp;gt;&amp;#34;&lt;/span&gt;);
+44:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;show: unexpected argument&amp;#34;&lt;/span&gt;);
+50:    println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;TASKS\n-----&amp;#34;&lt;/span&gt;);
+52:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}|{}|{}&amp;#34;&lt;/span&gt;, task.id, task.title, task.done);
+58:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;accomplish: missing &amp;lt;id&amp;gt;&amp;#34;&lt;/span&gt;);
+67:            println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;accomplish: &amp;lt;id&amp;gt; must be i32&amp;#34;&lt;/span&gt;);
+76:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;acco: missing &amp;lt;title&amp;gt;&amp;#34;&lt;/span&gt;);
+88:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;remove: missing &amp;lt;title&amp;gt;&amp;#34;&lt;/span&gt;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;文件名筛选&#34;&gt;文件名筛选&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches
+./src/main.rs
+./backend/src/bin/todo.rs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;全局替换&#34;&gt;全局替换&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches | xargs sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/println/pp/g&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或者&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches -0 | xargs -0 sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/println/pp/g&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
   </channel>

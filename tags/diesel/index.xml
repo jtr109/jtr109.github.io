@@ -17,8 +17,87 @@
       <pubDate>Thu, 07 Nov 2019 22:36:29 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
-      <description>背景描述 在使用 Diesel 和 uuid 开发的过程中, 使用发生报错:
-error[E0277]: the trait bound `uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not satisfied --&amp;gt; src/models.rs:45:14 | 45 | .load::&amp;lt;App&amp;gt;(conn) | ^^^^ the trait `diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;` is not implemented for `uuid::Uuid` | = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `(uuid::Uuid, std::string::String)` = note: required because of the requirements on the impl of `diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;` for `models::App` = note: required because of the requirements on the impl of `diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;` for `diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;` 代码如下:</description>
+      <description>&lt;h2 id=&#34;背景描述&#34;&gt;背景描述&lt;/h2&gt;
+&lt;p&gt;在使用 &lt;a href=&#34;http://diesel.rs/&#34;&gt;Diesel&lt;/a&gt; 和 &lt;a href=&#34;https://crates.io/crates/uuid&#34;&gt;uuid&lt;/a&gt; 开发的过程中, 使用发生报错:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0277]: the trait bound &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; is not satisfied
+  --&amp;gt; src/models.rs:45:14
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;45&lt;/span&gt; |             .load::&amp;lt;App&amp;gt;(conn)
+   |              ^^^^ the trait &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; is not implemented &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   |
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;(uuid::Uuid, std::string::String)&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::Queryable&amp;lt;(diesel::sql_types::Uuid, diesel::sql_types::Text), _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;models::App&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   = note: required because of the requirements on the impl of &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::query_dsl::LoadQuery&amp;lt;_, models::App&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;diesel::query_builder::SelectStatement&amp;lt;schema::app::table, dies
+el::query_builder::select_clause::DefaultSelectClause, diesel::query_builder::distinct_clause::NoDistinctClause, diesel::query_builder::where_clause::NoWhereClause, diesel::query
+_builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::LimitClause&amp;lt;diesel::expression::bound::Bound&amp;lt;diesel::sql_types::BigInt, i64&amp;gt;&amp;gt;&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;代码如下:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Cargo.toml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;dependencies&lt;/span&gt;]
+&lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1.4.2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;postgres&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuid&amp;#34;&lt;/span&gt;] }
+&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.4&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;v4&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;schema.rs&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;! {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;) {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Uuid&lt;/span&gt;,
+        &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Varchar&lt;/span&gt;,
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;models.rs&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;pg&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;PgConnection&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;prelude&lt;/span&gt;::*;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Uuid&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;token&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;create_claims&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;create_jwt_secret&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;encode_token&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Claims&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;TokenError&lt;/span&gt;};
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[derive(Queryable)]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;App&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Uuid&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;,
+}
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[derive(Insertable)]&lt;/span&gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#[table_name = &lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;app&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;NewApp&lt;/span&gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;jwt_secret&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;,
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;impl&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_by_id&lt;/span&gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;conn&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;PgConnection&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Vec&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt;&amp;gt; {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;limit&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;)
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;load&lt;/span&gt;::&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;App&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;conn&lt;/span&gt;)
+            .&lt;span style=&#34;color:#268bd2&#34;&gt;expect&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Error loading app&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;经过&#34;&gt;经过&lt;/h2&gt;
+&lt;p&gt;在往上查询未果, 经人提点可能是项目中 uuid 和版本不一致的问题导致的.&lt;/p&gt;
+&lt;h3 id=&#34;uuid-降级&#34;&gt;UUID 降级&lt;/h3&gt;
+&lt;p&gt;查看 Diesel 的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml&#34;&gt;diesel/Cargo.toml at 1.4.x · diesel-rs/diesel · GitHub&lt;/a&gt; 发现 Diesel 依赖的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L26&#34;&gt;uuid 版本&lt;/a&gt;为 &lt;code&gt;&amp;gt;=0.2.0, &amp;lt;0.7.0&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;gt;=0.2.0, &amp;lt;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;use_std&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而我在项目中使用的 &lt;code&gt;uuid&lt;/code&gt; 为 &lt;code&gt;0.7.4&lt;/code&gt;. 尝试将 uuid 降级到 &lt;code&gt;0.6&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;上述问题不再报错, 不过有一个新的报错出现:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0599]: no method named &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;to_simple&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; found &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; in the current scope
+  --&amp;gt; src/models.rs:37:45
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;37&lt;/span&gt; |         &lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;claims&lt;/span&gt; = create_claims(&amp;amp;self.id.to_simple().to_string());
+   |                                             ^^^^^^^^^ help: there is a method with a similar name: &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;simple&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以推断, uuid 在 0.6 到 0.7 的过程中有较大的功能改变. 那新问题就来了:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;我希望使用 uuid 最新版本的能力.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;修改-dependence&#34;&gt;修改 Dependence&lt;/h3&gt;
+&lt;p&gt;好消息是我在 &lt;code&gt;Cargo.toml&lt;/code&gt; 紧接着的一行发现了一个 dependence: &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L27&#34;&gt;uuidv07&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuidv07&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;package&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuid&amp;#34;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从配置信息可以看到, 这个 &lt;code&gt;uuidv07&lt;/code&gt; 同样使用的是 uuid 包 (&lt;code&gt;package = &amp;quot;uuid&amp;quot;&lt;/code&gt;). 但是版本为 &amp;ldquo;0.7.0&amp;rdquo; (&lt;code&gt;version = &amp;quot;0.7.0&amp;quot;&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;尝试修改本地项目的 &lt;code&gt;Cargo.toml&lt;/code&gt; 文件:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;dependencies&lt;/span&gt;]
+&lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1.4.2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;postgres&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuidv07&amp;#34;&lt;/span&gt;] }
+&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.4&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;v4&amp;#34;&lt;/span&gt;] }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;测试通过!&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
+&lt;p&gt;网上几乎没法找到这个&lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md#fixed-3&#34;&gt;改动&lt;/a&gt;相关的问题和解决方案, 甚至文档中都没有提及.&lt;/p&gt;
+&lt;p&gt;定位问题的能力还是有待提高.&lt;/p&gt;
+&lt;p&gt;#tech/rust&lt;/p&gt;
+</description>
     </item>
     
   </channel>

@@ -17,13 +17,36 @@
       <pubDate>Tue, 07 Jan 2020 23:45:24 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/one-time-password/</guid>
-      <description>背景 很多大型网站都提供了一种动态数字密码作为两步认证（2FA）的方案。你只要通过常用的密码管理器（例如 1Password，Authy 等）扫描二维码，就可以获得一个动态数字 token。我们来一起探索一下这门技术。
-TOTP TOTP 即 Time-Based One-Time Password Algorithm。顾名思义这是一种基于时间的 token 算法，从宏观来看就是基于时间和共享的密钥（shared secret key）生成随机数字 token。
-与之类似的算法还有HOTP（Event-Based One-Time Password Algorithm）。
-Google Authenticator Google Authenticator 也是一种 TOTP，只不过它的 secret key 必须使用 base32 的1。
-Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考我的 fork2； rust-oath：使用数最多的相关 crate，功能全面；  Have A Try  在项目中尝试了生成 secret （secret.rs），生成二维码（qr_code.rs）以及生成 token（code.rs）。  Reference   Google Authenticator 的特殊性参考这个项目中的说明 &amp;#x21a9;&amp;#xfe0e;
- 已提交 pull request &amp;#x21a9;&amp;#xfe0e;
-   </description>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;很多大型网站都提供了一种动态数字密码作为两步认证（2FA）的方案。你只要通过常用的密码管理器（例如 1Password，Authy 等）扫描二维码，就可以获得一个动态数字 token。我们来一起探索一下这门技术。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h2 id=&#34;totp&#34;&gt;TOTP&lt;/h2&gt;
+&lt;p&gt;TOTP 即 &lt;a href=&#34;https://tools.ietf.org/html/rfc6238&#34;&gt;Time-Based One-Time Password Algorithm&lt;/a&gt;。顾名思义这是一种基于时间的 token 算法，从宏观来看就是基于时间和共享的密钥（shared secret key）生成随机数字 token。&lt;/p&gt;
+&lt;p&gt;与之类似的算法还有HOTP（&lt;a href=&#34;http://tools.ietf.org/html/rfc4226&#34;&gt;Event-Based One-Time Password Algorithm&lt;/a&gt;）。&lt;/p&gt;
+&lt;h2 id=&#34;google-authenticator&#34;&gt;Google Authenticator&lt;/h2&gt;
+&lt;p&gt;Google Authenticator 也是一种 TOTP，只不过它的 secret key 必须使用 base32 的&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;rust-implement&#34;&gt;Rust Implement&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://crates.io/crates/google-authenticator&#34;&gt;Google Authenticator Rust&lt;/a&gt;：一个非常简介易用的 crate，但是示例都存在着一些问题，可用示例可以参考&lt;a href=&#34;https://github.com/jtr109/google-authenticator-rust&#34;&gt;我的 fork&lt;/a&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;；&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://crates.io/crates/oath&#34;&gt;rust-oath&lt;/a&gt;：使用数最多的相关 crate，功能全面；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;have-a-try&#34;&gt;Have A Try&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在&lt;a href=&#34;https://github.com/jtr109/rust-play/tree/otp/src/bin&#34;&gt;项目&lt;/a&gt;中尝试了生成 secret （&lt;code&gt;secret.rs&lt;/code&gt;），生成二维码（&lt;code&gt;qr_code.rs&lt;/code&gt;）以及生成 token（&lt;code&gt;code.rs&lt;/code&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Google Authenticator 的特殊性参考&lt;a href=&#34;https://github.com/avacariu/rust-oath#google-authenticator&#34;&gt;这个项目中的说明&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/hanskorg/google-authenticator-rust/pull/3&#34;&gt;已提交 pull request&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
     </item>
     
     <item>
@@ -32,10 +55,19 @@ Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，
       <pubDate>Thu, 14 Nov 2019 14:06:16 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/git-with-2fa/</guid>
-      <description>写在最前 作为开发者, 应该清楚地知道 &amp;ldquo;密码再强也不是不可能被破解&amp;rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
-在 GitLab 中使用 2FA GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
-但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到解决方案.
- When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using GitLab’s API. You must use a personal access token instead.</description>
+      <description>&lt;h2 id=&#34;写在最前&#34;&gt;写在最前&lt;/h2&gt;
+&lt;p&gt;作为开发者, 应该清楚地知道 &amp;ldquo;密码再强也不是不可能被破解&amp;rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.&lt;/p&gt;
+&lt;h2 id=&#34;在-gitlab-中使用-2fa&#34;&gt;在 GitLab 中使用 2FA&lt;/h2&gt;
+&lt;p&gt;GitLab 中如何开启 2FA 在&lt;a href=&#34;https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-2fa-via-one-time-password-authenticator&#34;&gt;文档&lt;/a&gt;中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.&lt;/p&gt;
+&lt;p&gt;但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到&lt;a href=&#34;https://docs.gitlab.com/ce/user/profile/account/two_factor_authentication.html#personal-access-tokens&#34;&gt;解决方案&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using &lt;a href=&#34;https://docs.gitlab.com/ee/api/README.html&#34;&gt;GitLab’s API&lt;/a&gt;. You must use a &lt;a href=&#34;https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html&#34;&gt;personal access token&lt;/a&gt; instead.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以使用 access token 作为密码即可登录自己的 git 帐号拉取和推送服务.&lt;/p&gt;
+&lt;h2 id=&#34;关于-access-token&#34;&gt;关于 Access Token&lt;/h2&gt;
+&lt;p&gt;建议所有在使用 access token 的过程中, 为每一个客户端使用一个单独的 token, 来避免找到一个 token 变成 &amp;ldquo;死 token&amp;rdquo;, 即这个 token &amp;ldquo;可能&amp;rdquo; 被用在很多地方, 而自己不知道具体在哪使用了.&lt;/p&gt;
+&lt;p&gt;给每个客户端建立一个 token, 也不要让这些 token 落盘, 如果 logout 了之后, 请刷新 token, 并使用你的新 token 登录.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -44,9 +76,35 @@ Rust Implement  Google Authenticator Rust：一个非常简介易用的 crate，
       <pubDate>Wed, 27 Mar 2019 13:59:45 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/django-password/</guid>
-      <description>Set Password Manually It is easy to set password with the instance of User by set_password:
-user = User.objects.create(username=&amp;#39;my_username&amp;#39;) user.set_password(&amp;#39;my_password&amp;#39;) But sometimes we want to bulk create users of we want to create an User model before saving into database. Your can create user model and set password manually.
-from django.contrib.auth.hashers import make_password user = User( username=&amp;#39;my_username&amp;#39;, password=make_password(&amp;#39;my_password&amp;#39;) ) # now you get the instance of User model How to Create an Raw Password Automatically?</description>
+      <description>&lt;h2 id=&#34;set-password-manually&#34;&gt;Set Password Manually&lt;/h2&gt;
+&lt;p&gt;It is easy to set password with the instance of &lt;code&gt;User&lt;/code&gt; by &lt;code&gt;set_password&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_username&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;set_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But sometimes we want to bulk create users of we want to create an &lt;code&gt;User&lt;/code&gt; model before saving into database. Your can create user model and set password manually.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.hashers&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;(
+    &lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_username&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
+)
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# now you get the instance of User model&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;how-to-create-an-raw-password-automatically&#34;&gt;How to Create an Raw Password Automatically?&lt;/h2&gt;
+&lt;p&gt;Django provide a method &lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;&lt;code&gt;make_random_password&lt;/code&gt;&lt;/a&gt; in the &lt;code&gt;BaseUserManager&lt;/code&gt;. So you can generate a password like this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;make_random_password&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# not a good idea&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;But what if we just want to create a password without &lt;code&gt;User&lt;/code&gt; involved? You can find the method &lt;code&gt;make_random_password&lt;/code&gt; just call the function &lt;code&gt;get_random_string&lt;/code&gt; defined in &lt;a href=&#34;https://github.com/django/django/blob/master/django/utils/crypto.py&#34;&gt;&lt;code&gt;django.utils.crypto&lt;/code&gt;&lt;/a&gt;. So we make it easy like this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.utils.crypto&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# try this one&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;allowed_chars&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;abcdef0123456789&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>

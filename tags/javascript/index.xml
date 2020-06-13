@@ -17,8 +17,472 @@
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
-      <description>Intergate Vue in Django What Project Will We Build We want to build a vue project with multiple pages. The Django view render these pages as templates.
-Why We Build Such A Project If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.</description>
+      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;Intergate Vue in Django&lt;/h1&gt;
+&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;What Project Will We Build&lt;/h2&gt;
+&lt;p&gt;We want to build a vue project with multiple pages. The Django view render these pages as templates.&lt;/p&gt;
+&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;Why We Build Such A Project&lt;/h2&gt;
+&lt;p&gt;If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.&lt;/p&gt;
+&lt;p&gt;So we consider to use front-end service to control the router and use back-end for access control.&lt;/p&gt;
+&lt;h2 id=&#34;initial-repository&#34;&gt;Initial Repository&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir vid &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; vid
+git init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;Create Virtual Environment&lt;/h2&gt;
+&lt;h3 id=&#34;specify-python-version&#34;&gt;Specify Python Version&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;Change Mirror (Optional)&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[[source]]
+name = &amp;#34;pypi&amp;#34;
+url = &amp;#34;https://mirrors.aliyun.com/pypi/simple/&amp;#34;
+verify_ssl = true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;Install Dependencies&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv install &lt;span style=&#34;color:#268bd2&#34;&gt;django&lt;/span&gt;==2.2.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;Start Django Project&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run django-admin startproject vid
+mv vid vid-dir &amp;amp;&amp;amp; mv ./vid-dir/* . &amp;amp;&amp;amp; rmdir vid-dir  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# move project to current path&lt;/span&gt;
+pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# check django project works&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;Create Authorization API in Django&lt;/h2&gt;
+&lt;p&gt;You should always create a custom user model in Django. &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model&#34;&gt;Here&lt;/a&gt; is why.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Remember not migrating until the custom user model is registered correctly.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;create-custom-user-model&#34;&gt;Create Custom User Model&lt;/h3&gt;
+&lt;p&gt;First, let us create an app.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;pipenv&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;manage&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;startapp&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We must install it in &lt;code&gt;INSTALLED_APPS&lt;/code&gt; in settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;INSTALLED_APPS&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# install account app&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we need to create a custom user model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/model.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.db&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;AbstractUser&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;AbstractUser&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;pass&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And replace the default one by registering it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;AUTH_USER_MODEL&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.User&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all, migrating the user model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py makemigrations
+pipenv run python manage.py migrate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;Create Logining and Checking Views&lt;/h3&gt;
+&lt;p&gt;Let&amp;rsquo;s create &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views&#34;&gt;class-based views&lt;/a&gt; with json responses.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/apis.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;json&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;authenticate&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;logout&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.http&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;LoginView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;json&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;loads&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# TODO: request validation&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;authenticate&lt;/span&gt;(**&lt;span style=&#34;color:#268bd2&#34;&gt;body&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;wrong password&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;))
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;GetUserInfoView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;not login&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt;=&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;)))
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;LogoutView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;not login&amp;#39;&lt;/span&gt;))
+
+        &lt;span style=&#34;color:#268bd2&#34;&gt;logout&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;)
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;JsonResponse&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, make router for it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;.apis&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;LoginView&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LogoutView&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;GetUserInfoView&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LoginView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;logout/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;LogoutView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;logout&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;get_user_info/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;GetUserInfoView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;get_user_info&amp;#39;&lt;/span&gt;),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+		&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;api/account/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.urls&amp;#39;&lt;/span&gt;)),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;Creating Vue Project with Multiple Pages&lt;/h2&gt;
+&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;Initializing a Vue Project&lt;/h3&gt;
+&lt;p&gt;Frist of all, let us initialize a vue project.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;vue create frontend
+&lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; frontend
+yarn install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we run the vue development service.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually &lt;code&gt;localhost:8080&lt;/code&gt;).&lt;/p&gt;
+&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;Satisfication for Multiple Pages&lt;/h3&gt;
+&lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
+mkdir -p src/pages/login
+mv main.js src/pages/login/app.js
+mv App.vue src/pages/login/app.vue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Change relative path in &lt;code&gt;app.vue&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;vue&lt;/span&gt; --&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;app&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;img&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;alt&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Vue logo&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;../../assets/logo.png&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Welcome to Your Vue.js App&amp;#34;&lt;/span&gt;/&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;../../components/HelloWorld.vue&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// remove the &amp;#39;name&amp;#39; field
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;HelloWorld&lt;/span&gt;
+  }
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Copy a new page named &amp;ldquo;user&amp;rdquo;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cp -r src/pages/login src/pages/user
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Edit parameter &lt;code&gt;msg&lt;/code&gt; in &lt;code&gt;src/pages/user&lt;/code&gt; to make difference between pages.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;This Is The User Page&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create &lt;code&gt;vue.config.js&lt;/code&gt; for build multiple pages.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
+touch vue.config.js
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Parsing and registering all pages in config file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;use strict&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;titles&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/titles.js&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;glob&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;glob&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt; = {}
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;glob&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;sync&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/pages/**/app.js&amp;#39;&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;forEach&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt; =&amp;gt; {
+  &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;./src/pages/&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;].&lt;span style=&#34;color:#268bd2&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/app.js&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;0&lt;/span&gt;]
+  &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;] = {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;entry&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;template&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;public/index.html&amp;#39;&lt;/span&gt;,
+    &lt;span style=&#34;color:#268bd2&#34;&gt;title&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;titles&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;],
+    &lt;span style=&#34;color:#268bd2&#34;&gt;chunks&lt;/span&gt;: [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;chunk-vendors&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;chunk-common&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;chunk&lt;/span&gt;]
+  }
+})
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;pages&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2&#34;&gt;chainWebpack&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;config&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;config&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;plugins&lt;/span&gt;.&lt;span style=&#34;color:#859900&#34;&gt;delete&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;named-chunks&amp;#39;&lt;/span&gt;),
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Run the service again.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now you can view the login and user pages corresponding url, such as &lt;code&gt;localhost:8080/login/&lt;/code&gt; and &lt;code&gt;localhost:8080/user/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Login page:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
+&lt;p&gt;User page:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;Inject Vue Page Into Django Template&lt;/h2&gt;
+&lt;h3 id=&#34;build-vue-dist&#34;&gt;Build Vue Dist&lt;/h3&gt;
+&lt;p&gt;Build the vue project first.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, you get &lt;code&gt;login.html&lt;/code&gt; and &lt;code&gt;user.html&lt;/code&gt; in the path &lt;code&gt;frontend/dist&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;Show Login Page in Django View&lt;/h3&gt;
+&lt;p&gt;Let us show login page by &lt;code&gt;TemplateView&lt;/code&gt; in Django.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views.generic&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;TemplateView&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;TemplateView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;template_name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login.html&amp;#39;&lt;/span&gt;)),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Change template directory in settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;TEMPLATES&lt;/span&gt; = [
+    {
+        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;DIRS&amp;#39;&lt;/span&gt;: [&lt;span style=&#34;color:#268bd2&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;join&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BASE_DIR&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;frontend&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;dist&amp;#39;&lt;/span&gt;)],
+        &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    },
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After Changing template path, the login view works well. But we find the static files is not found.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529205044695.png&#34; alt=&#34;image-20190529205044695&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We setting &lt;code&gt;assetsDir&lt;/code&gt; as &lt;code&gt;&#39;static&#39;&lt;/code&gt; in &lt;code&gt;vue.config.js&lt;/code&gt; will ask vue-cli to build all assets in the same directory &lt;code&gt;frontend/dist/static&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;assetsDir&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;static&amp;#39;&lt;/span&gt;,
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And then, registering the path in the Django settings.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/settings.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;STATICFILES_DIRS&lt;/span&gt; = [
+    &lt;span style=&#34;color:#268bd2&#34;&gt;os&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;join&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BASE_DIR&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;frontend/dist/static&amp;#39;&lt;/span&gt;),
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now, we can rebuild the vue project and refresh the page.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;render-user-page&#34;&gt;Render User Page&lt;/h3&gt;
+&lt;p&gt;Now, we already have the HTML file &lt;code&gt;frontend/dist/user.html&lt;/code&gt; . Let us render it in a Django view.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/views.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.http&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponseRedirect&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.shortcuts&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;render&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.urls&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;reverse&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.views&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;UserPageView&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;View&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;HttpRequest&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponse&lt;/span&gt;:
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;not&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;is_authenticated&lt;/span&gt;:
+            &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;HttpResponseRedirect&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;reverse&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;login_page&amp;#39;&lt;/span&gt;))
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;render&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;request&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;template_name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user.html&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;urlpatterns&lt;/span&gt; = [
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;UserPageView&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;as_view&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;user_page&amp;#39;&lt;/span&gt;),
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;Create a Login Form in User Page&lt;/h2&gt;
+&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;Login Form with Ant Design&lt;/h3&gt;
+&lt;p&gt;First, let us install the ant design vue package. &lt;a href=&#34;https://vue.ant.design/docs/vue/use-with-vue-cli/&#34;&gt;Here&lt;/a&gt; is the way to install and register ant design vue.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add ant-design-vue
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Import style in &lt;code&gt;frontend/src/pages/login/app.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;ant-design-vue/dist/antd.css&amp;#34;&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Create a new file in &lt;code&gt;frontend/src/components&lt;/code&gt;, copy the login form from &lt;a href=&#34;https://vue.ant.design/components/form/#components-form-demo-horizontal-login-form&#34;&gt;doc&lt;/a&gt;. Then:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;import components from ant design vue&lt;/li&gt;
+&lt;li&gt;register components required&lt;/li&gt;
+&lt;li&gt;disable actions in mounted (optional)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;frontend&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;src&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;LoginForm&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;vue&lt;/span&gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;layout&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;inline&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;:form&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;form&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;@submit&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;handleSubmit&amp;#34;&lt;/span&gt;
+  &amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;validate&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-status&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;userNameError&lt;/span&gt;() ? &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;&amp;#39; : &amp;#39;&amp;#39;&amp;#34;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;help&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userNameError() || &amp;#39;&amp;#39;&amp;#34;&lt;/span&gt;
+    &amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-input&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;v&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-decorator&lt;/span&gt;=&amp;#34;[
+          &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;userName&lt;/span&gt;&amp;#39;,
+          {&lt;span style=&#34;color:#268bd2&#34;&gt;rules&lt;/span&gt;: [{ &lt;span style=&#34;color:#268bd2&#34;&gt;required&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;Please&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;your&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;!&amp;#39; }]}
+        ]&amp;#34;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;placeholder&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Username&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-icon&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;slot&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;prefix&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;style&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;color:rgba(0,0,0,.25)&amp;#34;&lt;/span&gt;
+        /&amp;gt;
+      &amp;lt;/a-input&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;validate&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-status&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;passwordError&lt;/span&gt;() ? &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;&amp;#39; : &amp;#39;&amp;#39;&amp;#34;
+      :&lt;span style=&#34;color:#268bd2&#34;&gt;help&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;passwordError() || &amp;#39;&amp;#39;&amp;#34;&lt;/span&gt;
+    &amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-input&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;v&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-decorator&lt;/span&gt;=&amp;#34;[
+          &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;&amp;#39;,
+          {&lt;span style=&#34;color:#268bd2&#34;&gt;rules&lt;/span&gt;: [{ &lt;span style=&#34;color:#268bd2&#34;&gt;required&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &amp;#39;&lt;span style=&#34;color:#268bd2&#34;&gt;Please&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;your&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Password&lt;/span&gt;!&amp;#39; }]}
+        ]&amp;#34;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;placeholder&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Password&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-icon&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;slot&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;prefix&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;lock&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2&#34;&gt;style&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;color:rgba(0,0,0,.25)&amp;#34;&lt;/span&gt;
+        /&amp;gt;
+      &amp;lt;/a-input&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-form-item&lt;/span&gt;&amp;gt;
+      &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;a-button&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;primary&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;html&lt;/span&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;-type&lt;/span&gt;=&amp;#34;&lt;span style=&#34;color:#268bd2&#34;&gt;submit&lt;/span&gt;&amp;#34;
+        &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;:disabled&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;=&amp;#34;hasErrors(form.getFieldsError())&amp;#34;&lt;/span&gt;
+      &amp;gt;
+        &lt;span style=&#34;color:#268bd2&#34;&gt;Log&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt;
+      &amp;lt;/a-button&amp;gt;
+    &amp;lt;/a-form-item&amp;gt;
+  &amp;lt;/a-form&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt; } &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;ant&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;ant&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// eslint-disable-line
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;hasErrors&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;) {
+  &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Object&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;keys&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;some&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;field&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fieldsError&lt;/span&gt;[&lt;span style=&#34;color:#268bd2&#34;&gt;field&lt;/span&gt;])
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;components&lt;/span&gt;: {
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-button&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-form&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-form-item&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Item&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-input&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;,
+    &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a-icon&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt;,
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt; () {
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;hasErrors&lt;/span&gt;,
+      &lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;$form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;createForm&lt;/span&gt;(&lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;),
+    }
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;mounted&lt;/span&gt; () {
+    &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;$nextTick&lt;/span&gt;(() =&amp;gt; {
+      &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// To disabled submit button at the beginning.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// this.form.validateFields()
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    })
+  },
+  &lt;span style=&#34;color:#268bd2&#34;&gt;methods&lt;/span&gt;: {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Only show error after a field is touched.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;userNameError&lt;/span&gt; () {
+      &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt; } = &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;
+      &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;userName&amp;#39;&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;userName&amp;#39;&lt;/span&gt;)
+    },
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Only show error after a field is touched.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;passwordError&lt;/span&gt; () {
+      &lt;span style=&#34;color:#859900&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt; } = &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;
+      &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;isFieldTouched&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#268bd2&#34;&gt;getFieldError&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;)
+    },
+    &lt;span style=&#34;color:#268bd2&#34;&gt;handleSubmit&lt;/span&gt;  (&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;preventDefault&lt;/span&gt;()
+      &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;validateFields&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;) =&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (!&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;) {
+          &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Received values of form: &amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;)
+        }
+      })
+    },
+  },
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;Using Axios to Send Login Request&lt;/h3&gt;
+&lt;p&gt;First let add proxy in vue project.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;exports&lt;/span&gt; = {
+  # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+  &lt;span style=&#34;color:#268bd2&#34;&gt;devServer&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;proxy&lt;/span&gt;: {
+      &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/api&amp;#39;&lt;/span&gt;: {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;target&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;http://127.0.0.1:8000&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// the host of your django service
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#268bd2&#34;&gt;changeOrigin&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;,
+      }
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Install Axios.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add axios
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Have a try to request by Axios.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/src/components/LoginForm.vue
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;axios&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;axios&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;import&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;Form&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Button&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Input&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Icon&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt; } &lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ant-design-vue&amp;#39;&lt;/span&gt;
+ 
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// ----- snipped -----
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;default&lt;/span&gt; {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;methods&lt;/span&gt;: {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;handleSubmit&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) {
+      &lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;preventDefault&lt;/span&gt;()
+      &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;form&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;validateFields&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;) =&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (!&lt;span style=&#34;color:#268bd2&#34;&gt;err&lt;/span&gt;) {
+          &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Received values of form: &amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// eslint-disable-line
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;          &lt;span style=&#34;color:#859900&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;userName&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;values&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;)
+        }
+      })
+    },
+    &lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;login&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;) {
+      &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; { &lt;span style=&#34;color:#268bd2&#34;&gt;data&lt;/span&gt;: { &lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt; } } = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;axios&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/api/account/login/&amp;#39;&lt;/span&gt;, {&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;})
+      &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;status&lt;/span&gt; !== &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;success&amp;#39;&lt;/span&gt;) {
+        &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;)
+      } &lt;span style=&#34;color:#859900&#34;&gt;else&lt;/span&gt; {
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;window&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;location&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;/user/&amp;#39;&lt;/span&gt;
+      }
+    }
+}
+&amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You will find CSRF token error.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530143518162.png&#34; alt=&#34;image-20190530143518162&#34;&gt;&lt;/p&gt;
+&lt;p&gt;I do not find a better way to resolve it. Let disable CSRF token middleware until we find a solution.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;vid&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;settings&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;MIDDLEWARE&lt;/span&gt; = [
+    # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+    # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
+    # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;Create User and Test Redirection&lt;/h3&gt;
+&lt;p&gt;Let us create a user in django shell.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py shell
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create_user&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;email&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john@vid.com&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;weakpwd&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;Rebuild Frontend and Have A Try in Django Service&lt;/h3&gt;
+&lt;p&gt;Now let&amp;rsquo;s rebuild the frontend.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
+yarn run build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference:&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/25080236&#34;&gt;https://zhuanlan.zhihu.com/p/25080236&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Resolve the static not found problem: &lt;a href=&#34;https://blog.csdn.net/Amio_/article/details/88354438&#34;&gt;https://blog.csdn.net/Amio_/article/details/88354438&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To build vue project into multiple pages: &lt;a href=&#34;https://github.com/Plortinus/vue-multiple-pages/blob/master/src/pages/customer/home/app.vue&#34;&gt;https://github.com/Plortinus/vue-multiple-pages/blob/master/src/pages/customer/home/app.vue&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Avoid CSRF Error: &lt;a href=&#34;https://vsupalov.com/avoid-csrf-errors-axios-django/&#34;&gt;https://vsupalov.com/avoid-csrf-errors-axios-django/&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -27,7 +491,54 @@ Why We Build Such A Project If we seperate frond-end and back-end and all router
       <pubDate>Thu, 07 Sep 2017 16:41:23 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/es6-note/</guid>
-      <description>async 函数  async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果。 async 函数的返回值是一个 Promise 对象, 可以使用 then 指定下一步操作. 只要一个 await 语句后面的 Promise 变为 reject, 那么整个 async 函数都会中断执行  并发异步请求 // 写法一 let [foo, bar] = await Promise.all([getFoo(), getBar()]); // 写法二 let fooPromise = getFoo(); let barPromise = getBar(); let foo = await fooPromise; let bar = await barPromise; for 循环并发异步请求 async function dbFuc(db) { let docs = [{}, {}, {}]; let promises = docs.map((doc) =&amp;gt; db.</description>
+      <description>&lt;h2 id=&#34;async-函数&#34;&gt;async 函数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;async&lt;/code&gt; 表示函数里有异步操作，&lt;code&gt;await&lt;/code&gt; 表示紧跟在后面的表达式需要等待结果。&lt;/li&gt;
+&lt;li&gt;async 函数的返回值是一个 Promise 对象, 可以使用 then 指定下一步操作.&lt;/li&gt;
+&lt;li&gt;只要一个 &lt;code&gt;await&lt;/code&gt; 语句后面的 Promise 变为 reject, 那么整个 &lt;code&gt;async&lt;/code&gt; 函数都会中断执行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;并发异步请求&#34;&gt;并发异步请求&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 写法一
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;] = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;([&lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;()]);
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 写法二
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;();
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;();
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环并发异步请求&#34;&gt;for 循环并发异步请求&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;));
+
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt;);
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;);
+}
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 或者使用下面的写法
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;));
+
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt; = [];
+  &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promise&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt;) {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promise&lt;/span&gt;);
+  }
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环继发异步请求&#34;&gt;for 循环继发异步请求&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
+
+  &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;) {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;acync 函数中遇到 await 就会等待执行完成后在继续执行接下来的语句, 在 for 循环中也是一样.&lt;/p&gt;
+&lt;h2 id=&#34;for--of&#34;&gt;for &amp;hellip; of&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;for...of&lt;/code&gt; 循环调用遍历器接口，数组的遍历器接口只返回具有数字索引的属性。&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -36,12 +547,58 @@ Why We Build Such A Project If we seperate frond-end and back-end and all router
       <pubDate>Wed, 16 Aug 2017 10:51:52 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/about-js-for-loop/</guid>
-      <description>关于 for ... in 和 for ... of 简单记忆 由于 es6 中 for ... of 的加入, 对于记得不是很清楚的人会很容易产生混淆.
-for ... in 可以理解为获取 &amp;ldquo;index&amp;rdquo;. 在 Array 类型中, 调用 for ... in 获取的确实就是每个元素对应的 index, 而在 Object 中, 就是对应相应的 key 值.
-for ... of  只可以用于 Array.
-特别注意 for ... of 只能用于 Array, 用于 Object 或者 undefined 均会报错. 所以对于使用对象可能出现 undefined 的情况不要使用for ... of.
-示例 对 Array 使用:
-let a = {&amp;#39;a&amp;#39;: 1, &amp;#39;b&amp;#39;: 2} let b = [&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;] let c = undefined for (let i in a) { console.</description>
+      <description>&lt;h2 id=&#34;关于-for--in-和-for--of&#34;&gt;关于 &lt;code&gt;for ... in&lt;/code&gt; 和 &lt;code&gt;for ... of&lt;/code&gt;&lt;/h2&gt;
+&lt;h3 id=&#34;简单记忆&#34;&gt;简单记忆&lt;/h3&gt;
+&lt;p&gt;由于 es6 中 &lt;code&gt;for ... of&lt;/code&gt; 的加入, 对于记得不是很清楚的人会很容易产生混淆.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;for ... in&lt;/code&gt; 可以理解为获取 &amp;ldquo;index&amp;rdquo;. 在 Array 类型中, 调用 &lt;code&gt;for ... in&lt;/code&gt; 获取的确实就是每个元素对应的 index, 而在 Object 中, 就是对应相应的 key 值.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;for ... of &lt;/code&gt; 只可以用于 Array.&lt;/p&gt;
+&lt;h3 id=&#34;特别注意&#34;&gt;特别注意&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;for ... of&lt;/code&gt; 只能用于 Array, 用于 Object 或者 undefined 均会报错. 所以对于使用对象可能出现 undefined 的情况&lt;strong&gt;不要使用&lt;code&gt;for ... of&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
+&lt;p&gt;对 Array 使用:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; = {&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;}
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;]
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;undefined&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// return:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// a
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// b
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// return:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 0
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 1
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// return:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// undefined
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Error:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Uncaught TypeError: a[Symbol.iterator] is not a function
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// return:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// a
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// b
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt;) {
+  &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;i&amp;#39;&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Error:
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Uncaught TypeError: Cannot read property &amp;#39;Symbol(Symbol.iterator)&amp;#39; of undefined
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
   </channel>

@@ -17,12 +17,50 @@
       <pubDate>Thu, 07 Nov 2019 19:48:56 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/hexo-typora-github/</guid>
-      <description>Install Hexo Asset Image npm install https://github.com/CodeFalling/hexo-asset-image -save Configure Hexo 编辑 _config.yml, 设置 titlecase, 该功能使你在 hexo new &amp;quot;My New Post&amp;quot; 的时候创建的文件自动带上 -, 形如 My-New-Post:
-titlecase: true Create Post with Hexo 打开 _config.yml , 修改配置为 post_asset_folder: true
-使用 Hexo 创建 post:
-hexo new hexo-typora-github 这时 source/_posts 目录下会生成一个 hexo-typora-github.md 文件和一个 hexo-typora-github 目录, 这个目录就是图片的存放地址.
-需要注意的是, 这里需要使用 hexo-typora-github 这样的格式生成. 如果使用 hexo new &amp;quot;Hexo Typora Github&amp;quot;, 生成的图片目录名为 Hexo Typora Github, 无法和文件映射.
-Editing with Typora Typora 可以直接将图片复制到 .</description>
+      <description>&lt;h2 id=&#34;install-hexo-asset-image&#34;&gt;Install Hexo Asset Image&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;npm install https://github.com/CodeFalling/hexo-asset-image -save
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configure-hexo&#34;&gt;Configure Hexo&lt;/h2&gt;
+&lt;p&gt;编辑 &lt;code&gt;_config.yml&lt;/code&gt;, 设置 &lt;code&gt;titlecase&lt;/code&gt;, 该功能使你在 &lt;code&gt;hexo new &amp;quot;My New Post&amp;quot;&lt;/code&gt;  的时候创建的文件自动带上 &lt;code&gt;-&lt;/code&gt;, 形如 &lt;code&gt;My-New-Post&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;titlecase&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-post-with-hexo&#34;&gt;Create Post with Hexo&lt;/h2&gt;
+&lt;p&gt;打开 &lt;code&gt;_config.yml&lt;/code&gt; , 修改配置为 &lt;code&gt;post_asset_folder: true&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;使用 Hexo 创建 post:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo new hexo-typora-github
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这时 &lt;code&gt;source/_posts&lt;/code&gt; 目录下会生成一个 &lt;code&gt;hexo-typora-github.md&lt;/code&gt; 文件和一个 &lt;code&gt;hexo-typora-github&lt;/code&gt; 目录, 这个目录就是图片的存放地址.&lt;/p&gt;
+&lt;p&gt;需要注意的是, 这里需要使用 &lt;code&gt;hexo-typora-github&lt;/code&gt; 这样的格式生成. 如果使用 &lt;code&gt;hexo new &amp;quot;Hexo Typora Github&amp;quot;&lt;/code&gt;, 生成的图片目录名为 &lt;code&gt;Hexo Typora Github&lt;/code&gt;, 无法和文件映射.&lt;/p&gt;
+&lt;h2 id=&#34;editing-with-typora&#34;&gt;Editing with Typora&lt;/h2&gt;
+&lt;p&gt;Typora 可以直接将图片复制到 &lt;code&gt;.md&lt;/code&gt; 文档中, 但是如何和 Hexo 拉起服务的图片路径保持一致是一个问题.&lt;/p&gt;
+&lt;p&gt;使用 Typora 打开 &lt;code&gt;source/_posts&lt;/code&gt; 目录, 点击设置 -&amp;gt; 图片:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;修改图片存放目录为 &lt;code&gt;./${filename}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;勾选 &lt;code&gt;Use relative path if possible&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191107200154200.png&#34; alt=&#34;image-20191107200154200&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试截图, 使用 &lt;code&gt;Ctrl-v&lt;/code&gt; 粘贴到 Typora 中, 图片地址为: &lt;code&gt;![image-20191107200154200](hexo-typora-github/image-20191107200154200.png)&lt;/code&gt;. 符合预期, 图片可以正常显示了.&lt;/p&gt;
+&lt;h2 id=&#34;deploying-to-github&#34;&gt;Deploying to Github&lt;/h2&gt;
+&lt;p&gt;修改 &lt;code&gt;_config.yml&lt;/code&gt; 中的 &lt;code&gt;deploy&lt;/code&gt; 配置.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;deploy:
+  type: git
+  repo: https://github.com/jtr109/jtr109.github.io
+  branch: master 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;部署服务到 github:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo clean &amp;amp;&amp;amp; hexo deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;comment-feature&#34;&gt;Comment Feature&lt;/h2&gt;
+&lt;p&gt;我参考&lt;a href=&#34;https://www.jianshu.com/p/d68de067ea74&#34;&gt;这篇文章&lt;/a&gt;进行配置, 写得非常详细. 不多做赘述.&lt;/p&gt;
+&lt;h2 id=&#34;favicon&#34;&gt;Favicon&lt;/h2&gt;
+&lt;p&gt;Next theme 默认生成的 icon 比较朴素, 可以使用 &lt;a href=&#34;https://favicon.io/favicon-generator/&#34;&gt;favicon generator&lt;/a&gt; 生成自己的 favicon, 既可以享受定制化的乐趣, 也避免了版权纠纷.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击右上角 Download 下载到本地, 解压并复制到 &lt;code&gt;themes/next/source/images&lt;/code&gt; 下, 并修改 Next 的配置文件 &lt;code&gt;nvim themes/next/_config.yml&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;favicon&lt;/span&gt;:
+  &lt;span style=&#34;color:#859900&#34;&gt;small&lt;/span&gt;: /images/favicon-16x16-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;medium&lt;/span&gt;: /images/favicon-32x32-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;apple_touch_icon&lt;/span&gt;: /images/apple-touch-icon-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;safari_pinned_tab&lt;/span&gt;: /images/logo.svg
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#android_manifest: /images/manifest.json&lt;/span&gt;
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#ms_browserconfig: /images/browserconfig.xml&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;添加分类&#34;&gt;添加分类&lt;/h2&gt;
+&lt;p&gt;添加分类可以帮助我们管理自己的文章, 使用方式可参考&lt;a href=&#34;https://whx4j8.github.io/2016/03/16/hexo-next-%E6%B7%BB%E5%8A%A0%E4%B8%BA%E6%96%87%E7%AB%A0%E6%B7%BB%E5%8A%A0%E5%88%86%E7%B1%BB/&#34;&gt;这篇博客文章&lt;/a&gt;.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -31,16 +69,43 @@ Editing with Typora Typora 可以直接将图片复制到 .</description>
       <pubDate>Fri, 11 Aug 2017 07:41:21 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/hexo-da-jian-bi-ji/</guid>
-      <description>项目搭建 项目搭建可以参考这篇 limedroid 的Hexo 博客搭建指南.
-提供一条 bash one line:
-$ hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 上面的代码可以快捷地拉起项目服务器.
-语言设置 如果你和我一样按照上面的文章配置了 Hexo, 你会发现自己的时间文字显示为德语 &amp;ldquo;Veröffentlicht am&amp;rdquo;.
-这是由于默认配置的语言不符. 首先确认 theme/next/languages/ 目录下有 zh-Hans.yml 文件, 另外我们需要将 _config.yml 中配置语言:
-language: zh-Hans 需要注意, 修改好配置文件后请使用 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 重新编译后再查看效果.
-参考:
- 使用Hexo踩坑小记 (文章中还有其他使用技巧, 值得学习.)  关于文章更新 通常如果只是修改文章内容, 可以保持 hexo server 出于运行状态, 修改的内容会自动更新到我们本地的 localhost:4000 页面上. 不过在提交文章之前, 请务必再使用 hexo g 重新编译.
-同样提供一条代码:
-$ hexo g &amp;amp;&amp;amp; hexo d 编译报错 在执行 hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s 时遇到过这样一个问题:</description>
+      <description>&lt;h2 id=&#34;项目搭建&#34;&gt;项目搭建&lt;/h2&gt;
+&lt;p&gt;项目搭建可以参考这篇 limedroid 的&lt;a href=&#34;https://github.com/limedroid/HexoLearning&#34;&gt;Hexo 博客搭建指南&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;提供一条 bash one line:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上面的代码可以快捷地拉起项目服务器.&lt;/p&gt;
+&lt;h2 id=&#34;语言设置&#34;&gt;语言设置&lt;/h2&gt;
+&lt;p&gt;如果你和我一样按照上面的文章配置了 Hexo, 你会发现自己的时间文字显示为德语 &amp;ldquo;Veröffentlicht am&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;这是由于默认配置的语言不符. 首先确认 &lt;code&gt;theme/next/languages/&lt;/code&gt; 目录下有 &lt;code&gt;zh-Hans.yml&lt;/code&gt; 文件, 另外我们需要将 &lt;code&gt;_config.yml&lt;/code&gt; 中配置语言:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;language: zh-Hans
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;需要注意, 修改好配置文件后请使用 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 重新编译后再查看效果.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;参考:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://supermaryy.com/2016/07/02/Obstacles_I_Met_When_Using_Hexo/&#34;&gt;使用Hexo踩坑小记&lt;/a&gt; (文章中还有其他使用技巧, 值得学习.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;关于文章更新&#34;&gt;关于文章更新&lt;/h2&gt;
+&lt;p&gt;通常如果只是修改文章内容, 可以保持 hexo server 出于运行状态, 修改的内容会自动更新到我们本地的 &lt;code&gt;localhost:4000&lt;/code&gt; 页面上. 不过在提交文章之前, 请务必再使用 &lt;code&gt;hexo g&lt;/code&gt; 重新编译.&lt;/p&gt;
+&lt;p&gt;同样提供一条代码:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ hexo g &amp;amp;&amp;amp; hexo d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;编译报错&#34;&gt;编译报错&lt;/h2&gt;
+&lt;p&gt;在执行 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 时遇到过这样一个问题:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;Error: Module version mismatch. Excepted 48, got 51.
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;具体原因不详, 有说法是由于 node 更新导致版本不一致导致的. 下面提供几种处理方式, 或许能解决问题.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;rm-rf node_modules &amp;amp;&amp;amp; npm install --no-optional&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;npm rebuild hexo&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;npm uninstall hexo-cli -g &amp;amp;&amp;amp; npm install hexo-cli  -g&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;参考&#34;&gt;参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;基本所有解决方式都可以在&lt;a href=&#34;https://github.com/hexojs/hexo/issues/1939&#34;&gt;官方 issue&lt;/a&gt; 中找到解答.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;页面请求极慢情况&#34;&gt;页面请求极慢情况&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;hexo s&lt;/code&gt; 在本地跑项目的时候, 发现主页加载极慢, 即使加载成功, 进入新的页面也加载极慢.&lt;/p&gt;
+&lt;p&gt;按理说本地请求静态文件是不可能有如此大的延迟的. 查看请求可以发现有一个对 fonts.googleapis.com 的请求, 经过了解, 发现这个请求是我们的 next theme 去请求的字体.&lt;/p&gt;
+&lt;p&gt;由于众所周知的原因, 这个网址是不存在的. 所以我们需要指定正确的 font resource. 这里我选择了&lt;a href=&#34;https://lug.ustc.edu.cn/wiki/lug/services/googlefonts#%E4%BD%BF%E7%94%A8&#34;&gt;中科大的镜像&lt;/a&gt; 经过尝试, 可以秒开主页.&lt;/p&gt;
+</description>
     </item>
     
   </channel>
