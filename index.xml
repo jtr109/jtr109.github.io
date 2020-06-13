@@ -6,10 +6,29 @@
     <description>Recent content on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 10 Jun 2020 14:54:41 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2020 12:02:11 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>在博客或文档中使用 Ruby Tag 实现注解效果</title>
+      <link>https://jtr109.github.io/posts/using-ruby-tag-both-in-typora-and-hugo/</link>
+      <pubDate>Sat, 13 Jun 2020 12:02:11 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/using-ruby-tag-both-in-typora-and-hugo/</guid>
+      <description>背景 在博客或文档中，我们有时候会希望对自己的文字做注解。例如为一个专业术语加上标注，便于读者理解：
+ We are about to study the idea of a computational process.
+ 我们会翻译为：
+ 我们将要学习计算过程的概念。
+ 如果我们想要引述原文来增加准确性，一个简单的做法是在后面加上括号：
+ 我们将要学习计算过程 (computational process) 的概念。
+ 有没有更好的方法呢？
+使用 HTML 元素 Ruby Tag 在 HTML 中，我们可以使用 Ruby Tag 来实现这个需求。
+Ruby Tag 概述 这里简单解释一下 ruby tag 的整体结构：
+&amp;lt;ruby&amp;gt; 计算过程 &amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt; &amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt; &amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt; &amp;lt;/ruby&amp;gt; &amp;lt;ruby&amp;gt; 中的元素主要分为几部分：
+ 主体，即示例中的「计算过程」。这部分是正常显示在段落中的内容，其格式继承自 &amp;lt;ruby&amp;gt; 外部的格式。 &amp;lt;rp&amp;gt; 用来包裹括号。这是为了兼容性，在不支持 &amp;lt;ruby&amp;gt; 的浏览器中显示为「计算过程（computational process）」 &amp;lt;rt&amp;gt; 用来包裹注释信息，注释会以小字形式显示在主体内容的上方。  实践示例 我们将要学习&amp;lt;ruby&amp;gt;计算过程&amp;lt;rp&amp;gt;（&amp;lt;/rp&amp;gt;&amp;lt;rt&amp;gt;computational process&amp;lt;/rt&amp;gt;&amp;lt;rp&amp;gt;）&amp;lt;/rp&amp;gt;&amp;lt;/ruby&amp;gt;的概念。 实现的效果如下：</description>
+    </item>
     
     <item>
       <title>在 Python 中使用 RSA 2048</title>
