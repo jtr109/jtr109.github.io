@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jtr109.github.io/tags/blog/</loc>
+    <lastmod>2020-06-13T12:02:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/blog-experimental-reports/</loc>
+    <lastmod>2020-06-13T12:02:11+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jtr109.github.io/categories/</loc>
     <lastmod>2020-06-13T12:02:11+08:00</lastmod>
   </url>
@@ -19,6 +29,11 @@
   
   <url>
     <loc>https://jtr109.github.io/posts/</loc>
+    <lastmod>2020-06-13T12:02:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/</loc>
     <lastmod>2020-06-13T12:02:11+08:00</lastmod>
   </url>
   
@@ -70,11 +85,6 @@
   <url>
     <loc>https://jtr109.github.io/posts/time-zone-between-systems/</loc>
     <lastmod>2020-06-09T12:03:19+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/blog/</loc>
-    <lastmod>2020-06-07T19:48:37+08:00</lastmod>
   </url>
   
   <url>
