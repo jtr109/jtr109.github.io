@@ -6,10 +6,29 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2020 10:41:57 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Reading Friendly RSS Config in Hugo</title>
+      <link>https://jtr109.github.io/posts/reading-friendly-rss-config-in-hugo/</link>
+      <pubDate>Sun, 14 Jun 2020 10:41:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/reading-friendly-rss-config-in-hugo/</guid>
+      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; has RSS support by default. But the implementation is not friendly for reading in RSS subscriber. If we open &lt;a href=&#34;https://jtr109.github.io/index.xml&#34;&gt;the RSS page&lt;/a&gt; we will see that the content in &lt;code&gt;&amp;lt;description&amp;gt;&lt;/code&gt; are summary with plaintext.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/reading-friendly-rss-config-in-hugo.assets/image-20200614105452252.png&#34; alt=&#34;summary-without-html-tags&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;If we want to show &lt;em&gt;full content&lt;/em&gt; in our RSS pages, we need to override &lt;a href=&#34;https://gohugo.io/templates/rss/#the-embedded-rssxml&#34;&gt;the RSS template&lt;/a&gt;. Copy &lt;a href=&#34;https://github.com/gohugoio/hugo/blob/master/tpl/tplimpl/embedded/templates/_default/rss.xml&#34;&gt;the default rss template&lt;/a&gt; and save it in the local file &lt;code&gt;layouts/_default/rss.xml&lt;/code&gt;. Then, find out the &lt;a href=&#34;https://github.com/gohugoio/hugo/blob/master/tpl/tplimpl/embedded/templates/_default/rss.xml#L35&#34;&gt;&lt;code&gt;.Summary&lt;/code&gt; in &lt;code&gt;&amp;lt;description&amp;gt;&lt;/code&gt;&lt;/a&gt; and replace it into &lt;code&gt;.Content&lt;/code&gt;. &lt;a href=&#34;https://jtr109.github.io/index.xml&#34;&gt;The RSS page&lt;/a&gt; shows full content in description with HTML style.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/reading-friendly-rss-config-in-hugo.assets/image-20200614110430952.png&#34; alt=&#34;image-20200614110430952&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://yongfu.name/2018/12/13/hugo_rss.html&#34;&gt;https://yongfu.name/2018/12/13/hugo_rss.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>VSCode 字体配置</title>

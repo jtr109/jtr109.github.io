@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>blog on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/blog/</link>
-    <description>Recent content in blog on jtr109&#39;s Castle</description>
+    <title>Blog Notes on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/series/blog-notes/</link>
+    <description>Recent content in Blog Notes on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 14 Jun 2020 10:41:57 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://jtr109.github.io/series/blog-notes/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -144,6 +144,58 @@
 &lt;li&gt;&lt;a href=&#34;https://blog.dianduidian.com/post/%E4%BD%BF%E7%94%A8hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/&#34;&gt;使用hugo搭建博客系统&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://support.typora.io/Images/&#34;&gt;Images in Typora&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Post Blog with Hexo with Next</title>
+      <link>https://jtr109.github.io/posts/hexo-typora-github/</link>
+      <pubDate>Thu, 07 Nov 2019 19:48:56 +0000</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/hexo-typora-github/</guid>
+      <description>&lt;h2 id=&#34;install-hexo-asset-image&#34;&gt;Install Hexo Asset Image&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;npm install https://github.com/CodeFalling/hexo-asset-image -save
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configure-hexo&#34;&gt;Configure Hexo&lt;/h2&gt;
+&lt;p&gt;编辑 &lt;code&gt;_config.yml&lt;/code&gt;, 设置 &lt;code&gt;titlecase&lt;/code&gt;, 该功能使你在 &lt;code&gt;hexo new &amp;quot;My New Post&amp;quot;&lt;/code&gt;  的时候创建的文件自动带上 &lt;code&gt;-&lt;/code&gt;, 形如 &lt;code&gt;My-New-Post&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;titlecase&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-post-with-hexo&#34;&gt;Create Post with Hexo&lt;/h2&gt;
+&lt;p&gt;打开 &lt;code&gt;_config.yml&lt;/code&gt; , 修改配置为 &lt;code&gt;post_asset_folder: true&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;使用 Hexo 创建 post:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo new hexo-typora-github
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这时 &lt;code&gt;source/_posts&lt;/code&gt; 目录下会生成一个 &lt;code&gt;hexo-typora-github.md&lt;/code&gt; 文件和一个 &lt;code&gt;hexo-typora-github&lt;/code&gt; 目录, 这个目录就是图片的存放地址.&lt;/p&gt;
+&lt;p&gt;需要注意的是, 这里需要使用 &lt;code&gt;hexo-typora-github&lt;/code&gt; 这样的格式生成. 如果使用 &lt;code&gt;hexo new &amp;quot;Hexo Typora Github&amp;quot;&lt;/code&gt;, 生成的图片目录名为 &lt;code&gt;Hexo Typora Github&lt;/code&gt;, 无法和文件映射.&lt;/p&gt;
+&lt;h2 id=&#34;editing-with-typora&#34;&gt;Editing with Typora&lt;/h2&gt;
+&lt;p&gt;Typora 可以直接将图片复制到 &lt;code&gt;.md&lt;/code&gt; 文档中, 但是如何和 Hexo 拉起服务的图片路径保持一致是一个问题.&lt;/p&gt;
+&lt;p&gt;使用 Typora 打开 &lt;code&gt;source/_posts&lt;/code&gt; 目录, 点击设置 -&amp;gt; 图片:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;修改图片存放目录为 &lt;code&gt;./${filename}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;勾选 &lt;code&gt;Use relative path if possible&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191107200154200.png&#34; alt=&#34;image-20191107200154200&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尝试截图, 使用 &lt;code&gt;Ctrl-v&lt;/code&gt; 粘贴到 Typora 中, 图片地址为: &lt;code&gt;![image-20191107200154200](hexo-typora-github/image-20191107200154200.png)&lt;/code&gt;. 符合预期, 图片可以正常显示了.&lt;/p&gt;
+&lt;h2 id=&#34;deploying-to-github&#34;&gt;Deploying to Github&lt;/h2&gt;
+&lt;p&gt;修改 &lt;code&gt;_config.yml&lt;/code&gt; 中的 &lt;code&gt;deploy&lt;/code&gt; 配置.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;deploy:
+  type: git
+  repo: https://github.com/jtr109/jtr109.github.io
+  branch: master 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;部署服务到 github:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo clean &amp;amp;&amp;amp; hexo deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;comment-feature&#34;&gt;Comment Feature&lt;/h2&gt;
+&lt;p&gt;我参考&lt;a href=&#34;https://www.jianshu.com/p/d68de067ea74&#34;&gt;这篇文章&lt;/a&gt;进行配置, 写得非常详细. 不多做赘述.&lt;/p&gt;
+&lt;h2 id=&#34;favicon&#34;&gt;Favicon&lt;/h2&gt;
+&lt;p&gt;Next theme 默认生成的 icon 比较朴素, 可以使用 &lt;a href=&#34;https://favicon.io/favicon-generator/&#34;&gt;favicon generator&lt;/a&gt; 生成自己的 favicon, 既可以享受定制化的乐趣, 也避免了版权纠纷.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击右上角 Download 下载到本地, 解压并复制到 &lt;code&gt;themes/next/source/images&lt;/code&gt; 下, 并修改 Next 的配置文件 &lt;code&gt;nvim themes/next/_config.yml&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;favicon&lt;/span&gt;:
+  &lt;span style=&#34;color:#859900&#34;&gt;small&lt;/span&gt;: /images/favicon-16x16-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;medium&lt;/span&gt;: /images/favicon-32x32-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;apple_touch_icon&lt;/span&gt;: /images/apple-touch-icon-next.png
+  &lt;span style=&#34;color:#859900&#34;&gt;safari_pinned_tab&lt;/span&gt;: /images/logo.svg
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#android_manifest: /images/manifest.json&lt;/span&gt;
+  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#ms_browserconfig: /images/browserconfig.xml&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;添加分类&#34;&gt;添加分类&lt;/h2&gt;
+&lt;p&gt;添加分类可以帮助我们管理自己的文章, 使用方式可参考&lt;a href=&#34;https://whx4j8.github.io/2016/03/16/hexo-next-%E6%B7%BB%E5%8A%A0%E4%B8%BA%E6%96%87%E7%AB%A0%E6%B7%BB%E5%8A%A0%E5%88%86%E7%B1%BB/&#34;&gt;这篇博客文章&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

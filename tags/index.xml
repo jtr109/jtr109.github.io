@@ -6,10 +6,37 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2020 10:41:57 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>blog</title>
+      <link>https://jtr109.github.io/tags/blog/</link>
+      <pubDate>Sun, 14 Jun 2020 10:41:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hugo</title>
+      <link>https://jtr109.github.io/tags/hugo/</link>
+      <pubDate>Sun, 14 Jun 2020 10:41:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RSS</title>
+      <link>https://jtr109.github.io/tags/rss/</link>
+      <pubDate>Sun, 14 Jun 2020 10:41:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/rss/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>editor</title>
@@ -35,15 +62,6 @@
       <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/vscode/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>blog</title>
-      <link>https://jtr109.github.io/tags/blog/</link>
-      <pubDate>Sat, 13 Jun 2020 20:28:42 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/blog/</guid>
       <description></description>
     </item>
     
@@ -107,15 +125,6 @@
       <pubDate>Tue, 09 Jun 2020 12:03:19 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/time-zone/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hugo</title>
-      <link>https://jtr109.github.io/tags/hugo/</link>
-      <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/hugo/</guid>
       <description></description>
     </item>
     
@@ -377,15 +386,6 @@
       <pubDate>Thu, 13 Jun 2019 23:24:57 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/file/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>RSS</title>
-      <link>https://jtr109.github.io/tags/rss/</link>
-      <pubDate>Thu, 13 Jun 2019 23:24:57 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/rss/</guid>
       <description></description>
     </item>
     
