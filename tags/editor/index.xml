@@ -17,8 +17,7 @@
       <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/vscode-font-configuration/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
-&lt;p&gt;在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。&lt;/p&gt;
+      <description>&lt;p&gt;在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。今天就让我们一起&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34; alt=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图片来自 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple&#34;&gt;Shades of Purple&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;实践&#34;&gt;实践&lt;/h2&gt;
