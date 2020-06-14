@@ -375,5 +375,177 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
 </description>
     </item>
     
+    <item>
+      <title>记 Rust 中 Err 实际类型的查找</title>
+      <link>https://jtr109.github.io/posts/rust-error-type/</link>
+      <pubDate>Thu, 22 Aug 2019 14:33:24 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-error-type/</guid>
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result.html#using-result-in-main&#34;&gt;Result - Rust By Example&lt;/a&gt;中有一个示例如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;std&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;num&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number_str&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;10&amp;#34;&lt;/span&gt;;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number_str&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;::&amp;lt;&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;&amp;gt;() {
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;)  =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;,
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;),
+    };
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;);
+    &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里有一个问题没有明确解释: 没有足够的信息, 怎么就确认 &lt;code&gt;parse&lt;/code&gt; 返回的 &lt;code&gt;Err&lt;/code&gt; 是 &lt;code&gt;ParseIntError&lt;/code&gt; 类型了?&lt;/p&gt;
+&lt;h2 id=&#34;拨开迷雾&#34;&gt;拨开迷雾&lt;/h2&gt;
+&lt;p&gt;所幸在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result/result_map.html&#34;&gt;下一个章节&lt;/a&gt;有这么一句话:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We first need to know what kind of error type we are dealing with. To determine the &lt;code&gt;Err&lt;/code&gt; type, we look to  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;&lt;code&gt;parse()&lt;/code&gt;&lt;/a&gt; , which is implemented with the  &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt;&lt;/a&gt;  trait for  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.i32.html&#34;&gt;&lt;code&gt;i32&lt;/code&gt;&lt;/a&gt; . As a result, the &lt;code&gt;Err&lt;/code&gt; type is specified as  &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;&lt;code&gt;ParseIntError&lt;/code&gt;&lt;/a&gt; .&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;那我们就顺着这个线索好好梳理一下这个类型是如何确认的.&lt;/p&gt;
+&lt;h2 id=&#34;寻根溯源&#34;&gt;寻根溯源&lt;/h2&gt;
+&lt;h3 id=&#34;parse-方法分析&#34;&gt;&lt;code&gt;parse&lt;/code&gt; 方法分析&lt;/h3&gt;
+&lt;p&gt;这里很容易确认 &lt;code&gt;number_str&lt;/code&gt; 是一个 &lt;code&gt;str&lt;/code&gt; 类型. 那我们需要查找的就是 &lt;code&gt;str.parse&lt;/code&gt; 这个方法的&lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;文档&lt;/a&gt;, 定义如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;&amp;gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FromStr&lt;/span&gt;,
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到 &lt;code&gt;Err&lt;/code&gt; 的类型为 &lt;code&gt;&amp;lt;F as FromStr&amp;gt;::Err&lt;/code&gt;. 那我们知道答案一定在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;std::str::FromStr&lt;/a&gt;下.&lt;/p&gt;
+&lt;p&gt;不过先别急, 我们看看 &lt;code&gt;parse&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/src/core/str/mod.rs.html#3923-3925&#34;&gt;源码&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FromStr&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到非常简单, 我们可以确定这个 &lt;code&gt;Err&lt;/code&gt; 就是来自 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;FromStr::from_str&lt;/a&gt; 的返回.&lt;/p&gt;
+&lt;p&gt;最后让我们再留意一下 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 这个用法. 文档中是这样解释的:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As such, &lt;code&gt;parse&lt;/code&gt; is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt;. This helps the inference algorithm understand specifically which type you’re trying to parse into.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;可以了解到, 如果需要将 &lt;code&gt;str&lt;/code&gt; 解析成什么类型, 就在 &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt; 中填写什么类型. 以上文为例, 就是 &lt;code&gt;i32&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;fromstr-分析&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt; 分析&lt;/h3&gt;
+&lt;p&gt;让我们仔细阅读一下 &lt;code&gt;std::str::FromStr&lt;/code&gt; 这个 method 在&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;文档&lt;/a&gt;中的一段描述:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If parsing succeeds, return the value inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Ok&#34;&gt;&lt;code&gt;Ok&lt;/code&gt;&lt;/a&gt; , otherwise when the string is ill-formatted return an error specific to the inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Err&#34;&gt;Err&lt;/a&gt; . The error type is specific to implementation of the trait.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;重点是&lt;strong&gt;The error type is specific to implementation of the trait&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;那我们就试着在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#implementors&#34;&gt;Implementors&lt;/a&gt; 里找实现对应的实现, 即 &lt;code&gt;impl FromStr for i32&lt;/code&gt;. 那在这个 [implementor]([std::str::FromStr - &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&lt;/a&gt;) 中, 对应的 &lt;code&gt;Err&lt;/code&gt; 就很容易找到了:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;让我们再简单梳理一下:&lt;/p&gt;
+&lt;p&gt;首先我们需要匹配 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 的结果, 如果是 &lt;code&gt;Err&lt;/code&gt; 需要作为 &lt;code&gt;main&lt;/code&gt; 函数的结果返回 (&lt;code&gt;main&lt;/code&gt; 函数不是重点).&lt;/p&gt;
+&lt;p&gt;我们从 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;parse&lt;/a&gt; 的返回中找到返回值来自方法 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;from_str&lt;/a&gt; 的调用. 根据其实现方式, 找到 &lt;code&gt;i32&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;实现中&lt;/a&gt;定义了 &lt;code&gt;Err&lt;/code&gt; 的类型: &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;ParseIntError&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>use foo::bar::* 导致 mismatched types 报错</title>
+      <link>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</link>
+      <pubDate>Tue, 13 Aug 2019 11:13:09 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</guid>
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;今天跟着&lt;a href=&#34;https://dev.to/werner/practical-rust-web-development-api-rest-29g1&#34;&gt;文章&lt;/a&gt;学习的时候遇到一个问题. 我把这句导入语句&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;dsl&lt;/span&gt;::*;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;放在了顶部,  在下面定义了一个 method:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;impl&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Product&lt;/span&gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;Product&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;result&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;connection&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;establish_connection&lt;/span&gt;();
+
+        &lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;first&lt;/span&gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;connection&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;结果编译报错:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0308]: mismatched types
+  --&amp;gt; src/models/product.rs:17:17
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;17&lt;/span&gt; |     pub fn find(id: &amp;amp;i32) -&amp;gt; Result&amp;lt;Product, diesel::result::Error&amp;gt; {
+   |                 ^^ expected i32, found struct &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   |
+   = note: expected &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;i32&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+              found &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
+&lt;p&gt;原因出在 &lt;code&gt;use foo::bar::*&lt;/code&gt; 的时候, 编译器将 struct &lt;code&gt;id&lt;/code&gt; 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 &lt;code&gt;id&lt;/code&gt; 指的是一个 pattern. 所以报错.&lt;/p&gt;
+&lt;p&gt;举一个类似的例子:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;Foo&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) {}
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上例子中, 函数 &lt;code&gt;bar&lt;/code&gt; 里定义的 &lt;code&gt;Foo&lt;/code&gt; 被编译器认为是一个 pattern, 所以会提示 mismatched types.&lt;/p&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;p&gt;这里的主要原因是 &lt;code&gt;diesel&lt;/code&gt;  的变量名设计存在一些问题. 这里其实用 CamelCase 会更合适.&lt;/p&gt;
+&lt;p&gt;另外应该避免使用 &lt;code&gt;use foo::bar::*&lt;/code&gt; 这样的语法.&lt;/p&gt;
+&lt;p&gt;那如果不得不用的时候, 特别是针对 &lt;code&gt;diesel&lt;/code&gt; 使用的时候, 可以尽量考虑在函数内调用 &lt;code&gt;use&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>符合 Fn, FnMut and FnOnce 的闭包实现</title>
+      <link>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</link>
+      <pubDate>Wed, 24 Jul 2019 08:25:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</guid>
+      <description>&lt;p&gt;不同类型的闭包可以被指定为不同类型的 trait. 可参考rust by example 中的&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/fn/closures/input_parameters.html#as-input-parameters&#34;&gt;相关段落&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;StackOverflow 中的&lt;a href=&#34;https://stackoverflow.com/questions/30177395/when-does-a-closure-implement-fn-fnmut-and-fnonce&#34;&gt;回答&lt;/a&gt;更明白的解释了 &lt;code&gt;Fn&lt;/code&gt;, &lt;code&gt;FnMut&lt;/code&gt;, &lt;code&gt;FnOnce&lt;/code&gt; 的区别:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Fn&lt;/code&gt;: 是闭包的基本 Trait, 即闭包中仅有 reference ( &lt;code&gt;&amp;amp;self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnMut&lt;/code&gt;: 旨在强调传入的闭包中含有可 reference ( &lt;code&gt;&amp;amp;mut self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnOnce&lt;/code&gt;: 旨在强调传入的闭包中含有 moved 进来的变量 ( &lt;code&gt;self&lt;/code&gt;), 即意味着这个闭包只能被调用一次.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从 Rust By Example 中的例子可以看到一个符合 &lt;code&gt;FnOnce&lt;/code&gt; 的闭包的构建方法:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;goodbye&amp;#34;&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;to_owned&lt;/span&gt;();
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Capture 2 variables: `greeting` by reference and
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `farewell` by value.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diary&lt;/span&gt; = || {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `greeting` is by reference: requires `Fn`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;I said {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;greeting&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Mutation forces `farewell` to be captured by
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// mutable reference. Now requires `FnMut`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;!!!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Then I screamed {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Now I can sleep. zzzzz&amp;#34;&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Manually calling drop forces `farewell` to
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// be captured by value. Now requires `FnOnce`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;mem&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;drop&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是这个例子过于复杂, 一个最大的疑惑就是 &lt;code&gt;FnOnce&lt;/code&gt; 的实现是否真的那么复杂? 我该如何自己定义一个 &lt;code&gt;FnOnce&lt;/code&gt;闭包? 后来我发现其实非常简单, 只需要一个 &lt;code&gt;move&lt;/code&gt;. 下面是我对三种 trait 的简单定义已经实现:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Fn&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnMut&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnOnce&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;); &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 由于引入闭包的是 reference, 多次调用没有问题
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;, world!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;move&lt;/span&gt; || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt;);
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// apply_fn_once(c); // 由于显式地将闭包定义了 `move` 所以强制获取了 s3 的所有权, 多次调用会报错, 符合期待
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
   </channel>
 </rss>

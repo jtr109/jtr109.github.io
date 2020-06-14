@@ -20,5 +20,32 @@
       <description></description>
     </item>
     
+    <item>
+      <title>Rust Notes</title>
+      <link>https://jtr109.github.io/series/rust-notes/</link>
+      <pubDate>Thu, 22 Aug 2019 14:33:24 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/series/rust-notes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Vim Notes</title>
+      <link>https://jtr109.github.io/series/vim-notes/</link>
+      <pubDate>Wed, 31 Jul 2019 11:04:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/series/vim-notes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mac Notes</title>
+      <link>https://jtr109.github.io/series/mac-notes/</link>
+      <pubDate>Thu, 13 Jun 2019 10:03:50 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/series/mac-notes/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

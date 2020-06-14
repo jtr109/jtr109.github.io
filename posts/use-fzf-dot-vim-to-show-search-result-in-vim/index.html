@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Use fzf.vim to Show Search Result in Vim"/>
+<meta name="twitter:description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do."/>
+
+    <meta property="og:title" content="Use fzf.vim to Show Search Result in Vim" />
+<meta property="og:description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/" />
+<meta property="article:published_time" content="2019-07-31T11:04:57+08:00" />
+<meta property="article:modified_time" content="2019-07-31T11:04:57+08:00" />
+
+
+
+    
+      <base href="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/">
+    
+    <title>
+  Use fzf.vim to Show Search Result in Vim · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="colorscheme-auto"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Use fzf.vim to Show Search Result in Vim</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2019-07-31T11:04:57&#43;08:00'>
+                July 31, 2019
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              3-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/vim/">Vim</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/fzf/">fzf</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="why-fzfvim">Why fzf.vim</h2>
+<p>Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).</p>
+<p>The plugin <a href="https://github.com/junegunn/fzf.vim">fzf.vim</a> is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.</p>
+<h2 id="some-searching-tricks">Some Searching Tricks</h2>
+<p>You should spend some time on learning how to use fzf.vim smoothly if you have no experience of using<a href="https://www.yuque.com/jtr109/zima/tk6fdc/edit"> fzf</a>. Now, let me show you some tricks.</p>
+<h3 id="respecting-gitignore">Respecting <code>.gitignore</code> </h3>
+<h4 id="tldr">TL;DR</h4>
+<p>Add this line in your <code>.vimrc</code>:</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files&#39;</span>
+</code></pre></div><h4 id="here-is-why">Here Is Why</h4>
+<p>Let&rsquo;s say we have a rust project with <code>target</code> directory. When calling <code>:Files</code> we find all files even though those in the directory <code>target</code> which we expected ignored by specified in <code>.gitignore</code>.</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png" alt="image.png"></p>
+<p>Because the fzf does not understand the <code>.gitignore</code>. Let us reproduct it in command line with fzf.</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773516508-3e3d3a52-f971-4fe5-9523-0ab84d3d1324.png" alt="image.png"></p>
+<p>But don&rsquo;t be sad. We can config it to out purpose. Before that, we need a searching engine which respect <code>.gitignore</code>, such as <a href="https://www.yuque.com/jtr109/zima/tk6fdc/edit">the silver searcher</a> or <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>. Let&rsquo;s use ripgrep (called <code>rg</code> as usual) as an example.</p>
+<p>We can use the command <code>rg --files</code> to list all files without those ignored by <code>.gitignore</code>. And we can list them in fzf with <code>rg --files | fzf</code>.</p>
+<p>Now we just need to specify the fzf.vim use the command <code>rg --files</code> to search as default.</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files&#39;</span>
+</code></pre></div><p>Let&rsquo;s have a look at the result now.</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png" alt="image.png"></p>
+<h4 id="by-the-way">By The Way</h4>
+<p>If you perfer <code>ag</code>, try this:</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;ag -g &#34;&#34;&#39;</span>
+</code></pre></div><h2 id="tips-with-rg">Tips with <code>rg</code></h2>
+<p>If you use <code>rg</code> as default search engine in fzf, you will find all hidden files are excluded. You need to add <code>--hidden</code> to show them.</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files --hidden&#39;</span>
+</code></pre></div><p>And now, all hidden files which not ignored by <code>.gitignore</code> are shown. But wait a minute, all files in <code>.git</code> directory are shown too! Most of time, this is not our purpose. But only the way can solve it is adding <code>.git</code> into <code>.gitignore</code> directly. Please comment if you find a better way!</p>
+<h3 id="filter-by-content">Filter By Content</h3>
+<p>If we try to search content in your project with fzf using <code>:Rg</code>. The result will like below.</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png" alt="image.png"></p>
+<p>But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use <code>.</code> in your pattern. The characters before <code>.</code> will be known as a pattern for filename and as content pattern after <code>.</code>.</p>
+<p>Let&rsquo;s have a try which filter only with content, such as <code>.arg</code>.</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png" alt="image.png"></p>
+<p>What about <code>arg.</code> for only filename?</p>
+<p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png" alt="image.png"></p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405">https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405</a></li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+      <h3>See also in Vim Notes</h3>
+      <nav>
+        <ul>
+        
+        
+          
+        
+          
+            <li>
+              <a href="https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/">Toggling Searching Highlight in Vim</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://jtr109.github.io/posts/set-environment-variables-in-vim/">Set Environment Variables in Vim</a>
+            </li>
+          
+        
+        </ul>
+      </nav>
+    
+  
+</section>
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+    
+
+  </body>
+
+</html>

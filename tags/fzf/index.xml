@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>fzf on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/fzf/</link>
+    <description>Recent content in fzf on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 31 Jul 2019 11:04:57 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/fzf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Use fzf.vim to Show Search Result in Vim</title>
+      <link>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</link>
+      <pubDate>Wed, 31 Jul 2019 11:04:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</guid>
+      <description>&lt;h2 id=&#34;why-fzfvim&#34;&gt;Why fzf.vim&lt;/h2&gt;
+&lt;p&gt;Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).&lt;/p&gt;
+&lt;p&gt;The plugin &lt;a href=&#34;https://github.com/junegunn/fzf.vim&#34;&gt;fzf.vim&lt;/a&gt; is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.&lt;/p&gt;
+&lt;h2 id=&#34;some-searching-tricks&#34;&gt;Some Searching Tricks&lt;/h2&gt;
+&lt;p&gt;You should spend some time on learning how to use fzf.vim smoothly if you have no experience of using&lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt; fzf&lt;/a&gt;. Now, let me show you some tricks.&lt;/p&gt;
+&lt;h3 id=&#34;respecting-gitignore&#34;&gt;Respecting &lt;code&gt;.gitignore&lt;/code&gt; &lt;/h3&gt;
+&lt;h4 id=&#34;tldr&#34;&gt;TL;DR&lt;/h4&gt;
+&lt;p&gt;Add this line in your &lt;code&gt;.vimrc&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;here-is-why&#34;&gt;Here Is Why&lt;/h4&gt;
+&lt;p&gt;Let&amp;rsquo;s say we have a rust project with &lt;code&gt;target&lt;/code&gt; directory. When calling &lt;code&gt;:Files&lt;/code&gt; we find all files even though those in the directory &lt;code&gt;target&lt;/code&gt; which we expected ignored by specified in &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Because the fzf does not understand the &lt;code&gt;.gitignore&lt;/code&gt;. Let us reproduct it in command line with fzf.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773516508-3e3d3a52-f971-4fe5-9523-0ab84d3d1324.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;But don&amp;rsquo;t be sad. We can config it to out purpose. Before that, we need a searching engine which respect &lt;code&gt;.gitignore&lt;/code&gt;, such as &lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt;the silver searcher&lt;/a&gt; or &lt;a href=&#34;https://github.com/BurntSushi/ripgrep&#34;&gt;ripgrep&lt;/a&gt;. Let&amp;rsquo;s use ripgrep (called &lt;code&gt;rg&lt;/code&gt; as usual) as an example.&lt;/p&gt;
+&lt;p&gt;We can use the command &lt;code&gt;rg --files&lt;/code&gt; to list all files without those ignored by &lt;code&gt;.gitignore&lt;/code&gt;. And we can list them in fzf with &lt;code&gt;rg --files | fzf&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now we just need to specify the fzf.vim use the command &lt;code&gt;rg --files&lt;/code&gt; to search as default.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s have a look at the result now.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;by-the-way&#34;&gt;By The Way&lt;/h4&gt;
+&lt;p&gt;If you perfer &lt;code&gt;ag&lt;/code&gt;, try this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ag -g &amp;#34;&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tips-with-rg&#34;&gt;Tips with &lt;code&gt;rg&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;If you use &lt;code&gt;rg&lt;/code&gt; as default search engine in fzf, you will find all hidden files are excluded. You need to add &lt;code&gt;--hidden&lt;/code&gt; to show them.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files --hidden&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, all hidden files which not ignored by &lt;code&gt;.gitignore&lt;/code&gt; are shown. But wait a minute, all files in &lt;code&gt;.git&lt;/code&gt; directory are shown too! Most of time, this is not our purpose. But only the way can solve it is adding &lt;code&gt;.git&lt;/code&gt; into &lt;code&gt;.gitignore&lt;/code&gt; directly. Please comment if you find a better way!&lt;/p&gt;
+&lt;h3 id=&#34;filter-by-content&#34;&gt;Filter By Content&lt;/h3&gt;
+&lt;p&gt;If we try to search content in your project with fzf using &lt;code&gt;:Rg&lt;/code&gt;. The result will like below.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use &lt;code&gt;.&lt;/code&gt; in your pattern. The characters before &lt;code&gt;.&lt;/code&gt; will be known as a pattern for filename and as content pattern after &lt;code&gt;.&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s have a try which filter only with content, such as &lt;code&gt;.arg&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;What about &lt;code&gt;arg.&lt;/code&gt; for only filename?&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&#34;&gt;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -333,6 +333,66 @@
   </url>
   
   <url>
+    <loc>https://jtr109.github.io/tags/error/</loc>
+    <lastmod>2019-08-22T14:33:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/rust-notes/</loc>
+    <lastmod>2019-08-22T14:33:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/rust-error-type/</loc>
+    <lastmod>2019-08-22T14:33:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/module/</loc>
+    <lastmod>2019-08-13T11:13:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</loc>
+    <lastmod>2019-08-13T11:13:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/fzf/</loc>
+    <lastmod>2019-07-31T11:04:57+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</loc>
+    <lastmod>2019-07-31T11:04:57+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/vim-notes/</loc>
+    <lastmod>2019-07-31T11:04:57+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/closure/</loc>
+    <lastmod>2019-07-24T08:25:44+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</loc>
+    <lastmod>2019-07-24T08:25:44+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</loc>
+    <lastmod>2019-06-29T12:04:17+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/set-environment-variables-in-vim/</loc>
+    <lastmod>2019-06-29T11:54:22+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jtr109.github.io/posts/changing-timezone-in-docker/</loc>
     <lastmod>2019-06-17T11:40:44+08:00</lastmod>
   </url>
@@ -355,6 +415,21 @@
   <url>
     <loc>https://jtr109.github.io/tags/rss/</loc>
     <lastmod>2019-06-13T23:24:57+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</loc>
+    <lastmod>2019-06-13T10:03:50+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/mac-notes/</loc>
+    <lastmod>2019-06-13T10:03:50+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/macos/</loc>
+    <lastmod>2019-06-13T10:03:50+08:00</lastmod>
   </url>
   
   <url>

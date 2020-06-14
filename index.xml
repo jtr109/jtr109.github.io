@@ -1295,6 +1295,251 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
     </item>
     
     <item>
+      <title>记 Rust 中 Err 实际类型的查找</title>
+      <link>https://jtr109.github.io/posts/rust-error-type/</link>
+      <pubDate>Thu, 22 Aug 2019 14:33:24 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-error-type/</guid>
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result.html#using-result-in-main&#34;&gt;Result - Rust By Example&lt;/a&gt;中有一个示例如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;std&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;num&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number_str&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;10&amp;#34;&lt;/span&gt;;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number_str&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;::&amp;lt;&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;&amp;gt;() {
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;)  =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;,
+        &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;),
+    };
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;number&lt;/span&gt;);
+    &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里有一个问题没有明确解释: 没有足够的信息, 怎么就确认 &lt;code&gt;parse&lt;/code&gt; 返回的 &lt;code&gt;Err&lt;/code&gt; 是 &lt;code&gt;ParseIntError&lt;/code&gt; 类型了?&lt;/p&gt;
+&lt;h2 id=&#34;拨开迷雾&#34;&gt;拨开迷雾&lt;/h2&gt;
+&lt;p&gt;所幸在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result/result_map.html&#34;&gt;下一个章节&lt;/a&gt;有这么一句话:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We first need to know what kind of error type we are dealing with. To determine the &lt;code&gt;Err&lt;/code&gt; type, we look to  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;&lt;code&gt;parse()&lt;/code&gt;&lt;/a&gt; , which is implemented with the  &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt;&lt;/a&gt;  trait for  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.i32.html&#34;&gt;&lt;code&gt;i32&lt;/code&gt;&lt;/a&gt; . As a result, the &lt;code&gt;Err&lt;/code&gt; type is specified as  &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;&lt;code&gt;ParseIntError&lt;/code&gt;&lt;/a&gt; .&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;那我们就顺着这个线索好好梳理一下这个类型是如何确认的.&lt;/p&gt;
+&lt;h2 id=&#34;寻根溯源&#34;&gt;寻根溯源&lt;/h2&gt;
+&lt;h3 id=&#34;parse-方法分析&#34;&gt;&lt;code&gt;parse&lt;/code&gt; 方法分析&lt;/h3&gt;
+&lt;p&gt;这里很容易确认 &lt;code&gt;number_str&lt;/code&gt; 是一个 &lt;code&gt;str&lt;/code&gt; 类型. 那我们需要查找的就是 &lt;code&gt;str.parse&lt;/code&gt; 这个方法的&lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;文档&lt;/a&gt;, 定义如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;&amp;gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FromStr&lt;/span&gt;,
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到 &lt;code&gt;Err&lt;/code&gt; 的类型为 &lt;code&gt;&amp;lt;F as FromStr&amp;gt;::Err&lt;/code&gt;. 那我们知道答案一定在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;std::str::FromStr&lt;/a&gt;下.&lt;/p&gt;
+&lt;p&gt;不过先别急, 我们看看 &lt;code&gt;parse&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/src/core/str/mod.rs.html#3923-3925&#34;&gt;源码&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FromStr&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt; {
+    &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到非常简单, 我们可以确定这个 &lt;code&gt;Err&lt;/code&gt; 就是来自 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;FromStr::from_str&lt;/a&gt; 的返回.&lt;/p&gt;
+&lt;p&gt;最后让我们再留意一下 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 这个用法. 文档中是这样解释的:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As such, &lt;code&gt;parse&lt;/code&gt; is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt;. This helps the inference algorithm understand specifically which type you’re trying to parse into.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;可以了解到, 如果需要将 &lt;code&gt;str&lt;/code&gt; 解析成什么类型, 就在 &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt; 中填写什么类型. 以上文为例, 就是 &lt;code&gt;i32&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;fromstr-分析&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt; 分析&lt;/h3&gt;
+&lt;p&gt;让我们仔细阅读一下 &lt;code&gt;std::str::FromStr&lt;/code&gt; 这个 method 在&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;文档&lt;/a&gt;中的一段描述:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If parsing succeeds, return the value inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Ok&#34;&gt;&lt;code&gt;Ok&lt;/code&gt;&lt;/a&gt; , otherwise when the string is ill-formatted return an error specific to the inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Err&#34;&gt;Err&lt;/a&gt; . The error type is specific to implementation of the trait.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;重点是&lt;strong&gt;The error type is specific to implementation of the trait&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;那我们就试着在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#implementors&#34;&gt;Implementors&lt;/a&gt; 里找实现对应的实现, 即 &lt;code&gt;impl FromStr for i32&lt;/code&gt;. 那在这个 [implementor]([std::str::FromStr - &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&lt;/a&gt;) 中, 对应的 &lt;code&gt;Err&lt;/code&gt; 就很容易找到了:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;让我们再简单梳理一下:&lt;/p&gt;
+&lt;p&gt;首先我们需要匹配 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 的结果, 如果是 &lt;code&gt;Err&lt;/code&gt; 需要作为 &lt;code&gt;main&lt;/code&gt; 函数的结果返回 (&lt;code&gt;main&lt;/code&gt; 函数不是重点).&lt;/p&gt;
+&lt;p&gt;我们从 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;parse&lt;/a&gt; 的返回中找到返回值来自方法 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;from_str&lt;/a&gt; 的调用. 根据其实现方式, 找到 &lt;code&gt;i32&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;实现中&lt;/a&gt;定义了 &lt;code&gt;Err&lt;/code&gt; 的类型: &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;ParseIntError&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>use foo::bar::* 导致 mismatched types 报错</title>
+      <link>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</link>
+      <pubDate>Tue, 13 Aug 2019 11:13:09 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</guid>
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;今天跟着&lt;a href=&#34;https://dev.to/werner/practical-rust-web-development-api-rest-29g1&#34;&gt;文章&lt;/a&gt;学习的时候遇到一个问题. 我把这句导入语句&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;dsl&lt;/span&gt;::*;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;放在了顶部,  在下面定义了一个 method:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;impl&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Product&lt;/span&gt; {
+    &lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;Product&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;result&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
+        &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;connection&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;establish_connection&lt;/span&gt;();
+
+        &lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;table&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;id&lt;/span&gt;).&lt;span style=&#34;color:#268bd2&#34;&gt;first&lt;/span&gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;connection&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;结果编译报错:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0308]: mismatched types
+  --&amp;gt; src/models/product.rs:17:17
+   |
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;17&lt;/span&gt; |     pub fn find(id: &amp;amp;i32) -&amp;gt; Result&amp;lt;Product, diesel::result::Error&amp;gt; {
+   |                 ^^ expected i32, found struct &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+   |
+   = note: expected &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;i32&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+              found &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
+&lt;p&gt;原因出在 &lt;code&gt;use foo::bar::*&lt;/code&gt; 的时候, 编译器将 struct &lt;code&gt;id&lt;/code&gt; 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 &lt;code&gt;id&lt;/code&gt; 指的是一个 pattern. 所以报错.&lt;/p&gt;
+&lt;p&gt;举一个类似的例子:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;;
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;Foo&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;i32&lt;/span&gt;) {}
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上例子中, 函数 &lt;code&gt;bar&lt;/code&gt; 里定义的 &lt;code&gt;Foo&lt;/code&gt; 被编译器认为是一个 pattern, 所以会提示 mismatched types.&lt;/p&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;p&gt;这里的主要原因是 &lt;code&gt;diesel&lt;/code&gt;  的变量名设计存在一些问题. 这里其实用 CamelCase 会更合适.&lt;/p&gt;
+&lt;p&gt;另外应该避免使用 &lt;code&gt;use foo::bar::*&lt;/code&gt; 这样的语法.&lt;/p&gt;
+&lt;p&gt;那如果不得不用的时候, 特别是针对 &lt;code&gt;diesel&lt;/code&gt; 使用的时候, 可以尽量考虑在函数内调用 &lt;code&gt;use&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Use fzf.vim to Show Search Result in Vim</title>
+      <link>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</link>
+      <pubDate>Wed, 31 Jul 2019 11:04:57 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</guid>
+      <description>&lt;h2 id=&#34;why-fzfvim&#34;&gt;Why fzf.vim&lt;/h2&gt;
+&lt;p&gt;Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).&lt;/p&gt;
+&lt;p&gt;The plugin &lt;a href=&#34;https://github.com/junegunn/fzf.vim&#34;&gt;fzf.vim&lt;/a&gt; is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.&lt;/p&gt;
+&lt;h2 id=&#34;some-searching-tricks&#34;&gt;Some Searching Tricks&lt;/h2&gt;
+&lt;p&gt;You should spend some time on learning how to use fzf.vim smoothly if you have no experience of using&lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt; fzf&lt;/a&gt;. Now, let me show you some tricks.&lt;/p&gt;
+&lt;h3 id=&#34;respecting-gitignore&#34;&gt;Respecting &lt;code&gt;.gitignore&lt;/code&gt; &lt;/h3&gt;
+&lt;h4 id=&#34;tldr&#34;&gt;TL;DR&lt;/h4&gt;
+&lt;p&gt;Add this line in your &lt;code&gt;.vimrc&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;here-is-why&#34;&gt;Here Is Why&lt;/h4&gt;
+&lt;p&gt;Let&amp;rsquo;s say we have a rust project with &lt;code&gt;target&lt;/code&gt; directory. When calling &lt;code&gt;:Files&lt;/code&gt; we find all files even though those in the directory &lt;code&gt;target&lt;/code&gt; which we expected ignored by specified in &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Because the fzf does not understand the &lt;code&gt;.gitignore&lt;/code&gt;. Let us reproduct it in command line with fzf.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773516508-3e3d3a52-f971-4fe5-9523-0ab84d3d1324.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;But don&amp;rsquo;t be sad. We can config it to out purpose. Before that, we need a searching engine which respect &lt;code&gt;.gitignore&lt;/code&gt;, such as &lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt;the silver searcher&lt;/a&gt; or &lt;a href=&#34;https://github.com/BurntSushi/ripgrep&#34;&gt;ripgrep&lt;/a&gt;. Let&amp;rsquo;s use ripgrep (called &lt;code&gt;rg&lt;/code&gt; as usual) as an example.&lt;/p&gt;
+&lt;p&gt;We can use the command &lt;code&gt;rg --files&lt;/code&gt; to list all files without those ignored by &lt;code&gt;.gitignore&lt;/code&gt;. And we can list them in fzf with &lt;code&gt;rg --files | fzf&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now we just need to specify the fzf.vim use the command &lt;code&gt;rg --files&lt;/code&gt; to search as default.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s have a look at the result now.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;by-the-way&#34;&gt;By The Way&lt;/h4&gt;
+&lt;p&gt;If you perfer &lt;code&gt;ag&lt;/code&gt;, try this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ag -g &amp;#34;&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tips-with-rg&#34;&gt;Tips with &lt;code&gt;rg&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;If you use &lt;code&gt;rg&lt;/code&gt; as default search engine in fzf, you will find all hidden files are excluded. You need to add &lt;code&gt;--hidden&lt;/code&gt; to show them.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files --hidden&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, all hidden files which not ignored by &lt;code&gt;.gitignore&lt;/code&gt; are shown. But wait a minute, all files in &lt;code&gt;.git&lt;/code&gt; directory are shown too! Most of time, this is not our purpose. But only the way can solve it is adding &lt;code&gt;.git&lt;/code&gt; into &lt;code&gt;.gitignore&lt;/code&gt; directly. Please comment if you find a better way!&lt;/p&gt;
+&lt;h3 id=&#34;filter-by-content&#34;&gt;Filter By Content&lt;/h3&gt;
+&lt;p&gt;If we try to search content in your project with fzf using &lt;code&gt;:Rg&lt;/code&gt;. The result will like below.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use &lt;code&gt;.&lt;/code&gt; in your pattern. The characters before &lt;code&gt;.&lt;/code&gt; will be known as a pattern for filename and as content pattern after &lt;code&gt;.&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s have a try which filter only with content, such as &lt;code&gt;.arg&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;What about &lt;code&gt;arg.&lt;/code&gt; for only filename?&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&#34;&gt;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>符合 Fn, FnMut and FnOnce 的闭包实现</title>
+      <link>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</link>
+      <pubDate>Wed, 24 Jul 2019 08:25:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</guid>
+      <description>&lt;p&gt;不同类型的闭包可以被指定为不同类型的 trait. 可参考rust by example 中的&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/fn/closures/input_parameters.html#as-input-parameters&#34;&gt;相关段落&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;StackOverflow 中的&lt;a href=&#34;https://stackoverflow.com/questions/30177395/when-does-a-closure-implement-fn-fnmut-and-fnonce&#34;&gt;回答&lt;/a&gt;更明白的解释了 &lt;code&gt;Fn&lt;/code&gt;, &lt;code&gt;FnMut&lt;/code&gt;, &lt;code&gt;FnOnce&lt;/code&gt; 的区别:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Fn&lt;/code&gt;: 是闭包的基本 Trait, 即闭包中仅有 reference ( &lt;code&gt;&amp;amp;self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnMut&lt;/code&gt;: 旨在强调传入的闭包中含有可 reference ( &lt;code&gt;&amp;amp;mut self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnOnce&lt;/code&gt;: 旨在强调传入的闭包中含有 moved 进来的变量 ( &lt;code&gt;self&lt;/code&gt;), 即意味着这个闭包只能被调用一次.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从 Rust By Example 中的例子可以看到一个符合 &lt;code&gt;FnOnce&lt;/code&gt; 的闭包的构建方法:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;goodbye&amp;#34;&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;to_owned&lt;/span&gt;();
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Capture 2 variables: `greeting` by reference and
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `farewell` by value.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diary&lt;/span&gt; = || {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `greeting` is by reference: requires `Fn`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;I said {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;greeting&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Mutation forces `farewell` to be captured by
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// mutable reference. Now requires `FnMut`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;!!!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Then I screamed {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Now I can sleep. zzzzz&amp;#34;&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Manually calling drop forces `farewell` to
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// be captured by value. Now requires `FnOnce`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;mem&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;drop&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是这个例子过于复杂, 一个最大的疑惑就是 &lt;code&gt;FnOnce&lt;/code&gt; 的实现是否真的那么复杂? 我该如何自己定义一个 &lt;code&gt;FnOnce&lt;/code&gt;闭包? 后来我发现其实非常简单, 只需要一个 &lt;code&gt;move&lt;/code&gt;. 下面是我对三种 trait 的简单定义已经实现:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Fn&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnMut&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnOnce&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;); &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 由于引入闭包的是 reference, 多次调用没有问题
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;, world!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;move&lt;/span&gt; || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt;);
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// apply_fn_once(c); // 由于显式地将闭包定义了 `move` 所以强制获取了 s3 的所有权, 多次调用会报错, 符合期待
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>Toggling Searching Highlight in Vim</title>
+      <link>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</link>
+      <pubDate>Sat, 29 Jun 2019 12:04:17 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</guid>
+      <description>&lt;h2 id=&#34;toggling-searching-highlight-in-vim&#34;&gt;Toggling Searching Highlight in Vim&lt;/h2&gt;
+&lt;p&gt;Some people disable highlight searching in Vim because it is bother about toggling between &lt;code&gt;:hl&lt;/code&gt; and &lt;code&gt;:nohl&lt;/code&gt;. Even though you can create a shortcut for it, don&amp;rsquo;t you want to do it automatically. Let&amp;rsquo;s imagine that we can highlight all matching results when search. After we moving our cursor, the highlight off automatically.&lt;/p&gt;
+&lt;p&gt;The plugin of &lt;a href=&#34;https://github.com/romainl/vim-cool&#34;&gt;vim-cool&lt;/a&gt;, is so cool just like its name, can help use make it come true!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;You should have a try!&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Set Environment Variables in Vim</title>
+      <link>https://jtr109.github.io/posts/set-environment-variables-in-vim/</link>
+      <pubDate>Sat, 29 Jun 2019 11:54:22 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/set-environment-variables-in-vim/</guid>
+      <description>&lt;p&gt;Sometimes, we want to set an environment variable in Vim without contaminating the environment variable in our system.&lt;/p&gt;
+&lt;p&gt;You can try setting it only in &lt;code&gt;.vimrc&lt;/code&gt; like below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
       <title>Changing Timezone in Docker</title>
       <link>https://jtr109.github.io/posts/changing-timezone-in-docker/</link>
       <pubDate>Mon, 17 Jun 2019 11:40:44 +0800</pubDate>
@@ -1358,6 +1603,24 @@ ENV TZ America/Los_Angeles
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/11650301/6522746&#34;&gt;This answer&lt;/a&gt; shows how to execute on all files.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/13180357/6522746&#34;&gt;This one&lt;/a&gt; asked how to type control characters in command line.&lt;/li&gt;
 &lt;li&gt;The comments of &lt;a href=&#34;https://stackoverflow.com/a/13180336/6522746&#34;&gt;this answer&lt;/a&gt; explain how to use &lt;code&gt;sed&lt;/code&gt; for replacing in Mac.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fix Tiny Icon in Mac Dock</title>
+      <link>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</link>
+      <pubDate>Thu, 13 Jun 2019 10:03:50 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</guid>
+      <description>&lt;h2 id=&#34;description&#34;&gt;Description&lt;/h2&gt;
+&lt;p&gt;Sometimes you will find an app opened but the icon is too small in the dock.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;You can try this command in your terminal.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;killall Dock
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://apple.stackexchange.com/questions/338881/there-is-a-tiny-icon-on-macos-dock-that-is-not-clickable&#34;&gt;https://apple.stackexchange.com/questions/338881/there-is-a-tiny-icon-on-macos-dock-that-is-not-clickable&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>

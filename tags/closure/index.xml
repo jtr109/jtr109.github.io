@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>closure on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/closure/</link>
+    <description>Recent content in closure on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Jul 2019 08:25:44 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/closure/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>符合 Fn, FnMut and FnOnce 的闭包实现</title>
+      <link>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</link>
+      <pubDate>Wed, 24 Jul 2019 08:25:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</guid>
+      <description>&lt;p&gt;不同类型的闭包可以被指定为不同类型的 trait. 可参考rust by example 中的&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/fn/closures/input_parameters.html#as-input-parameters&#34;&gt;相关段落&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;StackOverflow 中的&lt;a href=&#34;https://stackoverflow.com/questions/30177395/when-does-a-closure-implement-fn-fnmut-and-fnonce&#34;&gt;回答&lt;/a&gt;更明白的解释了 &lt;code&gt;Fn&lt;/code&gt;, &lt;code&gt;FnMut&lt;/code&gt;, &lt;code&gt;FnOnce&lt;/code&gt; 的区别:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Fn&lt;/code&gt;: 是闭包的基本 Trait, 即闭包中仅有 reference ( &lt;code&gt;&amp;amp;self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnMut&lt;/code&gt;: 旨在强调传入的闭包中含有可 reference ( &lt;code&gt;&amp;amp;mut self&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FnOnce&lt;/code&gt;: 旨在强调传入的闭包中含有 moved 进来的变量 ( &lt;code&gt;self&lt;/code&gt;), 即意味着这个闭包只能被调用一次.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从 Rust By Example 中的例子可以看到一个符合 &lt;code&gt;FnOnce&lt;/code&gt; 的闭包的构建方法:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;goodbye&amp;#34;&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;to_owned&lt;/span&gt;();
+
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Capture 2 variables: `greeting` by reference and
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `farewell` by value.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;diary&lt;/span&gt; = || {
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// `greeting` is by reference: requires `Fn`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;I said {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;greeting&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Mutation forces `farewell` to be captured by
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// mutable reference. Now requires `FnMut`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;!!!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Then I screamed {}.&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Now I can sleep. zzzzz&amp;#34;&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// Manually calling drop forces `farewell` to
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// be captured by value. Now requires `FnOnce`.
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#268bd2&#34;&gt;mem&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;drop&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;farewell&lt;/span&gt;);
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是这个例子过于复杂, 一个最大的疑惑就是 &lt;code&gt;FnOnce&lt;/code&gt; 的实现是否真的那么复杂? 我该如何自己定义一个 &lt;code&gt;FnOnce&lt;/code&gt;闭包? 后来我发现其实非常简单, 只需要一个 &lt;code&gt;move&lt;/code&gt;. 下面是我对三种 trait 的简单定义已经实现:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Fn&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnMut&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;F&lt;/span&gt;)
+&lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;FnOnce&lt;/span&gt;(),
+{
+    &lt;span style=&#34;color:#268bd2&#34;&gt;f&lt;/span&gt;();
+}
+
+&lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt;); &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 由于引入闭包的是 reference, 多次调用没有问题
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;mut&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt; = || &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push_str&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;, world!&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_mut&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;move&lt;/span&gt; || &lt;span style=&#34;color:#268bd2&#34;&gt;println&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;s3&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;apply_fn_once&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;c&lt;/span&gt;);
+    &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// apply_fn_once(c); // 由于显式地将闭包定义了 `move` 所以强制获取了 s3 的所有权, 多次调用会报错, 符合期待
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

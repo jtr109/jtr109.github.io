@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mac Notes on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/series/mac-notes/</link>
+    <description>Recent content in Mac Notes on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 13 Jun 2019 10:03:50 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/series/mac-notes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fix Tiny Icon in Mac Dock</title>
+      <link>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</link>
+      <pubDate>Thu, 13 Jun 2019 10:03:50 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</guid>
+      <description>&lt;h2 id=&#34;description&#34;&gt;Description&lt;/h2&gt;
+&lt;p&gt;Sometimes you will find an app opened but the icon is too small in the dock.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;You can try this command in your terminal.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;killall Dock
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://apple.stackexchange.com/questions/338881/there-is-a-tiny-icon-on-macos-dock-that-is-not-clickable&#34;&gt;https://apple.stackexchange.com/questions/338881/there-is-a-tiny-icon-on-macos-dock-that-is-not-clickable&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
