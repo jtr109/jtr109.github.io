@@ -6,10 +6,25 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 17 Jun 2020 15:35:25 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2020 19:13:42 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Generating SSH Key Pairs</title>
+      <link>https://jtr109.github.io/posts/generate-ssh-key/</link>
+      <pubDate>Wed, 17 Jun 2020 19:13:42 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/generate-ssh-key/</guid>
+      <description>&lt;p&gt;ED25519 is more secure and recommended to be used as SSH key pairs now. Let&amp;rsquo;s have a try:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;ssh-keygen -t ed25519 -C &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;lt;comment&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.gitlab.com/ee/ssh/README.html#generating-a-new-ssh-key-pair&#34;&gt;https://docs.gitlab.com/ee/ssh/README.html#generating-a-new-ssh-key-pair&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>How to Log in Rust</title>
