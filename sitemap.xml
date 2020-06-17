@@ -3,6 +3,56 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jtr109.github.io/categories/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/rust-log-level/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/log/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/rust/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/rust-notes/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/series/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/categories/tech/</loc>
+    <lastmod>2020-06-17T15:35:25+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jtr109.github.io/tags/blog/</loc>
     <lastmod>2020-06-14T10:41:57+08:00</lastmod>
   </url>
@@ -13,22 +63,7 @@
   </url>
   
   <url>
-    <loc>https://jtr109.github.io/categories/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://jtr109.github.io/tags/hugo/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/posts/</loc>
     <lastmod>2020-06-14T10:41:57+08:00</lastmod>
   </url>
   
@@ -39,21 +74,6 @@
   
   <url>
     <loc>https://jtr109.github.io/tags/rss/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/series/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/</loc>
-    <lastmod>2020-06-14T10:41:57+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/categories/tech/</loc>
     <lastmod>2020-06-14T10:41:57+08:00</lastmod>
   </url>
   
@@ -140,11 +160,6 @@
   <url>
     <loc>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</loc>
     <lastmod>2020-06-07T19:48:37+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/rust/</loc>
-    <lastmod>2020-01-07T23:45:24+00:00</lastmod>
   </url>
   
   <url>
@@ -344,11 +359,6 @@
   
   <url>
     <loc>https://jtr109.github.io/tags/error/</loc>
-    <lastmod>2019-08-22T14:33:24+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/series/rust-notes/</loc>
     <lastmod>2019-08-22T14:33:24+08:00</lastmod>
   </url>
   
