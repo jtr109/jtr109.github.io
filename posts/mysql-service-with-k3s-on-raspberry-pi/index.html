@@ -245,7 +245,8 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
               <span style="color:#859900">name</span>: mysql-data-storage
 </code></pre></div><h3 id="expose-the-service">Expose the Service</h3>
 <p>After the deployment applied and the pod is running. The MySQL service is not exposed to the node. We need to create a Service to listen the port on node.</p>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#859900">apiVersion</span>: v1
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># service.yaml</span>
+<span style="color:#859900">apiVersion</span>: v1
 <span style="color:#859900">kind</span>: Service
 <span style="color:#859900">metadata</span>:
   <span style="color:#859900">name</span>: mysql-service
