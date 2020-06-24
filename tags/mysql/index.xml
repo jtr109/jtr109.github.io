@@ -136,7 +136,6 @@
 &lt;p&gt;Now, you can connet to your new database with a MySQL client.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mysql -P &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt; -h &amp;lt;raspberry-pi-host&amp;gt; -u root -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;All done!&lt;/p&gt;
-&lt;hr&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
