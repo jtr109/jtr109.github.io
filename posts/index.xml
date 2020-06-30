@@ -6,10 +6,118 @@
     <description>Recent content in Posts on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 24 Jun 2020 11:26:40 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2020 15:44:46 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>COPY Command in Dockerfile Keeps Contents in The Distened Folder</title>
+      <link>https://jtr109.github.io/posts/dockerfile-copy/</link>
+      <pubDate>Tue, 30 Jun 2020 15:44:46 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/dockerfile-copy/</guid>
+      <description>&lt;h2 id=&#34;problem-description&#34;&gt;Problem Description&lt;/h2&gt;
+&lt;p&gt;When I created configures and want to copy them into a docker image based on Nginx.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ tree conf.d
+conf.d
+└── custom.conf
+
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; directory, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;0&lt;/span&gt; files
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I wrote a dockerfile shown below and built with it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt; nginx&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;COPY&lt;/span&gt; src/conf.d /etc/nginx/conf.d
+&lt;span style=&#34;color:#859900&#34;&gt;RUN&lt;/span&gt; ls -l /etc/nginx/conf.d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I found the file &lt;code&gt;/etc/nginx/conf.d/default.conf&lt;/code&gt; which exists in the basic Nginx image was not removed in the built one.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ docker build --no-cache .
+Sending build context to Docker daemon  4.608kB
+Step 1/3 : FROM nginx
+ ---&amp;gt; 2622e6cca7eb
+Step 2/3 : COPY src/conf.d /etc/nginx/conf.d
+ ---&amp;gt; afb504ce8ba6
+Step 3/3 : RUN ls -l /etc/nginx/conf.d
+ ---&amp;gt; Running in 7aef205e795c
+total &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;8&lt;/span&gt;
+drwxr-xr-x &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4096&lt;/span&gt; Jun &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30&lt;/span&gt; 08:21 custom.conf
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1093&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:01 default.conf
+Removing intermediate container 7aef205e795c
+ ---&amp;gt; 604a79ae8a67
+Successfully built 604a79ae8a67
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;explaination&#34;&gt;Explaination&lt;/h2&gt;
+&lt;p&gt;The &lt;a href=&#34;https://docs.docker.com/engine/reference/builder/#copy&#34;&gt;document&lt;/a&gt; says:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The &lt;code&gt;COPY&lt;/code&gt; instruction copies new files or directories from &lt;code&gt;&amp;lt;src&amp;gt;&lt;/code&gt; and adds them to the filesystem of the container at the path &lt;code&gt;&amp;lt;dest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The &lt;code&gt;COPY&lt;/code&gt; command only copies all contents in the source directory but not the source directory itself.&lt;/p&gt;
+&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;The only way to resolve it is set the whole parent directory of &lt;code&gt;conf.d&lt;/code&gt; as the &lt;code&gt;&amp;lt;src&amp;gt;&lt;/code&gt; directory. The all contents except &lt;code&gt;conf.d&lt;/code&gt; will be kept.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;First, let us build our new configure stucture.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ tree src
+src
+└── conf.d
+    └── custom.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, change the dockerfile to show both &lt;code&gt;/etc/nginx&lt;/code&gt; and &lt;code&gt;/etc/nginx/conf.d&lt;/code&gt; directories.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt; nginx&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;COPY&lt;/span&gt; src/conf.d /etc/nginx/conf.d
+&lt;span style=&#34;color:#859900&#34;&gt;RUN&lt;/span&gt; ls -l /etc/nginx
+&lt;span style=&#34;color:#859900&#34;&gt;RUN&lt;/span&gt; ls -l /etc/nginx/conf.d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;When build it with the new dockerfile.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ docker build --no-cache .
+Sending build context to Docker daemon  3.584kB
+Step 1/4 : FROM nginx
+ ---&amp;gt; 2622e6cca7eb
+Step 2/4 : COPY src/conf.d /etc/nginx/conf.d
+ ---&amp;gt; 882c7992707f
+Step 3/4 : RUN ls -l /etc/nginx
+ ---&amp;gt; Running in d0bf8116ec8a
+total &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;40&lt;/span&gt;
+drwxr-xr-x &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4096&lt;/span&gt; Jun &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30&lt;/span&gt; 08:53 conf.d
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1007&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 fastcgi_params
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2837&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 koi-utf
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2223&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 koi-win
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;5231&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 mime.types
+lrwxrwxrwx &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root   &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;22&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:01 modules -&amp;gt; /usr/lib/nginx/modules
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root  &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;643&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:01 nginx.conf
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root  &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;636&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 scgi_params
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root  &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;664&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 uwsgi_params
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3610&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:00 win-utf
+Removing intermediate container d0bf8116ec8a
+ ---&amp;gt; 5626761ee0b8
+Step 4/4 : RUN ls -l /etc/nginx/conf.d
+ ---&amp;gt; Running in a6597815965f
+total &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;8&lt;/span&gt;
+drwxr-xr-x &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4096&lt;/span&gt; Jun &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30&lt;/span&gt; 08:50 custom.conf
+-rw-r--r-- &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1093&lt;/span&gt; May &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;26&lt;/span&gt; 15:01 default.conf
+Removing intermediate container a6597815965f
+ ---&amp;gt; c3034a1a51fc
+Successfully built c3034a1a51fc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can see all files in &lt;code&gt;/etc/nginx&lt;/code&gt; original is kept. And the directory &lt;code&gt;/etc/nginx/conf.d&lt;/code&gt; is totally be overwritten.&lt;/p&gt;
+&lt;p&gt;By the way, If we want, we can add a new configure file &lt;code&gt;src/nginx.conf&lt;/code&gt;. It will overwrite the &lt;code&gt;/etc/nginx/nginx.conf&lt;/code&gt; in new images too.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/engine/reference/builder/#copy&#34;&gt;Document of &lt;code&gt;COPY&lt;/code&gt; command in official site.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Practices not work for me:
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/32576340/6522746&#34;&gt;https://stackoverflow.com/a/32576340/6522746&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/30220096/6522746&#34;&gt;https://stackoverflow.com/a/30220096/6522746&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Full example which uses the bad practice &lt;a href=&#34;https://github.com/jtr109/blog-examples/tree/master/dockerfile-copy/bad-practice&#34;&gt;here&lt;/a&gt;. &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Full example which uses the good practice &lt;a href=&#34;https://github.com/jtr109/blog-examples/tree/master/dockerfile-copy/good-practice&#34;&gt;here&lt;/a&gt;. &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>Mysql Service With K3s on Raspberry Pi</title>
