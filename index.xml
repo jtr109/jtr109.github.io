@@ -6,10 +6,44 @@
     <description>Recent content on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 30 Jun 2020 15:44:46 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2020 11:34:13 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>字节计量单位探究</title>
+      <link>https://jtr109.github.io/posts/byte/</link>
+      <pubDate>Thu, 02 Jul 2020 11:34:13 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/byte/</guid>
+      <description>&lt;p&gt;在计算机使用过程中，我们会遇到困惑，有的时候我们使用 KB、GB 这样的十进制表示（如磁盘空间），有的时候我们又可以看到 KiB，GiB 这样的表示方式（如网络传输和 Kubernetes 配置）。&lt;/p&gt;
+&lt;h2 id=&#34;区别&#34;&gt;区别&lt;/h2&gt;
+&lt;p&gt;字节的表示方法分为两类，如 KB、MB、GB 这类为十进制表示法，而 KiB、MiB、GiB 这类则是二进制表示法。&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/byte.assets/image-20200702114319210.png&#34; alt=&#34;Wiki 中提供的对比图表&#34;&gt;&lt;/p&gt;
+&lt;p&gt;由于历史原因，存储设备使用国际单位制度（十进制前缀），网络传输使用 IEC 60027-2（二进制前缀）。&lt;/p&gt;
+&lt;h2 id=&#34;特殊情况&#34;&gt;特殊情况&lt;/h2&gt;
+&lt;p&gt;Windows 和 macOS 以及硬件厂商在计量磁盘空间时选择的单位也分为两个阵营&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Gibibyte与&lt;a href=&#34;https://zh.wikipedia.org/wiki/Gigabyte&#34;&gt;Gigabyte&lt;/a&gt;常常被混淆，前者的计算方式是二进制，后者的计算方式是十进制。现今的计算上，常把Gigabyte以二进制的方式计算，即230。(因为Windows对&lt;em&gt;GB&lt;/em&gt;这个信息计量单位的误用，因此在Windows中显示的&amp;quot;1GB&amp;rdquo;，其实应是指&amp;quot;1GiB&amp;rdquo;，由此常造成误解。并且因Windows操作系统的占有率高，导致该误用非常普遍。)，由于两种换算方法的不同，使容量在计算上相差了7.3%，所以常有Windows系统报告的容量比硬盘标示的容量还要小的情况发生。但在&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E8%8B%B9%E6%9E%9C%E5%85%AC%E5%8F%B8&#34;&gt;苹果公司&lt;/a&gt;的&lt;a href=&#34;https://zh.wikipedia.org/wiki/OS_X&#34;&gt;OS X&lt;/a&gt;操作系统中，对于&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%84%B2%E5%AD%98%E8%A3%9D%E7%BD%AE&#34;&gt;存储设备&lt;/a&gt;的容量计算方式与硬件厂商一致，均为1GB = 1,000,000,000（109）字节的十进制，避免了计算和使用上的麻烦。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://devblogs.microsoft.com/oldnewthing/20090611-00/?p=17933&#34;&gt;Why does Explorer use the term KB instead of KiB?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;截图来自&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82&#34;&gt;维基百科「字节」词条&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;摘自&lt;a href=&#34;https://zh.wikipedia.org/wiki/Gibibyte&#34;&gt;维基百科 Gibibyte 词条&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>COPY Command in Dockerfile Keeps Contents in The Distened Folder</title>

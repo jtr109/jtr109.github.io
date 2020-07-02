@@ -3,23 +3,48 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://jtr109.github.io/posts/dockerfile-copy/</loc>
-    <lastmod>2020-06-30T15:44:46+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/</loc>
-    <lastmod>2020-06-30T15:44:46+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/posts/</loc>
-    <lastmod>2020-06-30T15:44:46+08:00</lastmod>
+    <loc>https://jtr109.github.io/tags/byte/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://jtr109.github.io/categories/</loc>
-    <lastmod>2020-06-24T11:26:40+08:00</lastmod>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/network/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/tags/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/categories/tech/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/byte/</loc>
+    <lastmod>2020-07-02T11:34:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jtr109.github.io/posts/dockerfile-copy/</loc>
+    <lastmod>2020-06-30T15:44:46+08:00</lastmod>
   </url>
   
   <url>
@@ -44,16 +69,6 @@
   
   <url>
     <loc>https://jtr109.github.io/tags/raspberry-pi/</loc>
-    <lastmod>2020-06-24T11:26:40+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/tags/</loc>
-    <lastmod>2020-06-24T11:26:40+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://jtr109.github.io/categories/tech/</loc>
     <lastmod>2020-06-24T11:26:40+08:00</lastmod>
   </url>
   

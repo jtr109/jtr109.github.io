@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="在计算机使用过程中，我们会遇到困惑，有的时候我们使用 KB、GB 这样的十进制表示（如磁盘空间），有的时候我们又可以看到 KiB，GiB 这样的表示方式（如网络传输和 Kubernetes 配置）。
+区别 字节的表示方法分为两类，如 KB、MB、GB 这类为十进制表示法，而 KiB、MiB、GiB 这类则是二进制表示法。1
+由于历史原因，存储设备使用国际单位制度（十进制前缀），网络传输使用 IEC 60027-2（二进制前缀）。
+特殊情况 Windows 和 macOS 以及硬件厂商在计量磁盘空间时选择的单位也分为两个阵营2。
+ Gibibyte与Gigabyte常常被混淆，前者的计算方式是二进制，后者的计算方式是十进制。现今的计算上，常把Gigabyte以二进制的方式计算，即230。(因为Windows对GB这个信息计量单位的误用，因此在Windows中显示的&quot;1GB&rdquo;，其实应是指&quot;1GiB&rdquo;，由此常造成误解。并且因Windows操作系统的占有率高，导致该误用非常普遍。)，由于两种换算方法的不同，使容量在计算上相差了7.3%，所以常有Windows系统报告的容量比硬盘标示的容量还要小的情况发生。但在苹果公司的OS X操作系统中，对于存储设备的容量计算方式与硬件厂商一致，均为1GB = 1,000,000,000（109）字节的十进制，避免了计算和使用上的麻烦。
+ 参考  Why does Explorer use the term KB instead of KiB?    截图来自维基百科「字节」词条 &#x21a9;&#xfe0e;
+ 摘自维基百科 Gibibyte 词条 &#x21a9;&#xfe0e;
+   ">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="字节计量单位探究"/>
+<meta name="twitter:description" content="在计算机使用过程中，我们会遇到困惑，有的时候我们使用 KB、GB 这样的十进制表示（如磁盘空间），有的时候我们又可以看到 KiB，GiB 这样的表示方式（如网络传输和 Kubernetes 配置）。
+区别 字节的表示方法分为两类，如 KB、MB、GB 这类为十进制表示法，而 KiB、MiB、GiB 这类则是二进制表示法。1
+由于历史原因，存储设备使用国际单位制度（十进制前缀），网络传输使用 IEC 60027-2（二进制前缀）。
+特殊情况 Windows 和 macOS 以及硬件厂商在计量磁盘空间时选择的单位也分为两个阵营2。
+ Gibibyte与Gigabyte常常被混淆，前者的计算方式是二进制，后者的计算方式是十进制。现今的计算上，常把Gigabyte以二进制的方式计算，即230。(因为Windows对GB这个信息计量单位的误用，因此在Windows中显示的&quot;1GB&rdquo;，其实应是指&quot;1GiB&rdquo;，由此常造成误解。并且因Windows操作系统的占有率高，导致该误用非常普遍。)，由于两种换算方法的不同，使容量在计算上相差了7.3%，所以常有Windows系统报告的容量比硬盘标示的容量还要小的情况发生。但在苹果公司的OS X操作系统中，对于存储设备的容量计算方式与硬件厂商一致，均为1GB = 1,000,000,000（109）字节的十进制，避免了计算和使用上的麻烦。
+ 参考  Why does Explorer use the term KB instead of KiB?    截图来自维基百科「字节」词条 &#x21a9;&#xfe0e;
+ 摘自维基百科 Gibibyte 词条 &#x21a9;&#xfe0e;
+   "/>
+
+    <meta property="og:title" content="字节计量单位探究" />
+<meta property="og:description" content="在计算机使用过程中，我们会遇到困惑，有的时候我们使用 KB、GB 这样的十进制表示（如磁盘空间），有的时候我们又可以看到 KiB，GiB 这样的表示方式（如网络传输和 Kubernetes 配置）。
+区别 字节的表示方法分为两类，如 KB、MB、GB 这类为十进制表示法，而 KiB、MiB、GiB 这类则是二进制表示法。1
+由于历史原因，存储设备使用国际单位制度（十进制前缀），网络传输使用 IEC 60027-2（二进制前缀）。
+特殊情况 Windows 和 macOS 以及硬件厂商在计量磁盘空间时选择的单位也分为两个阵营2。
+ Gibibyte与Gigabyte常常被混淆，前者的计算方式是二进制，后者的计算方式是十进制。现今的计算上，常把Gigabyte以二进制的方式计算，即230。(因为Windows对GB这个信息计量单位的误用，因此在Windows中显示的&quot;1GB&rdquo;，其实应是指&quot;1GiB&rdquo;，由此常造成误解。并且因Windows操作系统的占有率高，导致该误用非常普遍。)，由于两种换算方法的不同，使容量在计算上相差了7.3%，所以常有Windows系统报告的容量比硬盘标示的容量还要小的情况发生。但在苹果公司的OS X操作系统中，对于存储设备的容量计算方式与硬件厂商一致，均为1GB = 1,000,000,000（109）字节的十进制，避免了计算和使用上的麻烦。
+ 参考  Why does Explorer use the term KB instead of KiB?    截图来自维基百科「字节」词条 &#x21a9;&#xfe0e;
+ 摘自维基百科 Gibibyte 词条 &#x21a9;&#xfe0e;
+   " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/byte/" />
+<meta property="article:published_time" content="2020-07-02T11:34:13+08:00" />
+<meta property="article:modified_time" content="2020-07-02T11:34:13+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/byte/">
+    
+    <title>
+  字节计量单位探究 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/byte/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="colorscheme-auto"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">字节计量单位探究</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-07-02T11:34:13&#43;08:00'>
+                July 2, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/byte/">byte</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/network/">network</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>在计算机使用过程中，我们会遇到困惑，有的时候我们使用 KB、GB 这样的十进制表示（如磁盘空间），有的时候我们又可以看到 KiB，GiB 这样的表示方式（如网络传输和 Kubernetes 配置）。</p>
+<h2 id="区别">区别</h2>
+<p>字节的表示方法分为两类，如 KB、MB、GB 这类为十进制表示法，而 KiB、MiB、GiB 这类则是二进制表示法。<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="https://jtr109.github.io/images/byte.assets/image-20200702114319210.png" alt="Wiki 中提供的对比图表"></p>
+<p>由于历史原因，存储设备使用国际单位制度（十进制前缀），网络传输使用 IEC 60027-2（二进制前缀）。</p>
+<h2 id="特殊情况">特殊情况</h2>
+<p>Windows 和 macOS 以及硬件厂商在计量磁盘空间时选择的单位也分为两个阵营<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
+<blockquote>
+<p>Gibibyte与<a href="https://zh.wikipedia.org/wiki/Gigabyte">Gigabyte</a>常常被混淆，前者的计算方式是二进制，后者的计算方式是十进制。现今的计算上，常把Gigabyte以二进制的方式计算，即230。(因为Windows对<em>GB</em>这个信息计量单位的误用，因此在Windows中显示的&quot;1GB&rdquo;，其实应是指&quot;1GiB&rdquo;，由此常造成误解。并且因Windows操作系统的占有率高，导致该误用非常普遍。)，由于两种换算方法的不同，使容量在计算上相差了7.3%，所以常有Windows系统报告的容量比硬盘标示的容量还要小的情况发生。但在<a href="https://zh.wikipedia.org/wiki/%E8%8B%B9%E6%9E%9C%E5%85%AC%E5%8F%B8">苹果公司</a>的<a href="https://zh.wikipedia.org/wiki/OS_X">OS X</a>操作系统中，对于<a href="https://zh.wikipedia.org/wiki/%E5%84%B2%E5%AD%98%E8%A3%9D%E7%BD%AE">存储设备</a>的容量计算方式与硬件厂商一致，均为1GB = 1,000,000,000（109）字节的十进制，避免了计算和使用上的麻烦。</p>
+</blockquote>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://devblogs.microsoft.com/oldnewthing/20090611-00/?p=17933">Why does Explorer use the term KB instead of KiB?</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>截图来自<a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82">维基百科「字节」词条</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>摘自<a href="https://zh.wikipedia.org/wiki/Gibibyte">维基百科 Gibibyte 词条</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+    
+
+  </body>
+
+</html>
