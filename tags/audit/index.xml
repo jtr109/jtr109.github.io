@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>audit on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/audit/</link>
+    <description>Recent content in audit on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 02 Jul 2020 15:31:22 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/audit/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于微服务中日志审计实现方式的思考</title>
+      <link>https://jtr109.github.io/posts/audit-logging/</link>
+      <pubDate>Thu, 02 Jul 2020 15:31:22 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/audit-logging/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;工作中开发项目时，审计功能模块要求服务在动作时记录一些日志，供审计模块汇总分析，形成审计服务。为了符合，各个服务被要求记录下了很多和服务流程无关的冗余信息。主要包括在动作触发时刻实体的部分属性和关联实体的属性信息。避免属性或关联变动后，历史状态丢失。&lt;/p&gt;
+&lt;p&gt;但是这样的方式导致很多操作原本仅限于一个实体的某个属性，由于为了留存更多的的记录，需要查询更多的信息来写入日志，会需要消耗更多的数据库查询资源。另外如果需求的属性没有被预见到，那已经被记录的日志中未记录的属性信息都会丢失，后续没有办法弥补。&lt;/p&gt;
+&lt;h2 id=&#34;思考&#34;&gt;思考&lt;/h2&gt;
+&lt;p&gt;理论上日志中仅应该记录不可变信息，比如主体 ID、操作名称、操作属性。而当时主体的其他属性、其他关联的主体应该通过数据记录查询出来。另外如果需要兼顾查询性能，可以对查询做缓存。&lt;/p&gt;
+&lt;p&gt;这样可以使查询更加有弹性，日志记录侵入服务逻辑。也可以更好地适应不同的查询场景。&lt;/p&gt;
+&lt;p&gt;以审计修改密码行为为例，如果我们希望在审计时同时显示当时账号的用户名。对某条记录而言，应该以该条记录的时间向前查询，通过记录中存储的账号 ID 找到最新的一条对用户名的修改（可能是修改操作，也可能是创建操作中指定了用户名）。然后基于那次修改记录，显示用户名。&lt;/p&gt;
+&lt;p&gt;但是上述推导过程是有性能开销的，如果每次查询的时候都需要做这样的操作，会造成性能损失。最直接的方式是在每次查询时，对以查询过的信息条目做缓存，每次只有未被查询过的记录需要重新推导出完整信息条目。另一种方式是实现一个触发器，在新的日志被写入时，立即生成完整的信息条目。&lt;/p&gt;
+&lt;h2 id=&#34;审计问题&#34;&gt;审计问题&lt;/h2&gt;
+&lt;p&gt;按照上述方案，可能会认为审计模块的开发需要了解业务细节。但其实并非如此，我们应该将日志汇总成数据条目的任务拆分出来，可以由运营人员通过 ETL&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 等工具进行汇总，向外提供接口或信息条目记录。而审计模块需要提供能力接收和展现生成的结果。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;研究中，使用方式暂不明确。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

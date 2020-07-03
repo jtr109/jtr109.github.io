@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="背景 工作中开发项目时，审计功能模块要求服务在动作时记录一些日志，供审计模块汇总分析，形成审计服务。为了符合，各个服务被要求记录下了很多和服务流程无关的冗余信息。主要包括在动作触发时刻实体的部分属性和关联实体的属性信息。避免属性或关联变动后，历史状态丢失。
+但是这样的方式导致很多操作原本仅限于一个实体的某个属性，由于为了留存更多的的记录，需要查询更多的信息来写入日志，会需要消耗更多的数据库查询资源。另外如果需求的属性没有被预见到，那已经被记录的日志中未记录的属性信息都会丢失，后续没有办法弥补。
+思考 理论上日志中仅应该记录不可变信息，比如主体 ID、操作名称、操作属性。而当时主体的其他属性、其他关联的主体应该通过数据记录查询出来。另外如果需要兼顾查询性能，可以对查询做缓存。
+这样可以使查询更加有弹性，日志记录侵入服务逻辑。也可以更好地适应不同的查询场景。
+以审计修改密码行为为例，如果我们希望在审计时同时显示当时账号的用户名。对某条记录而言，应该以该条记录的时间向前查询，通过记录中存储的账号 ID 找到最新的一条对用户名的修改（可能是修改操作，也可能是创建操作中指定了用户名）。然后基于那次修改记录，显示用户名。
+但是上述推导过程是有性能开销的，如果每次查询的时候都需要做这样的操作，会造成性能损失。最直接的方式是在每次查询时，对以查询过的信息条目做缓存，每次只有未被查询过的记录需要重新推导出完整信息条目。另一种方式是实现一个触发器，在新的日志被写入时，立即生成完整的信息条目。
+审计问题 按照上述方案，可能会认为审计模块的开发需要了解业务细节。但其实并非如此，我们应该将日志汇总成数据条目的任务拆分出来，可以由运营人员通过 ETL1 等工具进行汇总，向外提供接口或信息条目记录。而审计模块需要提供能力接收和展现生成的结果。
+  研究中，使用方式暂不明确。 &#x21a9;&#xfe0e;
+   ">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="关于微服务中日志审计实现方式的思考"/>
+<meta name="twitter:description" content="背景 工作中开发项目时，审计功能模块要求服务在动作时记录一些日志，供审计模块汇总分析，形成审计服务。为了符合，各个服务被要求记录下了很多和服务流程无关的冗余信息。主要包括在动作触发时刻实体的部分属性和关联实体的属性信息。避免属性或关联变动后，历史状态丢失。
+但是这样的方式导致很多操作原本仅限于一个实体的某个属性，由于为了留存更多的的记录，需要查询更多的信息来写入日志，会需要消耗更多的数据库查询资源。另外如果需求的属性没有被预见到，那已经被记录的日志中未记录的属性信息都会丢失，后续没有办法弥补。
+思考 理论上日志中仅应该记录不可变信息，比如主体 ID、操作名称、操作属性。而当时主体的其他属性、其他关联的主体应该通过数据记录查询出来。另外如果需要兼顾查询性能，可以对查询做缓存。
+这样可以使查询更加有弹性，日志记录侵入服务逻辑。也可以更好地适应不同的查询场景。
+以审计修改密码行为为例，如果我们希望在审计时同时显示当时账号的用户名。对某条记录而言，应该以该条记录的时间向前查询，通过记录中存储的账号 ID 找到最新的一条对用户名的修改（可能是修改操作，也可能是创建操作中指定了用户名）。然后基于那次修改记录，显示用户名。
+但是上述推导过程是有性能开销的，如果每次查询的时候都需要做这样的操作，会造成性能损失。最直接的方式是在每次查询时，对以查询过的信息条目做缓存，每次只有未被查询过的记录需要重新推导出完整信息条目。另一种方式是实现一个触发器，在新的日志被写入时，立即生成完整的信息条目。
+审计问题 按照上述方案，可能会认为审计模块的开发需要了解业务细节。但其实并非如此，我们应该将日志汇总成数据条目的任务拆分出来，可以由运营人员通过 ETL1 等工具进行汇总，向外提供接口或信息条目记录。而审计模块需要提供能力接收和展现生成的结果。
+  研究中，使用方式暂不明确。 &#x21a9;&#xfe0e;
+   "/>
+
+    <meta property="og:title" content="关于微服务中日志审计实现方式的思考" />
+<meta property="og:description" content="背景 工作中开发项目时，审计功能模块要求服务在动作时记录一些日志，供审计模块汇总分析，形成审计服务。为了符合，各个服务被要求记录下了很多和服务流程无关的冗余信息。主要包括在动作触发时刻实体的部分属性和关联实体的属性信息。避免属性或关联变动后，历史状态丢失。
+但是这样的方式导致很多操作原本仅限于一个实体的某个属性，由于为了留存更多的的记录，需要查询更多的信息来写入日志，会需要消耗更多的数据库查询资源。另外如果需求的属性没有被预见到，那已经被记录的日志中未记录的属性信息都会丢失，后续没有办法弥补。
+思考 理论上日志中仅应该记录不可变信息，比如主体 ID、操作名称、操作属性。而当时主体的其他属性、其他关联的主体应该通过数据记录查询出来。另外如果需要兼顾查询性能，可以对查询做缓存。
+这样可以使查询更加有弹性，日志记录侵入服务逻辑。也可以更好地适应不同的查询场景。
+以审计修改密码行为为例，如果我们希望在审计时同时显示当时账号的用户名。对某条记录而言，应该以该条记录的时间向前查询，通过记录中存储的账号 ID 找到最新的一条对用户名的修改（可能是修改操作，也可能是创建操作中指定了用户名）。然后基于那次修改记录，显示用户名。
+但是上述推导过程是有性能开销的，如果每次查询的时候都需要做这样的操作，会造成性能损失。最直接的方式是在每次查询时，对以查询过的信息条目做缓存，每次只有未被查询过的记录需要重新推导出完整信息条目。另一种方式是实现一个触发器，在新的日志被写入时，立即生成完整的信息条目。
+审计问题 按照上述方案，可能会认为审计模块的开发需要了解业务细节。但其实并非如此，我们应该将日志汇总成数据条目的任务拆分出来，可以由运营人员通过 ETL1 等工具进行汇总，向外提供接口或信息条目记录。而审计模块需要提供能力接收和展现生成的结果。
+  研究中，使用方式暂不明确。 &#x21a9;&#xfe0e;
+   " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/audit-logging/" />
+<meta property="article:published_time" content="2020-07-02T15:31:22+08:00" />
+<meta property="article:modified_time" content="2020-07-02T15:31:22+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/audit-logging/">
+    
+    <title>
+  关于微服务中日志审计实现方式的思考 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/audit-logging/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.72.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="colorscheme-auto"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">关于微服务中日志审计实现方式的思考</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-07-02T15:31:22&#43;08:00'>
+                July 2, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          <div class="categories">
+  <i class="fas fa-folder"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/audit/">audit</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/microservice/">microservice</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">背景</h2>
+<p>工作中开发项目时，审计功能模块要求服务在动作时记录一些日志，供审计模块汇总分析，形成审计服务。为了符合，各个服务被要求记录下了很多和服务流程无关的冗余信息。主要包括在动作触发时刻实体的部分属性和关联实体的属性信息。避免属性或关联变动后，历史状态丢失。</p>
+<p>但是这样的方式导致很多操作原本仅限于一个实体的某个属性，由于为了留存更多的的记录，需要查询更多的信息来写入日志，会需要消耗更多的数据库查询资源。另外如果需求的属性没有被预见到，那已经被记录的日志中未记录的属性信息都会丢失，后续没有办法弥补。</p>
+<h2 id="思考">思考</h2>
+<p>理论上日志中仅应该记录不可变信息，比如主体 ID、操作名称、操作属性。而当时主体的其他属性、其他关联的主体应该通过数据记录查询出来。另外如果需要兼顾查询性能，可以对查询做缓存。</p>
+<p>这样可以使查询更加有弹性，日志记录侵入服务逻辑。也可以更好地适应不同的查询场景。</p>
+<p>以审计修改密码行为为例，如果我们希望在审计时同时显示当时账号的用户名。对某条记录而言，应该以该条记录的时间向前查询，通过记录中存储的账号 ID 找到最新的一条对用户名的修改（可能是修改操作，也可能是创建操作中指定了用户名）。然后基于那次修改记录，显示用户名。</p>
+<p>但是上述推导过程是有性能开销的，如果每次查询的时候都需要做这样的操作，会造成性能损失。最直接的方式是在每次查询时，对以查询过的信息条目做缓存，每次只有未被查询过的记录需要重新推导出完整信息条目。另一种方式是实现一个触发器，在新的日志被写入时，立即生成完整的信息条目。</p>
+<h2 id="审计问题">审计问题</h2>
+<p>按照上述方案，可能会认为审计模块的开发需要了解业务细节。但其实并非如此，我们应该将日志汇总成数据条目的任务拆分出来，可以由运营人员通过 ETL<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 等工具进行汇总，向外提供接口或信息条目记录。而审计模块需要提供能力接收和展现生成的结果。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>研究中，使用方式暂不明确。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+    
+
+  </body>
+
+</html>
