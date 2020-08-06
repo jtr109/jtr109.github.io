@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>openid on jtr109&#39;s Castle</title>
+    <link>https://jtr109.github.io/tags/openid/</link>
+    <description>Recent content in openid on jtr109&#39;s Castle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 06 Aug 2020 14:04:44 +0800</lastBuildDate>
+    
+	<atom:link href="https://jtr109.github.io/tags/openid/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OpenID Connection (OIDC) 原理实践</title>
+      <link>https://jtr109.github.io/posts/oidc/</link>
+      <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/oidc/</guid>
+      <description>&lt;h2 id=&#34;流程概览&#34;&gt;流程概览&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Sequence_Diagram1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;名词解释&#34;&gt;名词解释&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;end user (EU)：实施操作的用户&lt;/li&gt;
+&lt;li&gt;relying party (RP)：希望登录的网站&lt;/li&gt;
+&lt;li&gt;OpenID provider (OP)：身份信息认证服务&lt;/li&gt;
+&lt;li&gt;ID token：用户身份票据，格式为 JWT，包含了用户在 OP 中的 ID，通过 &lt;code&gt;sub&lt;/code&gt; 字段描述。&lt;/li&gt;
+&lt;li&gt;access token：亦称为 token，是 EU 授权给 RP 的票据，RP 可以通过 access token 获取用户已授权的存储在 OP 中的信息。&lt;/li&gt;
+&lt;li&gt;nonce：RP发送请求的时候提供的随机字符串，用来减缓重放攻击，也可以来关联 ID token 和 RP 本身的 session 信息。&lt;/li&gt;
+&lt;li&gt;state：同OAuth2。防止 CSRF, XSRF。&lt;/li&gt;
+&lt;li&gt;scope：EU 授权给 RP 的用户信息范围，可选字段见&lt;a href=&#34;https://openid.net/specs/openid-connect-basic-1_0.html#rfc.section.2.4&#34;&gt;文档&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;构建-openid-provider&#34;&gt;构建 OpenID Provider&lt;/h2&gt;
+&lt;p&gt;参考 &lt;a href=&#34;https://django-oidc-provider.readthedocs.io/en/latest/index.html&#34;&gt;Django OIDC Provider&lt;/a&gt; 文档拉起构建 Django 服务。进入管理平台后创建一个 client，需要指定的配置有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;response type 指定为 &lt;code&gt;id_token token&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;redirect URLs 可以填写多个，每行填写一个，在向 OpenID provider 请求身份的时候必须携带一个重定向地址，这个地址必须包含在配置中。&lt;/li&gt;
+&lt;li&gt;scopes 指定为 &lt;code&gt;openid&lt;/code&gt; 如果需要 profile 或者 email 信息，也可以指定，例如： &lt;code&gt;openid profile email&lt;/code&gt;。（⚠️ 注意：目前测试下来，这里的 scope 配置并不影响 relying party 请求授权的 scopes）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;OIDC 模块在 Django Admin 中提供的配置页面&lt;/p&gt;
+&lt;h2 id=&#34;relying-party-获取身份信息&#34;&gt;Relying Party 获取身份信息&lt;/h2&gt;
+&lt;h3 id=&#34;请求授权&#34;&gt;请求授权&lt;/h3&gt;
+&lt;p&gt;要求 EU 请求 OP 的 authorize 接口，携带以下参数指定 RP 的身份：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;response_type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;client_id&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;redirect_uri&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;state&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;scope&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nonce&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其中 &lt;code&gt;state&lt;/code&gt; 和 &lt;code&gt;nonce&lt;/code&gt; 是可选的，用来防止重放攻击。请求地址示例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;http://localhost:8000/openid/authorize/?response_type=id_token%20token&amp;amp;client_id=932981&amp;amp;redirect_uri=http%3A%2F%2Flocalhost%3A3000&amp;amp;scope=openid%20profile&amp;amp;state=123123&amp;amp;nonce=n-0S6_WzA2Mj
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取授权&#34;&gt;获取授权&lt;/h3&gt;
+&lt;p&gt;EU 确认授权后，被要求重定向到之前指定的 &lt;code&gt;redirect_uri&lt;/code&gt;。同时携带上 OP 提供的参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;access_token&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;id_token&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;token_type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;expires_in&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;state&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;http://localhost:3000/#access_token=3f0a65d53906451393cab6b0f12a8106&amp;amp;id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNmRhNzAxMDE1ODQyMmZmODM2MTBiMzYzYTA0MGNmIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvb3BlbmlkIiwic3ViIjoiMSIsImF1ZCI6IjkzMjk4MSIsImV4cCI6MTU5NTg0MTUyNSwiaWF0IjoxNTk1ODQwOTI1LCJhdXRoX3RpbWUiOjE1OTU4MjIxOTUsIm5vbmNlIjoibi0wUzZfV3pBMk1qIiwiYXRfaGFzaCI6IkdadDZOUjUwMElWU3ZqbXZaZGFIbUEifQ.FSEqMu_xOfYlCEXRyB5vvFQPpQKuax6gQ2axKF3AmI-IytX9g1lWpw6q0jppaMkBCNHi5mses_EbEOWMwXVMDndJDuzIhiL6ZvU0e9hPDdSVRkKRVkgEHCqHKmIOmUe6wYdTfhcZANGVzAjFum81jVuTX5wSMvrVIYk5bad7XoKUJ30WlauPqnykmfZG6Jfw_LDzSe10yJm0EPudI1Tc5lSRysZGqUYXkjcpkzTHYIiSv0NVr88As-bLFwQdyTDMD3DPqnGI2Ruasdeo-ewxjEHFJbINndoKN5PNeLQ2OUoXuAx_pwFInQKm4FNYOHb0ogSvu7d6HAq0LGZESJx51Q&amp;amp;token_type=bearer&amp;amp;expires_in=3600&amp;amp;state=123123
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;验证-id-token&#34;&gt;验证 ID Token&lt;/h3&gt;
+&lt;p&gt;提取出参数 &lt;code&gt;id_token&lt;/code&gt; ，该参数为 JWT 形式，可以在 &lt;a href=&#34;https://jwt.io&#34;&gt;jwt.io&lt;/a&gt; 中模仿验证过程。首先提取 &lt;code&gt;id_token&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNmRhNzAxMDE1ODQyMmZmODM2MTBiMzYzYTA0MGNmIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvb3BlbmlkIiwic3ViIjoiMSIsImF1ZCI6IjkzMjk4MSIsImV4cCI6MTU5NTg0MTUyNSwiaWF0IjoxNTk1ODQwOTI1LCJhdXRoX3RpbWUiOjE1OTU4MjIxOTUsIm5vbmNlIjoibi0wUzZfV3pBMk1qIiwiYXRfaGFzaCI6IkdadDZOUjUwMElWU3ZqbXZaZGFIbUEifQ.FSEqMu_xOfYlCEXRyB5vvFQPpQKuax6gQ2axKF3AmI-IytX9g1lWpw6q0jppaMkBCNHi5mses_EbEOWMwXVMDndJDuzIhiL6ZvU0e9hPDdSVRkKRVkgEHCqHKmIOmUe6wYdTfhcZANGVzAjFum81jVuTX5wSMvrVIYk5bad7XoKUJ30WlauPqnykmfZG6Jfw_LDzSe10yJm0EPudI1Tc5lSRysZGqUYXkjcpkzTHYIiSv0NVr88As-bLFwQdyTDMD3DPqnGI2Ruasdeo-ewxjEHFJbINndoKN5PNeLQ2OUoXuAx_pwFInQKm4FNYOHb0ogSvu7d6HAq0LGZESJx51Q
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以注意到 jwt.io 中在解析 JWT 后，解析了 ID token 中 &lt;code&gt;iss&lt;/code&gt; 指定的地址，向 &lt;code&gt;.well-known/openid-configuration&lt;/code&gt; 地址发送请求，获取了 JWK 的存放地址 &lt;code&gt;jwks_uri&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%201.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://jwt.io&#34;&gt;jwt.io&lt;/a&gt; 请求 &lt;code&gt;iss&lt;/code&gt; 下的 &lt;code&gt;/.well-known/openid-configuration&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;通过请求到的公钥验证了 ID token。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%202.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;通过 &lt;code&gt;iss&lt;/code&gt; 下的 &lt;code&gt;/jwks&lt;/code&gt; 获取公钥&lt;/p&gt;
+&lt;h3 id=&#34;获取用户身份&#34;&gt;获取用户身份&lt;/h3&gt;
+&lt;p&gt;解析 &lt;code&gt;id_token&lt;/code&gt; 的 payload 可以获取到鉴权所需的所有信息。其中 &lt;code&gt;sub&lt;/code&gt; 为 EU 在 OP 中的 ID， &lt;code&gt;nonce&lt;/code&gt; 为 RP 提供，可以用来验证是否遭到重放。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;iss&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;http://localhost:8000/openid&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;sub&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;aud&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;932981&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;exp&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1595842560&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;iat&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1595841960&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;auth_time&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1595822195&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;nonce&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;n-0S6_WzA2Mj&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;at_hash&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;9EJSyU5K0pBbW1x2FMdbrQ&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取已授权的用户信息&#34;&gt;获取已授权的用户信息&lt;/h3&gt;
+&lt;p&gt;RP 根据指定的 &lt;code&gt;token_type&lt;/code&gt; 和 &lt;code&gt;access_token&lt;/code&gt; 获取被授权的用户信息。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -X GET http://localhost:8000/openid/userinfo -H &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Authorization: Bearer 3f0a65d53906451393cab6b0f12a8106&amp;#34;&lt;/span&gt; -i
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%203.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;返回已授权的用户信息&lt;/p&gt;
+&lt;h3 id=&#34;用户登录-rp&#34;&gt;用户登录 RP&lt;/h3&gt;
+&lt;p&gt;根据以上获取的用户 ID 就可以定位到用户，获取的用户信息可以用作创建或者更新。实际登陆态由 RP 自己控制，如果登录会话过期了，如果在当前网站登录一样，需要回到登录页面，要求 EU 再次授权身份。&lt;/p&gt;
+&lt;h2 id=&#34;资料&#34;&gt;资料&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://auth0.com/docs/protocols/oidc&#34;&gt;OpenID Connect | Auth0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://openid.net/connect/&#34;&gt;OpenID Connect Document&lt;/a&gt;（&lt;a href=&#34;https://www.cnblogs.com/linianhui/p/openid-connect-core.html&#34;&gt;附译文&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://oauth.net/articles/authentication/&#34;&gt;OAuth 不能作为身份认证的原因&lt;/a&gt;（&lt;a href=&#34;https://www.cnblogs.com/linianhui/p/authentication-based-on-oauth2.html&#34;&gt;附译文&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://goharbor.io/docs/1.10/administration/configure-authentication/oidc-auth/&#34;&gt;Harbor 的 OIDC 适配&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://jwt.io/&#34;&gt;JWT.io&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

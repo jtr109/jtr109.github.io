@@ -6,10 +6,37 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 02 Jul 2020 15:31:22 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 06 Aug 2020 14:04:44 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>authentication</title>
+      <link>https://jtr109.github.io/tags/authentication/</link>
+      <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/authentication/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>oidc</title>
+      <link>https://jtr109.github.io/tags/oidc/</link>
+      <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/oidc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openid</title>
+      <link>https://jtr109.github.io/tags/openid/</link>
+      <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/openid/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>audit</title>
