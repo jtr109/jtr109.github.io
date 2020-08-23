@@ -6,10 +6,93 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 02 Jul 2020 15:31:22 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 22 Aug 2020 23:10:13 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用 Telnet 模拟邮件客户端发送邮件</title>
+      <link>https://jtr109.github.io/posts/telnet-smpt/</link>
+      <pubDate>Sat, 22 Aug 2020 23:10:13 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/telnet-smpt/</guid>
+      <description>&lt;h2 id=&#34;基础知识&#34;&gt;基础知识&lt;/h2&gt;
+&lt;p&gt;SMTP 协议中有3个组成部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户代理（user agent）&lt;/li&gt;
+&lt;li&gt;邮件服务器（mail server）&lt;/li&gt;
+&lt;li&gt;简单邮件传输协议（Simple Mail Transfer Protocol, SMTP）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;邮件服务器分为两类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;客户端邮件服务器&lt;/li&gt;
+&lt;li&gt;服务端邮件服务器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个邮件的声明周期为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;发件人用户代理 -(1)-&amp;gt; 客户端邮件服务器 -(2)-&amp;gt; 服务端邮件服务器 &amp;lt;-(3)- 收件人用户代理
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中 (1) (2) 通过 SMTP 协议实现，(3) 为 POP3 或 IMAP 协议。&lt;/p&gt;
+&lt;p&gt;本文将使用 telnet 模拟用户代理，遵循 SMTP 协议向客户端 SMTP 服务器验证用户身份并发送请求（即 (1) 阶段），实现发送邮件动作。&lt;/p&gt;
+&lt;h2 id=&#34;操作步骤&#34;&gt;操作步骤&lt;/h2&gt;
+&lt;h3 id=&#34;数据准备&#34;&gt;数据准备&lt;/h3&gt;
+&lt;p&gt;首先我们需要准备好用户名和密码，由于 SMTP 协议中登录用的用户名和密码都必须是 base64&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ &lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; -n &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;sender@example.com&amp;#34;&lt;/span&gt; | base64
+c2VuZGVyQGV4YW1wbGUuY29t
+$ &lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; -n &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;yourpassword&amp;#34;&lt;/span&gt; | base64
+eW91cnBhc3N3b3Jk
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;建立-tcp-连接&#34;&gt;建立 TCP 连接&lt;/h3&gt;
+&lt;p&gt;以下以 &lt;code&gt;smtp.example.com&lt;/code&gt; 作为客户端邮件服务器举例。&lt;/p&gt;
+&lt;p&gt;首先通过 telnet 和客户服务器 SMTP 服务器建立连接。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ telnet smtp.example.com &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;25&lt;/span&gt;
+Trying 220.181.97.88...
+Connected to smtp.example.com.
+Escape character is &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;220&lt;/span&gt; telproxy-sm3.hmbj.internal ESMTP ready
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;首先我们建立了一个 TCP 连接，该连接保持在连接状态。我们向服务器发送 &lt;code&gt;HELO&lt;/code&gt; 命令，服务器返回响应提供服务器可以处理的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;EHLO smtp.example.com
+250-telproxy-sm3.hmbj.internal
+250-PIPELINING
+250-8BITMIME
+250-AUTH=LOGIN PLAIN
+250-AUTH PLAIN LOGIN
+250 STARTTLS
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;验证身份&#34;&gt;验证身份&lt;/h3&gt;
+&lt;p&gt;我们使用 &lt;code&gt;AUTH&lt;/code&gt; 验证用户身份，指定使用 &lt;code&gt;LOGIN&lt;/code&gt; 协议。服务器返回响应状态码和信息。信息经过了 base64 编码，解码可以看到要求填写的信息分别为 &lt;code&gt;Username:&lt;/code&gt; 和 &lt;code&gt;Password:&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;AUTH LOGIN
+334 VXNlcm5hbWU6
+c2VuZGVyQGV4YW1wbGUuY29t
+334 UGFzc3dvcmQ6
+eW91cnBhc3N3b3Jk
+235 2.0.0 OK
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;发送邮件&#34;&gt;发送邮件&lt;/h3&gt;
+&lt;p&gt;下面可以开始编写邮件内容：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;MAIL FROM: &amp;lt;sender@example.com&amp;gt;
+250 2.1.0 Ok
+RCPT TO: &amp;lt;recept@example2.com&amp;gt;
+250 2.1.5 Ok
+DATA
+354 End data with &amp;lt;CR&amp;gt;&amp;lt;LF&amp;gt;.&amp;lt;CR&amp;gt;&amp;lt;LF&amp;gt;
+From: sender@example.com
+To: recept@example2.com
+Subject: Test Sending Email with Telnet
+
+Hello!
+.
+250 2.0.0 Ok: queued as 749D640F5E
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样邮件就一个成功发送了，最后让我们断开 TCP 连接：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;QUIT
+221 2.0.0 Bye
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样就完整模拟了一次用户代理向 SMTP 客户服务器发送邮件的动作。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.ietf.org/archive/id/draft-murchison-sasl-login-00.txt&#34;&gt;协议标准&lt;/a&gt;供参考。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>关于微服务中日志审计实现方式的思考</title>
