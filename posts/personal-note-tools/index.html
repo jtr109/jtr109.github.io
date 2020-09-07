@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="分类 目前计划将笔记分为以下几类：
+ 素材 词条 文章  素材 包括文字、音视频片段，可能是一期播客、一段视频或者是文字片段。没有经过任何加工。这些素材需要标明来源，有迹可循。
+素材在搜集时可能没有实际作用，主要目的是在后续需要使用时可以快速检索和定位。
+词条 一个词条定义了一个事物（称为对象）。一个词条中收集了所有和它相关的素材，以及个人对这个对象的理解和阐释。
+在词条中需要避免大量的原文引用，使用自己的语言进行描述。
+考核词条好坏的标准是：一个词条中的解释可以使自己快速回忆起词条对象的大致含义，获得感性认识。能为「文章」提供内容基础。
+文章 文章对一个事物、思想或者方法的总结归纳。
+笔记中应该以纯个人产出为主，其内容是对词条的内容和关系的吸收与总结。可以作为「博客」等形式向外界公布，接收公众评价和交流。
+同时，在一篇文章被发布以后，它应该再次称为你的「素材」，并可能在后续在「词条」和「文章」中使用。
+存储介质 素材 存储素材的目标是快捷。所以存储工具应该做到全平台可用、支持多种类型的内容。这要才能保证在任何时候发现的资源和想法都可以被快速收集。
+可选工具有 Notion 和 Evernote 等。目前我使用的工具是 Notion，将所有素材收集在一个 Database 下，通过 tags 进行分类。
+词条 词条之间需要能够相互关联，能做到按图索骥。所以需要一个 Wiki 类应用，甚至能够实现 Zettelkasten。
+可选工具有 Obsidian 或者 Roam Research。鉴于 Obsidian 免费且为功能够用，我日常使用 Obsidian。
+文章 文章的载体是个人形象的展现，其面对的对象是读者，应该能做到具有美感的展示，并为读者提供：分类（或标签）、索引和评论等交互功能。
+这部分的可选工具比较多，有 Wordpress、Notion 或者个人博客搭建。我选择个人博客搭建，并托管在 GitHub 上。">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="个人笔记管理方案"/>
+<meta name="twitter:description" content="分类 目前计划将笔记分为以下几类：
+ 素材 词条 文章  素材 包括文字、音视频片段，可能是一期播客、一段视频或者是文字片段。没有经过任何加工。这些素材需要标明来源，有迹可循。
+素材在搜集时可能没有实际作用，主要目的是在后续需要使用时可以快速检索和定位。
+词条 一个词条定义了一个事物（称为对象）。一个词条中收集了所有和它相关的素材，以及个人对这个对象的理解和阐释。
+在词条中需要避免大量的原文引用，使用自己的语言进行描述。
+考核词条好坏的标准是：一个词条中的解释可以使自己快速回忆起词条对象的大致含义，获得感性认识。能为「文章」提供内容基础。
+文章 文章对一个事物、思想或者方法的总结归纳。
+笔记中应该以纯个人产出为主，其内容是对词条的内容和关系的吸收与总结。可以作为「博客」等形式向外界公布，接收公众评价和交流。
+同时，在一篇文章被发布以后，它应该再次称为你的「素材」，并可能在后续在「词条」和「文章」中使用。
+存储介质 素材 存储素材的目标是快捷。所以存储工具应该做到全平台可用、支持多种类型的内容。这要才能保证在任何时候发现的资源和想法都可以被快速收集。
+可选工具有 Notion 和 Evernote 等。目前我使用的工具是 Notion，将所有素材收集在一个 Database 下，通过 tags 进行分类。
+词条 词条之间需要能够相互关联，能做到按图索骥。所以需要一个 Wiki 类应用，甚至能够实现 Zettelkasten。
+可选工具有 Obsidian 或者 Roam Research。鉴于 Obsidian 免费且为功能够用，我日常使用 Obsidian。
+文章 文章的载体是个人形象的展现，其面对的对象是读者，应该能做到具有美感的展示，并为读者提供：分类（或标签）、索引和评论等交互功能。
+这部分的可选工具比较多，有 Wordpress、Notion 或者个人博客搭建。我选择个人博客搭建，并托管在 GitHub 上。"/>
+
+    <meta property="og:title" content="个人笔记管理方案" />
+<meta property="og:description" content="分类 目前计划将笔记分为以下几类：
+ 素材 词条 文章  素材 包括文字、音视频片段，可能是一期播客、一段视频或者是文字片段。没有经过任何加工。这些素材需要标明来源，有迹可循。
+素材在搜集时可能没有实际作用，主要目的是在后续需要使用时可以快速检索和定位。
+词条 一个词条定义了一个事物（称为对象）。一个词条中收集了所有和它相关的素材，以及个人对这个对象的理解和阐释。
+在词条中需要避免大量的原文引用，使用自己的语言进行描述。
+考核词条好坏的标准是：一个词条中的解释可以使自己快速回忆起词条对象的大致含义，获得感性认识。能为「文章」提供内容基础。
+文章 文章对一个事物、思想或者方法的总结归纳。
+笔记中应该以纯个人产出为主，其内容是对词条的内容和关系的吸收与总结。可以作为「博客」等形式向外界公布，接收公众评价和交流。
+同时，在一篇文章被发布以后，它应该再次称为你的「素材」，并可能在后续在「词条」和「文章」中使用。
+存储介质 素材 存储素材的目标是快捷。所以存储工具应该做到全平台可用、支持多种类型的内容。这要才能保证在任何时候发现的资源和想法都可以被快速收集。
+可选工具有 Notion 和 Evernote 等。目前我使用的工具是 Notion，将所有素材收集在一个 Database 下，通过 tags 进行分类。
+词条 词条之间需要能够相互关联，能做到按图索骥。所以需要一个 Wiki 类应用，甚至能够实现 Zettelkasten。
+可选工具有 Obsidian 或者 Roam Research。鉴于 Obsidian 免费且为功能够用，我日常使用 Obsidian。
+文章 文章的载体是个人形象的展现，其面对的对象是读者，应该能做到具有美感的展示，并为读者提供：分类（或标签）、索引和评论等交互功能。
+这部分的可选工具比较多，有 Wordpress、Notion 或者个人博客搭建。我选择个人博客搭建，并托管在 GitHub 上。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/personal-note-tools/" />
+<meta property="article:published_time" content="2020-09-07T20:01:53+08:00" />
+<meta property="article:modified_time" content="2020-09-07T20:01:53+08:00" />
+
+
+    
+      <base href="https://jtr109.github.io/posts/personal-note-tools/">
+    
+    <title>
+  个人笔记管理方案 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/personal-note-tools/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.74.3" />
+  </head>
+
+  
+  
+    
+  
+  <body class="colorscheme-auto"
+        onload=""
+  >
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">个人笔记管理方案</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-09-07T20:01:53&#43;08:00'>
+                September 7, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              1-minute read
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="https://jtr109.github.io/tags/tool/">Tool</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/note/">Note</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="分类">分类</h2>
+<p>目前计划将笔记分为以下几类：</p>
+<ol>
+<li>素材</li>
+<li>词条</li>
+<li>文章</li>
+</ol>
+<h3 id="素材">素材</h3>
+<p>包括文字、音视频片段，可能是一期播客、一段视频或者是文字片段。没有经过任何加工。这些素材需要标明来源，有迹可循。</p>
+<p>素材在搜集时可能没有实际作用，主要目的是在后续需要使用时可以快速检索和定位。</p>
+<h3 id="词条">词条</h3>
+<p>一个词条定义了一个事物（称为对象）。一个词条中收集了所有和它相关的素材，以及个人对这个对象的理解和阐释。</p>
+<p>在词条中需要避免大量的原文引用，使用自己的语言进行描述。</p>
+<p>考核词条好坏的标准是：一个词条中的解释可以使自己快速回忆起词条对象的大致含义，获得感性认识。能为「文章」提供内容基础。</p>
+<h3 id="文章">文章</h3>
+<p>文章对一个事物、思想或者方法的总结归纳。</p>
+<p>笔记中应该以纯个人产出为主，其内容是对词条的内容和关系的吸收与总结。可以作为「博客」等形式向外界公布，接收公众评价和交流。</p>
+<p>同时，在一篇文章被发布以后，它应该再次称为你的「素材」，并可能在后续在「词条」和「文章」中使用。</p>
+<h2 id="存储介质">存储介质</h2>
+<h3 id="素材-1">素材</h3>
+<p>存储素材的目标是快捷。所以存储工具应该做到全平台可用、支持多种类型的内容。这要才能保证在任何时候发现的资源和想法都可以被快速收集。</p>
+<p>可选工具有 Notion 和 Evernote 等。目前我使用的工具是 Notion，将所有素材收集在一个 Database 下，通过 tags 进行分类。</p>
+<h3 id="词条-1">词条</h3>
+<p>词条之间需要能够相互关联，能做到按图索骥。所以需要一个 Wiki 类应用，甚至能够实现 Zettelkasten。</p>
+<p>可选工具有 Obsidian 或者 Roam Research。鉴于 Obsidian 免费且为功能够用，我日常使用 Obsidian。</p>
+<h3 id="文章-1">文章</h3>
+<p>文章的载体是个人形象的展现，其面对的对象是读者，应该能做到具有美感的展示，并为读者提供：分类（或标签）、索引和评论等交互功能。</p>
+<p>这部分的可选工具比较多，有 Wordpress、Notion 或者个人博客搭建。我选择个人博客搭建，并托管在 GitHub 上。</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2020
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+    
+
+  </body>
+
+</html>
