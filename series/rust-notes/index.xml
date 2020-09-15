@@ -6,10 +6,56 @@
     <description>Recent content in Rust Notes on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 17 Jun 2020 15:35:25 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2020 16:02:04 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/series/rust-notes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rust Base62 库学习和分析</title>
+      <link>https://jtr109.github.io/posts/rust-base62-lib/</link>
+      <pubDate>Tue, 15 Sep 2020 16:02:04 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-base62-lib/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;在学习设计 Short URL 时尝试基于 Rust 编写了一个 Base62 库 &lt;a href=&#34;https://crates.io/crates/base62num&#34;&gt;base62num&lt;/a&gt;。后来发现已经有一个 Rust 库 &lt;a href=&#34;https://crates.io/crates/base-62&#34;&gt;base-62&lt;/a&gt; 提供了 Base62 的功能。&lt;/p&gt;
+&lt;h2 id=&#34;差异分析&#34;&gt;差异分析&lt;/h2&gt;
+&lt;p&gt;因此我尝试对比 base-62 和自己项目的源码和功能做了一次学习。&lt;/p&gt;
+&lt;h4 id=&#34;字符集映射&#34;&gt;字符集映射&lt;/h4&gt;
+&lt;p&gt;base-62 使用的字符集是：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而 base62num 中使用的是：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我在构建 base62num 时纠结过 alphanumeric 的顺序，但是没有找到明确的标准说明顺序。只有 Wikipedia 中明确给出了&lt;a href=&#34;https://en.wikipedia.org/wiki/Base62#Base62_table&#34;&gt;字符映射表&lt;/a&gt;，所以我选择了后者。&lt;/p&gt;
+&lt;h4 id=&#34;正整型的形式&#34;&gt;正整型的形式&lt;/h4&gt;
+&lt;p&gt;开始设计时，我只考虑了 32 bit 的 MurmurHash，所以认为 &lt;code&gt;usize&lt;/code&gt; 已经可以满足需求。但实际上 &lt;code&gt;usize&lt;/code&gt; 的大小对于 Base62 的使用场景来说还是不太够用的。&lt;/p&gt;
+&lt;p&gt;我们来看看 base-62 中的设计思路。在 base-62 中 &lt;a href=&#34;https://docs.rs/base-62/0.1.1/base_62/base62/fn.encode.html&#34;&gt;&lt;code&gt;encode&lt;/code&gt;&lt;/a&gt; 的参数是 bytes：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;encode&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;bytes&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;[&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;u8&lt;/span&gt;]) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;文档中是这样描述这个参数 bytes 的定义的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A byte array (leading zeros allowed) is prepended with &lt;code&gt;0x01&lt;/code&gt; and is treated as a big-endian unsigned integer (&lt;code&gt;num_bigint::BigUint&lt;/code&gt;).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这样带来了一个好处：该库的参数不受类型定义限制。因为无论是标准库&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;还是 &lt;code&gt;num_bigint&lt;/code&gt; &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;都实现了对 byte array 的转化。所以将 byte array 避免了适应不同的类型，提高了通用性。这一点非常值得学习。&lt;/p&gt;
+&lt;h3 id=&#34;实现差异&#34;&gt;实现差异&lt;/h3&gt;
+&lt;h4 id=&#34;常量定义&#34;&gt;常量定义&lt;/h4&gt;
+&lt;p&gt;base-62 &lt;a href=&#34;https://docs.rs/base-62/0.1.1/src/base_62/base62.rs.html#54&#34;&gt;定义字母表常量&lt;/a&gt;时使用的类型是 &lt;code&gt;[char; 62]&lt;/code&gt;，而非 &lt;code&gt;String&lt;/code&gt;。这样可以避免反复执行 &lt;code&gt;String::chars&lt;/code&gt; 的 CPU 消耗。&lt;/p&gt;
+&lt;h4 id=&#34;错误处理&#34;&gt;错误处理&lt;/h4&gt;
+&lt;p&gt;base-62 在定义错误类型时使用了 &lt;code&gt;failure&lt;/code&gt; 库，降低了代码复杂度。是一个不错的方法。&lt;/p&gt;
+&lt;h2 id=&#34;未来计划&#34;&gt;未来计划&lt;/h2&gt;
+&lt;p&gt;一开始没有使用 base-62 的原因是没有理解为什么使用了 byte array 这样的方式作为参数。目前 base-62 对我而言美中不足的就是字母表顺序和我预期不一致。未来会考虑将自己的项目存档，通过 &lt;code&gt;features&lt;/code&gt; 给 base-62 提供可选的其他字母表顺序的支持。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;以 &lt;code&gt;usize&lt;/code&gt; 为例，提供了 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.usize.html#method.to_be_bytes&#34;&gt;&lt;code&gt;to_be_bytes&lt;/code&gt;&lt;/a&gt; 方法。&lt;code&gt;u32&lt;/code&gt;, &lt;code&gt;u64&lt;/code&gt; 等也均有此方法。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;这里不得不吐糟一下 &lt;code&gt;num_bigint&lt;/code&gt;。虽然也实现了 byte array 转换，但是使用了的名称 &lt;a href=&#34;https://docs.rs/num-bigint/0.2.3/num_bigint/struct.BigUint.html#method.to_bytes_be&#34;&gt;to_bytes_be&lt;/a&gt;，和标准库中不一致。导致不能使用 trait 来解决问题。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>How to Log in Rust</title>
