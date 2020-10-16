@@ -57,7 +57,7 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;npm install https://github.com/CodeFalling/hexo-asset-image -save
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configure-hexo&#34;&gt;Configure Hexo&lt;/h2&gt;
 &lt;p&gt;编辑 &lt;code&gt;_config.yml&lt;/code&gt;, 设置 &lt;code&gt;titlecase&lt;/code&gt;, 该功能使你在 &lt;code&gt;hexo new &amp;quot;My New Post&amp;quot;&lt;/code&gt;  的时候创建的文件自动带上 &lt;code&gt;-&lt;/code&gt;, 形如 &lt;code&gt;My-New-Post&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;titlecase&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;titlecase&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-post-with-hexo&#34;&gt;Create Post with Hexo&lt;/h2&gt;
 &lt;p&gt;打开 &lt;code&gt;_config.yml&lt;/code&gt; , 修改配置为 &lt;code&gt;post_asset_folder: true&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;使用 Hexo 创建 post:&lt;/p&gt;
@@ -87,11 +87,11 @@
 &lt;p&gt;Next theme 默认生成的 icon 比较朴素, 可以使用 &lt;a href=&#34;https://favicon.io/favicon-generator/&#34;&gt;favicon generator&lt;/a&gt; 生成自己的 favicon, 既可以享受定制化的乐趣, 也避免了版权纠纷.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
 &lt;p&gt;点击右上角 Download 下载到本地, 解压并复制到 &lt;code&gt;themes/next/source/images&lt;/code&gt; 下, 并修改 Next 的配置文件 &lt;code&gt;nvim themes/next/_config.yml&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;favicon&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;small&lt;/span&gt;: /images/favicon-16x16-next.png
-  &lt;span style=&#34;color:#859900&#34;&gt;medium&lt;/span&gt;: /images/favicon-32x32-next.png
-  &lt;span style=&#34;color:#859900&#34;&gt;apple_touch_icon&lt;/span&gt;: /images/apple-touch-icon-next.png
-  &lt;span style=&#34;color:#859900&#34;&gt;safari_pinned_tab&lt;/span&gt;: /images/logo.svg
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;favicon&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;small&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/favicon-16x16-next.png&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;medium&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/favicon-32x32-next.png&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apple_touch_icon&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/apple-touch-icon-next.png&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;safari_pinned_tab&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/logo.svg&lt;/span&gt;
   &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#android_manifest: /images/manifest.json&lt;/span&gt;
   &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#ms_browserconfig: /images/browserconfig.xml&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;添加分类&#34;&gt;添加分类&lt;/h2&gt;

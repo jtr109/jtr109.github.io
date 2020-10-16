@@ -6,10 +6,38 @@
     <description>Recent content in time on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 09 Jun 2020 12:03:19 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2020 11:16:30 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/time/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python 中的事件处理</title>
+      <link>https://jtr109.github.io/posts/time-in-python/</link>
+      <pubDate>Tue, 06 Oct 2020 11:16:30 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/time-in-python/</guid>
+      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;时间差计算&lt;/h2&gt;
+&lt;p&gt;计算时间差最直观的方式是使用 &lt;code&gt;time.time&lt;/code&gt; 方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;()
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# Processing&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;duration&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; - &lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而 &lt;code&gt;time.time&lt;/code&gt; 是基于墙上时钟（或称钟表时间），该事件通过进程所在的操作系统和远端 NTP 服务器更新。这意味着两次 &lt;code&gt;time.time&lt;/code&gt; 之间可能发生过始终同步，导致记录的时间间隔不可靠，甚至可能出现负值。&lt;/p&gt;
+&lt;p&gt;在 Python3 中，更合适的做法是通过 &lt;code&gt;time.monotonic&lt;/code&gt; 调用系统的单调时钟：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;monotonic&lt;/span&gt;()
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# Processing&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;monotonic&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;duration&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; - &lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;由于单调时钟是由单机维护的，它总是向前，不会受始终同步影响，所以其记载的事件更为准确。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>开发过程中的时间和时区问题</title>

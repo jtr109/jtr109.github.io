@@ -70,7 +70,7 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
     <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.74.3" />
+    <meta name="generator" content="Hugo 0.75.1" />
   </head>
 
   
@@ -172,33 +172,33 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir /mnt/data
 </code></pre></div><p>Then, create a configure file for persistent volume.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># pv.yaml</span>
-<span style="color:#859900">apiVersion</span>: v1
-<span style="color:#859900">kind</span>: PersistentVolume
-<span style="color:#859900">metadata</span>:
-  <span style="color:#859900">name</span>: mysql-data-pv-volume
-  <span style="color:#859900">labels</span>:
-    <span style="color:#859900">type</span>: local
-<span style="color:#859900">spec</span>:
-  <span style="color:#859900">storageClassName</span>: manual
-  <span style="color:#859900">capacity</span>:
-    <span style="color:#859900">storage</span>: 2Gi
-  <span style="color:#859900">accessModes</span>:
-    - ReadWriteOnce
-  <span style="color:#859900">hostPath</span>:
-    <span style="color:#859900">path</span>: <span style="color:#2aa198">&#34;/mnt/data&#34;</span>  <span style="color:#93a1a1;font-style:italic"># the directory created on node</span>
+<span style="color:#268bd2;font-weight:bold">apiVersion</span>: <span style="color:#2aa198">v1</span>
+<span style="color:#268bd2;font-weight:bold">kind</span>: <span style="color:#2aa198">PersistentVolume</span>
+<span style="color:#268bd2;font-weight:bold">metadata</span>:
+  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-data-pv-volume</span>
+  <span style="color:#268bd2;font-weight:bold">labels</span>:
+    <span style="color:#268bd2;font-weight:bold">type</span>: <span style="color:#2aa198">local</span>
+<span style="color:#268bd2;font-weight:bold">spec</span>:
+  <span style="color:#268bd2;font-weight:bold">storageClassName</span>: <span style="color:#2aa198">manual</span>
+  <span style="color:#268bd2;font-weight:bold">capacity</span>:
+    <span style="color:#268bd2;font-weight:bold">storage</span>: <span style="color:#2aa198">2Gi</span>
+  <span style="color:#268bd2;font-weight:bold">accessModes</span>:
+    - <span style="color:#2aa198">ReadWriteOnce</span>
+  <span style="color:#268bd2;font-weight:bold">hostPath</span>:
+    <span style="color:#268bd2;font-weight:bold">path</span>: <span style="color:#2aa198">&#34;/mnt/data&#34;</span>  <span style="color:#93a1a1;font-style:italic"># the directory created on node</span>
 </code></pre></div><p>After created, we can claim it on Kubernetes. Here is the config file:</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># pvc.yaml</span>
-<span style="color:#859900">apiVersion</span>: v1
-<span style="color:#859900">kind</span>: PersistentVolumeClaim
-<span style="color:#859900">metadata</span>:
-  <span style="color:#859900">name</span>: mysql-data-pv-claim
-<span style="color:#859900">spec</span>:
-  <span style="color:#859900">storageClassName</span>: manual
-  <span style="color:#859900">accessModes</span>:
-    - ReadWriteOnce
-  <span style="color:#859900">resources</span>:
-    <span style="color:#859900">requests</span>:
-      <span style="color:#859900">storage</span>: 2Gi  <span style="color:#93a1a1;font-style:italic"># the storage should be less than capacity in persistent volume</span>
+<span style="color:#268bd2;font-weight:bold">apiVersion</span>: <span style="color:#2aa198">v1</span>
+<span style="color:#268bd2;font-weight:bold">kind</span>: <span style="color:#2aa198">PersistentVolumeClaim</span>
+<span style="color:#268bd2;font-weight:bold">metadata</span>:
+  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-data-pv-claim</span>
+<span style="color:#268bd2;font-weight:bold">spec</span>:
+  <span style="color:#268bd2;font-weight:bold">storageClassName</span>: <span style="color:#2aa198">manual</span>
+  <span style="color:#268bd2;font-weight:bold">accessModes</span>:
+    - <span style="color:#2aa198">ReadWriteOnce</span>
+  <span style="color:#268bd2;font-weight:bold">resources</span>:
+    <span style="color:#268bd2;font-weight:bold">requests</span>:
+      <span style="color:#268bd2;font-weight:bold">storage</span>: <span style="color:#2aa198">2Gi  # the storage should be less than capacity in persistent volume</span>
 </code></pre></div><h3 id="adding-a-secret-with-mysql-password">Adding A Secret with MySQL Password</h3>
 <p>The passsword of mysql we will use later should be injected into the pod environment by using the Secret.</p>
 <p><em>Note that the value must be encoded using base64<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></em>.</p>
@@ -206,13 +206,13 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">echo</span> -n <span style="color:#2aa198">&#39;mypassword&#39;</span> | base64
 </code></pre></div><p>The output <code>bXlwYXNzd29yZA==</code> should be put into our secret configure file.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># secret.yaml</span>
-<span style="color:#859900">apiVersion</span>: v1
-<span style="color:#859900">kind</span>: Secret
-<span style="color:#859900">metadata</span>:
-  <span style="color:#859900">name</span>: mysql-secret
-<span style="color:#859900">type</span>: Opaque
-<span style="color:#859900">data</span>:
-  <span style="color:#859900">password</span>: bXlwYXNzd29yZA==  <span style="color:#93a1a1;font-style:italic"># encoded base64 password</span>
+<span style="color:#268bd2;font-weight:bold">apiVersion</span>: <span style="color:#2aa198">v1</span>
+<span style="color:#268bd2;font-weight:bold">kind</span>: <span style="color:#2aa198">Secret</span>
+<span style="color:#268bd2;font-weight:bold">metadata</span>:
+  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-secret</span>
+<span style="color:#268bd2;font-weight:bold">type</span>: <span style="color:#2aa198">Opaque</span>
+<span style="color:#268bd2;font-weight:bold">data</span>:
+  <span style="color:#268bd2;font-weight:bold">password</span>: <span style="color:#2aa198">bXlwYXNzd29yZA==  # encoded base64 password</span>
 </code></pre></div><h3 id="creating-deployment-with-a-mysql-container">Creating Deployment with a MySQL Container</h3>
 <ul>
 <li>Specifying image to create a container in pod.</li>
@@ -220,57 +220,57 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
 <li>Using Secret as environment variables.</li>
 </ul>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># deployment.yaml</span>
-<span style="color:#859900">apiVersion</span>: apps/v1
-<span style="color:#859900">kind</span>: Deployment
-<span style="color:#859900">metadata</span>:
-  <span style="color:#859900">name</span>: mysql-deployment
-  <span style="color:#859900">labels</span>:
-    <span style="color:#859900">app</span>: mysql
-<span style="color:#859900">spec</span>:
-  <span style="color:#859900">replicas</span>: <span style="color:#2aa198;font-weight:bold">1</span>
-  <span style="color:#859900">selector</span>:
-    <span style="color:#859900">matchLabels</span>:
-      <span style="color:#859900">app</span>: mysql
-  <span style="color:#859900">template</span>:
-    <span style="color:#859900">metadata</span>:
-      <span style="color:#859900">labels</span>:
-        <span style="color:#859900">app</span>: mysql
-    <span style="color:#859900">spec</span>:
-      <span style="color:#859900">volumes</span>:
-        - <span style="color:#859900">name</span>: mysql-data-storage
-          <span style="color:#859900">persistentVolumeClaim</span>:
-            <span style="color:#859900">claimName</span>: mysql-data-pv-claim
-      <span style="color:#859900">containers</span>:
-        - <span style="color:#859900">name</span>: mysql-container
-          <span style="color:#859900">image</span>: jsurf/rpi-mariadb
-          <span style="color:#859900">ports</span>:
-            - <span style="color:#859900">containerPort</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
-              <span style="color:#859900">name</span>: <span style="color:#2aa198">&#34;mysql-port&#34;</span>
-          <span style="color:#859900">env</span>:
-            - <span style="color:#859900">name</span>: MYSQL_ROOT_PASSWORD
-              <span style="color:#859900">valueFrom</span>:
-                <span style="color:#859900">secretKeyRef</span>:
-                  <span style="color:#859900">name</span>: mysql-secret
-                  <span style="color:#859900">key</span>: password
-          <span style="color:#859900">volumeMounts</span>:
-            - <span style="color:#859900">mountPath</span>: <span style="color:#2aa198">&#34;/var/lib/mysql&#34;</span>
-              <span style="color:#859900">name</span>: mysql-data-storage
+<span style="color:#268bd2;font-weight:bold">apiVersion</span>: <span style="color:#2aa198">apps/v1</span>
+<span style="color:#268bd2;font-weight:bold">kind</span>: <span style="color:#2aa198">Deployment</span>
+<span style="color:#268bd2;font-weight:bold">metadata</span>:
+  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-deployment</span>
+  <span style="color:#268bd2;font-weight:bold">labels</span>:
+    <span style="color:#268bd2;font-weight:bold">app</span>: <span style="color:#2aa198">mysql</span>
+<span style="color:#268bd2;font-weight:bold">spec</span>:
+  <span style="color:#268bd2;font-weight:bold">replicas</span>: <span style="color:#2aa198;font-weight:bold">1</span>
+  <span style="color:#268bd2;font-weight:bold">selector</span>:
+    <span style="color:#268bd2;font-weight:bold">matchLabels</span>:
+      <span style="color:#268bd2;font-weight:bold">app</span>: <span style="color:#2aa198">mysql</span>
+  <span style="color:#268bd2;font-weight:bold">template</span>:
+    <span style="color:#268bd2;font-weight:bold">metadata</span>:
+      <span style="color:#268bd2;font-weight:bold">labels</span>:
+        <span style="color:#268bd2;font-weight:bold">app</span>: <span style="color:#2aa198">mysql</span>
+    <span style="color:#268bd2;font-weight:bold">spec</span>:
+      <span style="color:#268bd2;font-weight:bold">volumes</span>:
+        - <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-data-storage</span>
+          <span style="color:#268bd2;font-weight:bold">persistentVolumeClaim</span>:
+            <span style="color:#268bd2;font-weight:bold">claimName</span>: <span style="color:#2aa198">mysql-data-pv-claim</span>
+      <span style="color:#268bd2;font-weight:bold">containers</span>:
+        - <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-container</span>
+          <span style="color:#268bd2;font-weight:bold">image</span>: <span style="color:#2aa198">jsurf/rpi-mariadb</span>
+          <span style="color:#268bd2;font-weight:bold">ports</span>:
+            - <span style="color:#268bd2;font-weight:bold">containerPort</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
+              <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">&#34;mysql-port&#34;</span>
+          <span style="color:#268bd2;font-weight:bold">env</span>:
+            - <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">MYSQL_ROOT_PASSWORD</span>
+              <span style="color:#268bd2;font-weight:bold">valueFrom</span>:
+                <span style="color:#268bd2;font-weight:bold">secretKeyRef</span>:
+                  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-secret</span>
+                  <span style="color:#268bd2;font-weight:bold">key</span>: <span style="color:#2aa198">password</span>
+          <span style="color:#268bd2;font-weight:bold">volumeMounts</span>:
+            - <span style="color:#268bd2;font-weight:bold">mountPath</span>: <span style="color:#2aa198">&#34;/var/lib/mysql&#34;</span>
+              <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-data-storage</span>
 </code></pre></div><h3 id="expose-the-service">Expose the Service</h3>
 <p>After the deployment applied and the pod is running. The MySQL service is not exposed to the node. We need to create a Service to listen the port on node.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#93a1a1;font-style:italic"># service.yaml</span>
-<span style="color:#859900">apiVersion</span>: v1
-<span style="color:#859900">kind</span>: Service
-<span style="color:#859900">metadata</span>:
-  <span style="color:#859900">name</span>: mysql-service
-<span style="color:#859900">spec</span>:
-  <span style="color:#859900">type</span>: NodePort
-  <span style="color:#859900">selector</span>:
-    <span style="color:#859900">app</span>: mysql
-  <span style="color:#859900">ports</span>:
-    - <span style="color:#859900">protocol</span>: TCP
-      <span style="color:#859900">port</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
-      <span style="color:#859900">targetPort</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
-      <span style="color:#859900">nodePort</span>: <span style="color:#2aa198;font-weight:bold">30006</span>
+<span style="color:#268bd2;font-weight:bold">apiVersion</span>: <span style="color:#2aa198">v1</span>
+<span style="color:#268bd2;font-weight:bold">kind</span>: <span style="color:#2aa198">Service</span>
+<span style="color:#268bd2;font-weight:bold">metadata</span>:
+  <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-service</span>
+<span style="color:#268bd2;font-weight:bold">spec</span>:
+  <span style="color:#268bd2;font-weight:bold">type</span>: <span style="color:#2aa198">NodePort</span>
+  <span style="color:#268bd2;font-weight:bold">selector</span>:
+    <span style="color:#268bd2;font-weight:bold">app</span>: <span style="color:#2aa198">mysql</span>
+  <span style="color:#268bd2;font-weight:bold">ports</span>:
+    - <span style="color:#268bd2;font-weight:bold">protocol</span>: <span style="color:#2aa198">TCP</span>
+      <span style="color:#268bd2;font-weight:bold">port</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
+      <span style="color:#268bd2;font-weight:bold">targetPort</span>: <span style="color:#2aa198;font-weight:bold">3306</span>
+      <span style="color:#268bd2;font-weight:bold">nodePort</span>: <span style="color:#2aa198;font-weight:bold">30006</span>
 </code></pre></div><h2 id="have-a-try">Have a Try</h2>
 <p>Now, you can connet to your new database with a MySQL client.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mysql -P <span style="color:#2aa198;font-weight:bold">30006</span> -h &lt;raspberry-pi-host&gt; -u root -p

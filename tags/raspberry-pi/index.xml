@@ -33,33 +33,33 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir /mnt/data
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, create a configure file for persistent volume.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# pv.yaml&lt;/span&gt;
-&lt;span style=&#34;color:#859900&#34;&gt;apiVersion&lt;/span&gt;: v1
-&lt;span style=&#34;color:#859900&#34;&gt;kind&lt;/span&gt;: PersistentVolume
-&lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-data-pv-volume
-  &lt;span style=&#34;color:#859900&#34;&gt;labels&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt;: local
-&lt;span style=&#34;color:#859900&#34;&gt;spec&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;storageClassName&lt;/span&gt;: manual
-  &lt;span style=&#34;color:#859900&#34;&gt;capacity&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;storage&lt;/span&gt;: 2Gi
-  &lt;span style=&#34;color:#859900&#34;&gt;accessModes&lt;/span&gt;:
-    - ReadWriteOnce
-  &lt;span style=&#34;color:#859900&#34;&gt;hostPath&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/mnt/data&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the directory created on node&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;PersistentVolume&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-pv-volume&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;labels&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;type&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;local&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;spec&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storageClassName&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;manual&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;capacity&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;2Gi&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;accessModes&lt;/span&gt;:
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;ReadWriteOnce&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;hostPath&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/mnt/data&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the directory created on node&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After created, we can claim it on Kubernetes. Here is the config file:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# pvc.yaml&lt;/span&gt;
-&lt;span style=&#34;color:#859900&#34;&gt;apiVersion&lt;/span&gt;: v1
-&lt;span style=&#34;color:#859900&#34;&gt;kind&lt;/span&gt;: PersistentVolumeClaim
-&lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-data-pv-claim
-&lt;span style=&#34;color:#859900&#34;&gt;spec&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;storageClassName&lt;/span&gt;: manual
-  &lt;span style=&#34;color:#859900&#34;&gt;accessModes&lt;/span&gt;:
-    - ReadWriteOnce
-  &lt;span style=&#34;color:#859900&#34;&gt;resources&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;requests&lt;/span&gt;:
-      &lt;span style=&#34;color:#859900&#34;&gt;storage&lt;/span&gt;: 2Gi  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the storage should be less than capacity in persistent volume&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;PersistentVolumeClaim&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-pv-claim&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;spec&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storageClassName&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;manual&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;accessModes&lt;/span&gt;:
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;ReadWriteOnce&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;resources&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;requests&lt;/span&gt;:
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;2Gi  # the storage should be less than capacity in persistent volume&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;adding-a-secret-with-mysql-password&#34;&gt;Adding A Secret with MySQL Password&lt;/h3&gt;
 &lt;p&gt;The passsword of mysql we will use later should be injected into the pod environment by using the Secret.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Note that the value must be encoded using base64&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/em&gt;.&lt;/p&gt;
@@ -67,13 +67,13 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; -n &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;mypassword&amp;#39;&lt;/span&gt; | base64
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The output &lt;code&gt;bXlwYXNzd29yZA==&lt;/code&gt; should be put into our secret configure file.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# secret.yaml&lt;/span&gt;
-&lt;span style=&#34;color:#859900&#34;&gt;apiVersion&lt;/span&gt;: v1
-&lt;span style=&#34;color:#859900&#34;&gt;kind&lt;/span&gt;: Secret
-&lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-secret
-&lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt;: Opaque
-&lt;span style=&#34;color:#859900&#34;&gt;data&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;password&lt;/span&gt;: bXlwYXNzd29yZA==  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# encoded base64 password&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Secret&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-secret&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;type&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Opaque&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;data&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;password&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;bXlwYXNzd29yZA==  # encoded base64 password&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;creating-deployment-with-a-mysql-container&#34;&gt;Creating Deployment with a MySQL Container&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Specifying image to create a container in pod.&lt;/li&gt;
@@ -81,57 +81,57 @@
 &lt;li&gt;Using Secret as environment variables.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# deployment.yaml&lt;/span&gt;
-&lt;span style=&#34;color:#859900&#34;&gt;apiVersion&lt;/span&gt;: apps/v1
-&lt;span style=&#34;color:#859900&#34;&gt;kind&lt;/span&gt;: Deployment
-&lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-deployment
-  &lt;span style=&#34;color:#859900&#34;&gt;labels&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;app&lt;/span&gt;: mysql
-&lt;span style=&#34;color:#859900&#34;&gt;spec&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;replicas&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;
-  &lt;span style=&#34;color:#859900&#34;&gt;selector&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;matchLabels&lt;/span&gt;:
-      &lt;span style=&#34;color:#859900&#34;&gt;app&lt;/span&gt;: mysql
-  &lt;span style=&#34;color:#859900&#34;&gt;template&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-      &lt;span style=&#34;color:#859900&#34;&gt;labels&lt;/span&gt;:
-        &lt;span style=&#34;color:#859900&#34;&gt;app&lt;/span&gt;: mysql
-    &lt;span style=&#34;color:#859900&#34;&gt;spec&lt;/span&gt;:
-      &lt;span style=&#34;color:#859900&#34;&gt;volumes&lt;/span&gt;:
-        - &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-data-storage
-          &lt;span style=&#34;color:#859900&#34;&gt;persistentVolumeClaim&lt;/span&gt;:
-            &lt;span style=&#34;color:#859900&#34;&gt;claimName&lt;/span&gt;: mysql-data-pv-claim
-      &lt;span style=&#34;color:#859900&#34;&gt;containers&lt;/span&gt;:
-        - &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-container
-          &lt;span style=&#34;color:#859900&#34;&gt;image&lt;/span&gt;: jsurf/rpi-mariadb
-          &lt;span style=&#34;color:#859900&#34;&gt;ports&lt;/span&gt;:
-            - &lt;span style=&#34;color:#859900&#34;&gt;containerPort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
-              &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;mysql-port&amp;#34;&lt;/span&gt;
-          &lt;span style=&#34;color:#859900&#34;&gt;env&lt;/span&gt;:
-            - &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: MYSQL_ROOT_PASSWORD
-              &lt;span style=&#34;color:#859900&#34;&gt;valueFrom&lt;/span&gt;:
-                &lt;span style=&#34;color:#859900&#34;&gt;secretKeyRef&lt;/span&gt;:
-                  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-secret
-                  &lt;span style=&#34;color:#859900&#34;&gt;key&lt;/span&gt;: password
-          &lt;span style=&#34;color:#859900&#34;&gt;volumeMounts&lt;/span&gt;:
-            - &lt;span style=&#34;color:#859900&#34;&gt;mountPath&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/var/lib/mysql&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-data-storage
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;apps/v1&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Deployment&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-deployment&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;labels&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;app&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;spec&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;replicas&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;selector&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;matchLabels&lt;/span&gt;:
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;app&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;template&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;labels&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;app&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql&lt;/span&gt;
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;spec&lt;/span&gt;:
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;volumes&lt;/span&gt;:
+        - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-storage&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;persistentVolumeClaim&lt;/span&gt;:
+            &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;claimName&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-pv-claim&lt;/span&gt;
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;containers&lt;/span&gt;:
+        - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-container&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;jsurf/rpi-mariadb&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;ports&lt;/span&gt;:
+            - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;containerPort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
+              &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;mysql-port&amp;#34;&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;env&lt;/span&gt;:
+            - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;
+              &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;valueFrom&lt;/span&gt;:
+                &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;secretKeyRef&lt;/span&gt;:
+                  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-secret&lt;/span&gt;
+                  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;key&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;password&lt;/span&gt;
+          &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;volumeMounts&lt;/span&gt;:
+            - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;mountPath&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/var/lib/mysql&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-storage&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;expose-the-service&#34;&gt;Expose the Service&lt;/h3&gt;
 &lt;p&gt;After the deployment applied and the pod is running. The MySQL service is not exposed to the node. We need to create a Service to listen the port on node.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# service.yaml&lt;/span&gt;
-&lt;span style=&#34;color:#859900&#34;&gt;apiVersion&lt;/span&gt;: v1
-&lt;span style=&#34;color:#859900&#34;&gt;kind&lt;/span&gt;: Service
-&lt;span style=&#34;color:#859900&#34;&gt;metadata&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;name&lt;/span&gt;: mysql-service
-&lt;span style=&#34;color:#859900&#34;&gt;spec&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt;: NodePort
-  &lt;span style=&#34;color:#859900&#34;&gt;selector&lt;/span&gt;:
-    &lt;span style=&#34;color:#859900&#34;&gt;app&lt;/span&gt;: mysql
-  &lt;span style=&#34;color:#859900&#34;&gt;ports&lt;/span&gt;:
-    - &lt;span style=&#34;color:#859900&#34;&gt;protocol&lt;/span&gt;: TCP
-      &lt;span style=&#34;color:#859900&#34;&gt;port&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
-      &lt;span style=&#34;color:#859900&#34;&gt;targetPort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
-      &lt;span style=&#34;color:#859900&#34;&gt;nodePort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Service&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-service&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;spec&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;type&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;NodePort&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;selector&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;app&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;ports&lt;/span&gt;:
+    - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;protocol&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;TCP&lt;/span&gt;
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;port&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;targetPort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;nodePort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;have-a-try&#34;&gt;Have a Try&lt;/h2&gt;
 &lt;p&gt;Now, you can connet to your new database with a MySQL client.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mysql -P &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt; -h &amp;lt;raspberry-pi-host&amp;gt; -u root -p

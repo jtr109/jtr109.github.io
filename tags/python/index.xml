@@ -6,10 +6,38 @@
     <description>Recent content in Python on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 27 Nov 2019 17:27:14 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2020 11:16:30 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python 中的事件处理</title>
+      <link>https://jtr109.github.io/posts/time-in-python/</link>
+      <pubDate>Tue, 06 Oct 2020 11:16:30 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/time-in-python/</guid>
+      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;时间差计算&lt;/h2&gt;
+&lt;p&gt;计算时间差最直观的方式是使用 &lt;code&gt;time.time&lt;/code&gt; 方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;()
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# Processing&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;duration&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; - &lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而 &lt;code&gt;time.time&lt;/code&gt; 是基于墙上时钟（或称钟表时间），该事件通过进程所在的操作系统和远端 NTP 服务器更新。这意味着两次 &lt;code&gt;time.time&lt;/code&gt; 之间可能发生过始终同步，导致记录的时间间隔不可靠，甚至可能出现负值。&lt;/p&gt;
+&lt;p&gt;在 Python3 中，更合适的做法是通过 &lt;code&gt;time.monotonic&lt;/code&gt; 调用系统的单调时钟：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;monotonic&lt;/span&gt;()
+&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# Processing&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;monotonic&lt;/span&gt;()
+
+&lt;span style=&#34;color:#268bd2&#34;&gt;duration&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;t2&lt;/span&gt; - &lt;span style=&#34;color:#268bd2&#34;&gt;t1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;由于单调时钟是由单机维护的，它总是向前，不会受始终同步影响，所以其记载的事件更为准确。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Pip Install From Git Repositories</title>
@@ -198,15 +226,15 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
 &lt;h2 id=&#34;python-集成&#34;&gt;Python 集成&lt;/h2&gt;
 &lt;p&gt;以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在&lt;a href=&#34;https://docs.gitlab.com/ee/ci/yaml/&#34;&gt;文档&lt;/a&gt;中找到.&lt;/p&gt;
 &lt;h3 id=&#34;编写配置&#34;&gt;编写配置&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;image&lt;/span&gt;: python:&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3.7.4&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定使用的基础镜像&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;python:3.7.4  # 指定使用的基础镜像&lt;/span&gt;
 
-&lt;span style=&#34;color:#859900&#34;&gt;job1&lt;/span&gt;:
-  &lt;span style=&#34;color:#859900&#34;&gt;stage&lt;/span&gt;: test
-  &lt;span style=&#34;color:#859900&#34;&gt;script&lt;/span&gt;:
-    - python -c &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;print(&amp;#39;hello&amp;#39;)&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 执行语句&lt;/span&gt;
-    - python -c &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;print(&amp;#39;world&amp;#39;)&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#859900&#34;&gt;tags&lt;/span&gt;:
-    - pyservice  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定 runner 对应的 tag&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;job1&lt;/span&gt;:
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;stage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;test&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;:
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;python -c &amp;#34;print(&amp;#39;hello&amp;#39;)&amp;#34;  # 执行语句&lt;/span&gt;
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;python -c &amp;#34;print(&amp;#39;world&amp;#39;)&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;tags&lt;/span&gt;:
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;pyservice  # 指定 runner 对应的 tag&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要注意的是 &lt;code&gt;image&lt;/code&gt;, &lt;code&gt;before_script&lt;/code&gt; 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 &lt;code&gt;before_script&lt;/code&gt;, 那这个 job 被触发的时候, 不会读取和执行全局的 &lt;code&gt;before_script&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;设置缓存&#34;&gt;设置缓存&lt;/h3&gt;
 &lt;p&gt;在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考&lt;a href=&#34;https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies&#34;&gt;文档 Caching Python dependencies&lt;/a&gt;中的方案进行配置.&lt;/p&gt;
