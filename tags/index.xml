@@ -6,10 +6,28 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Oct 2020 11:16:30 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Oct 2020 16:18:21 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>authentication</title>
+      <link>https://jtr109.github.io/tags/authentication/</link>
+      <pubDate>Wed, 21 Oct 2020 16:18:21 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/authentication/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>authorization</title>
+      <link>https://jtr109.github.io/tags/authorization/</link>
+      <pubDate>Wed, 21 Oct 2020 16:18:21 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/authorization/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Python</title>
@@ -71,15 +89,6 @@
       <pubDate>Sat, 22 Aug 2020 23:10:13 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/smtp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>authentication</title>
-      <link>https://jtr109.github.io/tags/authentication/</link>
-      <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/authentication/</guid>
       <description></description>
     </item>
     
