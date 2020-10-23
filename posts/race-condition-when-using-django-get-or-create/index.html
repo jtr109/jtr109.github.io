@@ -14,8 +14,6 @@
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&#39;c53b8ba212ef4f15b2365e1bb3d524fe&#39;, defaults=dict(name=&#39;foo&#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
-    
-
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Django `get_or_create` 创建重复条目问题分析和处理"/>
 <meta name="twitter:description" content="名词解释  Data Race &amp; Race Condition: 待补充, 可参考这个 StackOverflow 回答  问题描述 Django 的 ORM 操作中有一个非常实用的功能: get_or_create, 可以判断数据库中是否有符合条件的条目, 没有则创建.
@@ -36,9 +34,6 @@
 <meta property="article:modified_time" content="2019-11-09T22:09:45+00:00" />
 
 
-    
-      <base href="https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/">
-    
     <title>
   Django `get_or_create` 创建重复条目问题分析和处理 · jtr109&#39;s Castle
 </title>
@@ -48,13 +43,13 @@
     
 
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.3219ef62ae52679b7a9c19043171c3cd9f523628c2a65f3ef247ee18836bc90b.css" integrity="sha256-MhnvYq5SZ5t6nBkEMXHDzZ9SNijCpl8&#43;8kfuGINryQs=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -63,18 +58,21 @@
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.e78e80fc3a585a4d1c8fc7f58623b6ff852411e38431a9cd1792877ecaa160f6.css" integrity="sha256-546A/DpYWk0cj8f1hiO2/4UkEeOEManNF5KHfsqhYPY=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
       
     
 
-    
-      <link rel="stylesheet" href="https://jtr109.github.io/css/custom.css" />
     
 
     
 
     <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://jtr109.github.io/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://jtr109.github.io/images/apple-touch-icon.png">
+
+    
 
     <meta name="generator" content="Hugo 0.75.1" />
   </head>
@@ -93,30 +91,42 @@
       jtr109&#39;s Castle
     </a>
     
-    <input type="checkbox" id="menu-toggle" />
-    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
-    <ul class="navigation-list">
       
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
-          </li>
-        
-          <li class="navigation-item">
-            <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
-          </li>
-        
+        <span id="dark-mode-toggle" class="float-right">
+          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+        </span>
       
-      
-    </ul>
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+            </li>
+          
+        
+        
+        
+          <li class="navigation-item separator">
+            <span>|</span>
+          </li>
+        
+      </ul>
     
   </section>
 </nav>
@@ -133,22 +143,23 @@
         <div class="post-meta">
           <div class="date">
             <span class="posted-on">
-              <i class="fas fa-calendar"></i>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
               <time datetime='2019-11-09T22:09:45Z'>
                 November 9, 2019
               </time>
             </span>
             <span class="reading-time">
-              <i class="fas fa-clock"></i>
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
               3-minute read
             </span>
           </div>
+          
           <div class="categories">
-  <i class="fas fa-folder"></i>
+  <i class="fa fa-folder" aria-hidden="true"></i>
     <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
 
           <div class="tags">
-  <i class="fas fa-tag"></i>
+  <i class="fa fa-tag" aria-hidden="true"></i>
     <a href="https://jtr109.github.io/tags/python/">Python</a>
       <span class="separator">•</span>
     <a href="https://jtr109.github.io/tags/django/">Django</a></div>
@@ -357,6 +368,13 @@ Destroying <span style="color:#cb4b16">test</span> database <span style="color:#
     </main>
 
     
+      
+        
+        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+      
+    
+
+    
 
     
 <script type="application/javascript">
@@ -375,6 +393,9 @@ if (!doNotTrack) {
 
     
 
+    
+
+    
   </body>
 
 </html>

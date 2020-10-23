@@ -6,10 +6,66 @@
     <description>Recent content in Python on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Oct 2020 11:16:30 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2020 11:10:55 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python Class 定义时声明当前 Class 类型</title>
+      <link>https://jtr109.github.io/posts/python-self-typing-annotation/</link>
+      <pubDate>Fri, 23 Oct 2020 11:10:55 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-self-typing-annotation/</guid>
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;声明：一下所有场景基于 Python 3.8.2。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;让我们一起来看看下面这个例子：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;:
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__name__&lt;/span&gt; == &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#268bd2&#34;&gt;Foo&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;bar&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;该例子中我们按常规方式声明了 &lt;code&gt;self&lt;/code&gt; 的类型 &lt;code&gt;Foo&lt;/code&gt;。让我们尝试验证类型和执行代码。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ mypy main.py
+Success: no issues found in &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;source&lt;/span&gt; file
+
+$ python main.py
+Traceback (most recent call last):
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;main.py&amp;#34;&lt;/span&gt;, line 1, in &amp;lt;module&amp;gt;
+    class Foo:
+  File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;main.py&amp;#34;&lt;/span&gt;, line 3, in Foo
+    def __init__(self: Foo, bar: str) -&amp;gt; None:
+NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt; is not defined
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为生命方式符合 &lt;a href=&#34;http://mypy-lang.org/&#34;&gt;mypy&lt;/a&gt; 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 &lt;code&gt;Foo&lt;/code&gt; 定义前就已经被自己的方法 &lt;code&gt;__init__&lt;/code&gt; 使用了，解释器无法理解，报出 &lt;code&gt;NameError: name &#39;Foo&#39; is not defined&lt;/code&gt; 错误。&lt;/p&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;p&gt;我们需要一个生命方法，可以同时满足 &lt;code&gt;mypy&lt;/code&gt; 的类型生命校验，也可以满足解释器的运行规则。文章汇总了几种解决方案：&lt;/p&gt;
+&lt;h3 id=&#34;forward-references&#34;&gt;Forward References&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/#forward-references&#34;&gt;Forward references&lt;/a&gt; 方法出自 &lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/&#34;&gt;PEP-484&lt;/a&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When a type hint contains names that have not been defined yet, that definition may be expressed as a string literal, to be resolved later.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们可以使用 &lt;code&gt;&amp;quot;Foo&amp;quot;&lt;/code&gt; 字符串作为声明的类型。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;:
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;postponed-evaluation-of-annotations&#34;&gt;Postponed Evaluation of Annotations&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0563/&#34;&gt;PEP-563&lt;/a&gt; 介绍了一个 &lt;code&gt;__future__&lt;/code&gt; 功能。使我们可以更符合直觉地使用类型声明。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484&#34;&gt;PEP 484&lt;/a&gt; introduced a standard meaning to annotations: type hints. &lt;a href=&#34;https://www.python.org/dev/peps/pep-0526&#34;&gt;PEP 526&lt;/a&gt; defined variable annotations, explicitly tying them with the type hinting use case.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们需要在模块中导入 &lt;code&gt;__annotation__&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__future__&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;annotations&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;:
+
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;Foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     
     <item>
       <title>Python 中的事件处理</title>
