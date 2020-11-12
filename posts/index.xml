@@ -6,10 +6,24 @@
     <description>Recent content in Posts on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 23 Oct 2020 11:10:55 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 12 Nov 2020 16:33:27 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用 Rust 实现符合开闭原则的财务数据系统的（部分）结构</title>
+      <link>https://jtr109.github.io/posts/rust-financial-ocp/</link>
+      <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-financial-ocp/</guid>
+      <description>&lt;p&gt;在学习《架构整洁之道》时，在「开闭原则（OCP）」一章的思想实验设计了如下架构：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/rust-financial-ocp.assets/image-20201112163526657.png&#34; alt=&#34;财务数据系统符合开闭原则的架构&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;⬆️ 截图自：孙宇聪. 架构整洁之道 (Chinese Edition) (Kindle Locations 1177-1179). Kindle Edition.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;右侧的依赖关系引起了我的注意：Database 组件依赖 Interactor 组件，而非反过来，我尝试使用 Rust 实现上述的依赖关系。&lt;/p&gt;
+&lt;script src=&#34;https://gist-it.appspot.com/https://github.com/jtr109/rust-snippets/blob/master/financial-ocp/src/lib.rs&#34;&gt;&lt;/script&gt;
+</description>
+    </item>
     
     <item>
       <title>Python Class 定义时声明当前 Class 类型</title>
@@ -725,7 +739,7 @@ Successfully built c3034a1a51fc
     - &lt;span style=&#34;color:#2aa198&#34;&gt;ReadWriteOnce&lt;/span&gt;
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;resources&lt;/span&gt;:
     &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;requests&lt;/span&gt;:
-      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;2Gi  # the storage should be less than capacity in persistent volume&lt;/span&gt;
+      &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;2Gi &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the storage should be less than capacity in persistent volume&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;adding-a-secret-with-mysql-password&#34;&gt;Adding A Secret with MySQL Password&lt;/h3&gt;
 &lt;p&gt;The passsword of mysql we will use later should be injected into the pod environment by using the Secret.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Note that the value must be encoded using base64&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/em&gt;.&lt;/p&gt;
@@ -739,7 +753,7 @@ Successfully built c3034a1a51fc
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-secret&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;type&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Opaque&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;data&lt;/span&gt;:
-  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;password&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;bXlwYXNzd29yZA==  # encoded base64 password&lt;/span&gt;
+  &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;password&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;bXlwYXNzd29yZA== &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# encoded base64 password&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;creating-deployment-with-a-mysql-container&#34;&gt;Creating Deployment with a MySQL Container&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Specifying image to create a container in pod.&lt;/li&gt;
@@ -1843,15 +1857,15 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
 &lt;h2 id=&#34;python-集成&#34;&gt;Python 集成&lt;/h2&gt;
 &lt;p&gt;以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在&lt;a href=&#34;https://docs.gitlab.com/ee/ci/yaml/&#34;&gt;文档&lt;/a&gt;中找到.&lt;/p&gt;
 &lt;h3 id=&#34;编写配置&#34;&gt;编写配置&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;python:3.7.4  # 指定使用的基础镜像&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;python:3.7.4 &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定使用的基础镜像&lt;/span&gt;
 
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;job1&lt;/span&gt;:
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;stage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;test&lt;/span&gt;
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;:
-    - &lt;span style=&#34;color:#2aa198&#34;&gt;python -c &amp;#34;print(&amp;#39;hello&amp;#39;)&amp;#34;  # 执行语句&lt;/span&gt;
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;python -c &amp;#34;print(&amp;#39;hello&amp;#39;)&amp;#34; &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 执行语句&lt;/span&gt;
     - &lt;span style=&#34;color:#2aa198&#34;&gt;python -c &amp;#34;print(&amp;#39;world&amp;#39;)&amp;#34;&lt;/span&gt;
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;tags&lt;/span&gt;:
-    - &lt;span style=&#34;color:#2aa198&#34;&gt;pyservice  # 指定 runner 对应的 tag&lt;/span&gt;
+    - &lt;span style=&#34;color:#2aa198&#34;&gt;pyservice &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定 runner 对应的 tag&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要注意的是 &lt;code&gt;image&lt;/code&gt;, &lt;code&gt;before_script&lt;/code&gt; 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 &lt;code&gt;before_script&lt;/code&gt;, 那这个 job 被触发的时候, 不会读取和执行全局的 &lt;code&gt;before_script&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;设置缓存&#34;&gt;设置缓存&lt;/h3&gt;
 &lt;p&gt;在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考&lt;a href=&#34;https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies&#34;&gt;文档 Caching Python dependencies&lt;/a&gt;中的方案进行配置.&lt;/p&gt;
@@ -3771,40 +3785,40 @@ server started
 &lt;/ul&gt;
 &lt;h3 id=&#34;并发异步请求&#34;&gt;并发异步请求&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 写法一
-&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;] = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;([&lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;()]);
+&lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;] = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;([&lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;()]);
 
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 写法二
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;();
 &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;();
-&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt;;
-&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt;;
+&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt;;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环并发异步请求&#34;&gt;for 循环并发异步请求&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;));
 
-  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt;);
+  &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt;);
   &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;);
 }
 
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 或者使用下面的写法
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
-&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+&lt;span style=&#34;color:#859900&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;));
 
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt; = [];
   &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promise&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt;) {
-    &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promise&lt;/span&gt;);
+    &lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;push&lt;/span&gt;(&lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promise&lt;/span&gt;);
   }
   &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;);
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环继发异步请求&#34;&gt;for 循环继发异步请求&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
 
   &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;of&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;) {
-    &lt;span style=&#34;color:#268bd2&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;);
+    &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;);
   }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;acync 函数中遇到 await 就会等待执行完成后在继续执行接下来的语句, 在 for 循环中也是一样.&lt;/p&gt;

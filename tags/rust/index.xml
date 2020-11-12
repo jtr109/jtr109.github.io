@@ -6,10 +6,24 @@
     <description>Recent content in Rust on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 15 Sep 2020 16:02:04 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 12 Nov 2020 16:33:27 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用 Rust 实现符合开闭原则的财务数据系统的（部分）结构</title>
+      <link>https://jtr109.github.io/posts/rust-financial-ocp/</link>
+      <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/rust-financial-ocp/</guid>
+      <description>&lt;p&gt;在学习《架构整洁之道》时，在「开闭原则（OCP）」一章的思想实验设计了如下架构：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/rust-financial-ocp.assets/image-20201112163526657.png&#34; alt=&#34;财务数据系统符合开闭原则的架构&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;⬆️ 截图自：孙宇聪. 架构整洁之道 (Chinese Edition) (Kindle Locations 1177-1179). Kindle Edition.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;右侧的依赖关系引起了我的注意：Database 组件依赖 Interactor 组件，而非反过来，我尝试使用 Rust 实现上述的依赖关系。&lt;/p&gt;
+&lt;script src=&#34;https://gist-it.appspot.com/https://github.com/jtr109/rust-snippets/blob/master/financial-ocp/src/lib.rs&#34;&gt;&lt;/script&gt;
+</description>
+    </item>
     
     <item>
       <title>Rust Base62 库学习和分析</title>

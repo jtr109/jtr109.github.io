@@ -6,10 +6,28 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 23 Oct 2020 11:10:55 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 12 Nov 2020 16:33:27 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>architecture</title>
+      <link>https://jtr109.github.io/tags/architecture/</link>
+      <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/architecture/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rust</title>
+      <link>https://jtr109.github.io/tags/rust/</link>
+      <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/rust/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>mypy</title>
@@ -62,15 +80,6 @@
       <pubDate>Tue, 15 Sep 2020 23:19:50 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/wi-fi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Rust</title>
-      <link>https://jtr109.github.io/tags/rust/</link>
-      <pubDate>Tue, 15 Sep 2020 16:02:04 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/rust/</guid>
       <description></description>
     </item>
     

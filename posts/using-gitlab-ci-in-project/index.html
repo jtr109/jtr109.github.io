@@ -77,7 +77,7 @@ docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/git
 
     
 
-    <meta name="generator" content="Hugo 0.75.1" />
+    <meta name="generator" content="Hugo 0.78.1" />
   </head>
 
   
@@ -191,15 +191,15 @@ docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/git
 <h2 id="python-集成">Python 集成</h2>
 <p>以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在<a href="https://docs.gitlab.com/ee/ci/yaml/">文档</a>中找到.</p>
 <h3 id="编写配置">编写配置</h3>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#268bd2;font-weight:bold">image</span>: <span style="color:#2aa198">python:3.7.4  # 指定使用的基础镜像</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#268bd2;font-weight:bold">image</span>: <span style="color:#2aa198">python:3.7.4 </span> <span style="color:#93a1a1;font-style:italic"># 指定使用的基础镜像</span>
 
 <span style="color:#268bd2;font-weight:bold">job1</span>:
   <span style="color:#268bd2;font-weight:bold">stage</span>: <span style="color:#2aa198">test</span>
   <span style="color:#268bd2;font-weight:bold">script</span>:
-    - <span style="color:#2aa198">python -c &#34;print(&#39;hello&#39;)&#34;  # 执行语句</span>
+    - <span style="color:#2aa198">python -c &#34;print(&#39;hello&#39;)&#34; </span> <span style="color:#93a1a1;font-style:italic"># 执行语句</span>
     - <span style="color:#2aa198">python -c &#34;print(&#39;world&#39;)&#34;</span>
   <span style="color:#268bd2;font-weight:bold">tags</span>:
-    - <span style="color:#2aa198">pyservice  # 指定 runner 对应的 tag</span>
+    - <span style="color:#2aa198">pyservice </span> <span style="color:#93a1a1;font-style:italic"># 指定 runner 对应的 tag</span>
 </code></pre></div><p>需要注意的是 <code>image</code>, <code>before_script</code> 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 <code>before_script</code>, 那这个 job 被触发的时候, 不会读取和执行全局的 <code>before_script</code>.</p>
 <h3 id="设置缓存">设置缓存</h3>
 <p>在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考<a href="https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies">文档 Caching Python dependencies</a>中的方案进行配置.</p>

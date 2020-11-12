@@ -68,7 +68,7 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
 
     
 
-    <meta name="generator" content="Hugo 0.75.1" />
+    <meta name="generator" content="Hugo 0.78.1" />
   </head>
 
   
@@ -209,7 +209,7 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
     - <span style="color:#2aa198">ReadWriteOnce</span>
   <span style="color:#268bd2;font-weight:bold">resources</span>:
     <span style="color:#268bd2;font-weight:bold">requests</span>:
-      <span style="color:#268bd2;font-weight:bold">storage</span>: <span style="color:#2aa198">2Gi  # the storage should be less than capacity in persistent volume</span>
+      <span style="color:#268bd2;font-weight:bold">storage</span>: <span style="color:#2aa198">2Gi </span> <span style="color:#93a1a1;font-style:italic"># the storage should be less than capacity in persistent volume</span>
 </code></pre></div><h3 id="adding-a-secret-with-mysql-password">Adding A Secret with MySQL Password</h3>
 <p>The passsword of mysql we will use later should be injected into the pod environment by using the Secret.</p>
 <p><em>Note that the value must be encoded using base64<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></em>.</p>
@@ -223,7 +223,7 @@ Prepare MySQL Data Storage Let us create a volume for our MySQL service to store
   <span style="color:#268bd2;font-weight:bold">name</span>: <span style="color:#2aa198">mysql-secret</span>
 <span style="color:#268bd2;font-weight:bold">type</span>: <span style="color:#2aa198">Opaque</span>
 <span style="color:#268bd2;font-weight:bold">data</span>:
-  <span style="color:#268bd2;font-weight:bold">password</span>: <span style="color:#2aa198">bXlwYXNzd29yZA==  # encoded base64 password</span>
+  <span style="color:#268bd2;font-weight:bold">password</span>: <span style="color:#2aa198">bXlwYXNzd29yZA== </span> <span style="color:#93a1a1;font-style:italic"># encoded base64 password</span>
 </code></pre></div><h3 id="creating-deployment-with-a-mysql-container">Creating Deployment with a MySQL Container</h3>
 <ul>
 <li>Specifying image to create a container in pod.</li>
