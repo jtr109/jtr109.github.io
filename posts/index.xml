@@ -6,10 +6,25 @@
     <description>Recent content in Posts on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 12 Nov 2020 16:33:27 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 28 Nov 2020 21:03:29 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>我的邀请码合集</title>
+      <link>https://jtr109.github.io/posts/my-invitation-codes/</link>
+      <pubDate>Sat, 28 Nov 2020 21:03:29 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/my-invitation-codes/</guid>
+      <description>&lt;p&gt;这里收集了我所有的邀请码。&lt;/p&gt;
+&lt;p&gt;如果有朋友觉得我的文章对自己有所帮助，正好又要购买相关产品，不妨考虑&lt;strong&gt;使用我的邀请码购买&lt;/strong&gt;。再次先行谢过！&lt;/p&gt;
+&lt;h2 id=&#34;burning-vocabulary&#34;&gt;Burning Vocabulary&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://burningvocabulary.com/&#34;&gt;Burning Vocabulary&lt;/a&gt; 是一款外语辅助记忆软件，你可以通过浏览器标注不认识的单词并获得注解，这些单词在其他页面出现时也会被高亮显示，帮助记忆。它甚至提供了 Youtube 的字幕高亮功能。&lt;/p&gt;
+&lt;p&gt;我的邀请码：&lt;code&gt;TJW6KA&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;邀请说明：购买专业版时填写我的邀请码，我和你每人获得额外6个月专业版期限，可赚取上限2年。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>使用 Rust 实现符合开闭原则的财务数据系统的（部分）结构</title>
