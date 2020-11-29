@@ -6,10 +6,23 @@
     <description>Recent content on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 28 Nov 2020 21:03:29 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 29 Nov 2020 08:29:10 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Twitter Bots 推荐</title>
+      <link>https://jtr109.github.io/posts/twitter-bots/</link>
+      <pubDate>Sun, 29 Nov 2020 08:29:10 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/twitter-bots/</guid>
+      <description>&lt;h2 id=&#34;thread-reader-app&#34;&gt;Thread Reader App&lt;/h2&gt;
+&lt;p&gt;由于 Twitter 中一条 tweet 的字数限制，人们通常会把需要表达的长内容分成多个 tweet，递归回复上一条 tweet，从而形成一个 thread。利用 Twitter 对 thread 的展现机制，就可以看到一条上下关联的 thread。&lt;/p&gt;
+&lt;p&gt;不过还有一个问题是如果我们需要仔细阅读，会发现一条 thread 中只有当前查看的 tweet 会放大显示，其他的 tweets 字都很小，并不适合阅读。这时候我们就可以借助 &lt;a href=&#34;https://twitter.com/threadreaderapp&#34;&gt;Thread Reader App&lt;/a&gt; 将一条 thread 展现在一个页面中。&lt;/p&gt;
+&lt;p&gt;用法也很简单，只要在目标 thread 最末尾的一条 tweet 中回复 &lt;code&gt;@threadreaderapp unroll&lt;/code&gt; 即可，你将立即收到 Thread Reader App 的回复，并且可以它提供链接对应的页面中查看完整的 thread 内容。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>我的邀请码合集</title>
