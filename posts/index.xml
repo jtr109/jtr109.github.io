@@ -6,10 +6,48 @@
     <description>Recent content in Posts on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 29 Nov 2020 08:29:10 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 07 Jan 2021 11:15:44 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python 给形参定义随机默认值的注意事项</title>
+      <link>https://jtr109.github.io/posts/python-arguments-initialization/</link>
+      <pubDate>Thu, 07 Jan 2021 11:15:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/python-arguments-initialization/</guid>
+      <description>&lt;h2 id=&#34;概览&#34;&gt;概览&lt;/h2&gt;
+&lt;p&gt;我们在定义形参时会使用默认值，但是需要注意这些默认值在初始化的时候就会被实例化。所以不应该在定义形参的时候使用随机函数指定默认值。&lt;/p&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;如果我们定义如下代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;uuid4&lt;/span&gt;()):
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行上述代码时，如果不指定参数值，会发现每次的返回值并不是随机的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# UUID(&amp;#39;21b425cf-c9a6-4479-95e7-061ebed36511&amp;#39;)&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# UUID(&amp;#39;21b425cf-c9a6-4479-95e7-061ebed36511&amp;#39;)&lt;/span&gt;
+&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# UUID(&amp;#39;21b425cf-c9a6-4479-95e7-061ebed36511&amp;#39;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果我们定义类方法，也会遇到相同的问题。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;
+&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;random&lt;/span&gt;
+
+&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;:
+  
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;uuid4&lt;/span&gt;()):
+        &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+        
+    &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;biz&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;buz&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;random&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;randint&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;10&lt;/span&gt;)):
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;buz&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;p&gt;所以在如果希望定义一个随机的形参，必须在函数内部定义。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;):
+    &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
+        &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;uuid4&lt;/span&gt;()
+    &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     
     <item>
       <title>Twitter Bots 推荐</title>
@@ -41,7 +79,7 @@
 &lt;p&gt;邀请码：&lt;code&gt;TJW6KA&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;邀请规则：购买专业版时填写我的邀请码，我和你每人获得额外6个月专业版期限，可赚取上限2年。&lt;/p&gt;
+&lt;p&gt;邀请规则：购买专业版时填写我的邀请码，我和你每人获得额外6个月专业版期限。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;多抓鱼&#34;&gt;多抓鱼&lt;/h2&gt;
@@ -1461,14 +1499,14 @@ hello, another_executable
 &lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;Value&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;};
 
 &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
-    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
-                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
-                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
-                 ]
-               }&amp;#34;#;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;r#&amp;#34;{
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;userid&amp;#34;: 103609,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;verified&amp;#34;: true,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;access_privileges&amp;#34;: [
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                   &amp;#34;user&amp;#34;,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                   &amp;#34;admin&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 ]
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;               }&amp;#34;#&lt;/span&gt;;
 
     &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Value&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
 
@@ -1509,14 +1547,14 @@ hello, another_executable
 }
 
 &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
-    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
-            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
-            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
-        ]
-    }&amp;#34;#;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;r#&amp;#34;{
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;userid&amp;#34;: 103609,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;verified&amp;#34;: true,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;access_privileges&amp;#34;: [
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;            &amp;#34;user&amp;#34;,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;            &amp;#34;admin&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        ]
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    }&amp;#34;#&lt;/span&gt;;
 
     &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
 

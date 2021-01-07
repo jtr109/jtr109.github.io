@@ -303,14 +303,14 @@ hello, another_executable
 &lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;Value&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;};
 
 &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
-    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
-                 &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
-                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
-                   &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
-                 ]
-               }&amp;#34;#;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;r#&amp;#34;{
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;userid&amp;#34;: 103609,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;verified&amp;#34;: true,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 &amp;#34;access_privileges&amp;#34;: [
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                   &amp;#34;user&amp;#34;,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                   &amp;#34;admin&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;                 ]
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;               }&amp;#34;#&lt;/span&gt;;
 
     &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;Value&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
 
@@ -351,14 +351,14 @@ hello, another_executable
 }
 
 &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;Error&lt;/span&gt;&amp;gt; {
-    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;r&lt;/span&gt;#&amp;#34;{
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;userid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;103609&lt;/span&gt;,
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;verified&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;true&lt;/span&gt;,
-        &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;access_privileges&amp;#34;&lt;/span&gt;: [
-            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
-            &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;
-        ]
-    }&amp;#34;#;
+    &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;r#&amp;#34;{
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;userid&amp;#34;: 103609,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;verified&amp;#34;: true,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        &amp;#34;access_privileges&amp;#34;: [
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;            &amp;#34;user&amp;#34;,
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;            &amp;#34;admin&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;        ]
+&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;    }&amp;#34;#&lt;/span&gt;;
 
     &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parsed&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;User&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;serde_json&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;from_str&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;j&lt;/span&gt;)?;
 

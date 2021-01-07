@@ -6,10 +6,19 @@
     <description>Recent content in Categories on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 28 Nov 2020 21:03:29 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 07 Jan 2021 11:15:44 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>tech</title>
+      <link>https://jtr109.github.io/categories/tech/</link>
+      <pubDate>Thu, 07 Jan 2021 11:15:44 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/categories/tech/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>life</title>
@@ -17,15 +26,6 @@
       <pubDate>Sat, 28 Nov 2020 21:03:29 +0800</pubDate>
       
       <guid>https://jtr109.github.io/categories/life/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tech</title>
-      <link>https://jtr109.github.io/categories/tech/</link>
-      <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/categories/tech/</guid>
       <description></description>
     </item>
     

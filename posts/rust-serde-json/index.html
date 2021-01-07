@@ -68,7 +68,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.78.2" />
+    <meta name="generator" content="Hugo 0.79.0" />
   </head>
 
   
@@ -169,14 +169,14 @@
 <span style="color:#859900">use</span> <span style="color:#268bd2">serde_json</span>::{<span style="color:#268bd2">Value</span>, <span style="color:#268bd2">Error</span>};
 
 <span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">Error</span>&gt; {
-    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#268bd2">r</span>#&#34;{
-                 <span style="color:#2aa198">&#34;userid&#34;</span>: <span style="color:#2aa198;font-weight:bold">103609</span>,
-                 <span style="color:#2aa198">&#34;verified&#34;</span>: <span style="color:#cb4b16">true</span>,
-                 <span style="color:#2aa198">&#34;access_privileges&#34;</span>: [
-                   <span style="color:#2aa198">&#34;user&#34;</span>,
-                   <span style="color:#2aa198">&#34;admin&#34;</span>
-                 ]
-               }&#34;#;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#2aa198">r#&#34;{
+</span><span style="color:#2aa198">                 &#34;userid&#34;: 103609,
+</span><span style="color:#2aa198">                 &#34;verified&#34;: true,
+</span><span style="color:#2aa198">                 &#34;access_privileges&#34;: [
+</span><span style="color:#2aa198">                   &#34;user&#34;,
+</span><span style="color:#2aa198">                   &#34;admin&#34;
+</span><span style="color:#2aa198">                 ]
+</span><span style="color:#2aa198">               }&#34;#</span>;
 
     <span style="color:#859900">let</span> <span style="color:#268bd2">parsed</span>: <span style="color:#cb4b16">Value</span> = <span style="color:#268bd2">serde_json</span>::<span style="color:#268bd2">from_str</span>(<span style="color:#268bd2">j</span>)?;
 
@@ -217,14 +217,14 @@
 }
 
 <span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">Error</span>&gt; {
-    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#268bd2">r</span>#&#34;{
-        <span style="color:#2aa198">&#34;userid&#34;</span>: <span style="color:#2aa198;font-weight:bold">103609</span>,
-        <span style="color:#2aa198">&#34;verified&#34;</span>: <span style="color:#cb4b16">true</span>,
-        <span style="color:#2aa198">&#34;access_privileges&#34;</span>: [
-            <span style="color:#2aa198">&#34;user&#34;</span>,
-            <span style="color:#2aa198">&#34;admin&#34;</span>
-        ]
-    }&#34;#;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">j</span> = <span style="color:#2aa198">r#&#34;{
+</span><span style="color:#2aa198">        &#34;userid&#34;: 103609,
+</span><span style="color:#2aa198">        &#34;verified&#34;: true,
+</span><span style="color:#2aa198">        &#34;access_privileges&#34;: [
+</span><span style="color:#2aa198">            &#34;user&#34;,
+</span><span style="color:#2aa198">            &#34;admin&#34;
+</span><span style="color:#2aa198">        ]
+</span><span style="color:#2aa198">    }&#34;#</span>;
 
     <span style="color:#859900">let</span> <span style="color:#268bd2">parsed</span>: <span style="color:#cb4b16">User</span> = <span style="color:#268bd2">serde_json</span>::<span style="color:#268bd2">from_str</span>(<span style="color:#268bd2">j</span>)?;
 
@@ -295,7 +295,7 @@
       
         ©
         
-        2020
+        2021
          Ryan Li 
       
       
