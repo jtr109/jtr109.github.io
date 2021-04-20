@@ -29,9 +29,10 @@
 # models.py class Race(models.Model): user_id = models.CharField(max_length=32) name = models.CharField(max_length=32) 如果在项目中调用遇到了并发的情况, 会导致数据库中有一条以上的相同条目. 可以编写单元测试复现该问题:
 # tests.py class RaceTestCase(TestCase): def test_race(self): def get_or_create(): Race.objects.get_or_create( user_id=&#39;c53b8ba212ef4f15b2365e1bb3d524fe&#39;, defaults=dict(name=&#39;foo&#39;, age=1), ) threads = list() for _ in range(10): threads.append(threading.Thread(target=get_or_create)) for t in threads: t.start() for t in threads: t.join() self." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/" />
-<meta property="article:published_time" content="2019-11-09T22:09:45+00:00" />
-<meta property="article:modified_time" content="2019-11-09T22:09:45+00:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-11-09T22:09:45&#43;00:00" />
+<meta property="article:modified_time" content="2019-11-09T22:09:45&#43;00:00" />
+
 
 
     <title>
@@ -74,7 +75,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -370,7 +371,7 @@ Destroying <span style="color:#cb4b16">test</span> database <span style="color:#
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -389,7 +390,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

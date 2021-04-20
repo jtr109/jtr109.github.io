@@ -6,10 +6,19 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 28 Jan 2021 23:29:20 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 20 Apr 2021 11:07:34 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>network</title>
+      <link>https://jtr109.github.io/tags/network/</link>
+      <pubDate>Tue, 20 Apr 2021 11:07:34 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/network/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>translate</title>
@@ -161,15 +170,6 @@
       <pubDate>Thu, 02 Jul 2020 11:34:13 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/byte/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>network</title>
-      <link>https://jtr109.github.io/tags/network/</link>
-      <pubDate>Thu, 02 Jul 2020 11:34:13 +0800</pubDate>
-      
-      <guid>https://jtr109.github.io/tags/network/</guid>
       <description></description>
     </item>
     

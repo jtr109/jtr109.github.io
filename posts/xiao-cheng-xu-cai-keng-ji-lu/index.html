@@ -23,9 +23,10 @@
  bindchange: 返回发生 change 之后的 index value: 当前选中项的 index range: 选取项对应的范围  基础用法可以参考文档. 值得注意的是, 这里的 value 和 bindchange 返回的 event.detail.value 都是且只能是元素在 array 中的序号, 即 index 值 (从 0 开始). 即使是我们下面提到的 objectArray 目前也没有发现其他可以用来作为元素 key 的方法.
 但是文档中提供的方法只能用于一元数组的显示和选择, 虽然文档提到了 objectArray 的使用, 但是并未清晰地给出明确的使用方式. 如果我们还是按照文档的方法, 只定义 bindchagne, value and range, 会发现所有的选项都是 [object Object] 而非内容, 这是因为对于 picker 而言, 他将 range 被赋值的 objectArray 当作一个普通的一元数组, 取到的自然是整个 object. 正确的使用方法, 需要参考这篇小程序 picker 对于 objArray 怎么取值." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/xiao-cheng-xu-cai-keng-ji-lu/" />
-<meta property="article:published_time" content="2017-08-11T06:34:06+08:00" />
-<meta property="article:modified_time" content="2017-08-11T06:34:06+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/xiao-cheng-xu-cai-keng-ji-lu/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-08-11T06:34:06&#43;08:00" />
+<meta property="article:modified_time" content="2017-08-11T06:34:06&#43;08:00" />
+
 
 
     <title>
@@ -68,7 +69,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -286,7 +287,7 @@
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -305,7 +306,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

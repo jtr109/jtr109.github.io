@@ -20,9 +20,10 @@
 <meta property="og:description" content="流程概览 名词解释  end user (EU)：实施操作的用户 relying party (RP)：希望登录的网站 OpenID provider (OP)：身份信息认证服务 ID token：用户身份票据，格式为 JWT，包含了用户在 OP 中的 ID，通过 sub 字段描述。 access token：亦称为 token，是 EU 授权给 RP 的票据，RP 可以通过 access token 获取用户已授权的存储在 OP 中的信息。 nonce：RP发送请求的时候提供的随机字符串，用来减缓重放攻击，也可以来关联 ID token 和 RP 本身的 session 信息。 state：同OAuth2。防止 CSRF, XSRF。 scope：EU 授权给 RP 的用户信息范围，可选字段见文档。  构建 OpenID Provider 参考 Django OIDC Provider 文档拉起构建 Django 服务。进入管理平台后创建一个 client，需要指定的配置有：
  response type 指定为 id_token token redirect URLs 可以填写多个，每行填写一个，在向 OpenID provider 请求身份的时候必须携带一个重定向地址，这个地址必须包含在配置中。 scopes 指定为 openid 如果需要 profile 或者 email 信息，也可以指定，例如： openid profile email。（⚠️ 注意：目前测试下来，这里的 scope 配置并不影响 relying party 请求授权的 scopes）  OIDC 模块在 Django Admin 中提供的配置页面" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/oidc/" />
-<meta property="article:published_time" content="2020-08-06T14:04:44+08:00" />
-<meta property="article:modified_time" content="2020-08-06T14:04:44+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/oidc/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-08-06T14:04:44&#43;08:00" />
+<meta property="article:modified_time" content="2020-08-06T14:04:44&#43;08:00" />
+
 
 
     <title>
@@ -65,7 +66,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -322,7 +323,7 @@
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -341,7 +342,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

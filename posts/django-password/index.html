@@ -23,9 +23,10 @@ from django.contrib.auth.hashers import make_password user = User( username=&#39
 user = User.objects.create(username=&#39;my_username&#39;) user.set_password(&#39;my_password&#39;) But sometimes we want to bulk create users of we want to create an User model before saving into database. Your can create user model and set password manually.
 from django.contrib.auth.hashers import make_password user = User( username=&#39;my_username&#39;, password=make_password(&#39;my_password&#39;) ) # now you get the instance of User model How to Create an Raw Password Automatically?" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/django-password/" />
-<meta property="article:published_time" content="2019-03-27T13:59:45+08:00" />
-<meta property="article:modified_time" content="2019-03-27T13:59:45+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/django-password/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-03-27T13:59:45&#43;08:00" />
+<meta property="article:modified_time" content="2019-03-27T13:59:45&#43;08:00" />
+
 
 
     <title>
@@ -68,7 +69,7 @@ from django.contrib.auth.hashers import make_password user = User( username=&#39
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -270,7 +271,7 @@ from django.contrib.auth.hashers import make_password user = User( username=&#39
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -289,7 +290,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

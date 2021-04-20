@@ -29,9 +29,10 @@ openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Pyth
 from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&#34;private.pem&#34;, &#34;wb&#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&#34;receiver.pem&#34;, &#34;wb&#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密 使用 PyCryptodome 实现 RSA-2048 加解密。
 In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1_OAEP In [3]: private_key = RSA." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/python-rsa-2048/" />
-<meta property="article:published_time" content="2020-06-10T14:54:41+08:00" />
-<meta property="article:modified_time" content="2020-06-10T14:54:41+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/python-rsa-2048/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-06-10T14:54:41&#43;08:00" />
+<meta property="article:modified_time" content="2020-06-10T14:54:41&#43;08:00" />
+
 
 
     <title>
@@ -74,7 +75,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -291,7 +292,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto.Cipher import PKCS1
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -310,7 +311,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

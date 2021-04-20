@@ -47,9 +47,10 @@
 授权 授权用来连接主体（用户、角色、组织其一）和策略。
 关系图 erDiagram UserPool ||--o{ Application : contains Application }o--o{ Connection: bind UserPool ||--o{ Connection : configures UserPool ||--o{ User : contains UserPool ||--o{ Role : contains Role }o--o{ User : contains UserPool ||--o{ Group : contains Group }o--o{ User : contains UserPool ||--o{ Org : contains Org ||--o{ ChildrenNode: children ChildrenNode ||--o{ ChildrenNode: children Org }o--o{ User : members ChildrenNode ||--o{ User: members UserPool ||--o{ Whitelist : configures UserPool ||--o{ Resource : configures Resource ||--o{ Action : contains UserPool ||--o{ Policy : configures Policy }o." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/authing-er/" />
-<meta property="article:published_time" content="2020-10-21T16:18:21+08:00" />
-<meta property="article:modified_time" content="2020-10-21T16:18:21+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/authing-er/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-10-21T16:18:21&#43;08:00" />
+<meta property="article:modified_time" content="2020-10-21T16:18:21&#43;08:00" />
+
 
 
     <title>
@@ -92,7 +93,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -328,7 +329,7 @@
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -347,7 +348,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

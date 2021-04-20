@@ -20,9 +20,10 @@ pub fn add(a: i32, b: i32) -&gt; i32 { a &#43; b } // This is a really bad addin
 <meta property="og:description" content="起因 一个标准的单元测试写法为:
 pub fn add(a: i32, b: i32) -&gt; i32 { a &#43; b } // This is a really bad adding function, its purpose is to fail in this // example. #[allow(dead_code)] fn bad_add(a: i32, b: i32) -&gt; i32 { a - b } #[cfg(test)] mod tests { // Note this useful idiom: importing names from outer (for mod tests) scope.  use super::*; #[test] fn test_add() { assert_eq!(add(1, 2), 3); } #[test] fn test_bad_add() { // This assert would fire and test will fail." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/rust-unittest-example/" />
-<meta property="article:published_time" content="2019-11-07T22:38:24+00:00" />
-<meta property="article:modified_time" content="2019-11-07T22:38:24+00:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/rust-unittest-example/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-11-07T22:38:24&#43;00:00" />
+<meta property="article:modified_time" content="2019-11-07T22:38:24&#43;00:00" />
+
 
 
     <title>
@@ -65,7 +66,7 @@ pub fn add(a: i32, b: i32) -&gt; i32 { a &#43; b } // This is a really bad addin
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -287,7 +288,7 @@ The syntax given to this macro is the same syntax as the  <a href="https://doc.r
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -306,7 +307,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

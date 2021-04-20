@@ -26,9 +26,10 @@ Product.objects.all() execute model objects all
 Consideration How can we get a queryset from model?
 Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls, name, bases, attrs): super_new = super(ModelBase, cls).__new__ # ... new_class = super_new(cls, name, bases, new_attrs) # ... new_class.add_to_class(&#39;_meta&#39;, Options(meta, app_label)) # ... new_class._prepare() # ... return new_class # ... def _prepare(cls): # ... if not opts.managers or cls." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/what-happen-when-model-objects-all/" />
-<meta property="article:published_time" content="2018-08-27T17:01:12+08:00" />
-<meta property="article:modified_time" content="2018-08-27T17:01:12+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/what-happen-when-model-objects-all/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-08-27T17:01:12&#43;08:00" />
+<meta property="article:modified_time" content="2018-08-27T17:01:12&#43;08:00" />
+
 
 
     <title>
@@ -71,7 +72,7 @@ Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -336,7 +337,7 @@ Source snippet # django/db/models/base.py class ModelBase(type): def __new__(cls
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -355,7 +356,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

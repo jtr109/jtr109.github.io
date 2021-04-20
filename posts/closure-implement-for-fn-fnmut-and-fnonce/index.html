@@ -26,9 +26,10 @@ StackOverflow 中的回答更明白的解释了 Fn, FnMut, FnOnce 的区别:
  Fn: 是闭包的基本 Trait, 即闭包中仅有 reference ( &amp;self) FnMut: 旨在强调传入的闭包中含有可 reference ( &amp;mut self) FnOnce: 旨在强调传入的闭包中含有 moved 进来的变量 ( self), 即意味着这个闭包只能被调用一次.  从 Rust By Example 中的例子可以看到一个符合 FnOnce 的闭包的构建方法:
 let mut farewell = &#34;goodbye&#34;.to_owned(); // Capture 2 variables: `greeting` by reference and // `farewell` by value. let diary = || { // `greeting` is by reference: requires `Fn`.  println!" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/" />
-<meta property="article:published_time" content="2019-07-24T08:25:44+08:00" />
-<meta property="article:modified_time" content="2019-07-24T08:25:44+08:00" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-financial-ocp/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-base62-lib/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-log-level/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-error-type/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/" />
+<meta property="og:url" content="https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-24T08:25:44&#43;08:00" />
+<meta property="article:modified_time" content="2019-07-24T08:25:44&#43;08:00" />
+<meta property="og:see_also" content="https://jtr109.github.io/posts/rust-financial-ocp/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-base62-lib/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-log-level/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/rust-error-type/" /><meta property="og:see_also" content="https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/" />
 
 
 
@@ -72,7 +73,7 @@ let mut farewell = &#34;goodbye&#34;.to_owned(); // Capture 2 variables: `greeti
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -357,7 +358,7 @@ let mut farewell = &#34;goodbye&#34;.to_owned(); // Capture 2 variables: `greeti
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -376,7 +377,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

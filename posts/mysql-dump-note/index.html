@@ -23,9 +23,10 @@
 1. 全量备份 2. 增量备份及恢复 2.1 备份 2.1.1 启用二进制备份 开启 binlog 日志 mysql -hlocalhost -uroot -pjue -e &#34;set global sql_log_bin=1&#34;; mysql -hlocalhost -uroot -pjue -e &#34;show global variables like &#39;sql_log_bin&#39;\G&#34;; 实测需要将 global 替换为 session
 在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置 log-bin=D:/Program Files (x86)/MySQL/mylog/jlog 2.1.2 重启 MySQL 服务 2.1.3 执行一次全量备份 $ mysqldump -hlocalhost -uroot -p -l -F test &gt; testtt.sql 全量备份除了新建 sql 备份意外，还会新建一个 binlog 文件，完成后可以删除早先的 binlog 文件。 转移全量备份的 sql 并保存。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/mysql-dump-note/" />
-<meta property="article:published_time" content="2017-08-13T14:04:20+08:00" />
-<meta property="article:modified_time" content="2017-08-13T14:04:20+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/mysql-dump-note/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-08-13T14:04:20&#43;08:00" />
+<meta property="article:modified_time" content="2017-08-13T14:04:20&#43;08:00" />
+
 
 
     <title>
@@ -68,7 +69,7 @@
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -287,7 +288,7 @@ $ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -306,7 +307,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

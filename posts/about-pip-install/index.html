@@ -26,9 +26,10 @@ $ pip install git&#43;https://git.example.com/example/foo.git ... $ pip freeze &
 $ pip install -e git&#43;https://git.example.com/example/foo.git#egg=0.0.1 $ pip freeze &gt; requirements.txt $ cat requirements.txt -e git&#43;https://git.example.com/example/foo.git@2c2ed2b3df2084d1b1ebfa87c9fe703072eded7b#egg=dm_utils Docker Build 上面的示例可以解决大部分 public 项目的拉取和安装问题, 但如果在 private 项目中使用上面的方案, 在 docker build 时会报错, 原因是构建镜像的时候, 镜像中没有我们的 git 用户信息, 无法拉取私有仓库.
 需要向项目仓库所有者请求一个 deploy token, 使用提供的用户名和 token 执行 pip install, 例如:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/about-pip-install/" />
-<meta property="article:published_time" content="2019-11-27T17:27:14+00:00" />
-<meta property="article:modified_time" content="2019-11-27T17:27:14+00:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/about-pip-install/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-11-27T17:27:14&#43;00:00" />
+<meta property="article:modified_time" content="2019-11-27T17:27:14&#43;00:00" />
+
 
 
     <title>
@@ -71,7 +72,7 @@ $ pip install -e git&#43;https://git.example.com/example/foo.git#egg=0.0.1 $ pip
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -269,7 +270,7 @@ $ cat requirements.txt
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -288,7 +289,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 

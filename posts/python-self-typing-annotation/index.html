@@ -29,9 +29,10 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
 class Foo: def __init__(self: Foo, bar: str) -&gt; None: self.bar = bar if __name__ == &#39;__main__&#39;: Foo(&#39;bar&#39;) 该例子中我们按常规方式声明了 self 的类型 Foo。让我们尝试验证类型和执行代码。
 $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceback (most recent call last): File &#34;main.py&#34;, line 1, in &lt;module&gt; class Foo: File &#34;main.py&#34;, line 3, in Foo def __init__(self: Foo, bar: str) -&gt; None: NameError: name &#39;Foo&#39; is not defined 因为生命方式符合 mypy 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 Foo 定义前就已经被自己的方法 __init__ 使用了，解释器无法理解，报出 NameError: name &#39;Foo&#39; is not defined 错误。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/python-self-typing-annotation/" />
-<meta property="article:published_time" content="2020-10-23T11:10:55+08:00" />
-<meta property="article:modified_time" content="2020-10-23T11:10:55+08:00" />
+<meta property="og:url" content="https://jtr109.github.io/posts/python-self-typing-annotation/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-10-23T11:10:55&#43;08:00" />
+<meta property="article:modified_time" content="2020-10-23T11:10:55&#43;08:00" />
+
 
 
     <title>
@@ -74,7 +75,7 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
 
     
 
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.82.0" />
   </head>
 
   
@@ -295,7 +296,7 @@ NameError: name <span style="color:#2aa198">&#39;Foo&#39;</span> is not defined
     
       
         
-        <script src="https://jtr109.github.io/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
       
     
 
@@ -314,7 +315,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
 
     
 
