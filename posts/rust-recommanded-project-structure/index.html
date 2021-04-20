@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="Background The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
-. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib The elements want be used outside should start with pub (which means publish) in src/lib.rs.
-pub fn hello(s: &amp;str) -&gt; String { format!">
+    <meta name="description" content="Background    The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
+. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib    The elements want be used outside should start with pub (which means publish) in src/lib.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Rust Recommanded Project Structure"/>
-<meta name="twitter:description" content="Background The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
-. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib The elements want be used outside should start with pub (which means publish) in src/lib.rs.
-pub fn hello(s: &amp;str) -&gt; String { format!"/>
+<meta name="twitter:description" content="Background    The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
+. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib    The elements want be used outside should start with pub (which means publish) in src/lib."/>
 
     <meta property="og:title" content="Rust Recommanded Project Structure" />
-<meta property="og:description" content="Background The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
-. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib The elements want be used outside should start with pub (which means publish) in src/lib.rs.
-pub fn hello(s: &amp;str) -&gt; String { format!" />
+<meta property="og:description" content="Background    The Cargo Book recommand the package layout of rust project. Here is an example project implemented with it.
+. ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs Lib    The elements want be used outside should start with pub (which means publish) in src/lib." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jtr109.github.io/posts/rust-recommanded-project-structure/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-01-06T22:51:41&#43;00:00" />
@@ -37,14 +37,12 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
       <link rel="canonical" href="https://jtr109.github.io/posts/rust-recommanded-project-structure/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -53,7 +51,7 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -76,9 +74,17 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
   
     
   
-  <body class="colorscheme-auto"
+  <body class="preload-transitions colorscheme-auto"
         onload=""
   >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
@@ -86,11 +92,6 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
       jtr109&#39;s Castle
     </a>
     
-      
-        <span id="dark-mode-toggle" class="float-right">
-          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-        </span>
-      
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
@@ -116,11 +117,6 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
           
         
         
-        
-          <li class="navigation-item separator">
-            <span>|</span>
-          </li>
-        
       </ul>
     
   </section>
@@ -133,7 +129,11 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">Rust Recommanded Project Structure</h1>
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/rust-recommanded-project-structure/">
+              Rust Recommanded Project Structure
+            </a>
+          </h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -162,7 +162,12 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
 
       <div>
         
-        <h2 id="background">Background</h2>
+        <h2 id="background">
+  Background
+  <a class="heading-link" href="#background">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p><a href="https://doc.rust-lang.org/cargo/index.html">The Cargo Book</a> recommand the <a href="https://doc.rust-lang.org/cargo/guide/project-layout.html#package-layout">package layout</a> of rust project. Here is <a href="https://github.com/jtr109/rust-play/tree/recommand-structure">an example project</a> implemented with it.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">.
 ├── Cargo.lock
@@ -179,12 +184,22 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
 └── tests
     └── some-integration-tests.rs
 </code></pre></div><!-- more -->
-<h2 id="lib">Lib</h2>
+<h2 id="lib">
+  Lib
+  <a class="heading-link" href="#lib">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>The elements want be used outside should start with <code>pub</code> (which means <strong>publish</strong>) in <code>src/lib.rs</code>.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">pub</span> <span style="color:#859900">fn</span> <span style="color:#268bd2">hello</span>(<span style="color:#268bd2">s</span>: <span style="color:#859900">&amp;</span><span style="color:#859900;font-weight:bold">str</span>) -&gt; <span style="color:#cb4b16">String</span> {
     <span style="color:#268bd2">format</span>!(<span style="color:#2aa198">&#34;hello, {}&#34;</span>, <span style="color:#268bd2">s</span>)
 }
-</code></pre></div><h2 id="main">Main</h2>
+</code></pre></div><h2 id="main">
+  Main
+  <a class="heading-link" href="#main">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>The <code>src/lib.rs</code> can be used as a module in project.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// src/main.rs
 </span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">mod</span> <span style="color:#268bd2">lib</span>;
@@ -199,7 +214,12 @@ pub fn hello(s: &amp;str) -&gt; String { format!" />
     Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running <span style="color:#2aa198">`</span>target/debug/play<span style="color:#2aa198">`</span>
 hello, main
-</code></pre></div><h2 id="bin">Bin</h2>
+</code></pre></div><h2 id="bin">
+  Bin
+  <a class="heading-link" href="#bin">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>It is easy to create other executables by adding them in directory <code>src/bin</code>. Cargo will find all executables in it. So it is unnecessary to config <code>Cargo.toml</code> like <a href="https://stackoverflow.com/a/26946705/6522746">that</a>.</p>
 <p>But there are some difference from <code>src/main.rs</code> that we cannot find module named <code>lib</code> in the scope of <code>src/bin/another_executable.rs</code>.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// src/bin/another_executable.rs
@@ -242,7 +262,12 @@ error: build failed
     Finished dev [unoptimized + debuginfo] target(s) in 0.37s
      Running <span style="color:#2aa198">`</span>target/debug/another_executable<span style="color:#2aa198">`</span>
 hello, another_executable
-</code></pre></div><h2 id="tests">Tests</h2>
+</code></pre></div><h2 id="tests">
+  Tests
+  <a class="heading-link" href="#tests">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>It is similar with using <code>src/lib.rs</code> in <code>src/bin</code>.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">// tests/some-integration-tests.rs
 </span><span style="color:#93a1a1;font-style:italic"></span><span style="color:#859900">extern</span> <span style="color:#859900">crate</span> <span style="color:#268bd2">play</span>;
@@ -287,8 +312,8 @@ hello, another_executable
     </article>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     MathJax = {
       tex: {
@@ -331,9 +356,7 @@ hello, another_executable
 
     
       
-        
-        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
-      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
@@ -351,6 +374,12 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
+
+    
+
+    
+
+    
 
     
 

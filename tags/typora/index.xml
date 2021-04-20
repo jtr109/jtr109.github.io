@@ -17,29 +17,64 @@
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typora 可以便捷地将文件保存在本地，但是如果不合理配置，无法适应静态网页生成器（如：Hugo）的静态文件存储方式。所以需要通过 Typora 强大的配置方式解决这个问题。&lt;/p&gt;
-&lt;h2 id=&#34;目标&#34;&gt;目标&lt;/h2&gt;
+&lt;h2 id=&#34;目标&#34;&gt;
+  目标
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%9b%ae%e6%a0%87&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;将文件存放在项目目录中的 &lt;code&gt;static/images&lt;/code&gt; 目录下，同时保证能在 Typora 和 Hugo 生成的网站中可见。&lt;/p&gt;
 &lt;!-- more --&gt;
-&lt;h2 id=&#34;配置-typora&#34;&gt;配置 Typora&lt;/h2&gt;
+&lt;h2 id=&#34;配置-typora&#34;&gt;
+  配置 Typora
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-typora&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typora 有两个选项需要配置：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。&lt;/li&gt;
 &lt;li&gt;图片的自动存放路径。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;指定图片根路径&#34;&gt;指定图片根路径&lt;/h3&gt;
+&lt;h3 id=&#34;指定图片根路径&#34;&gt;
+  指定图片根路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8c%87%e5%ae%9a%e5%9b%be%e7%89%87%e6%a0%b9%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;点击 Use Image Root Path，选择 &lt;code&gt;static&lt;/code&gt; 目录作为根路径。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195608916.png&#34; alt=&#34;image-20200607195608916&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;设置图片自动存放路径&lt;/h3&gt;
+&lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;
+  设置图片自动存放路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%ae%be%e7%bd%ae%e5%9b%be%e7%89%87%e8%87%aa%e5%8a%a8%e5%ad%98%e6%94%be%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在设置中选择 Image 栏，将 &lt;code&gt;static/images&lt;/code&gt; 的绝对路径设置为图片插入地址。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195835475.png&#34; alt=&#34;image-20200607195835475&#34;&gt;&lt;/p&gt;
 &lt;p&gt;也可以通过语法加入图片子目录，更好地管理图片。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200608112923095.png&#34; alt=&#34;image-20200608112923095&#34;&gt;&lt;/p&gt;
 &lt;p&gt;经过如上配置，截图便可通过 command+v 自动保存在 &lt;code&gt;static/images&lt;/code&gt; 目录中。&lt;/p&gt;
-&lt;h2 id=&#34;配置-hugo&#34;&gt;配置 Hugo&lt;/h2&gt;
+&lt;h2 id=&#34;配置-hugo&#34;&gt;
+  配置 Hugo
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-hugo&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 &lt;code&gt;static&lt;/code&gt;，符合要求。此时拉起站点，就可以正常显示图片了！&lt;/p&gt;
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;h2 id=&#34;参考&#34;&gt;
+  参考
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8f%82%e8%80%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://blog.dianduidian.com/post/%E4%BD%BF%E7%94%A8hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/&#34;&gt;使用hugo搭建博客系统&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://support.typora.io/Images/&#34;&gt;Images in Typora&lt;/a&gt;&lt;/li&gt;
@@ -53,18 +88,38 @@
       <pubDate>Thu, 07 Nov 2019 19:48:56 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/hexo-typora-github/</guid>
-      <description>&lt;h2 id=&#34;install-hexo-asset-image&#34;&gt;Install Hexo Asset Image&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;install-hexo-asset-image&#34;&gt;
+  Install Hexo Asset Image
+  &lt;a class=&#34;heading-link&#34; href=&#34;#install-hexo-asset-image&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;npm install https://github.com/CodeFalling/hexo-asset-image -save
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configure-hexo&#34;&gt;Configure Hexo&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;configure-hexo&#34;&gt;
+  Configure Hexo
+  &lt;a class=&#34;heading-link&#34; href=&#34;#configure-hexo&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;编辑 &lt;code&gt;_config.yml&lt;/code&gt;, 设置 &lt;code&gt;titlecase&lt;/code&gt;, 该功能使你在 &lt;code&gt;hexo new &amp;quot;My New Post&amp;quot;&lt;/code&gt;  的时候创建的文件自动带上 &lt;code&gt;-&lt;/code&gt;, 形如 &lt;code&gt;My-New-Post&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;titlecase&lt;/span&gt;: &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-post-with-hexo&#34;&gt;Create Post with Hexo&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-post-with-hexo&#34;&gt;
+  Create Post with Hexo
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-post-with-hexo&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;打开 &lt;code&gt;_config.yml&lt;/code&gt; , 修改配置为 &lt;code&gt;post_asset_folder: true&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;使用 Hexo 创建 post:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo new hexo-typora-github
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这时 &lt;code&gt;source/_posts&lt;/code&gt; 目录下会生成一个 &lt;code&gt;hexo-typora-github.md&lt;/code&gt; 文件和一个 &lt;code&gt;hexo-typora-github&lt;/code&gt; 目录, 这个目录就是图片的存放地址.&lt;/p&gt;
 &lt;p&gt;需要注意的是, 这里需要使用 &lt;code&gt;hexo-typora-github&lt;/code&gt; 这样的格式生成. 如果使用 &lt;code&gt;hexo new &amp;quot;Hexo Typora Github&amp;quot;&lt;/code&gt;, 生成的图片目录名为 &lt;code&gt;Hexo Typora Github&lt;/code&gt;, 无法和文件映射.&lt;/p&gt;
-&lt;h2 id=&#34;editing-with-typora&#34;&gt;Editing with Typora&lt;/h2&gt;
+&lt;h2 id=&#34;editing-with-typora&#34;&gt;
+  Editing with Typora
+  &lt;a class=&#34;heading-link&#34; href=&#34;#editing-with-typora&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typora 可以直接将图片复制到 &lt;code&gt;.md&lt;/code&gt; 文档中, 但是如何和 Hexo 拉起服务的图片路径保持一致是一个问题.&lt;/p&gt;
 &lt;p&gt;使用 Typora 打开 &lt;code&gt;source/_posts&lt;/code&gt; 目录, 点击设置 -&amp;gt; 图片:&lt;/p&gt;
 &lt;ol&gt;
@@ -73,7 +128,12 @@
 &lt;/ol&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191107200154200.png&#34; alt=&#34;image-20191107200154200&#34;&gt;&lt;/p&gt;
 &lt;p&gt;尝试截图, 使用 &lt;code&gt;Ctrl-v&lt;/code&gt; 粘贴到 Typora 中, 图片地址为: &lt;code&gt;![image-20191107200154200](hexo-typora-github/image-20191107200154200.png)&lt;/code&gt;. 符合预期, 图片可以正常显示了.&lt;/p&gt;
-&lt;h2 id=&#34;deploying-to-github&#34;&gt;Deploying to Github&lt;/h2&gt;
+&lt;h2 id=&#34;deploying-to-github&#34;&gt;
+  Deploying to Github
+  &lt;a class=&#34;heading-link&#34; href=&#34;#deploying-to-github&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;修改 &lt;code&gt;_config.yml&lt;/code&gt; 中的 &lt;code&gt;deploy&lt;/code&gt; 配置.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;deploy:
   type: git
@@ -81,9 +141,19 @@
   branch: master 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;部署服务到 github:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hexo clean &amp;amp;&amp;amp; hexo deploy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;comment-feature&#34;&gt;Comment Feature&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;comment-feature&#34;&gt;
+  Comment Feature
+  &lt;a class=&#34;heading-link&#34; href=&#34;#comment-feature&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我参考&lt;a href=&#34;https://www.jianshu.com/p/d68de067ea74&#34;&gt;这篇文章&lt;/a&gt;进行配置, 写得非常详细. 不多做赘述.&lt;/p&gt;
-&lt;h2 id=&#34;favicon&#34;&gt;Favicon&lt;/h2&gt;
+&lt;h2 id=&#34;favicon&#34;&gt;
+  Favicon
+  &lt;a class=&#34;heading-link&#34; href=&#34;#favicon&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Next theme 默认生成的 icon 比较朴素, 可以使用 &lt;a href=&#34;https://favicon.io/favicon-generator/&#34;&gt;favicon generator&lt;/a&gt; 生成自己的 favicon, 既可以享受定制化的乐趣, 也避免了版权纠纷.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
 &lt;p&gt;点击右上角 Download 下载到本地, 解压并复制到 &lt;code&gt;themes/next/source/images&lt;/code&gt; 下, 并修改 Next 的配置文件 &lt;code&gt;nvim themes/next/_config.yml&lt;/code&gt;.&lt;/p&gt;
@@ -94,7 +164,12 @@
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;safari_pinned_tab&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/logo.svg&lt;/span&gt;
   &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#android_manifest: /images/manifest.json&lt;/span&gt;
   &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;#ms_browserconfig: /images/browserconfig.xml&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;添加分类&#34;&gt;添加分类&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;添加分类&#34;&gt;
+  添加分类
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b7%bb%e5%8a%a0%e5%88%86%e7%b1%bb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;添加分类可以帮助我们管理自己的文章, 使用方式可参考&lt;a href=&#34;https://whx4j8.github.io/2016/03/16/hexo-next-%E6%B7%BB%E5%8A%A0%E4%B8%BA%E6%96%87%E7%AB%A0%E6%B7%BB%E5%8A%A0%E5%88%86%E7%B1%BB/&#34;&gt;这篇博客文章&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>

@@ -17,7 +17,12 @@
       <pubDate>Wed, 17 Jun 2020 15:35:25 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-log-level/</guid>
-      <description>&lt;h2 id=&#34;using-log-module&#34;&gt;Using &lt;code&gt;log&lt;/code&gt; Module&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;using-log-module&#34;&gt;
+  Using &lt;code&gt;log&lt;/code&gt; Module
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-log-module&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/log/&#34;&gt;Log module&lt;/a&gt; does not show any log without a logging implementation&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 
@@ -28,7 +33,12 @@
     &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;warn&amp;#34;&lt;/span&gt;);
     &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;error&amp;#34;&lt;/span&gt;);
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;using-env_logger&#34;&gt;Using &lt;code&gt;env_logger&lt;/code&gt;&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;using-env_logger&#34;&gt;
+  Using &lt;code&gt;env_logger&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-env_logger&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/env_logger/0.7.1/env_logger/&#34;&gt;The &lt;code&gt;env_logger&lt;/code&gt; module&lt;/a&gt; is a logging implementation we can choose. But even if we init it. The output is not shown as expected.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 
@@ -47,10 +57,20 @@
 &lt;blockquote&gt;
 &lt;p&gt;Log levels are controlled on a per-module basis, and by default all logging is disabled except for &lt;code&gt;error!&lt;/code&gt;. Logging is controlled via the &lt;code&gt;RUST_LOG&lt;/code&gt; environment variable.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;specifying-logging-level&#34;&gt;Specifying Logging Level&lt;/h2&gt;
+&lt;h2 id=&#34;specifying-logging-level&#34;&gt;
+  Specifying Logging Level
+  &lt;a class=&#34;heading-link&#34; href=&#34;#specifying-logging-level&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we want to set the logging level, the environment variable &lt;code&gt;RUST_LOG&lt;/code&gt; is required. Such as below.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;RUST_LOG&lt;/span&gt;=info cargo run
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;setting-default-logging-level&#34;&gt;Setting Default Logging Level&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;setting-default-logging-level&#34;&gt;
+  Setting Default Logging Level
+  &lt;a class=&#34;heading-link&#34; href=&#34;#setting-default-logging-level&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;But we can also change the default logging level explicitly.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 &lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;env_logger&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Env&lt;/span&gt;;
@@ -67,7 +87,12 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now you can &lt;a href=&#34;https://play.rust-lang.org/?version=stable&amp;amp;mode=debug&amp;amp;edition=2018&amp;amp;gist=ff9ceff45cee38a23e818f60c3557184&#34;&gt;see&lt;/a&gt; all logs higher than specific level.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[2020-06-17T10:33:10Z WARN  playground] warn
 [2020-06-17T10:33:10Z ERROR playground] error
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;
+  References
+  &lt;a class=&#34;heading-link&#34; href=&#34;#references&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/log/0.4.8/log/index.html&#34;&gt;&lt;code&gt;log&lt;/code&gt; module document&lt;/a&gt;&lt;/p&gt;

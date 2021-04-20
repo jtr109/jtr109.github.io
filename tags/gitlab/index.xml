@@ -17,16 +17,31 @@
       <pubDate>Thu, 14 Nov 2019 14:06:16 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/git-with-2fa/</guid>
-      <description>&lt;h2 id=&#34;写在最前&#34;&gt;写在最前&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;写在最前&#34;&gt;
+  写在最前
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%86%99%e5%9c%a8%e6%9c%80%e5%89%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;作为开发者, 应该清楚地知道 &amp;ldquo;密码再强也不是不可能被破解&amp;rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.&lt;/p&gt;
-&lt;h2 id=&#34;在-gitlab-中使用-2fa&#34;&gt;在 GitLab 中使用 2FA&lt;/h2&gt;
+&lt;h2 id=&#34;在-gitlab-中使用-2fa&#34;&gt;
+  在 GitLab 中使用 2FA
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%9c%a8-gitlab-%e4%b8%ad%e4%bd%bf%e7%94%a8-2fa&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;GitLab 中如何开启 2FA 在&lt;a href=&#34;https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-2fa-via-one-time-password-authenticator&#34;&gt;文档&lt;/a&gt;中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.&lt;/p&gt;
 &lt;p&gt;但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到&lt;a href=&#34;https://docs.gitlab.com/ce/user/profile/account/two_factor_authentication.html#personal-access-tokens&#34;&gt;解决方案&lt;/a&gt;.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using &lt;a href=&#34;https://docs.gitlab.com/ee/api/README.html&#34;&gt;GitLab’s API&lt;/a&gt;. You must use a &lt;a href=&#34;https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html&#34;&gt;personal access token&lt;/a&gt; instead.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;所以使用 access token 作为密码即可登录自己的 git 帐号拉取和推送服务.&lt;/p&gt;
-&lt;h2 id=&#34;关于-access-token&#34;&gt;关于 Access Token&lt;/h2&gt;
+&lt;h2 id=&#34;关于-access-token&#34;&gt;
+  关于 Access Token
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e4%ba%8e-access-token&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;建议所有在使用 access token 的过程中, 为每一个客户端使用一个单独的 token, 来避免找到一个 token 变成 &amp;ldquo;死 token&amp;rdquo;, 即这个 token &amp;ldquo;可能&amp;rdquo; 被用在很多地方, 而自己不知道具体在哪使用了.&lt;/p&gt;
 &lt;p&gt;给每个客户端建立一个 token, 也不要让这些 token 落盘, 如果 logout 了之后, 请刷新 token, 并使用你的新 token 登录.&lt;/p&gt;
 </description>
@@ -39,24 +54,64 @@
       
       <guid>https://jtr109.github.io/posts/using-gitlab-ci-in-project/</guid>
       <description>&lt;p&gt;GitLab 的 CI 功能有非常完备的&lt;a href=&#34;https://docs.gitlab.com/ee/ci/&#34;&gt;文档&lt;/a&gt;, 本文旨在介绍一些常用概念和可能遇到的问题, 帮助大家更好的接入和使用.&lt;/p&gt;
-&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;公司项目中有大量 Python 项目构建的微服务, 在合并的过程中需要实现持续集成来获取信息.&lt;/p&gt;
-&lt;h2 id=&#34;服务搭建&#34;&gt;服务搭建&lt;/h2&gt;
-&lt;h3 id=&#34;名词解释&#34;&gt;名词解释&lt;/h3&gt;
+&lt;h2 id=&#34;服务搭建&#34;&gt;
+  服务搭建
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e6%90%ad%e5%bb%ba&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;名词解释&#34;&gt;
+  名词解释
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Runner: &lt;a href=&#34;https://docs.gitlab.com/runner/&#34;&gt;Runner&lt;/a&gt; 是任务的执行单元, 实际上就是一个 OS, 它可以是一个主机, 虚拟机 Docker 或者 Kubernetes.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;runner-搭建和配置&#34;&gt;Runner 搭建和配置&lt;/h2&gt;
+&lt;h2 id=&#34;runner-搭建和配置&#34;&gt;
+  Runner 搭建和配置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#runner-%e6%90%ad%e5%bb%ba%e5%92%8c%e9%85%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Shell Runner 有一个麻烦的问题, 就是所有操作都会影响主机的文件, 依赖等, 而且基于主机 OS 的 runner 导致他是独一无二的, 所以无法实现环境区分. 已经 9102 年了, 建议使用 &lt;a href=&#34;https://docs.gitlab.com/runner/install/docker.html&#34;&gt;Docker Runner&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;配置-runner-调度器&#34;&gt;配置 Runner 调度器&lt;/h3&gt;
+&lt;h3 id=&#34;配置-runner-调度器&#34;&gt;
+  配置 Runner 调度器
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-runner-%e8%b0%83%e5%ba%a6%e5%99%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;工具&lt;a href=&#34;https://docs.gitlab.com/runner/install/docker.html#docker-image-installation&#34;&gt;文档&lt;/a&gt;安装好 Docker CE 和 &lt;code&gt;gitlab-runner&lt;/code&gt;, 意味着你拉起了一个 runners 调度器.&lt;/p&gt;
-&lt;h3 id=&#34;配置-runner&#34;&gt;配置 Runner&lt;/h3&gt;
+&lt;h3 id=&#34;配置-runner&#34;&gt;
+  配置 Runner
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-runner&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;根据&lt;a href=&#34;https://docs.gitlab.com/runner/register/index.html#docker&#34;&gt;文档&lt;/a&gt;触发 Runner 注册:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注册时需要指定 URL 和 registration token, 可以在项目 &lt;strong&gt;Settings -&amp;gt; CI / CD -&amp;gt; Runners&lt;/strong&gt; 中查到. 注册时可以指定这个 Runner 的 Tag, 如果项目配置的 Job 中有对应的 Tag, 就会触发该 Runner 的执行.&lt;/p&gt;
-&lt;h2 id=&#34;python-集成&#34;&gt;Python 集成&lt;/h2&gt;
+&lt;h2 id=&#34;python-集成&#34;&gt;
+  Python 集成
+  &lt;a class=&#34;heading-link&#34; href=&#34;#python-%e9%9b%86%e6%88%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在&lt;a href=&#34;https://docs.gitlab.com/ee/ci/yaml/&#34;&gt;文档&lt;/a&gt;中找到.&lt;/p&gt;
-&lt;h3 id=&#34;编写配置&#34;&gt;编写配置&lt;/h3&gt;
+&lt;h3 id=&#34;编写配置&#34;&gt;
+  编写配置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bc%96%e5%86%99%e9%85%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;python:3.7.4 &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定使用的基础镜像&lt;/span&gt;
 
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;job1&lt;/span&gt;:
@@ -67,7 +122,12 @@
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;tags&lt;/span&gt;:
     - &lt;span style=&#34;color:#2aa198&#34;&gt;pyservice &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定 runner 对应的 tag&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要注意的是 &lt;code&gt;image&lt;/code&gt;, &lt;code&gt;before_script&lt;/code&gt; 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 &lt;code&gt;before_script&lt;/code&gt;, 那这个 job 被触发的时候, 不会读取和执行全局的 &lt;code&gt;before_script&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;设置缓存&#34;&gt;设置缓存&lt;/h3&gt;
+&lt;h3 id=&#34;设置缓存&#34;&gt;
+  设置缓存
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%ae%be%e7%bd%ae%e7%bc%93%e5%ad%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考&lt;a href=&#34;https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies&#34;&gt;文档 Caching Python dependencies&lt;/a&gt;中的方案进行配置.&lt;/p&gt;
 &lt;p&gt;另外根据该方案进行配置后, 即使多个 repositories 共用一个 runner, 每个项目的依赖文件也能做到相互隔离, 各自缓存, 互不影响.&lt;/p&gt;
 </description>

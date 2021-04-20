@@ -17,7 +17,12 @@
       <pubDate>Thu, 07 Nov 2019 22:36:29 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
-      <description>&lt;h2 id=&#34;背景描述&#34;&gt;背景描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景描述&#34;&gt;
+  背景描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在使用 &lt;a href=&#34;http://diesel.rs/&#34;&gt;Diesel&lt;/a&gt; 和 &lt;a href=&#34;https://crates.io/crates/uuid&#34;&gt;uuid&lt;/a&gt; 开发的过程中, 使用发生报错:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;error[E0277]: the trait bound &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;uuid::Uuid: diesel::Queryable&amp;lt;diesel::sql_types::Uuid, _&amp;gt;&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt; is not satisfied
   --&amp;gt; src/models.rs:45:14
@@ -70,9 +75,19 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
             .&lt;span style=&#34;color:#268bd2&#34;&gt;expect&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Error loading app&amp;#34;&lt;/span&gt;)
     }
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;经过&#34;&gt;经过&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;经过&#34;&gt;
+  经过
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bb%8f%e8%bf%87&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在往上查询未果, 经人提点可能是项目中 uuid 和版本不一致的问题导致的.&lt;/p&gt;
-&lt;h3 id=&#34;uuid-降级&#34;&gt;UUID 降级&lt;/h3&gt;
+&lt;h3 id=&#34;uuid-降级&#34;&gt;
+  UUID 降级
+  &lt;a class=&#34;heading-link&#34; href=&#34;#uuid-%e9%99%8d%e7%ba%a7&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;查看 Diesel 的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml&#34;&gt;diesel/Cargo.toml at 1.4.x · diesel-rs/diesel · GitHub&lt;/a&gt; 发现 Diesel 依赖的 &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L26&#34;&gt;uuid 版本&lt;/a&gt;为 &lt;code&gt;&amp;gt;=0.2.0, &amp;lt;0.7.0&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;gt;=0.2.0, &amp;lt;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;use_std&amp;#34;&lt;/span&gt;] }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而我在项目中使用的 &lt;code&gt;uuid&lt;/code&gt; 为 &lt;code&gt;0.7.4&lt;/code&gt;. 尝试将 uuid 降级到 &lt;code&gt;0.6&lt;/code&gt;.&lt;/p&gt;
@@ -84,7 +99,12 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
    |                                             ^^^^^^^^^ help: there is a method with a similar name: &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;simple&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以推断, uuid 在 0.6 到 0.7 的过程中有较大的功能改变. 那新问题就来了:&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;我希望使用 uuid 最新版本的能力.&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;修改-dependence&#34;&gt;修改 Dependence&lt;/h3&gt;
+&lt;h3 id=&#34;修改-dependence&#34;&gt;
+  修改 Dependence
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bf%ae%e6%94%b9-dependence&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;好消息是我在 &lt;code&gt;Cargo.toml&lt;/code&gt; 紧接着的一行发现了一个 dependence: &lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/1.4.x/diesel/Cargo.toml#L27&#34;&gt;uuidv07&lt;/a&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;uuidv07&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.0&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;optional&lt;/span&gt; = &lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;package&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuid&amp;#34;&lt;/span&gt;}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从配置信息可以看到, 这个 &lt;code&gt;uuidv07&lt;/code&gt; 同样使用的是 uuid 包 (&lt;code&gt;package = &amp;quot;uuid&amp;quot;&lt;/code&gt;). 但是版本为 &amp;ldquo;0.7.0&amp;rdquo; (&lt;code&gt;version = &amp;quot;0.7.0&amp;quot;&lt;/code&gt;).&lt;/p&gt;
@@ -93,7 +113,12 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
 &lt;span style=&#34;color:#268bd2&#34;&gt;diesel&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;1.4.2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;postgres&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;uuidv07&amp;#34;&lt;/span&gt;] }
 &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt; = { &lt;span style=&#34;color:#268bd2&#34;&gt;version&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;0.7.4&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;features&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;v4&amp;#34;&lt;/span&gt;] }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;测试通过!&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
+&lt;h2 id=&#34;结论&#34;&gt;
+  结论
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bb%93%e8%ae%ba&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;网上几乎没法找到这个&lt;a href=&#34;https://github.com/diesel-rs/diesel/blob/master/CHANGELOG.md#fixed-3&#34;&gt;改动&lt;/a&gt;相关的问题和解决方案, 甚至文档中都没有提及.&lt;/p&gt;
 &lt;p&gt;定位问题的能力还是有待提高.&lt;/p&gt;
 &lt;p&gt;#tech/rust&lt;/p&gt;
@@ -106,7 +131,12 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
       <pubDate>Tue, 13 Aug 2019 11:13:09 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;今天跟着&lt;a href=&#34;https://dev.to/werner/practical-rust-web-development-api-rest-29g1&#34;&gt;文章&lt;/a&gt;学习的时候遇到一个问题. 我把这句导入语句&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;dsl&lt;/span&gt;::*;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;放在了顶部,  在下面定义了一个 method:&lt;/p&gt;
@@ -126,7 +156,12 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
    |
    = note: expected &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;i32&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
               found &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;
+  原因
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8e%9f%e5%9b%a0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;原因出在 &lt;code&gt;use foo::bar::*&lt;/code&gt; 的时候, 编译器将 struct &lt;code&gt;id&lt;/code&gt; 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 &lt;code&gt;id&lt;/code&gt; 指的是一个 pattern. 所以报错.&lt;/p&gt;
 &lt;p&gt;举一个类似的例子:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;;
@@ -135,7 +170,12 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
 
 &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上例子中, 函数 &lt;code&gt;bar&lt;/code&gt; 里定义的 &lt;code&gt;Foo&lt;/code&gt; 被编译器认为是一个 pattern, 所以会提示 mismatched types.&lt;/p&gt;
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这里的主要原因是 &lt;code&gt;diesel&lt;/code&gt;  的变量名设计存在一些问题. 这里其实用 CamelCase 会更合适.&lt;/p&gt;
 &lt;p&gt;另外应该避免使用 &lt;code&gt;use foo::bar::*&lt;/code&gt; 这样的语法.&lt;/p&gt;
 &lt;p&gt;那如果不得不用的时候, 特别是针对 &lt;code&gt;diesel&lt;/code&gt; 使用的时候, 可以尽量考虑在函数内调用 &lt;code&gt;use&lt;/code&gt;.&lt;/p&gt;

@@ -17,17 +17,32 @@
       <pubDate>Wed, 24 Jun 2020 11:26:40 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/mysql-service-with-k3s-on-raspberry-pi/</guid>
-      <description>&lt;h2 id=&#34;dependences&#34;&gt;Dependences&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;dependences&#34;&gt;
+  Dependences
+  &lt;a class=&#34;heading-link&#34; href=&#34;#dependences&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Installed &lt;a href=&#34;https://k3s.io/&#34;&gt;K3s&lt;/a&gt; on a Raspberry Pi&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;li&gt;Installed &lt;a href=&#34;https://kubernetes.io/docs/tasks/tools/install-kubectl/&#34;&gt;kubectl&lt;/a&gt; on your local computer.&lt;/li&gt;
 &lt;li&gt;A MySQL client. (for testing)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;install-mysql-on-kubernetes&#34;&gt;Install MySQL on Kubernetes&lt;/h2&gt;
+&lt;h2 id=&#34;install-mysql-on-kubernetes&#34;&gt;
+  Install MySQL on Kubernetes
+  &lt;a class=&#34;heading-link&#34; href=&#34;#install-mysql-on-kubernetes&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We will create configures and apply them to create a MySQL service. All configure files below must be applied after created with command:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl apply -f &amp;lt;config-name&amp;gt;.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;All commands below are omitted.&lt;/p&gt;
-&lt;h3 id=&#34;prepare-mysql-data-storage&#34;&gt;Prepare MySQL Data Storage&lt;/h3&gt;
+&lt;h3 id=&#34;prepare-mysql-data-storage&#34;&gt;
+  Prepare MySQL Data Storage
+  &lt;a class=&#34;heading-link&#34; href=&#34;#prepare-mysql-data-storage&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us create a volume for our MySQL service to store data.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;At first, we need create a directory on node with command:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir /mnt/data
@@ -60,7 +75,12 @@
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;resources&lt;/span&gt;:
     &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;requests&lt;/span&gt;:
       &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;storage&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;2Gi &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the storage should be less than capacity in persistent volume&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;adding-a-secret-with-mysql-password&#34;&gt;Adding A Secret with MySQL Password&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;adding-a-secret-with-mysql-password&#34;&gt;
+  Adding A Secret with MySQL Password
+  &lt;a class=&#34;heading-link&#34; href=&#34;#adding-a-secret-with-mysql-password&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;The passsword of mysql we will use later should be injected into the pod environment by using the Secret.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Note that the value must be encoded using base64&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;Says that the password is &amp;ldquo;mypassword&amp;rdquo;.&lt;/p&gt;
@@ -74,7 +94,12 @@
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;type&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;Opaque&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;data&lt;/span&gt;:
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;password&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;bXlwYXNzd29yZA== &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# encoded base64 password&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;creating-deployment-with-a-mysql-container&#34;&gt;Creating Deployment with a MySQL Container&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;creating-deployment-with-a-mysql-container&#34;&gt;
+  Creating Deployment with a MySQL Container
+  &lt;a class=&#34;heading-link&#34; href=&#34;#creating-deployment-with-a-mysql-container&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Specifying image to create a container in pod.&lt;/li&gt;
 &lt;li&gt;Using PersistentVolumeClaim as volume.&lt;/li&gt;
@@ -116,7 +141,12 @@
           &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;volumeMounts&lt;/span&gt;:
             - &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;mountPath&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/var/lib/mysql&amp;#34;&lt;/span&gt;
               &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;mysql-data-storage&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;expose-the-service&#34;&gt;Expose the Service&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;expose-the-service&#34;&gt;
+  Expose the Service
+  &lt;a class=&#34;heading-link&#34; href=&#34;#expose-the-service&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;After the deployment applied and the pod is running. The MySQL service is not exposed to the node. We need to create a Service to listen the port on node.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# service.yaml&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
@@ -132,7 +162,12 @@
       &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;port&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
       &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;targetPort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3306&lt;/span&gt;
       &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;nodePort&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;have-a-try&#34;&gt;Have a Try&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;have-a-try&#34;&gt;
+  Have a Try
+  &lt;a class=&#34;heading-link&#34; href=&#34;#have-a-try&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Now, you can connet to your new database with a MySQL client.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mysql -P &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;30006&lt;/span&gt; -h &amp;lt;raspberry-pi-host&amp;gt; -u root -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;All done!&lt;/p&gt;
@@ -160,7 +195,12 @@
       
       <guid>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</guid>
       <description>&lt;p&gt;本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。&lt;/p&gt;
-&lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;MySQL Server 密码重置&lt;/h1&gt;
+&lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;
+  MySQL Server 密码重置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#mysql-server-%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;本机环境
 Mac OS X EI Capitan
@@ -170,11 +210,26 @@ pwd: &lt;code&gt;/User/jtr109/qs/&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;em&gt;密码重置的方式多种多样，用很多我尝试之后这个是我唯一可行的，和我有相同环境、情况的朋友可以参考：&lt;a href=&#34;http://blog.csdn.net/u014410695/article/details/50630233&#34;&gt;数据库之mac上mysql root密码忘记或权限错误的解决办法&lt;/a&gt;。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;遇到这个问题主要是我装MySQL的时候不专心，传说官方dmg装完后是会&lt;strong&gt;提示设定密码&lt;/strong&gt;的，不知道怎么回事，反正我本地的MySQL Server就完全进不去了，只能改密码。这篇文章讲的非常清晰，简单易懂，不做过多评论。只要每一步照做就好。此文最大的优点是不用终端运行MySQL Server，也不用考虑 kill 进程，非常适合刚刚接触相关内容的朋友。&lt;/p&gt;
-&lt;h1 id=&#34;安装-mysqldb&#34;&gt;安装 MySQLdb&lt;/h1&gt;
+&lt;h1 id=&#34;安装-mysqldb&#34;&gt;
+  安装 MySQLdb
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%89%e8%a3%85-mysqldb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
 &lt;p&gt;首先进入你需要的路径，我们以 &lt;code&gt;/User/jtr109/qs/&lt;/code&gt; 为例。执行 &lt;code&gt;virtualenv venv&lt;/code&gt; 创建虚拟环境包， &lt;code&gt;source venv/bin/activate&lt;/code&gt; 进入虚拟环境。&lt;/p&gt;
-&lt;h2 id=&#34;注意安装模块名&#34;&gt;注意安装模块名&lt;/h2&gt;
+&lt;h2 id=&#34;注意安装模块名&#34;&gt;
+  注意安装模块名
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b3%a8%e6%84%8f%e5%ae%89%e8%a3%85%e6%a8%a1%e5%9d%97%e5%90%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我不知道为什么这个模块叫 MySQLdb，&lt;code&gt;import&lt;/code&gt; 语句也是 &lt;code&gt;import MySQLdb&lt;/code&gt;。但是你要&lt;strong&gt;注意&lt;/strong&gt;，&lt;code&gt;pip&lt;/code&gt; 安装语句为： &lt;code&gt;pip install MySQL-python&lt;/code&gt;。千万不要写错。不过因为你在虚拟环境，所以玩脱了就这个环境包删了就好。这也是我为什么推崇为每个项目创建虚拟环境的原因之一。&lt;/p&gt;
-&lt;h2 id=&#34;修改-_mysqlso-追踪路径&#34;&gt;修改 &lt;code&gt;_mysql.so&lt;/code&gt; 追踪路径&lt;/h2&gt;
+&lt;h2 id=&#34;修改-_mysqlso-追踪路径&#34;&gt;
+  修改 &lt;code&gt;_mysql.so&lt;/code&gt; 追踪路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bf%ae%e6%94%b9-_mysqlso-%e8%bf%bd%e8%b8%aa%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;现在你可以试着进入 python， 然后运行：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import MySQLdb
 Traceback (most recent call last):
@@ -221,48 +276,138 @@ ImportError: dlopen(/Users/qs/venv/lib/python2.7/site-packages/_mysql.so, 2): Li
       
       <guid>https://jtr109.github.io/posts/mysql-dump-note/</guid>
       <description>&lt;p&gt;目前的配置环境均为 Windows，其他环境会在稍后补充&lt;/p&gt;
-&lt;h2 id=&#34;1-全量备份&#34;&gt;1. 全量备份&lt;/h2&gt;
-&lt;h2 id=&#34;2-增量备份及恢复&#34;&gt;2. 增量备份及恢复&lt;/h2&gt;
-&lt;h3 id=&#34;21-备份&#34;&gt;2.1 备份&lt;/h3&gt;
-&lt;h4 id=&#34;211-启用二进制备份&#34;&gt;2.1.1 启用二进制备份&lt;/h4&gt;
-&lt;h5 id=&#34;开启-binlog-日志&#34;&gt;开启 binlog 日志&lt;/h5&gt;
+&lt;h2 id=&#34;1-全量备份&#34;&gt;
+  1. 全量备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#1-%e5%85%a8%e9%87%8f%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h2 id=&#34;2-增量备份及恢复&#34;&gt;
+  2. 增量备份及恢复
+  &lt;a class=&#34;heading-link&#34; href=&#34;#2-%e5%a2%9e%e9%87%8f%e5%a4%87%e4%bb%bd%e5%8f%8a%e6%81%a2%e5%a4%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;21-备份&#34;&gt;
+  2.1 备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#21-%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;211-启用二进制备份&#34;&gt;
+  2.1.1 启用二进制备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#211-%e5%90%af%e7%94%a8%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
+&lt;h5 id=&#34;开启-binlog-日志&#34;&gt;
+  开启 binlog 日志
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%bc%80%e5%90%af-binlog-%e6%97%a5%e5%bf%97&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h5&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;set global sql_log_bin=1&amp;#34;&lt;/span&gt;;  
 mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;show global variables like &amp;#39;sql_log_bin&amp;#39;\G&amp;#34;&lt;/span&gt;;  
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;实测需要将 global 替换为 session&lt;/p&gt;
-&lt;h5 id=&#34;在系统-mysql-配置文件-myini-中加入修改存储-log-bin-的位置&#34;&gt;在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置&lt;/h5&gt;
+&lt;h5 id=&#34;在系统-mysql-配置文件-myini-中加入修改存储-log-bin-的位置&#34;&gt;
+  在系统 MySQL 配置文件 my.ini 中加入（修改）存储 log-bin 的位置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%9c%a8%e7%b3%bb%e7%bb%9f-mysql-%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6-myini-%e4%b8%ad%e5%8a%a0%e5%85%a5%e4%bf%ae%e6%94%b9%e5%ad%98%e5%82%a8-log-bin-%e7%9a%84%e4%bd%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h5&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;log-bin=D:/Program Files (x86)/MySQL/mylog/jlog
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;212-重启-mysql-服务&#34;&gt;2.1.2 重启 MySQL 服务&lt;/h4&gt;
-&lt;h4 id=&#34;213-执行一次全量备份&#34;&gt;2.1.3 执行一次全量备份&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;212-重启-mysql-服务&#34;&gt;
+  2.1.2 重启 MySQL 服务
+  &lt;a class=&#34;heading-link&#34; href=&#34;#212-%e9%87%8d%e5%90%af-mysql-%e6%9c%8d%e5%8a%a1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
+&lt;h4 id=&#34;213-执行一次全量备份&#34;&gt;
+  2.1.3 执行一次全量备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#213-%e6%89%a7%e8%a1%8c%e4%b8%80%e6%ac%a1%e5%85%a8%e9%87%8f%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqldump -hlocalhost -uroot -p -l -F &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; &amp;gt; testtt.sql
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;全量备份除了新建 sql 备份意外，还会新建一个 binlog 文件，完成后可以删除早先的 binlog 文件。
 转移全量备份的 sql 并保存。&lt;/p&gt;
-&lt;h4 id=&#34;214-定期备份-binlog-文件&#34;&gt;2.1.4 定期备份 binlog 文件&lt;/h4&gt;
-&lt;h5 id=&#34;拆分-binlog-文件&#34;&gt;拆分 binlog 文件&lt;/h5&gt;
+&lt;h4 id=&#34;214-定期备份-binlog-文件&#34;&gt;
+  2.1.4 定期备份 binlog 文件
+  &lt;a class=&#34;heading-link&#34; href=&#34;#214-%e5%ae%9a%e6%9c%9f%e5%a4%87%e4%bb%bd-binlog-%e6%96%87%e4%bb%b6&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
+&lt;h5 id=&#34;拆分-binlog-文件&#34;&gt;
+  拆分 binlog 文件
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8b%86%e5%88%86-binlog-%e6%96%87%e4%bb%b6&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h5&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysql -hlocalhost -uroot -p -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;flush logs;&amp;#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行语句会生成新的 binlog 文件用于记录， 原先的 binlog 文件可以转移并保存&lt;/p&gt;
-&lt;h3 id=&#34;22-恢复&#34;&gt;2.2 恢复&lt;/h3&gt;
-&lt;h3 id=&#34;221-单增量恢复&#34;&gt;2.2.1 单增量恢复&lt;/h3&gt;
+&lt;h3 id=&#34;22-恢复&#34;&gt;
+  2.2 恢复
+  &lt;a class=&#34;heading-link&#34; href=&#34;#22-%e6%81%a2%e5%a4%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h3 id=&#34;221-单增量恢复&#34;&gt;
+  2.2.1 单增量恢复
+  &lt;a class=&#34;heading-link&#34; href=&#34;#221-%e5%8d%95%e5%a2%9e%e9%87%8f%e6%81%a2%e5%a4%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;找到全量恢复之前的所有 binlog 文件， 同时导入&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果出现&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ERROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;则需要重新导入全量&lt;/p&gt;
-&lt;h3 id=&#34;222-复合导入&#34;&gt;2.2.2 复合导入&lt;/h3&gt;
+&lt;h3 id=&#34;222-复合导入&#34;&gt;
+  2.2.2 复合导入
+  &lt;a class=&#34;heading-link&#34; href=&#34;#222-%e5%a4%8d%e5%90%88%e5%af%bc%e5%85%a5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 导入全量&lt;/span&gt;
 $ mysql -hlocalhost -uroot -p &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; &amp;lt; testtt.sql
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 增量导入&lt;/span&gt;
 $ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样的导入方法只能完整地导入整个 binlog 文件中的数据， 我们还可以加入参数来完成部分导入：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 根据时间导入&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;23-问题汇总&#34;&gt;2.3 问题汇总&lt;/h3&gt;
-&lt;h4 id=&#34;231-mysql配置文件-myini-位置&#34;&gt;2.3.1 MySQL配置文件 my.ini 位置&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;23-问题汇总&#34;&gt;
+  2.3 问题汇总
+  &lt;a class=&#34;heading-link&#34; href=&#34;#23-%e9%97%ae%e9%a2%98%e6%b1%87%e6%80%bb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;231-mysql配置文件-myini-位置&#34;&gt;
+  2.3.1 MySQL配置文件 my.ini 位置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#231-mysql%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6-myini-%e4%bd%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;打开“服务”，找到 MySQL 相关服务（如 MySQL57），点击属性。“可执行文件的路径”的显示即为 my.ini 位置。&lt;/p&gt;
-&lt;h2 id=&#34;3-参考文档&#34;&gt;3. 参考文档&lt;/h2&gt;
-&lt;h3 id=&#34;31-全量备份&#34;&gt;3.1 全量备份&lt;/h3&gt;
+&lt;h2 id=&#34;3-参考文档&#34;&gt;
+  3. 参考文档
+  &lt;a class=&#34;heading-link&#34; href=&#34;#3-%e5%8f%82%e8%80%83%e6%96%87%e6%a1%a3&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;31-全量备份&#34;&gt;
+  3.1 全量备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#31-%e5%85%a8%e9%87%8f%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/jueblog/article/details/9878191&#34;&gt;【SQL】MySQL之使用mysqldump全备份及恢复过程详解&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;32-增量备份&#34;&gt;3.2 增量备份&lt;/h3&gt;
+&lt;h3 id=&#34;32-增量备份&#34;&gt;
+  3.2 增量备份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#32-%e5%a2%9e%e9%87%8f%e5%a4%87%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/jueblog/article/details/9909669&#34;&gt;【SQL】MySQL之使用mysqlbinlog进行增量备份及恢复详解&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000002408168&#34;&gt;MySQL增量备份与恢复实例&lt;/a&gt;&lt;/li&gt;

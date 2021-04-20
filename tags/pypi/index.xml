@@ -17,21 +17,41 @@
       <pubDate>Wed, 27 Nov 2019 17:27:14 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/about-pip-install/</guid>
-      <description>&lt;h2 id=&#34;包安装&#34;&gt;包安装&lt;/h2&gt;
-&lt;h3 id=&#34;问题&#34;&gt;问题&lt;/h3&gt;
+      <description>&lt;h2 id=&#34;包安装&#34;&gt;
+  包安装
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8c%85%e5%ae%89%e8%a3%85&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;问题&#34;&gt;
+  问题
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在公司项目开发过程中, 我们构建了一些自定义的 Python packages. 如果直接使用如下方式安装, 可以正常使用, 但是 &lt;code&gt;pip freeze&lt;/code&gt; 的时候只会显示包名称和版本. 无法在实际生产中使用.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install git+https://git.example.com/example/foo.git
 ...
 $ pip freeze &amp;gt; requirements.txt
 $ cat requirements.txt
 dm-utils==1.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;解决方案&#34;&gt;解决方案&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;需要参考&lt;a href=&#34;https://github.com/pypa/pip/issues/335#issuecomment-1774484&#34;&gt;这个 issue&lt;/a&gt;实现:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1
 $ pip freeze &amp;gt; requirements.txt
 $ cat requirements.txt
 -e git+https://git.example.com/example/foo.git@2c2ed2b3df2084d1b1ebfa87c9fe703072eded7b#egg=dm_utils
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;docker-build&#34;&gt;Docker Build&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;docker-build&#34;&gt;
+  Docker Build
+  &lt;a class=&#34;heading-link&#34; href=&#34;#docker-build&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;上面的示例可以解决大部分 public 项目的拉取和安装问题, 但如果在 private 项目中使用上面的方案, 在 &lt;code&gt;docker build&lt;/code&gt; 时会报错, 原因是构建镜像的时候, 镜像中没有我们的 git 用户信息, 无法拉取私有仓库.&lt;/p&gt;
 &lt;p&gt;需要向项目仓库所有者请求一个 &lt;a href=&#34;https://docs.gitlab.com/ee/user/project/deploy_tokens/&#34;&gt;deploy token&lt;/a&gt;, 使用提供的用户名和 token 执行 &lt;code&gt;pip install&lt;/code&gt;, 例如:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install -e git+https://gitlab+deploy-token-23:KdCjd8-mM1i9DzBZnXTz@git.example.com/example/foo.git#egg=0.0.1

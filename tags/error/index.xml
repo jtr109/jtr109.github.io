@@ -17,7 +17,12 @@
       <pubDate>Thu, 22 Aug 2019 14:33:24 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-error-type/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result.html#using-result-in-main&#34;&gt;Result - Rust By Example&lt;/a&gt;中有一个示例如下:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;std&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;num&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;;
 
@@ -31,14 +36,29 @@
     &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里有一个问题没有明确解释: 没有足够的信息, 怎么就确认 &lt;code&gt;parse&lt;/code&gt; 返回的 &lt;code&gt;Err&lt;/code&gt; 是 &lt;code&gt;ParseIntError&lt;/code&gt; 类型了?&lt;/p&gt;
-&lt;h2 id=&#34;拨开迷雾&#34;&gt;拨开迷雾&lt;/h2&gt;
+&lt;h2 id=&#34;拨开迷雾&#34;&gt;
+  拨开迷雾
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8b%a8%e5%bc%80%e8%bf%b7%e9%9b%be&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;所幸在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result/result_map.html&#34;&gt;下一个章节&lt;/a&gt;有这么一句话:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;We first need to know what kind of error type we are dealing with. To determine the &lt;code&gt;Err&lt;/code&gt; type, we look to  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;&lt;code&gt;parse()&lt;/code&gt;&lt;/a&gt; , which is implemented with the  &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt;&lt;/a&gt;  trait for  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.i32.html&#34;&gt;&lt;code&gt;i32&lt;/code&gt;&lt;/a&gt; . As a result, the &lt;code&gt;Err&lt;/code&gt; type is specified as  &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;&lt;code&gt;ParseIntError&lt;/code&gt;&lt;/a&gt; .&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;那我们就顺着这个线索好好梳理一下这个类型是如何确认的.&lt;/p&gt;
-&lt;h2 id=&#34;寻根溯源&#34;&gt;寻根溯源&lt;/h2&gt;
-&lt;h3 id=&#34;parse-方法分析&#34;&gt;&lt;code&gt;parse&lt;/code&gt; 方法分析&lt;/h3&gt;
+&lt;h2 id=&#34;寻根溯源&#34;&gt;
+  寻根溯源
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%af%bb%e6%a0%b9%e6%ba%af%e6%ba%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;parse-方法分析&#34;&gt;
+  &lt;code&gt;parse&lt;/code&gt; 方法分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#parse-%e6%96%b9%e6%b3%95%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;这里很容易确认 &lt;code&gt;number_str&lt;/code&gt; 是一个 &lt;code&gt;str&lt;/code&gt; 类型. 那我们需要查找的就是 &lt;code&gt;str.parse&lt;/code&gt; 这个方法的&lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;文档&lt;/a&gt;, 定义如下:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;&amp;gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt;
 &lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
@@ -54,7 +74,12 @@
 &lt;p&gt;As such, &lt;code&gt;parse&lt;/code&gt; is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt;. This helps the inference algorithm understand specifically which type you’re trying to parse into.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;可以了解到, 如果需要将 &lt;code&gt;str&lt;/code&gt; 解析成什么类型, 就在 &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt; 中填写什么类型. 以上文为例, 就是 &lt;code&gt;i32&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;fromstr-分析&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt; 分析&lt;/h3&gt;
+&lt;h3 id=&#34;fromstr-分析&#34;&gt;
+  &lt;code&gt;FromStr&lt;/code&gt; 分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#fromstr-%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;让我们仔细阅读一下 &lt;code&gt;std::str::FromStr&lt;/code&gt; 这个 method 在&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;文档&lt;/a&gt;中的一段描述:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If parsing succeeds, return the value inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Ok&#34;&gt;&lt;code&gt;Ok&lt;/code&gt;&lt;/a&gt; , otherwise when the string is ill-formatted return an error specific to the inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Err&#34;&gt;Err&lt;/a&gt; . The error type is specific to implementation of the trait.&lt;/p&gt;
@@ -62,7 +87,12 @@
 &lt;p&gt;重点是&lt;strong&gt;The error type is specific to implementation of the trait&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;那我们就试着在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#implementors&#34;&gt;Implementors&lt;/a&gt; 里找实现对应的实现, 即 &lt;code&gt;impl FromStr for i32&lt;/code&gt;. 那在这个 [implementor]([std::str::FromStr - &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&lt;/a&gt;) 中, 对应的 &lt;code&gt;Err&lt;/code&gt; 就很容易找到了:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;
+  Conclusion
+  &lt;a class=&#34;heading-link&#34; href=&#34;#conclusion&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;让我们再简单梳理一下:&lt;/p&gt;
 &lt;p&gt;首先我们需要匹配 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 的结果, 如果是 &lt;code&gt;Err&lt;/code&gt; 需要作为 &lt;code&gt;main&lt;/code&gt; 函数的结果返回 (&lt;code&gt;main&lt;/code&gt; 函数不是重点).&lt;/p&gt;
 &lt;p&gt;我们从 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;parse&lt;/a&gt; 的返回中找到返回值来自方法 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;from_str&lt;/a&gt; 的调用. 根据其实现方式, 找到 &lt;code&gt;i32&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;实现中&lt;/a&gt;定义了 &lt;code&gt;Err&lt;/code&gt; 的类型: &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;ParseIntError&lt;/a&gt;&lt;/p&gt;

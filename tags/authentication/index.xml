@@ -18,7 +18,12 @@
       
       <guid>https://jtr109.github.io/posts/authing-er/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://authing.cn/&#34;&gt;Authing&lt;/a&gt; 是一个典型的 IDaaS。提供了多种&lt;a href=&#34;https://docs.authing.cn/authentication/oidc/&#34;&gt;认证方式&lt;/a&gt;和&lt;a href=&#34;https://docs.authing.cn/social-login/web/&#34;&gt;社会化登录方式&lt;/a&gt;。&lt;/p&gt;
-&lt;h2 id=&#34;实体&#34;&gt;实体&lt;/h2&gt;
+&lt;h2 id=&#34;实体&#34;&gt;
+  实体
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e4%bd%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;用户池：UserPool；&lt;/li&gt;
 &lt;li&gt;应用：Application；&lt;/li&gt;
@@ -33,13 +38,33 @@
 &lt;li&gt;策略：Policy；&lt;/li&gt;
 &lt;li&gt;授权：Assignment；&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;用户池&#34;&gt;用户池&lt;/h3&gt;
+&lt;h3 id=&#34;用户池&#34;&gt;
+  用户池
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%94%a8%e6%88%b7%e6%b1%a0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;用户池是最高纬度的单位，每个用户池之间相互独立。&lt;/p&gt;
-&lt;h3 id=&#34;应用&#34;&gt;应用&lt;/h3&gt;
+&lt;h3 id=&#34;应用&#34;&gt;
+  应用
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ba%94%e7%94%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;对应 OIDC 中的概念就是 relying party。&lt;/p&gt;
-&lt;h3 id=&#34;连接身份源&#34;&gt;连接身份源&lt;/h3&gt;
+&lt;h3 id=&#34;连接身份源&#34;&gt;
+  连接身份源
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%bf%9e%e6%8e%a5%e8%ba%ab%e4%bb%bd%e6%ba%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Authing 的核心工作和 [[Dex]] 的一致，即作为中心节点连接多个 ID provider 和 relying party。而连接身份源就是这些 ID provider。&lt;/p&gt;
-&lt;h3 id=&#34;资源&#34;&gt;资源&lt;/h3&gt;
+&lt;h3 id=&#34;资源&#34;&gt;
+  资源
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%b5%84%e6%ba%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;资源是权限管理的对象。Authing 将其分为 3 这「资源类型」：数据、API、菜单。每个资源可以定义多个操作类型（actions）。&lt;/p&gt;
 &lt;p&gt;可以直观地看出：&lt;/p&gt;
 &lt;ul&gt;
@@ -48,12 +73,27 @@
 &lt;li&gt;数据旨在确定一个请求操作的对象是否能被操作。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;但目前看来这个「资源类型」主要是一个语义上的概念，对策略管理的配置没有影响。&lt;/p&gt;
-&lt;h3 id=&#34;策略&#34;&gt;策略&lt;/h3&gt;
+&lt;h3 id=&#34;策略&#34;&gt;
+  策略
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%ad%96%e7%95%a5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;一条策略是一个 resource 和多个 actions 的组合。&lt;/p&gt;
 &lt;p&gt;虽然资源是可以定义好的固定值，但是在策略配置时提供的依然是文本编辑（JSON）方式。即策略仅仅是规则，它与资源不是通过关系连接的。&lt;/p&gt;
-&lt;h3 id=&#34;授权&#34;&gt;授权&lt;/h3&gt;
+&lt;h3 id=&#34;授权&#34;&gt;
+  授权
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8e%88%e6%9d%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;授权用来连接主体（用户、角色、组织其一）和策略。&lt;/p&gt;
-&lt;h2 id=&#34;关系图&#34;&gt;关系图&lt;/h2&gt;
+&lt;h2 id=&#34;关系图&#34;&gt;
+  关系图
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e7%b3%bb%e5%9b%be&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;erDiagram
     UserPool ||--o{ Application : contains
     Application }o--o{ Connection: bind
@@ -88,9 +128,19 @@
       <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/oidc/</guid>
-      <description>&lt;h2 id=&#34;流程概览&#34;&gt;流程概览&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;流程概览&#34;&gt;
+  流程概览
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b5%81%e7%a8%8b%e6%a6%82%e8%a7%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Sequence_Diagram1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;名词解释&#34;&gt;名词解释&lt;/h2&gt;
+&lt;h2 id=&#34;名词解释&#34;&gt;
+  名词解释
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;end user (EU)：实施操作的用户&lt;/li&gt;
 &lt;li&gt;relying party (RP)：希望登录的网站&lt;/li&gt;
@@ -101,7 +151,12 @@
 &lt;li&gt;state：同OAuth2。防止 CSRF, XSRF。&lt;/li&gt;
 &lt;li&gt;scope：EU 授权给 RP 的用户信息范围，可选字段见&lt;a href=&#34;https://openid.net/specs/openid-connect-basic-1_0.html#rfc.section.2.4&#34;&gt;文档&lt;/a&gt;。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;构建-openid-provider&#34;&gt;构建 OpenID Provider&lt;/h2&gt;
+&lt;h2 id=&#34;构建-openid-provider&#34;&gt;
+  构建 OpenID Provider
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9e%84%e5%bb%ba-openid-provider&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;参考 &lt;a href=&#34;https://django-oidc-provider.readthedocs.io/en/latest/index.html&#34;&gt;Django OIDC Provider&lt;/a&gt; 文档拉起构建 Django 服务。进入管理平台后创建一个 client，需要指定的配置有：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;response type 指定为 &lt;code&gt;id_token token&lt;/code&gt;&lt;/li&gt;
@@ -110,8 +165,18 @@
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;OIDC 模块在 Django Admin 中提供的配置页面&lt;/p&gt;
-&lt;h2 id=&#34;relying-party-获取身份信息&#34;&gt;Relying Party 获取身份信息&lt;/h2&gt;
-&lt;h3 id=&#34;请求授权&#34;&gt;请求授权&lt;/h3&gt;
+&lt;h2 id=&#34;relying-party-获取身份信息&#34;&gt;
+  Relying Party 获取身份信息
+  &lt;a class=&#34;heading-link&#34; href=&#34;#relying-party-%e8%8e%b7%e5%8f%96%e8%ba%ab%e4%bb%bd%e4%bf%a1%e6%81%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;请求授权&#34;&gt;
+  请求授权
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%af%b7%e6%b1%82%e6%8e%88%e6%9d%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;要求 EU 请求 OP 的 authorize 接口，携带以下参数指定 RP 的身份：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;response_type&lt;/code&gt;&lt;/li&gt;
@@ -123,7 +188,12 @@
 &lt;/ul&gt;
 &lt;p&gt;其中 &lt;code&gt;state&lt;/code&gt; 和 &lt;code&gt;nonce&lt;/code&gt; 是可选的，用来防止重放攻击。请求地址示例：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;http://localhost:8000/openid/authorize/?response_type=id_token%20token&amp;amp;client_id=932981&amp;amp;redirect_uri=http%3A%2F%2Flocalhost%3A3000&amp;amp;scope=openid%20profile&amp;amp;state=123123&amp;amp;nonce=n-0S6_WzA2Mj
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取授权&#34;&gt;获取授权&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取授权&#34;&gt;
+  获取授权
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%8e%b7%e5%8f%96%e6%8e%88%e6%9d%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;EU 确认授权后，被要求重定向到之前指定的 &lt;code&gt;redirect_uri&lt;/code&gt;。同时携带上 OP 提供的参数：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;access_token&lt;/code&gt;&lt;/li&gt;
@@ -133,7 +203,12 @@
 &lt;li&gt;&lt;code&gt;state&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;http://localhost:3000/#access_token=3f0a65d53906451393cab6b0f12a8106&amp;amp;id_token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNmRhNzAxMDE1ODQyMmZmODM2MTBiMzYzYTA0MGNmIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvb3BlbmlkIiwic3ViIjoiMSIsImF1ZCI6IjkzMjk4MSIsImV4cCI6MTU5NTg0MTUyNSwiaWF0IjoxNTk1ODQwOTI1LCJhdXRoX3RpbWUiOjE1OTU4MjIxOTUsIm5vbmNlIjoibi0wUzZfV3pBMk1qIiwiYXRfaGFzaCI6IkdadDZOUjUwMElWU3ZqbXZaZGFIbUEifQ.FSEqMu_xOfYlCEXRyB5vvFQPpQKuax6gQ2axKF3AmI-IytX9g1lWpw6q0jppaMkBCNHi5mses_EbEOWMwXVMDndJDuzIhiL6ZvU0e9hPDdSVRkKRVkgEHCqHKmIOmUe6wYdTfhcZANGVzAjFum81jVuTX5wSMvrVIYk5bad7XoKUJ30WlauPqnykmfZG6Jfw_LDzSe10yJm0EPudI1Tc5lSRysZGqUYXkjcpkzTHYIiSv0NVr88As-bLFwQdyTDMD3DPqnGI2Ruasdeo-ewxjEHFJbINndoKN5PNeLQ2OUoXuAx_pwFInQKm4FNYOHb0ogSvu7d6HAq0LGZESJx51Q&amp;amp;token_type=bearer&amp;amp;expires_in=3600&amp;amp;state=123123
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;验证-id-token&#34;&gt;验证 ID Token&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;验证-id-token&#34;&gt;
+  验证 ID Token
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%aa%8c%e8%af%81-id-token&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;提取出参数 &lt;code&gt;id_token&lt;/code&gt; ，该参数为 JWT 形式，可以在 &lt;a href=&#34;https://jwt.io&#34;&gt;jwt.io&lt;/a&gt; 中模仿验证过程。首先提取 &lt;code&gt;id_token&lt;/code&gt;：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNmRhNzAxMDE1ODQyMmZmODM2MTBiMzYzYTA0MGNmIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvb3BlbmlkIiwic3ViIjoiMSIsImF1ZCI6IjkzMjk4MSIsImV4cCI6MTU5NTg0MTUyNSwiaWF0IjoxNTk1ODQwOTI1LCJhdXRoX3RpbWUiOjE1OTU4MjIxOTUsIm5vbmNlIjoibi0wUzZfV3pBMk1qIiwiYXRfaGFzaCI6IkdadDZOUjUwMElWU3ZqbXZaZGFIbUEifQ.FSEqMu_xOfYlCEXRyB5vvFQPpQKuax6gQ2axKF3AmI-IytX9g1lWpw6q0jppaMkBCNHi5mses_EbEOWMwXVMDndJDuzIhiL6ZvU0e9hPDdSVRkKRVkgEHCqHKmIOmUe6wYdTfhcZANGVzAjFum81jVuTX5wSMvrVIYk5bad7XoKUJ30WlauPqnykmfZG6Jfw_LDzSe10yJm0EPudI1Tc5lSRysZGqUYXkjcpkzTHYIiSv0NVr88As-bLFwQdyTDMD3DPqnGI2Ruasdeo-ewxjEHFJbINndoKN5PNeLQ2OUoXuAx_pwFInQKm4FNYOHb0ogSvu7d6HAq0LGZESJx51Q
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以注意到 jwt.io 中在解析 JWT 后，解析了 ID token 中 &lt;code&gt;iss&lt;/code&gt; 指定的地址，向 &lt;code&gt;.well-known/openid-configuration&lt;/code&gt; 地址发送请求，获取了 JWK 的存放地址 &lt;code&gt;jwks_uri&lt;/code&gt; 。&lt;/p&gt;
@@ -142,7 +217,12 @@
 &lt;p&gt;通过请求到的公钥验证了 ID token。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%202.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;通过 &lt;code&gt;iss&lt;/code&gt; 下的 &lt;code&gt;/jwks&lt;/code&gt; 获取公钥&lt;/p&gt;
-&lt;h3 id=&#34;获取用户身份&#34;&gt;获取用户身份&lt;/h3&gt;
+&lt;h3 id=&#34;获取用户身份&#34;&gt;
+  获取用户身份
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e8%ba%ab%e4%bb%bd&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;解析 &lt;code&gt;id_token&lt;/code&gt; 的 payload 可以获取到鉴权所需的所有信息。其中 &lt;code&gt;sub&lt;/code&gt; 为 EU 在 OP 中的 ID， &lt;code&gt;nonce&lt;/code&gt; 为 RP 提供，可以用来验证是否遭到重放。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;iss&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;http://localhost:8000/openid&amp;#34;&lt;/span&gt;,
@@ -154,14 +234,29 @@
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;nonce&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;n-0S6_WzA2Mj&amp;#34;&lt;/span&gt;,
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;&amp;#34;at_hash&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;9EJSyU5K0pBbW1x2FMdbrQ&amp;#34;&lt;/span&gt;
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取已授权的用户信息&#34;&gt;获取已授权的用户信息&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取已授权的用户信息&#34;&gt;
+  获取已授权的用户信息
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%8e%b7%e5%8f%96%e5%b7%b2%e6%8e%88%e6%9d%83%e7%9a%84%e7%94%a8%e6%88%b7%e4%bf%a1%e6%81%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;RP 根据指定的 &lt;code&gt;token_type&lt;/code&gt; 和 &lt;code&gt;access_token&lt;/code&gt; 获取被授权的用户信息。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -X GET http://localhost:8000/openid/userinfo -H &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Authorization: Bearer 3f0a65d53906451393cab6b0f12a8106&amp;#34;&lt;/span&gt; -i
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%203.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;返回已授权的用户信息&lt;/p&gt;
-&lt;h3 id=&#34;用户登录-rp&#34;&gt;用户登录 RP&lt;/h3&gt;
+&lt;h3 id=&#34;用户登录-rp&#34;&gt;
+  用户登录 RP
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%94%a8%e6%88%b7%e7%99%bb%e5%bd%95-rp&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;根据以上获取的用户 ID 就可以定位到用户，获取的用户信息可以用作创建或者更新。实际登陆态由 RP 自己控制，如果登录会话过期了，如果在当前网站登录一样，需要回到登录页面，要求 EU 再次授权身份。&lt;/p&gt;
-&lt;h2 id=&#34;资料&#34;&gt;资料&lt;/h2&gt;
+&lt;h2 id=&#34;资料&#34;&gt;
+  资料
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%b5%84%e6%96%99&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://auth0.com/docs/protocols/oidc&#34;&gt;OpenID Connect | Auth0&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://openid.net/connect/&#34;&gt;OpenID Connect Document&lt;/a&gt;（&lt;a href=&#34;https://www.cnblogs.com/linianhui/p/openid-connect-core.html&#34;&gt;附译文&lt;/a&gt;）&lt;/li&gt;

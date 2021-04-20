@@ -17,9 +17,19 @@
       <pubDate>Thu, 07 Jan 2021 11:15:44 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-arguments-initialization/</guid>
-      <description>&lt;h2 id=&#34;概览&#34;&gt;概览&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;概览&#34;&gt;
+  概览
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%a6%82%e8%a7%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我们在定义形参时会使用默认值，但是需要注意这些默认值在初始化的时候就会被实例化。所以不应该在定义形参的时候使用随机函数指定默认值。&lt;/p&gt;
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;如果我们定义如下代码：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;uuid&lt;/span&gt;
 
@@ -40,7 +50,12 @@
         
     &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;biz&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;buz&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;random&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;randint&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;10&lt;/span&gt;)):
         &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;buz&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;所以在如果希望定义一个随机的形参，必须在函数内部定义。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;):
     &lt;span style=&#34;color:#859900&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
@@ -55,7 +70,12 @@
       <pubDate>Fri, 23 Oct 2020 11:10:55 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-self-typing-annotation/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;声明：一下所有场景基于 Python 3.8.2。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;让我们一起来看看下面这个例子：&lt;/p&gt;
@@ -78,9 +98,19 @@ Traceback (most recent call last):
     def __init__(self: Foo, bar: str) -&amp;gt; None:
 NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt; is not defined
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为生命方式符合 &lt;a href=&#34;http://mypy-lang.org/&#34;&gt;mypy&lt;/a&gt; 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 &lt;code&gt;Foo&lt;/code&gt; 定义前就已经被自己的方法 &lt;code&gt;__init__&lt;/code&gt; 使用了，解释器无法理解，报出 &lt;code&gt;NameError: name &#39;Foo&#39; is not defined&lt;/code&gt; 错误。&lt;/p&gt;
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我们需要一个生命方法，可以同时满足 &lt;code&gt;mypy&lt;/code&gt; 的类型生命校验，也可以满足解释器的运行规则。文章汇总了几种解决方案：&lt;/p&gt;
-&lt;h3 id=&#34;forward-references&#34;&gt;Forward References&lt;/h3&gt;
+&lt;h3 id=&#34;forward-references&#34;&gt;
+  Forward References
+  &lt;a class=&#34;heading-link&#34; href=&#34;#forward-references&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/#forward-references&#34;&gt;Forward references&lt;/a&gt; 方法出自 &lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/&#34;&gt;PEP-484&lt;/a&gt;。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;When a type hint contains names that have not been defined yet, that definition may be expressed as a string literal, to be resolved later.&lt;/p&gt;
@@ -90,7 +120,12 @@ NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&
 
     &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
         &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;postponed-evaluation-of-annotations&#34;&gt;Postponed Evaluation of Annotations&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;postponed-evaluation-of-annotations&#34;&gt;
+  Postponed Evaluation of Annotations
+  &lt;a class=&#34;heading-link&#34; href=&#34;#postponed-evaluation-of-annotations&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0563/&#34;&gt;PEP-563&lt;/a&gt; 介绍了一个 &lt;code&gt;__future__&lt;/code&gt; 功能。使我们可以更符合直觉地使用类型声明。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484&#34;&gt;PEP 484&lt;/a&gt; introduced a standard meaning to annotations: type hints. &lt;a href=&#34;https://www.python.org/dev/peps/pep-0526&#34;&gt;PEP 526&lt;/a&gt; defined variable annotations, explicitly tying them with the type hinting use case.&lt;/p&gt;
@@ -111,7 +146,12 @@ NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&
       <pubDate>Tue, 06 Oct 2020 11:16:30 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/time-in-python/</guid>
-      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;时间差计算&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;
+  时间差计算
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%97%b6%e9%97%b4%e5%b7%ae%e8%ae%a1%e7%ae%97&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;计算时间差最直观的方式是使用 &lt;code&gt;time.time&lt;/code&gt; 方法：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
 
@@ -139,21 +179,41 @@ NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&
       <pubDate>Wed, 27 Nov 2019 17:27:14 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/about-pip-install/</guid>
-      <description>&lt;h2 id=&#34;包安装&#34;&gt;包安装&lt;/h2&gt;
-&lt;h3 id=&#34;问题&#34;&gt;问题&lt;/h3&gt;
+      <description>&lt;h2 id=&#34;包安装&#34;&gt;
+  包安装
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8c%85%e5%ae%89%e8%a3%85&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;问题&#34;&gt;
+  问题
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在公司项目开发过程中, 我们构建了一些自定义的 Python packages. 如果直接使用如下方式安装, 可以正常使用, 但是 &lt;code&gt;pip freeze&lt;/code&gt; 的时候只会显示包名称和版本. 无法在实际生产中使用.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install git+https://git.example.com/example/foo.git
 ...
 $ pip freeze &amp;gt; requirements.txt
 $ cat requirements.txt
 dm-utils==1.0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;解决方案&#34;&gt;解决方案&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;需要参考&lt;a href=&#34;https://github.com/pypa/pip/issues/335#issuecomment-1774484&#34;&gt;这个 issue&lt;/a&gt;实现:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install -e git+https://git.example.com/example/foo.git#egg=0.0.1
 $ pip freeze &amp;gt; requirements.txt
 $ cat requirements.txt
 -e git+https://git.example.com/example/foo.git@2c2ed2b3df2084d1b1ebfa87c9fe703072eded7b#egg=dm_utils
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;docker-build&#34;&gt;Docker Build&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;docker-build&#34;&gt;
+  Docker Build
+  &lt;a class=&#34;heading-link&#34; href=&#34;#docker-build&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;上面的示例可以解决大部分 public 项目的拉取和安装问题, 但如果在 private 项目中使用上面的方案, 在 &lt;code&gt;docker build&lt;/code&gt; 时会报错, 原因是构建镜像的时候, 镜像中没有我们的 git 用户信息, 无法拉取私有仓库.&lt;/p&gt;
 &lt;p&gt;需要向项目仓库所有者请求一个 &lt;a href=&#34;https://docs.gitlab.com/ee/user/project/deploy_tokens/&#34;&gt;deploy token&lt;/a&gt;, 使用提供的用户名和 token 执行 &lt;code&gt;pip install&lt;/code&gt;, 例如:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ pip install -e git+https://gitlab+deploy-token-23:KdCjd8-mM1i9DzBZnXTz@git.example.com/example/foo.git#egg=0.0.1
@@ -170,11 +230,21 @@ $ cat requirements.txt
       <pubDate>Sat, 09 Nov 2019 22:09:45 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/</guid>
-      <description>&lt;h2 id=&#34;名词解释&#34;&gt;名词解释&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;名词解释&#34;&gt;
+  名词解释
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Data Race &amp;amp; Race Condition: 待补充, 可参考&lt;a href=&#34;https://stackoverflow.com/a/58161437/6522746&#34;&gt;这个 StackOverflow 回答&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Django 的 ORM 操作中有一个非常实用的功能: &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt;, 可以判断数据库中是否有符合条件的条目, 没有则创建.&lt;/p&gt;
 &lt;p&gt;但是在使用过程中如果不加留意, 会发生 race condition. 导致数据库中创建出的条目不符合预期.&lt;/p&gt;
 &lt;p&gt;以下面这部分代码为例:&lt;/p&gt;
@@ -247,7 +317,12 @@ OK
 Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;alias&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;由于使用 &lt;code&gt;threading&lt;/code&gt; 实现并发, 所以不一定每次执行都会出现如上状况. 如果没有复现, 请重试几次.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;从上面的信息可以看到, 数据库中生成了不止一个条目, 而且有的 threading 在执行时报 &lt;code&gt;get() returned more than one Race&lt;/code&gt; 错误.&lt;/p&gt;
-&lt;h2 id=&#34;原因分析&#34;&gt;原因分析&lt;/h2&gt;
+&lt;h2 id=&#34;原因分析&#34;&gt;
+  原因分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8e%9f%e5%9b%a0%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;查看 &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt; 源码可以看到, 这个操作分为两步: 查询和创建. 所以在异步场景下, 可能出现多个读操作都没有查到条目, 触发 &lt;code&gt;DoesNotExist&lt;/code&gt; 报错, 写入多条, 而非预期中的始终只有一条.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
     &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
@@ -263,7 +338,12 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
     &lt;span style=&#34;color:#859900&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;DoesNotExist&lt;/span&gt;:
         &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_extract_model_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;)
         &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_create_object_from_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这个问题其实在文档中&lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/querysets/#get-or-create&#34;&gt;已经指出&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This method is atomic assuming that the database enforces uniqueness of the keyword arguments (see &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.unique&#34;&gt;&lt;code&gt;unique&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/options/#django.db.models.Options.unique_together&#34;&gt;&lt;code&gt;unique_together&lt;/code&gt;&lt;/a&gt;). If the fields used in the keyword arguments do not have a uniqueness constraint, concurrent calls to this method may result in multiple rows with the same parameters being inserted.&lt;/p&gt;
@@ -290,7 +370,12 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
         ]
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完整示例可以参考&lt;a href=&#34;https://github.com/jtr109/django-update-or-create-example&#34;&gt;示例项目&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;h2 id=&#34;源码分析&#34;&gt;
+  源码分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在源码中是如何使用 &lt;code&gt;translation.atom&lt;/code&gt; 解决这个错误的, 待后续分析.&lt;/p&gt;
 </description>
     </item>
@@ -302,24 +387,64 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
       
       <guid>https://jtr109.github.io/posts/using-gitlab-ci-in-project/</guid>
       <description>&lt;p&gt;GitLab 的 CI 功能有非常完备的&lt;a href=&#34;https://docs.gitlab.com/ee/ci/&#34;&gt;文档&lt;/a&gt;, 本文旨在介绍一些常用概念和可能遇到的问题, 帮助大家更好的接入和使用.&lt;/p&gt;
-&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;公司项目中有大量 Python 项目构建的微服务, 在合并的过程中需要实现持续集成来获取信息.&lt;/p&gt;
-&lt;h2 id=&#34;服务搭建&#34;&gt;服务搭建&lt;/h2&gt;
-&lt;h3 id=&#34;名词解释&#34;&gt;名词解释&lt;/h3&gt;
+&lt;h2 id=&#34;服务搭建&#34;&gt;
+  服务搭建
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e6%90%ad%e5%bb%ba&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;名词解释&#34;&gt;
+  名词解释
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Runner: &lt;a href=&#34;https://docs.gitlab.com/runner/&#34;&gt;Runner&lt;/a&gt; 是任务的执行单元, 实际上就是一个 OS, 它可以是一个主机, 虚拟机 Docker 或者 Kubernetes.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;runner-搭建和配置&#34;&gt;Runner 搭建和配置&lt;/h2&gt;
+&lt;h2 id=&#34;runner-搭建和配置&#34;&gt;
+  Runner 搭建和配置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#runner-%e6%90%ad%e5%bb%ba%e5%92%8c%e9%85%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Shell Runner 有一个麻烦的问题, 就是所有操作都会影响主机的文件, 依赖等, 而且基于主机 OS 的 runner 导致他是独一无二的, 所以无法实现环境区分. 已经 9102 年了, 建议使用 &lt;a href=&#34;https://docs.gitlab.com/runner/install/docker.html&#34;&gt;Docker Runner&lt;/a&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;配置-runner-调度器&#34;&gt;配置 Runner 调度器&lt;/h3&gt;
+&lt;h3 id=&#34;配置-runner-调度器&#34;&gt;
+  配置 Runner 调度器
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-runner-%e8%b0%83%e5%ba%a6%e5%99%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;工具&lt;a href=&#34;https://docs.gitlab.com/runner/install/docker.html#docker-image-installation&#34;&gt;文档&lt;/a&gt;安装好 Docker CE 和 &lt;code&gt;gitlab-runner&lt;/code&gt;, 意味着你拉起了一个 runners 调度器.&lt;/p&gt;
-&lt;h3 id=&#34;配置-runner&#34;&gt;配置 Runner&lt;/h3&gt;
+&lt;h3 id=&#34;配置-runner&#34;&gt;
+  配置 Runner
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-runner&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;根据&lt;a href=&#34;https://docs.gitlab.com/runner/register/index.html#docker&#34;&gt;文档&lt;/a&gt;触发 Runner 注册:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;docker run --rm -t -i -v /srv/gitlab-runner/config:/etc/gitlab-runner gitlab/gitlab-runner register
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注册时需要指定 URL 和 registration token, 可以在项目 &lt;strong&gt;Settings -&amp;gt; CI / CD -&amp;gt; Runners&lt;/strong&gt; 中查到. 注册时可以指定这个 Runner 的 Tag, 如果项目配置的 Job 中有对应的 Tag, 就会触发该 Runner 的执行.&lt;/p&gt;
-&lt;h2 id=&#34;python-集成&#34;&gt;Python 集成&lt;/h2&gt;
+&lt;h2 id=&#34;python-集成&#34;&gt;
+  Python 集成
+  &lt;a class=&#34;heading-link&#34; href=&#34;#python-%e9%9b%86%e6%88%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;以基于 Python 的 CI 配置文件为例, 介绍一下配置的组成. 更加高阶的配置信息可以在&lt;a href=&#34;https://docs.gitlab.com/ee/ci/yaml/&#34;&gt;文档&lt;/a&gt;中找到.&lt;/p&gt;
-&lt;h3 id=&#34;编写配置&#34;&gt;编写配置&lt;/h3&gt;
+&lt;h3 id=&#34;编写配置&#34;&gt;
+  编写配置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bc%96%e5%86%99%e9%85%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;image&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;python:3.7.4 &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定使用的基础镜像&lt;/span&gt;
 
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;job1&lt;/span&gt;:
@@ -330,7 +455,12 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;tags&lt;/span&gt;:
     - &lt;span style=&#34;color:#2aa198&#34;&gt;pyservice &lt;/span&gt; &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# 指定 runner 对应的 tag&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要注意的是 &lt;code&gt;image&lt;/code&gt;, &lt;code&gt;before_script&lt;/code&gt; 这些配置既可以作为顶级字段, 也可以在任何一个 job 中单独配置, 优先级从内到外, 即如果 job 内部有 &lt;code&gt;before_script&lt;/code&gt;, 那这个 job 被触发的时候, 不会读取和执行全局的 &lt;code&gt;before_script&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;设置缓存&#34;&gt;设置缓存&lt;/h3&gt;
+&lt;h3 id=&#34;设置缓存&#34;&gt;
+  设置缓存
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%ae%be%e7%bd%ae%e7%bc%93%e5%ad%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在项目实际使用中, 我们会需要引入很多依赖, 如果不做配置, 每次 Runner 执行的时候都会重新下载相关的依赖, 我们可以参考&lt;a href=&#34;https://docs.gitlab.com/ee/ci/caching/#caching-python-dependencies&#34;&gt;文档 Caching Python dependencies&lt;/a&gt;中的方案进行配置.&lt;/p&gt;
 &lt;p&gt;另外根据该方案进行配置后, 即使多个 repositories 共用一个 runner, 每个项目的依赖文件也能做到相互隔离, 各自缓存, 互不影响.&lt;/p&gt;
 </description>
@@ -342,16 +472,31 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
       <pubDate>Thu, 07 Nov 2019 22:31:12 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-grpc-json-format/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;最近在开发一个网关项目, 需要将外部的 JSON 请求转换成 gRPC 请求向后转发, 并将 gRPC 响应转换为 JSON 格式的响应返回.&lt;/p&gt;
 &lt;p&gt;实现过程中发现使用 &lt;code&gt;google.protobuf.json_format.MessageToDict&lt;/code&gt; 的时候 ( &lt;code&gt;google.protobuf.json_format.MessageToJson&lt;/code&gt; 同理) 有一些需要注意留意的细节.&lt;/p&gt;
-&lt;h2 id=&#34;遇到问题&#34;&gt;遇到问题&lt;/h2&gt;
+&lt;h2 id=&#34;遇到问题&#34;&gt;
+  遇到问题
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%81%87%e5%88%b0%e9%97%ae%e9%a2%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;当使用 &lt;code&gt;MessageToDict&lt;/code&gt;  对 messge 转换时, 发现两个不符合预期的问题:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如果一个 message field 对应的值为 zero value, 对应的 &lt;code&gt;dict&lt;/code&gt; 中不会显示该键值对&lt;/li&gt;
 &lt;li&gt;field 名称会从 snake_case 被转换成 lowerCamelCase&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;h2 id=&#34;源码分析&#34;&gt;
+  源码分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;以 &lt;code&gt;MessageToDict&lt;/code&gt; 为例, 我们看一下函数的定义.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;MessageToDict&lt;/span&gt;(
     &lt;span style=&#34;color:#268bd2&#34;&gt;message&lt;/span&gt;,
@@ -381,13 +526,28 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
 &lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;  &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
       &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ...&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以自动忽略 zero value 和 field 转换分别是由 &lt;code&gt;including_default_value_fields&lt;/code&gt; 和 &lt;code&gt;preserving_proto_field_name&lt;/code&gt; 两个参数控制.&lt;/p&gt;
-&lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
+&lt;h2 id=&#34;结论&#34;&gt;
+  结论
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bb%93%e8%ae%ba&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在调用 &lt;code&gt;MessageToDict&lt;/code&gt; 函数时, 将以上两个参数指定为 &lt;code&gt;True&lt;/code&gt; 即可解决问题. &lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos/blob/master/example.ipynb&#34;&gt;代码示例&lt;/a&gt;如下:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/python-grpc-json-format.assets/1570964227734-2317f63a-ba36-476a-8a80-58947a84aac4.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;示例代码可以在&lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos&#34;&gt;这个项目&lt;/a&gt;中查看&lt;/p&gt;
-&lt;h2 id=&#34;思考&#34;&gt;思考&lt;/h2&gt;
+&lt;h2 id=&#34;思考&#34;&gt;
+  思考
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%80%9d%e8%80%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这个问题会令人在意的主要原因是因为 Python 是一个弱类型语言, 或许 protobuf 在传输和存储过程中, 为了考虑性能, 确实会用省略字段的方式来表达零值, 就像&lt;a href=&#34;https://github.com/protocolbuffers/protobuf/issues/2796#issuecomment-284872746&#34;&gt;这个回答&lt;/a&gt;中说到的那样. 只要在将 protobuf 转换为特定语言的 struct 时再对应调整成恰当的结构就能满足需求, 但是在转换成 JSON 的时候默认将这个字段抹去, 我仍然认为是不合理的.&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;python grpc package tutorial: &lt;a href=&#34;https://grpc.io/docs/tutorials/basic/python/&#34;&gt;https://grpc.io/docs/tutorials/basic/python/&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;关于 zero value 默认忽略的解释: &lt;a href=&#34;https://github.com/protocolbuffers/protobuf/issues/2796&#34;&gt;https://github.com/protocolbuffers/protobuf/issues/2796&lt;/a&gt;&lt;/li&gt;
@@ -401,33 +561,88 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
-      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;Intergate Vue in Django&lt;/h1&gt;
-&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;What Project Will We Build&lt;/h2&gt;
+      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;
+  Intergate Vue in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#intergate-vue-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
+&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;
+  What Project Will We Build
+  &lt;a class=&#34;heading-link&#34; href=&#34;#what-project-will-we-build&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We want to build a vue project with multiple pages. The Django view render these pages as templates.&lt;/p&gt;
-&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;Why We Build Such A Project&lt;/h2&gt;
+&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;
+  Why We Build Such A Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-we-build-such-a-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.&lt;/p&gt;
 &lt;p&gt;So we consider to use front-end service to control the router and use back-end for access control.&lt;/p&gt;
-&lt;h2 id=&#34;initial-repository&#34;&gt;Initial Repository&lt;/h2&gt;
+&lt;h2 id=&#34;initial-repository&#34;&gt;
+  Initial Repository
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initial-repository&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir vid &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; vid
 git init
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;Create Virtual Environment&lt;/h2&gt;
-&lt;h3 id=&#34;specify-python-version&#34;&gt;Specify Python Version&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;
+  Create Virtual Environment
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-virtual-environment&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;specify-python-version&#34;&gt;
+  Specify Python Version
+  &lt;a class=&#34;heading-link&#34; href=&#34;#specify-python-version&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;Change Mirror (Optional)&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;
+  Change Mirror (Optional)
+  &lt;a class=&#34;heading-link&#34; href=&#34;#change-mirror-optional&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[[source]]
 name = &amp;#34;pypi&amp;#34;
 url = &amp;#34;https://mirrors.aliyun.com/pypi/simple/&amp;#34;
 verify_ssl = true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;Install Dependencies&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;
+  Install Dependencies
+  &lt;a class=&#34;heading-link&#34; href=&#34;#install-dependencies&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv install &lt;span style=&#34;color:#268bd2&#34;&gt;django&lt;/span&gt;==2.2.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;Start Django Project&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;
+  Start Django Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#start-django-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run django-admin startproject vid
 mv vid vid-dir &amp;amp;&amp;amp; mv ./vid-dir/* . &amp;amp;&amp;amp; rmdir vid-dir  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# move project to current path&lt;/span&gt;
 pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# check django project works&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;Create Authorization API in Django&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;
+  Create Authorization API in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-authorization-api-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;You should always create a custom user model in Django. &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model&#34;&gt;Here&lt;/a&gt; is why.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Remember not migrating until the custom user model is registered correctly.&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;create-custom-user-model&#34;&gt;Create Custom User Model&lt;/h3&gt;
+&lt;h3 id=&#34;create-custom-user-model&#34;&gt;
+  Create Custom User Model
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-custom-user-model&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us create an app.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;pipenv&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;manage&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;startapp&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We must install it in &lt;code&gt;INSTALLED_APPS&lt;/code&gt; in settings.&lt;/p&gt;
@@ -453,7 +668,12 @@ pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all, migrating the user model.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py makemigrations
 pipenv run python manage.py migrate
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;Create Logining and Checking Views&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;
+  Create Logining and Checking Views
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-logining-and-checking-views&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let&amp;rsquo;s create &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views&#34;&gt;class-based views&lt;/a&gt; with json responses.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/apis.py&lt;/span&gt;
 
@@ -513,8 +733,18 @@ pipenv run python manage.py migrate
 		&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
     &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;api/account/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.urls&amp;#39;&lt;/span&gt;)),
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;Creating Vue Project with Multiple Pages&lt;/h2&gt;
-&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;Initializing a Vue Project&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;
+  Creating Vue Project with Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#creating-vue-project-with-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;
+  Initializing a Vue Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initializing-a-vue-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Frist of all, let us initialize a vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;vue create frontend
 &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; frontend
@@ -522,7 +752,12 @@ yarn install
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we run the vue development service.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually &lt;code&gt;localhost:8080&lt;/code&gt;).&lt;/p&gt;
-&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;Satisfication for Multiple Pages&lt;/h3&gt;
+&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;
+  Satisfication for Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#satisfication-for-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
 mkdir -p src/pages/login
@@ -587,12 +822,27 @@ touch vue.config.js
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
 &lt;p&gt;User page:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;Inject Vue Page Into Django Template&lt;/h2&gt;
-&lt;h3 id=&#34;build-vue-dist&#34;&gt;Build Vue Dist&lt;/h3&gt;
+&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;
+  Inject Vue Page Into Django Template
+  &lt;a class=&#34;heading-link&#34; href=&#34;#inject-vue-page-into-django-template&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;build-vue-dist&#34;&gt;
+  Build Vue Dist
+  &lt;a class=&#34;heading-link&#34; href=&#34;#build-vue-dist&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Build the vue project first.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, you get &lt;code&gt;login.html&lt;/code&gt; and &lt;code&gt;user.html&lt;/code&gt; in the path &lt;code&gt;frontend/dist&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;Show Login Page in Django View&lt;/h3&gt;
+&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;
+  Show Login Page in Django View
+  &lt;a class=&#34;heading-link&#34; href=&#34;#show-login-page-in-django-view&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us show login page by &lt;code&gt;TemplateView&lt;/code&gt; in Django.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
 
@@ -635,7 +885,12 @@ touch vue.config.js
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;render-user-page&#34;&gt;Render User Page&lt;/h3&gt;
+&lt;h3 id=&#34;render-user-page&#34;&gt;
+  Render User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#render-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now, we already have the HTML file &lt;code&gt;frontend/dist/user.html&lt;/code&gt; . Let us render it in a Django view.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/views.py&lt;/span&gt;
 
@@ -659,8 +914,18 @@ touch vue.config.js
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;Create a Login Form in User Page&lt;/h2&gt;
-&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;Login Form with Ant Design&lt;/h3&gt;
+&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;
+  Create a Login Form in User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-a-login-form-in-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;
+  Login Form with Ant Design
+  &lt;a class=&#34;heading-link&#34; href=&#34;#login-form-with-ant-design&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us install the ant design vue package. &lt;a href=&#34;https://vue.ant.design/docs/vue/use-with-vue-cli/&#34;&gt;Here&lt;/a&gt; is the way to install and register ant design vue.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add ant-design-vue
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Import style in &lt;code&gt;frontend/src/pages/login/app.js&lt;/code&gt;&lt;/p&gt;
@@ -781,7 +1046,12 @@ touch vue.config.js
 &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;Using Axios to Send Login Request&lt;/h3&gt;
+&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;
+  Using Axios to Send Login Request
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-axios-to-send-login-request&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First let add proxy in vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
@@ -837,7 +1107,12 @@ touch vue.config.js
     # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
     # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;Create User and Test Redirection&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;
+  Create User and Test Redirection
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-user-and-test-redirection&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us create a user in django shell.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py shell
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
@@ -845,13 +1120,23 @@ touch vue.config.js
 &lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;Rebuild Frontend and Have A Try in Django Service&lt;/h3&gt;
+&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+  Rebuild Frontend and Have A Try in Django Service
+  &lt;a class=&#34;heading-link&#34; href=&#34;#rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now let&amp;rsquo;s rebuild the frontend.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
 yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference:&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference:
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/25080236&#34;&gt;https://zhuanlan.zhihu.com/p/25080236&lt;/a&gt;&lt;/p&gt;
@@ -875,15 +1160,30 @@ yarn run build
       <pubDate>Fri, 07 Sep 2018 07:34:23 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-singleton/</guid>
-      <description>&lt;h2 id=&#34;ways-to-use-singleton-in-python&#34;&gt;Ways to use singleton in Python&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;ways-to-use-singleton-in-python&#34;&gt;
+  Ways to use singleton in Python
+  &lt;a class=&#34;heading-link&#34; href=&#34;#ways-to-use-singleton-in-python&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;using module&lt;/li&gt;
 &lt;li&gt;using method &lt;code&gt;__new__&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;using decorator&lt;/li&gt;
 &lt;li&gt;using metaclass&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&#34;analysis-the-singleton-with-method-__new__&#34;&gt;Analysis the singleton with method &lt;code&gt;__new__&lt;/code&gt;&lt;/h2&gt;
-&lt;h3 id=&#34;implementation&#34;&gt;Implementation&lt;/h3&gt;
+&lt;h2 id=&#34;analysis-the-singleton-with-method-__new__&#34;&gt;
+  Analysis the singleton with method &lt;code&gt;__new__&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#analysis-the-singleton-with-method-__new__&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;implementation&#34;&gt;
+  Implementation
+  &lt;a class=&#34;heading-link&#34; href=&#34;#implementation&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us see the code first:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Singleton&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;object&lt;/span&gt;):
     &lt;span style=&#34;color:#268bd2&#34;&gt;_instance&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;
@@ -900,17 +1200,37 @@ yarn run build
 
 &amp;gt;&amp;gt;&amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;id&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt;), &lt;span style=&#34;color:#cb4b16&#34;&gt;id&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;))
 &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4420874480&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4420874480&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-does-it-work&#34;&gt;How does it work?&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-does-it-work&#34;&gt;
+  How does it work?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#how-does-it-work&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;We should know two feature to understand that:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;Class variables&lt;/strong&gt; are shared by all instances of the class. (Learn more in &lt;a href=&#34;https://docs.python.org/2/tutorial/classes.html#class-and-instance-variables&#34;&gt;document&lt;/a&gt;.)&lt;/li&gt;
 &lt;li&gt;The &lt;code&gt;__new__&lt;/code&gt; method &lt;strong&gt;return a instance&lt;/strong&gt; of class which will be used as &lt;code&gt;self&lt;/code&gt; in &lt;code&gt;__init__&lt;/code&gt; and other methods. (Learn more in &lt;a href=&#34;https://docs.python.org/3/reference/datamodel.html#object.__new__&#34;&gt;document&lt;/a&gt;)&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;here-we-go&#34;&gt;Here we go&lt;/h3&gt;
+&lt;h3 id=&#34;here-we-go&#34;&gt;
+  Here we go
+  &lt;a class=&#34;heading-link&#34; href=&#34;#here-we-go&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;When declaring a new instance, the &lt;a href=&#34;https://docs.python.org/3/reference/datamodel.html#object.__new__&#34;&gt;&lt;code&gt;__new__&lt;/code&gt;&lt;/a&gt; method check the existance of the class variable &lt;code&gt;_instance&lt;/code&gt;. Return it if exists. Otherwise, the class creates a new one, assigns to &lt;code&gt;_instance&lt;/code&gt; and return.&lt;/p&gt;
 &lt;p&gt;After that, all instances of the class &lt;code&gt;Singleton&lt;/code&gt; are the same class variable of class &lt;code&gt;Singleton&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;implement-with-decorator&#34;&gt;Implement with decorator&lt;/h2&gt;
-&lt;h3 id=&#34;implementation-1&#34;&gt;Implementation&lt;/h3&gt;
+&lt;h2 id=&#34;implement-with-decorator&#34;&gt;
+  Implement with decorator
+  &lt;a class=&#34;heading-link&#34; href=&#34;#implement-with-decorator&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;implementation-1&#34;&gt;
+  Implementation
+  &lt;a class=&#34;heading-link&#34; href=&#34;#implementation-1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;singleton&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;):
     &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;()
     &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;wrapper&lt;/span&gt;(*&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
@@ -927,12 +1247,27 @@ yarn run build
 &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
 
 &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# True&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works&#34;&gt;How it works?&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works&#34;&gt;
+  How it works?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#how-it-works&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;The criticle point is the implementation of &lt;strong&gt;closure&lt;/strong&gt; in python. The variable &lt;code&gt;_instances&lt;/code&gt; above did not collected by GC after &lt;code&gt;MyClass&lt;/code&gt; was called. (You can learn more &lt;a href=&#34;https://www.geeksforgeeks.org/python-closures/&#34;&gt;here&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;analysis-the-singleton-with-method-metaclass&#34;&gt;Analysis the singleton with method &lt;strong&gt;metaclass&lt;/strong&gt;&lt;/h2&gt;
-&lt;h3 id=&#34;implementation-2&#34;&gt;Implementation&lt;/h3&gt;
+&lt;h2 id=&#34;analysis-the-singleton-with-method-metaclass&#34;&gt;
+  Analysis the singleton with method &lt;strong&gt;metaclass&lt;/strong&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#analysis-the-singleton-with-method-metaclass&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;implementation-2&#34;&gt;
+  Implementation
+  &lt;a class=&#34;heading-link&#34; href=&#34;#implementation-2&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Singleton&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt;):
     &lt;span style=&#34;color:#268bd2&#34;&gt;_instances&lt;/span&gt; = &lt;span style=&#34;color:#cb4b16&#34;&gt;dict&lt;/span&gt;()
     &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__call__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;cls&lt;/span&gt;, *&lt;span style=&#34;color:#268bd2&#34;&gt;args&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
@@ -950,14 +1285,24 @@ yarn run build
 &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;MyClass&lt;/span&gt;()
 
 &lt;span style=&#34;color:#268bd2&#34;&gt;s1&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;is&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;s2&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# True&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works-1&#34;&gt;How it works?&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;how-it-works-1&#34;&gt;
+  How it works?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#how-it-works-1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;All class is an instance of a metaclass.&lt;/li&gt;
 &lt;li&gt;When the class is called it return the result which the &lt;code&gt;__call__&lt;/code&gt; method of metaclass return. (If not be overrided.)&lt;/li&gt;
 &lt;li&gt;So we return the same instance by means of the shared class variable &lt;code&gt;_instances&lt;/code&gt; in metaclass &lt;code&gt;Singleton&lt;/code&gt; to return a same instance.&lt;/li&gt;
 &lt;li&gt;By the way, the parent of metaclass should be the class &lt;code&gt;type&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000008141049&#34;&gt;Python 中的单例模式&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -971,10 +1316,20 @@ yarn run build
       
       <guid>https://jtr109.github.io/posts/hashers-issue-when-upgrade-django/</guid>
       <description>&lt;p&gt;&lt;em&gt;Note for &lt;code&gt;check_password&lt;/code&gt; in Django&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;h2 id=&#34;background&#34;&gt;
+  Background
+  &lt;a class=&#34;heading-link&#34; href=&#34;#background&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.&lt;/p&gt;
 &lt;p&gt;I tried to fork the logic of &lt;code&gt;User.check_password&lt;/code&gt; and create an async one. But the new one does not work as my &lt;em&gt;wrong&lt;/em&gt; exception. But I learn something from that at least.&lt;/p&gt;
-&lt;h2 id=&#34;different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;Different behavior of &lt;code&gt;User.check_password&lt;/code&gt; between objects from fixture and created manual&lt;/h2&gt;
+&lt;h2 id=&#34;different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;
+  Different behavior of &lt;code&gt;User.check_password&lt;/code&gt; between objects from fixture and created manual
+  &lt;a class=&#34;heading-link&#34; href=&#34;#different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;I found when I use the official &lt;code&gt;check_password&lt;/code&gt; on a user object from fixtures, the value of the object changed. But when I execute it on which I created recently. It did! I was confused about the difference.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;code in &lt;code&gt;django/contrib/auth/base_user&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.hashers&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; (
@@ -1034,7 +1389,12 @@ yarn run build
         &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;)
     &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can find when executed &lt;code&gt;check_password&lt;/code&gt; of &lt;code&gt;User&lt;/code&gt; object. The setter will be called when the password &lt;code&gt;is_correct&lt;/code&gt; and &lt;code&gt;must_update&lt;/code&gt;. And I find the &lt;code&gt;must_update&lt;/code&gt; is &lt;code&gt;False&lt;/code&gt; when checking the one I creatd but &lt;code&gt;True&lt;/code&gt; in fixtures.&lt;/p&gt;
-&lt;h2 id=&#34;why-must_update&#34;&gt;Why &lt;code&gt;must_update&lt;/code&gt;?&lt;/h2&gt;
+&lt;h2 id=&#34;why-must_update&#34;&gt;
+  Why &lt;code&gt;must_update&lt;/code&gt;?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-must_update&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;The variable &lt;code&gt;preferred&lt;/code&gt; with attribute &lt;code&gt;must_update&lt;/code&gt; is declared by &lt;code&gt;get_hasher&lt;/code&gt; and we can find it is an instance of &lt;code&gt;PBKDF2PasswordHasher&lt;/code&gt; as default. So the dependence of updating is the &lt;code&gt;iterations&lt;/code&gt; in decoded password.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;PBKDF2PasswordHasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BasePasswordHasher&lt;/span&gt;):
 
@@ -1082,7 +1442,12 @@ yarn run build
 &lt;blockquote&gt;
 &lt;p&gt;Hashed passwords will be updated when increasing (or decreasing) the number of PBKDF2 iterations or bcrypt rounds.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading&#34;&gt;Password upgrading - Django&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1095,7 +1460,12 @@ yarn run build
       <pubDate>Mon, 27 Aug 2018 17:01:12 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/what-happen-when-model-objects-all/</guid>
-      <description>&lt;h2 id=&#34;example-snippet&#34;&gt;Example snippet&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;example-snippet&#34;&gt;
+  Example snippet
+  &lt;a class=&#34;heading-link&#34; href=&#34;#example-snippet&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.db&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;
 
 &lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Product&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;models&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;Model&lt;/span&gt;):
@@ -1103,9 +1473,19 @@ yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;create a model&lt;/em&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;Product&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;execute model objects all&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;consideration&#34;&gt;Consideration&lt;/h2&gt;
+&lt;h2 id=&#34;consideration&#34;&gt;
+  Consideration
+  &lt;a class=&#34;heading-link&#34; href=&#34;#consideration&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;How can we get a queryset from model?&lt;/p&gt;
-&lt;h2 id=&#34;source-snippet&#34;&gt;Source snippet&lt;/h2&gt;
+&lt;h2 id=&#34;source-snippet&#34;&gt;
+  Source snippet
+  &lt;a class=&#34;heading-link&#34; href=&#34;#source-snippet&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# django/db/models/base.py&lt;/span&gt;
 
 &lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;ModelBase&lt;/span&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt;):
@@ -1197,23 +1577,43 @@ yarn run build
       <pubDate>Fri, 24 Aug 2018 07:08:11 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/asyncio-note/</guid>
-      <description>&lt;h2 id=&#34;starting-async-function-without-await&#34;&gt;Starting async function without await&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;starting-async-function-without-await&#34;&gt;
+  Starting async function without await
+  &lt;a class=&#34;heading-link&#34; href=&#34;#starting-async-function-without-await&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Async function in asyncio cannot start directly. It should be wrapped in &lt;a href=&#34;https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task&#34;&gt;&lt;code&gt;asyncio.create_task&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The &lt;a href=&#34;https://docs.python.org/3/library/asyncio-task.html#asyncio.ensure_future&#34;&gt;&lt;code&gt;asyncio.ensure_future&lt;/code&gt;&lt;/a&gt; can also be used. But&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;create_task() (added in Python 3.7) is the preferable way for spawning new tasks.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;call-usual-function-asynchronously-with-event-loop&#34;&gt;Call usual function asynchronously with event loop&lt;/h2&gt;
+&lt;h2 id=&#34;call-usual-function-asynchronously-with-event-loop&#34;&gt;
+  Call usual function asynchronously with event loop
+  &lt;a class=&#34;heading-link&#34; href=&#34;#call-usual-function-asynchronously-with-event-loop&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;start on next tick: &lt;code&gt;loop.call_soon(func)&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;delay for some time before start: &lt;code&gt;loop.call_later(delay, func)&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;start at a time: &lt;code&gt;loop.call_at(when, func)&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;See in &lt;a href=&#34;https://docs.python.org/3/library/asyncio-eventloop.html&#34;&gt;asyncio event loop&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;to-await-a-usual-function-by-returning-future-object&#34;&gt;To await a usual function by returning &lt;code&gt;Future&lt;/code&gt; object&lt;/h2&gt;
+&lt;h2 id=&#34;to-await-a-usual-function-by-returning-future-object&#34;&gt;
+  To await a usual function by returning &lt;code&gt;Future&lt;/code&gt; object
+  &lt;a class=&#34;heading-link&#34; href=&#34;#to-await-a-usual-function-by-returning-future-object&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Using &lt;code&gt;asyncio.add_done_callback&lt;/code&gt; can help.&lt;/p&gt;
 &lt;p&gt;But I am not sure what scene we need it instead of &lt;code&gt;await async_func()&lt;/code&gt;. Maybe the comment &lt;a href=&#34;https://stackoverflow.com/questions/44345139/python-asyncio-add-done-callback-with-async-def&#34;&gt;here&lt;/a&gt; can provide some help.&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://www.py-my.ru/2018/05/01/asyncio.html&#34;&gt;Asyncio tips&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -1227,7 +1627,12 @@ yarn run build
       
       <guid>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</guid>
       <description>&lt;p&gt;本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。&lt;/p&gt;
-&lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;MySQL Server 密码重置&lt;/h1&gt;
+&lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;
+  MySQL Server 密码重置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#mysql-server-%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;本机环境
 Mac OS X EI Capitan
@@ -1237,11 +1642,26 @@ pwd: &lt;code&gt;/User/jtr109/qs/&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;em&gt;密码重置的方式多种多样，用很多我尝试之后这个是我唯一可行的，和我有相同环境、情况的朋友可以参考：&lt;a href=&#34;http://blog.csdn.net/u014410695/article/details/50630233&#34;&gt;数据库之mac上mysql root密码忘记或权限错误的解决办法&lt;/a&gt;。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;遇到这个问题主要是我装MySQL的时候不专心，传说官方dmg装完后是会&lt;strong&gt;提示设定密码&lt;/strong&gt;的，不知道怎么回事，反正我本地的MySQL Server就完全进不去了，只能改密码。这篇文章讲的非常清晰，简单易懂，不做过多评论。只要每一步照做就好。此文最大的优点是不用终端运行MySQL Server，也不用考虑 kill 进程，非常适合刚刚接触相关内容的朋友。&lt;/p&gt;
-&lt;h1 id=&#34;安装-mysqldb&#34;&gt;安装 MySQLdb&lt;/h1&gt;
+&lt;h1 id=&#34;安装-mysqldb&#34;&gt;
+  安装 MySQLdb
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%89%e8%a3%85-mysqldb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
 &lt;p&gt;首先进入你需要的路径，我们以 &lt;code&gt;/User/jtr109/qs/&lt;/code&gt; 为例。执行 &lt;code&gt;virtualenv venv&lt;/code&gt; 创建虚拟环境包， &lt;code&gt;source venv/bin/activate&lt;/code&gt; 进入虚拟环境。&lt;/p&gt;
-&lt;h2 id=&#34;注意安装模块名&#34;&gt;注意安装模块名&lt;/h2&gt;
+&lt;h2 id=&#34;注意安装模块名&#34;&gt;
+  注意安装模块名
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b3%a8%e6%84%8f%e5%ae%89%e8%a3%85%e6%a8%a1%e5%9d%97%e5%90%8d&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我不知道为什么这个模块叫 MySQLdb，&lt;code&gt;import&lt;/code&gt; 语句也是 &lt;code&gt;import MySQLdb&lt;/code&gt;。但是你要&lt;strong&gt;注意&lt;/strong&gt;，&lt;code&gt;pip&lt;/code&gt; 安装语句为： &lt;code&gt;pip install MySQL-python&lt;/code&gt;。千万不要写错。不过因为你在虚拟环境，所以玩脱了就这个环境包删了就好。这也是我为什么推崇为每个项目创建虚拟环境的原因之一。&lt;/p&gt;
-&lt;h2 id=&#34;修改-_mysqlso-追踪路径&#34;&gt;修改 &lt;code&gt;_mysql.so&lt;/code&gt; 追踪路径&lt;/h2&gt;
+&lt;h2 id=&#34;修改-_mysqlso-追踪路径&#34;&gt;
+  修改 &lt;code&gt;_mysql.so&lt;/code&gt; 追踪路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bf%ae%e6%94%b9-_mysqlso-%e8%bf%bd%e8%b8%aa%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;现在你可以试着进入 python， 然后运行：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import MySQLdb
 Traceback (most recent call last):

@@ -20,27 +20,67 @@
       <description>&lt;p&gt;在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。今天就让我们一起&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34; alt=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图片来自 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple&#34;&gt;Shades of Purple&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;实践&#34;&gt;实践&lt;/h2&gt;
-&lt;h3 id=&#34;字体选择&#34;&gt;字体选择&lt;/h3&gt;
+&lt;h2 id=&#34;实践&#34;&gt;
+  实践
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e8%b7%b5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;字体选择&#34;&gt;
+  字体选择
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%97%e4%bd%93%e9%80%89%e6%8b%a9&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在 Shades of Purple 提供的&lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple#best-custom-settings&#34;&gt;推荐配置&lt;/a&gt;中可以了解到，截图中使用的字体是 &lt;a href=&#34;https://www.typography.com/fonts/operator/overview&#34;&gt;Operator Mono&lt;/a&gt;。可以在 &lt;a href=&#34;https://www.cufonfonts.com/font/operator-mono&#34;&gt;CUFON Fonts&lt;/a&gt; 网站免费下载&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;安装字体&#34;&gt;安装字体&lt;/h3&gt;
+&lt;h3 id=&#34;安装字体&#34;&gt;
+  安装字体
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%89%e8%a3%85%e5%ad%97%e4%bd%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;下载并解压字体包，可以看到各种 Operator Mono 字体，全选拖拽到 Font Book 中。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/Untitled.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/2.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%202.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;配置-vscode-使用的字体&#34;&gt;配置 VSCode 使用的字体&lt;/h3&gt;
+&lt;h3 id=&#34;配置-vscode-使用的字体&#34;&gt;
+  配置 VSCode 使用的字体
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-vscode-%e4%bd%bf%e7%94%a8%e7%9a%84%e5%ad%97%e4%bd%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;打开 VSCode，打开设置，搜索 &lt;em&gt;font family&lt;/em&gt;，将 Operator Mono 设置在最前。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/3.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%203.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;下载和使用合适的-theme&#34;&gt;下载和使用合适的 Theme&lt;/h3&gt;
+&lt;h3 id=&#34;下载和使用合适的-theme&#34;&gt;
+  下载和使用合适的 Theme
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%b8%8b%e8%bd%bd%e5%92%8c%e4%bd%bf%e7%94%a8%e5%90%88%e9%80%82%e7%9a%84-theme&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。&lt;/p&gt;
 &lt;p&gt;如果不知道用什么 theme 比较好，可以考虑尝试 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=sdras.night-owl&#34;&gt;Night Owl&lt;/a&gt; 或者 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple&#34;&gt;Shade of Purple&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/4.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%204.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。&lt;/p&gt;
-&lt;h3 id=&#34;中文字体&#34;&gt;中文字体&lt;/h3&gt;
+&lt;h3 id=&#34;中文字体&#34;&gt;
+  中文字体
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%b8%ad%e6%96%87%e5%ad%97%e4%bd%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。&lt;/p&gt;
 &lt;p&gt;我使用的是方正和可口可乐推出的&lt;a href=&#34;https://www.foundertype.com/index.php/FontInfo/index/id/4792&#34;&gt;在乎体&lt;/a&gt;。个人可免费使用。感兴趣的朋友可以尝试一下。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/5.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%205.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;补充说明&#34;&gt;补充说明&lt;/h2&gt;
-&lt;h3 id=&#34;字体差异&#34;&gt;字体差异&lt;/h3&gt;
+&lt;h2 id=&#34;补充说明&#34;&gt;
+  补充说明
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a1%a5%e5%85%85%e8%af%b4%e6%98%8e&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;字体差异&#34;&gt;
+  字体差异
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%97%e4%bd%93%e5%b7%ae%e5%bc%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在这里简单说明一下几种字体的差异：&lt;/p&gt;
 &lt;p&gt;文字粗细从粗到细：&lt;/p&gt;
 &lt;ul&gt;
@@ -50,7 +90,12 @@
 &lt;li&gt;Light&lt;/li&gt;
 &lt;li&gt;XLight&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;italic-后缀字体&#34;&gt;Italic 后缀字体&lt;/h3&gt;
+&lt;h3 id=&#34;italic-后缀字体&#34;&gt;
+  Italic 后缀字体
+  &lt;a class=&#34;heading-link&#34; href=&#34;#italic-%e5%90%8e%e7%bc%80%e5%ad%97%e4%bd%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Italic&lt;/em&gt; 后缀说明了这个字体是否是纯斜体，而非 italic 字体提示同时包含了正体和斜体字形。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/6.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%206.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果直接使用 italic 后缀的字体，你的界面会变成全斜体。&lt;/p&gt;

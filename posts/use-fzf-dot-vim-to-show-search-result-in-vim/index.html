@@ -5,19 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+    <meta name="description" content="Why fzf.vim    Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
 The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Use fzf.vim to Show Search Result in Vim"/>
-<meta name="twitter:description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+<meta name="twitter:description" content="Why fzf.vim    Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
 The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do."/>
 
     <meta property="og:title" content="Use fzf.vim to Show Search Result in Vim" />
-<meta property="og:description" content="Why fzf.vim Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
+<meta property="og:description" content="Why fzf.vim    Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).
 The plugin fzf.vim is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/" /><meta property="article:section" content="posts" />
@@ -35,14 +38,12 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
       <link rel="canonical" href="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -51,7 +52,7 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -74,9 +75,17 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
   
     
   
-  <body class="colorscheme-auto"
+  <body class="preload-transitions colorscheme-auto"
         onload=""
   >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
@@ -84,11 +93,6 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
       jtr109&#39;s Castle
     </a>
     
-      
-        <span id="dark-mode-toggle" class="float-right">
-          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-        </span>
-      
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
@@ -114,11 +118,6 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
           
         
         
-        
-          <li class="navigation-item separator">
-            <span>|</span>
-          </li>
-        
       </ul>
     
   </section>
@@ -131,7 +130,11 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">Use fzf.vim to Show Search Result in Vim</h1>
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/">
+              Use fzf.vim to Show Search Result in Vim
+            </a>
+          </h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -162,16 +165,41 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
 
       <div>
         
-        <h2 id="why-fzfvim">Why fzf.vim</h2>
+        <h2 id="why-fzfvim">
+  Why fzf.vim
+  <a class="heading-link" href="#why-fzfvim">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).</p>
 <p>The plugin <a href="https://github.com/junegunn/fzf.vim">fzf.vim</a> is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.</p>
-<h2 id="some-searching-tricks">Some Searching Tricks</h2>
+<h2 id="some-searching-tricks">
+  Some Searching Tricks
+  <a class="heading-link" href="#some-searching-tricks">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>You should spend some time on learning how to use fzf.vim smoothly if you have no experience of using<a href="https://www.yuque.com/jtr109/zima/tk6fdc/edit"> fzf</a>. Now, let me show you some tricks.</p>
-<h3 id="respecting-gitignore">Respecting <code>.gitignore</code> </h3>
-<h4 id="tldr">TL;DR</h4>
+<h3 id="respecting-gitignore">
+  Respecting <code>.gitignore</code> 
+  <a class="heading-link" href="#respecting-gitignore">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<h4 id="tldr">
+  TL;DR
+  <a class="heading-link" href="#tldr">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h4>
 <p>Add this line in your <code>.vimrc</code>:</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files&#39;</span>
-</code></pre></div><h4 id="here-is-why">Here Is Why</h4>
+</code></pre></div><h4 id="here-is-why">
+  Here Is Why
+  <a class="heading-link" href="#here-is-why">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h4>
 <p>Let&rsquo;s say we have a rust project with <code>target</code> directory. When calling <code>:Files</code> we find all files even though those in the directory <code>target</code> which we expected ignored by specified in <code>.gitignore</code>.</p>
 <p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png" alt="image.png"></p>
 <p>Because the fzf does not understand the <code>.gitignore</code>. Let us reproduct it in command line with fzf.</p>
@@ -182,14 +210,29 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files&#39;</span>
 </code></pre></div><p>Let&rsquo;s have a look at the result now.</p>
 <p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png" alt="image.png"></p>
-<h4 id="by-the-way">By The Way</h4>
+<h4 id="by-the-way">
+  By The Way
+  <a class="heading-link" href="#by-the-way">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h4>
 <p>If you perfer <code>ag</code>, try this:</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;ag -g &#34;&#34;&#39;</span>
-</code></pre></div><h2 id="tips-with-rg">Tips with <code>rg</code></h2>
+</code></pre></div><h2 id="tips-with-rg">
+  Tips with <code>rg</code>
+  <a class="heading-link" href="#tips-with-rg">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>If you use <code>rg</code> as default search engine in fzf, you will find all hidden files are excluded. You need to add <code>--hidden</code> to show them.</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#cb4b16">let</span> <span style="color:#268bd2">$FZF_DEFAULT_COMMAND</span> = <span style="color:#2aa198">&#39;rg --files --hidden&#39;</span>
 </code></pre></div><p>And now, all hidden files which not ignored by <code>.gitignore</code> are shown. But wait a minute, all files in <code>.git</code> directory are shown too! Most of time, this is not our purpose. But only the way can solve it is adding <code>.git</code> into <code>.gitignore</code> directly. Please comment if you find a better way!</p>
-<h3 id="filter-by-content">Filter By Content</h3>
+<h3 id="filter-by-content">
+  Filter By Content
+  <a class="heading-link" href="#filter-by-content">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
 <p>If we try to search content in your project with fzf using <code>:Rg</code>. The result will like below.</p>
 <p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png" alt="image.png"></p>
 <p>But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use <code>.</code> in your pattern. The characters before <code>.</code> will be known as a pattern for filename and as content pattern after <code>.</code>.</p>
@@ -197,7 +240,12 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
 <p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png" alt="image.png"></p>
 <p>What about <code>arg.</code> for only filename?</p>
 <p><img src="https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png" alt="image.png"></p>
-<h2 id="reference">Reference</h2>
+<h2 id="reference">
+  Reference
+  <a class="heading-link" href="#reference">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <ul>
 <li><a href="https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405">https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405</a></li>
 </ul>
@@ -213,7 +261,12 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
     
     
     
-      <h3>See also in Vim Notes</h3>
+      <h3 id="see-also-in-vim-notes">
+        See also in Vim Notes
+        <a class="heading-link" href="#see-also-in-vim-notes">
+          <i class="fa fa-link" aria-hidden="true"></i>
+        </a>
+      </h3>
       <nav>
         <ul>
         
@@ -265,8 +318,8 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
     </article>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     MathJax = {
       tex: {
@@ -309,9 +362,7 @@ The plugin fzf.vim is such a strong performer of them. It can not only help you 
 
     
       
-        
-        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
-      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
@@ -329,6 +380,12 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
+
+    
+
+    
+
+    
 
     
 

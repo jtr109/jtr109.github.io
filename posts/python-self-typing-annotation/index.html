@@ -5,9 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="问题描述 Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
+    <meta name="description" content="问题描述    Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
 声明：一下所有场景基于 Python 3.8.2。
 让我们一起来看看下面这个例子：
 class Foo: def __init__(self: Foo, bar: str) -&gt; None: self.bar = bar if __name__ == &#39;__main__&#39;: Foo(&#39;bar&#39;) 该例子中我们按常规方式声明了 self 的类型 Foo。让我们尝试验证类型和执行代码。
@@ -16,14 +19,14 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Class 定义时声明当前 Class 类型"/>
-<meta name="twitter:description" content="问题描述 Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
+<meta name="twitter:description" content="问题描述    Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
 声明：一下所有场景基于 Python 3.8.2。
 让我们一起来看看下面这个例子：
 class Foo: def __init__(self: Foo, bar: str) -&gt; None: self.bar = bar if __name__ == &#39;__main__&#39;: Foo(&#39;bar&#39;) 该例子中我们按常规方式声明了 self 的类型 Foo。让我们尝试验证类型和执行代码。
 $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceback (most recent call last): File &#34;main.py&#34;, line 1, in &lt;module&gt; class Foo: File &#34;main.py&#34;, line 3, in Foo def __init__(self: Foo, bar: str) -&gt; None: NameError: name &#39;Foo&#39; is not defined 因为生命方式符合 mypy 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 Foo 定义前就已经被自己的方法 __init__ 使用了，解释器无法理解，报出 NameError: name &#39;Foo&#39; is not defined 错误。"/>
 
     <meta property="og:title" content="Python Class 定义时声明当前 Class 类型" />
-<meta property="og:description" content="问题描述 Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
+<meta property="og:description" content="问题描述    Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。
 声明：一下所有场景基于 Python 3.8.2。
 让我们一起来看看下面这个例子：
 class Foo: def __init__(self: Foo, bar: str) -&gt; None: self.bar = bar if __name__ == &#39;__main__&#39;: Foo(&#39;bar&#39;) 该例子中我们按常规方式声明了 self 的类型 Foo。让我们尝试验证类型和执行代码。
@@ -43,14 +46,12 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
       <link rel="canonical" href="https://jtr109.github.io/posts/python-self-typing-annotation/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -59,7 +60,7 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -82,9 +83,17 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
   
     
   
-  <body class="colorscheme-auto"
+  <body class="preload-transitions colorscheme-auto"
         onload=""
   >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
@@ -92,11 +101,6 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
       jtr109&#39;s Castle
     </a>
     
-      
-        <span id="dark-mode-toggle" class="float-right">
-          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-        </span>
-      
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
@@ -122,11 +126,6 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
           
         
         
-        
-          <li class="navigation-item separator">
-            <span>|</span>
-          </li>
-        
       </ul>
     
   </section>
@@ -139,7 +138,11 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">Python Class 定义时声明当前 Class 类型</h1>
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/python-self-typing-annotation/">
+              Python Class 定义时声明当前 Class 类型
+            </a>
+          </h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -170,7 +173,12 @@ $ mypy main.py Success: no issues found in 1 source file $ python main.py Traceb
 
       <div>
         
-        <h2 id="问题描述">问题描述</h2>
+        <h2 id="问题描述">
+  问题描述
+  <a class="heading-link" href="#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。</p>
 <p><em>声明：一下所有场景基于 Python 3.8.2。</em></p>
 <p>让我们一起来看看下面这个例子：</p>
@@ -193,9 +201,19 @@ Traceback (most recent call last):
     def __init__(self: Foo, bar: str) -&gt; None:
 NameError: name <span style="color:#2aa198">&#39;Foo&#39;</span> is not defined
 </code></pre></div><p>因为生命方式符合 <a href="http://mypy-lang.org/">mypy</a> 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 <code>Foo</code> 定义前就已经被自己的方法 <code>__init__</code> 使用了，解释器无法理解，报出 <code>NameError: name 'Foo' is not defined</code> 错误。</p>
-<h2 id="解决方案">解决方案</h2>
+<h2 id="解决方案">
+  解决方案
+  <a class="heading-link" href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>我们需要一个生命方法，可以同时满足 <code>mypy</code> 的类型生命校验，也可以满足解释器的运行规则。文章汇总了几种解决方案：</p>
-<h3 id="forward-references">Forward References</h3>
+<h3 id="forward-references">
+  Forward References
+  <a class="heading-link" href="#forward-references">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
 <p><a href="https://www.python.org/dev/peps/pep-0484/#forward-references">Forward references</a> 方法出自 <a href="https://www.python.org/dev/peps/pep-0484/">PEP-484</a>。</p>
 <blockquote>
 <p>When a type hint contains names that have not been defined yet, that definition may be expressed as a string literal, to be resolved later.</p>
@@ -205,7 +223,12 @@ NameError: name <span style="color:#2aa198">&#39;Foo&#39;</span> is not defined
 
     <span style="color:#859900">def</span> <span style="color:#268bd2">__init__</span>(<span style="color:#268bd2">self</span>: <span style="color:#2aa198">&#39;Foo&#39;</span>, <span style="color:#268bd2">bar</span>: <span style="color:#cb4b16">str</span>) -&gt; <span style="color:#268bd2">None</span>:
         <span style="color:#268bd2">self</span>.<span style="color:#268bd2">bar</span> = <span style="color:#268bd2">bar</span>
-</code></pre></div><h3 id="postponed-evaluation-of-annotations">Postponed Evaluation of Annotations</h3>
+</code></pre></div><h3 id="postponed-evaluation-of-annotations">
+  Postponed Evaluation of Annotations
+  <a class="heading-link" href="#postponed-evaluation-of-annotations">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
 <p><a href="https://www.python.org/dev/peps/pep-0563/">PEP-563</a> 介绍了一个 <code>__future__</code> 功能。使我们可以更符合直觉地使用类型声明。</p>
 <blockquote>
 <p><a href="https://www.python.org/dev/peps/pep-0484">PEP 484</a> introduced a standard meaning to annotations: type hints. <a href="https://www.python.org/dev/peps/pep-0526">PEP 526</a> defined variable annotations, explicitly tying them with the type hinting use case.</p>
@@ -251,8 +274,8 @@ NameError: name <span style="color:#2aa198">&#39;Foo&#39;</span> is not defined
     </article>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     MathJax = {
       tex: {
@@ -295,9 +318,7 @@ NameError: name <span style="color:#2aa198">&#39;Foo&#39;</span> is not defined
 
     
       
-        
-        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
-      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
@@ -315,6 +336,12 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
+
+    
+
+    
+
+    
 
     
 

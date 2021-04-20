@@ -17,33 +17,88 @@
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
-      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;Intergate Vue in Django&lt;/h1&gt;
-&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;What Project Will We Build&lt;/h2&gt;
+      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;
+  Intergate Vue in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#intergate-vue-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
+&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;
+  What Project Will We Build
+  &lt;a class=&#34;heading-link&#34; href=&#34;#what-project-will-we-build&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We want to build a vue project with multiple pages. The Django view render these pages as templates.&lt;/p&gt;
-&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;Why We Build Such A Project&lt;/h2&gt;
+&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;
+  Why We Build Such A Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-we-build-such-a-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.&lt;/p&gt;
 &lt;p&gt;So we consider to use front-end service to control the router and use back-end for access control.&lt;/p&gt;
-&lt;h2 id=&#34;initial-repository&#34;&gt;Initial Repository&lt;/h2&gt;
+&lt;h2 id=&#34;initial-repository&#34;&gt;
+  Initial Repository
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initial-repository&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir vid &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; vid
 git init
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;Create Virtual Environment&lt;/h2&gt;
-&lt;h3 id=&#34;specify-python-version&#34;&gt;Specify Python Version&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;
+  Create Virtual Environment
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-virtual-environment&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;specify-python-version&#34;&gt;
+  Specify Python Version
+  &lt;a class=&#34;heading-link&#34; href=&#34;#specify-python-version&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;Change Mirror (Optional)&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;
+  Change Mirror (Optional)
+  &lt;a class=&#34;heading-link&#34; href=&#34;#change-mirror-optional&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[[source]]
 name = &amp;#34;pypi&amp;#34;
 url = &amp;#34;https://mirrors.aliyun.com/pypi/simple/&amp;#34;
 verify_ssl = true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;Install Dependencies&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;
+  Install Dependencies
+  &lt;a class=&#34;heading-link&#34; href=&#34;#install-dependencies&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv install &lt;span style=&#34;color:#268bd2&#34;&gt;django&lt;/span&gt;==2.2.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;Start Django Project&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;
+  Start Django Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#start-django-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run django-admin startproject vid
 mv vid vid-dir &amp;amp;&amp;amp; mv ./vid-dir/* . &amp;amp;&amp;amp; rmdir vid-dir  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# move project to current path&lt;/span&gt;
 pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# check django project works&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;Create Authorization API in Django&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;
+  Create Authorization API in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-authorization-api-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;You should always create a custom user model in Django. &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model&#34;&gt;Here&lt;/a&gt; is why.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Remember not migrating until the custom user model is registered correctly.&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;create-custom-user-model&#34;&gt;Create Custom User Model&lt;/h3&gt;
+&lt;h3 id=&#34;create-custom-user-model&#34;&gt;
+  Create Custom User Model
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-custom-user-model&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us create an app.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;pipenv&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;manage&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;startapp&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We must install it in &lt;code&gt;INSTALLED_APPS&lt;/code&gt; in settings.&lt;/p&gt;
@@ -69,7 +124,12 @@ pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all, migrating the user model.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py makemigrations
 pipenv run python manage.py migrate
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;Create Logining and Checking Views&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;
+  Create Logining and Checking Views
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-logining-and-checking-views&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let&amp;rsquo;s create &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views&#34;&gt;class-based views&lt;/a&gt; with json responses.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/apis.py&lt;/span&gt;
 
@@ -129,8 +189,18 @@ pipenv run python manage.py migrate
 		&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
     &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;api/account/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.urls&amp;#39;&lt;/span&gt;)),
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;Creating Vue Project with Multiple Pages&lt;/h2&gt;
-&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;Initializing a Vue Project&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;
+  Creating Vue Project with Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#creating-vue-project-with-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;
+  Initializing a Vue Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initializing-a-vue-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Frist of all, let us initialize a vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;vue create frontend
 &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; frontend
@@ -138,7 +208,12 @@ yarn install
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we run the vue development service.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually &lt;code&gt;localhost:8080&lt;/code&gt;).&lt;/p&gt;
-&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;Satisfication for Multiple Pages&lt;/h3&gt;
+&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;
+  Satisfication for Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#satisfication-for-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
 mkdir -p src/pages/login
@@ -203,12 +278,27 @@ touch vue.config.js
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
 &lt;p&gt;User page:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;Inject Vue Page Into Django Template&lt;/h2&gt;
-&lt;h3 id=&#34;build-vue-dist&#34;&gt;Build Vue Dist&lt;/h3&gt;
+&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;
+  Inject Vue Page Into Django Template
+  &lt;a class=&#34;heading-link&#34; href=&#34;#inject-vue-page-into-django-template&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;build-vue-dist&#34;&gt;
+  Build Vue Dist
+  &lt;a class=&#34;heading-link&#34; href=&#34;#build-vue-dist&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Build the vue project first.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, you get &lt;code&gt;login.html&lt;/code&gt; and &lt;code&gt;user.html&lt;/code&gt; in the path &lt;code&gt;frontend/dist&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;Show Login Page in Django View&lt;/h3&gt;
+&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;
+  Show Login Page in Django View
+  &lt;a class=&#34;heading-link&#34; href=&#34;#show-login-page-in-django-view&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us show login page by &lt;code&gt;TemplateView&lt;/code&gt; in Django.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
 
@@ -251,7 +341,12 @@ touch vue.config.js
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;render-user-page&#34;&gt;Render User Page&lt;/h3&gt;
+&lt;h3 id=&#34;render-user-page&#34;&gt;
+  Render User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#render-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now, we already have the HTML file &lt;code&gt;frontend/dist/user.html&lt;/code&gt; . Let us render it in a Django view.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/views.py&lt;/span&gt;
 
@@ -275,8 +370,18 @@ touch vue.config.js
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;Create a Login Form in User Page&lt;/h2&gt;
-&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;Login Form with Ant Design&lt;/h3&gt;
+&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;
+  Create a Login Form in User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-a-login-form-in-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;
+  Login Form with Ant Design
+  &lt;a class=&#34;heading-link&#34; href=&#34;#login-form-with-ant-design&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us install the ant design vue package. &lt;a href=&#34;https://vue.ant.design/docs/vue/use-with-vue-cli/&#34;&gt;Here&lt;/a&gt; is the way to install and register ant design vue.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add ant-design-vue
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Import style in &lt;code&gt;frontend/src/pages/login/app.js&lt;/code&gt;&lt;/p&gt;
@@ -397,7 +502,12 @@ touch vue.config.js
 &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;Using Axios to Send Login Request&lt;/h3&gt;
+&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;
+  Using Axios to Send Login Request
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-axios-to-send-login-request&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First let add proxy in vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
@@ -453,7 +563,12 @@ touch vue.config.js
     # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
     # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;Create User and Test Redirection&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;
+  Create User and Test Redirection
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-user-and-test-redirection&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us create a user in django shell.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py shell
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
@@ -461,13 +576,23 @@ touch vue.config.js
 &lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;Rebuild Frontend and Have A Try in Django Service&lt;/h3&gt;
+&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+  Rebuild Frontend and Have A Try in Django Service
+  &lt;a class=&#34;heading-link&#34; href=&#34;#rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now let&amp;rsquo;s rebuild the frontend.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
 yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference:&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference:
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/25080236&#34;&gt;https://zhuanlan.zhihu.com/p/25080236&lt;/a&gt;&lt;/p&gt;
@@ -491,13 +616,23 @@ yarn run build
       <pubDate>Thu, 07 Sep 2017 16:41:23 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/es6-note/</guid>
-      <description>&lt;h2 id=&#34;async-函数&#34;&gt;async 函数&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;async-函数&#34;&gt;
+  async 函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#async-%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;async&lt;/code&gt; 表示函数里有异步操作，&lt;code&gt;await&lt;/code&gt; 表示紧跟在后面的表达式需要等待结果。&lt;/li&gt;
 &lt;li&gt;async 函数的返回值是一个 Promise 对象, 可以使用 then 指定下一步操作.&lt;/li&gt;
 &lt;li&gt;只要一个 &lt;code&gt;await&lt;/code&gt; 语句后面的 Promise 变为 reject, 那么整个 &lt;code&gt;async&lt;/code&gt; 函数都会中断执行&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;并发异步请求&#34;&gt;并发异步请求&lt;/h3&gt;
+&lt;h3 id=&#34;并发异步请求&#34;&gt;
+  并发异步请求
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b9%b6%e5%8f%91%e5%bc%82%e6%ad%a5%e8%af%b7%e6%b1%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 写法一
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;] = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Promise&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;all&lt;/span&gt;([&lt;span style=&#34;color:#268bd2&#34;&gt;getFoo&lt;/span&gt;(), &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;()]);
 
@@ -506,7 +641,12 @@ yarn run build
 &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;getBar&lt;/span&gt;();
 &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;foo&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;fooPromise&lt;/span&gt;;
 &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#859900&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;barPromise&lt;/span&gt;;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环并发异步请求&#34;&gt;for 循环并发异步请求&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环并发异步请求&#34;&gt;
+  for 循环并发异步请求
+  &lt;a class=&#34;heading-link&#34; href=&#34;#for-%e5%be%aa%e7%8e%af%e5%b9%b6%e5%8f%91%e5%bc%82%e6%ad%a5%e8%af%b7%e6%b1%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;promises&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;doc&lt;/span&gt;));
@@ -527,7 +667,12 @@ yarn run build
   }
   &lt;span style=&#34;color:#268bd2&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;results&lt;/span&gt;);
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环继发异步请求&#34;&gt;for 循环继发异步请求&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;for-循环继发异步请求&#34;&gt;
+  for 循环继发异步请求
+  &lt;a class=&#34;heading-link&#34; href=&#34;#for-%e5%be%aa%e7%8e%af%e7%bb%a7%e5%8f%91%e5%bc%82%e6%ad%a5%e8%af%b7%e6%b1%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;dbFuc&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;db&lt;/span&gt;) {
   &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;docs&lt;/span&gt; = [{}, {}, {}];
 
@@ -536,7 +681,12 @@ yarn run build
   }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;acync 函数中遇到 await 就会等待执行完成后在继续执行接下来的语句, 在 for 循环中也是一样.&lt;/p&gt;
-&lt;h2 id=&#34;for--of&#34;&gt;for &amp;hellip; of&lt;/h2&gt;
+&lt;h2 id=&#34;for--of&#34;&gt;
+  for &amp;hellip; of
+  &lt;a class=&#34;heading-link&#34; href=&#34;#for--of&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;for...of&lt;/code&gt; 循环调用遍历器接口，数组的遍历器接口只返回具有数字索引的属性。&lt;/p&gt;
 </description>
     </item>
@@ -547,14 +697,34 @@ yarn run build
       <pubDate>Wed, 16 Aug 2017 10:51:52 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/about-js-for-loop/</guid>
-      <description>&lt;h2 id=&#34;关于-for--in-和-for--of&#34;&gt;关于 &lt;code&gt;for ... in&lt;/code&gt; 和 &lt;code&gt;for ... of&lt;/code&gt;&lt;/h2&gt;
-&lt;h3 id=&#34;简单记忆&#34;&gt;简单记忆&lt;/h3&gt;
+      <description>&lt;h2 id=&#34;关于-for--in-和-for--of&#34;&gt;
+  关于 &lt;code&gt;for ... in&lt;/code&gt; 和 &lt;code&gt;for ... of&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e4%ba%8e-for--in-%e5%92%8c-for--of&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;简单记忆&#34;&gt;
+  简单记忆
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%ae%80%e5%8d%95%e8%ae%b0%e5%bf%86&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;由于 es6 中 &lt;code&gt;for ... of&lt;/code&gt; 的加入, 对于记得不是很清楚的人会很容易产生混淆.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;for ... in&lt;/code&gt; 可以理解为获取 &amp;ldquo;index&amp;rdquo;. 在 Array 类型中, 调用 &lt;code&gt;for ... in&lt;/code&gt; 获取的确实就是每个元素对应的 index, 而在 Object 中, 就是对应相应的 key 值.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;for ... of &lt;/code&gt; 只可以用于 Array.&lt;/p&gt;
-&lt;h3 id=&#34;特别注意&#34;&gt;特别注意&lt;/h3&gt;
+&lt;h3 id=&#34;特别注意&#34;&gt;
+  特别注意
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%89%b9%e5%88%ab%e6%b3%a8%e6%84%8f&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;for ... of&lt;/code&gt; 只能用于 Array, 用于 Object 或者 undefined 均会报错. 所以对于使用对象可能出现 undefined 的情况&lt;strong&gt;不要使用&lt;code&gt;for ... of&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
+&lt;h3 id=&#34;示例&#34;&gt;
+  示例
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%a4%ba%e4%be%8b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;对 Array 使用:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;a&lt;/span&gt; = {&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;}
 &lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;b&lt;/span&gt; = [&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;]

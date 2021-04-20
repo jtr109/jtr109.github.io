@@ -5,24 +5,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="写在最前 作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
-在 GitLab 中使用 2FA GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
+    <meta name="description" content="写在最前    作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
+在 GitLab 中使用 2FA    GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
 但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到解决方案.
  When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using GitLab’s API. You must use a personal access token instead.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="在 Git 托管服务中使用两步验证能力"/>
-<meta name="twitter:description" content="写在最前 作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
-在 GitLab 中使用 2FA GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
+<meta name="twitter:description" content="写在最前    作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
+在 GitLab 中使用 2FA    GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
 但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到解决方案.
  When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using GitLab’s API. You must use a personal access token instead."/>
 
     <meta property="og:title" content="在 Git 托管服务中使用两步验证能力" />
-<meta property="og:description" content="写在最前 作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
-在 GitLab 中使用 2FA GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
+<meta property="og:description" content="写在最前    作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.
+在 GitLab 中使用 2FA    GitLab 中如何开启 2FA 在文档中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.
 但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到解决方案.
  When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using GitLab’s API. You must use a personal access token instead." />
 <meta property="og:type" content="article" />
@@ -40,14 +43,12 @@
       <link rel="canonical" href="https://jtr109.github.io/posts/git-with-2fa/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -56,7 +57,7 @@
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -79,9 +80,17 @@
   
     
   
-  <body class="colorscheme-auto"
+  <body class="preload-transitions colorscheme-auto"
         onload=""
   >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
@@ -89,11 +98,6 @@
       jtr109&#39;s Castle
     </a>
     
-      
-        <span id="dark-mode-toggle" class="float-right">
-          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-        </span>
-      
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
@@ -119,11 +123,6 @@
           
         
         
-        
-          <li class="navigation-item separator">
-            <span>|</span>
-          </li>
-        
       </ul>
     
   </section>
@@ -136,7 +135,11 @@
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">在 Git 托管服务中使用两步验证能力</h1>
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/git-with-2fa/">
+              在 Git 托管服务中使用两步验证能力
+            </a>
+          </h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -169,16 +172,31 @@
 
       <div>
         
-        <h2 id="写在最前">写在最前</h2>
+        <h2 id="写在最前">
+  写在最前
+  <a class="heading-link" href="#%e5%86%99%e5%9c%a8%e6%9c%80%e5%89%8d">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>作为开发者, 应该清楚地知道 &ldquo;密码再强也不是不可能被破解&rdquo;, 所以只要网站支持 2FA, 就建议在自己的帐号中配置 2FA 支持.</p>
-<h2 id="在-gitlab-中使用-2fa">在 GitLab 中使用 2FA</h2>
+<h2 id="在-gitlab-中使用-2fa">
+  在 GitLab 中使用 2FA
+  <a class="heading-link" href="#%e5%9c%a8-gitlab-%e4%b8%ad%e4%bd%bf%e7%94%a8-2fa">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>GitLab 中如何开启 2FA 在<a href="https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-2fa-via-one-time-password-authenticator">文档</a>中写得比较清晰, 而且其中推荐了几种可选的 one time password authenticators.</p>
 <p>但是按照这个方案操作完之后, 如果你的项目通过 https 指定远程 git 仓库地址, 你的 git 终端会要求你重新登录. 如果你足够耐心, 其实可以在页面下方找到<a href="https://docs.gitlab.com/ce/user/profile/account/two_factor_authentication.html#personal-access-tokens">解决方案</a>.</p>
 <blockquote>
 <p>When 2FA is enabled, you can no longer use your normal account password to authenticate with Git over HTTPS on the command line or when using <a href="https://docs.gitlab.com/ee/api/README.html">GitLab’s API</a>. You must use a <a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html">personal access token</a> instead.</p>
 </blockquote>
 <p>所以使用 access token 作为密码即可登录自己的 git 帐号拉取和推送服务.</p>
-<h2 id="关于-access-token">关于 Access Token</h2>
+<h2 id="关于-access-token">
+  关于 Access Token
+  <a class="heading-link" href="#%e5%85%b3%e4%ba%8e-access-token">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>建议所有在使用 access token 的过程中, 为每一个客户端使用一个单独的 token, 来避免找到一个 token 变成 &ldquo;死 token&rdquo;, 即这个 token &ldquo;可能&rdquo; 被用在很多地方, 而自己不知道具体在哪使用了.</p>
 <p>给每个客户端建立一个 token, 也不要让这些 token 落盘, 如果 logout 了之后, 请刷新 token, 并使用你的新 token 登录.</p>
 
@@ -215,8 +233,8 @@
     </article>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     MathJax = {
       tex: {
@@ -259,9 +277,7 @@
 
     
       
-        
-        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
-      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
@@ -279,6 +295,12 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
+
+    
+
+    
+
+    
 
     
 

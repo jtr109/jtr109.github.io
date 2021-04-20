@@ -31,17 +31,37 @@
       <pubDate>Tue, 15 Sep 2020 16:02:04 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-base62-lib/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在学习设计 Short URL 时尝试基于 Rust 编写了一个 Base62 库 &lt;a href=&#34;https://crates.io/crates/base62num&#34;&gt;base62num&lt;/a&gt;。后来发现已经有一个 Rust 库 &lt;a href=&#34;https://crates.io/crates/base-62&#34;&gt;base-62&lt;/a&gt; 提供了 Base62 的功能。&lt;/p&gt;
-&lt;h2 id=&#34;差异分析&#34;&gt;差异分析&lt;/h2&gt;
+&lt;h2 id=&#34;差异分析&#34;&gt;
+  差异分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b7%ae%e5%bc%82%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;因此我尝试对比 base-62 和自己项目的源码和功能做了一次学习。&lt;/p&gt;
-&lt;h4 id=&#34;字符集映射&#34;&gt;字符集映射&lt;/h4&gt;
+&lt;h4 id=&#34;字符集映射&#34;&gt;
+  字符集映射
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e9%9b%86%e6%98%a0%e5%b0%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;base-62 使用的字符集是：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而 base62num 中使用的是：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我在构建 base62num 时纠结过 alphanumeric 的顺序，但是没有找到明确的标准说明顺序。只有 Wikipedia 中明确给出了&lt;a href=&#34;https://en.wikipedia.org/wiki/Base62#Base62_table&#34;&gt;字符映射表&lt;/a&gt;，所以我选择了后者。&lt;/p&gt;
-&lt;h4 id=&#34;正整型的形式&#34;&gt;正整型的形式&lt;/h4&gt;
+&lt;h4 id=&#34;正整型的形式&#34;&gt;
+  正整型的形式
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%ad%a3%e6%95%b4%e5%9e%8b%e7%9a%84%e5%bd%a2%e5%bc%8f&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;开始设计时，我只考虑了 32 bit 的 MurmurHash，所以认为 &lt;code&gt;usize&lt;/code&gt; 已经可以满足需求。但实际上 &lt;code&gt;usize&lt;/code&gt; 的大小对于 Base62 的使用场景来说还是不太够用的。&lt;/p&gt;
 &lt;p&gt;我们来看看 base-62 中的设计思路。在 base-62 中 &lt;a href=&#34;https://docs.rs/base-62/0.1.1/base_62/base62/fn.encode.html&#34;&gt;&lt;code&gt;encode&lt;/code&gt;&lt;/a&gt; 的参数是 bytes：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;encode&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;bytes&lt;/span&gt;: &lt;span style=&#34;color:#859900&#34;&gt;&amp;amp;&lt;/span&gt;[&lt;span style=&#34;color:#859900;font-weight:bold&#34;&gt;u8&lt;/span&gt;]) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;String&lt;/span&gt;
@@ -50,12 +70,32 @@
 &lt;p&gt;A byte array (leading zeros allowed) is prepended with &lt;code&gt;0x01&lt;/code&gt; and is treated as a big-endian unsigned integer (&lt;code&gt;num_bigint::BigUint&lt;/code&gt;).&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;这样带来了一个好处：该库的参数不受类型定义限制。因为无论是标准库&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;还是 &lt;code&gt;num_bigint&lt;/code&gt; &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;都实现了对 byte array 的转化。所以将 byte array 避免了适应不同的类型，提高了通用性。这一点非常值得学习。&lt;/p&gt;
-&lt;h3 id=&#34;实现差异&#34;&gt;实现差异&lt;/h3&gt;
-&lt;h4 id=&#34;常量定义&#34;&gt;常量定义&lt;/h4&gt;
+&lt;h3 id=&#34;实现差异&#34;&gt;
+  实现差异
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e7%8e%b0%e5%b7%ae%e5%bc%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;常量定义&#34;&gt;
+  常量定义
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b8%b8%e9%87%8f%e5%ae%9a%e4%b9%89&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;base-62 &lt;a href=&#34;https://docs.rs/base-62/0.1.1/src/base_62/base62.rs.html#54&#34;&gt;定义字母表常量&lt;/a&gt;时使用的类型是 &lt;code&gt;[char; 62]&lt;/code&gt;，而非 &lt;code&gt;String&lt;/code&gt;。这样可以避免反复执行 &lt;code&gt;String::chars&lt;/code&gt; 的 CPU 消耗。&lt;/p&gt;
-&lt;h4 id=&#34;错误处理&#34;&gt;错误处理&lt;/h4&gt;
+&lt;h4 id=&#34;错误处理&#34;&gt;
+  错误处理
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%94%99%e8%af%af%e5%a4%84%e7%90%86&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;base-62 在定义错误类型时使用了 &lt;code&gt;failure&lt;/code&gt; 库，降低了代码复杂度。是一个不错的方法。&lt;/p&gt;
-&lt;h2 id=&#34;未来计划&#34;&gt;未来计划&lt;/h2&gt;
+&lt;h2 id=&#34;未来计划&#34;&gt;
+  未来计划
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%aa%e6%9d%a5%e8%ae%a1%e5%88%92&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;一开始没有使用 base-62 的原因是没有理解为什么使用了 byte array 这样的方式作为参数。目前 base-62 对我而言美中不足的就是字母表顺序和我预期不一致。未来会考虑将自己的项目存档，通过 &lt;code&gt;features&lt;/code&gt; 给 base-62 提供可选的其他字母表顺序的支持。&lt;/p&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
@@ -77,7 +117,12 @@
       <pubDate>Wed, 17 Jun 2020 15:35:25 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-log-level/</guid>
-      <description>&lt;h2 id=&#34;using-log-module&#34;&gt;Using &lt;code&gt;log&lt;/code&gt; Module&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;using-log-module&#34;&gt;
+  Using &lt;code&gt;log&lt;/code&gt; Module
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-log-module&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/log/&#34;&gt;Log module&lt;/a&gt; does not show any log without a logging implementation&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 
@@ -88,7 +133,12 @@
     &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;warn&amp;#34;&lt;/span&gt;);
     &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;error&amp;#34;&lt;/span&gt;);
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;using-env_logger&#34;&gt;Using &lt;code&gt;env_logger&lt;/code&gt;&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;using-env_logger&#34;&gt;
+  Using &lt;code&gt;env_logger&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-env_logger&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/env_logger/0.7.1/env_logger/&#34;&gt;The &lt;code&gt;env_logger&lt;/code&gt; module&lt;/a&gt; is a logging implementation we can choose. But even if we init it. The output is not shown as expected.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 
@@ -107,10 +157,20 @@
 &lt;blockquote&gt;
 &lt;p&gt;Log levels are controlled on a per-module basis, and by default all logging is disabled except for &lt;code&gt;error!&lt;/code&gt;. Logging is controlled via the &lt;code&gt;RUST_LOG&lt;/code&gt; environment variable.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;specifying-logging-level&#34;&gt;Specifying Logging Level&lt;/h2&gt;
+&lt;h2 id=&#34;specifying-logging-level&#34;&gt;
+  Specifying Logging Level
+  &lt;a class=&#34;heading-link&#34; href=&#34;#specifying-logging-level&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we want to set the logging level, the environment variable &lt;code&gt;RUST_LOG&lt;/code&gt; is required. Such as below.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;RUST_LOG&lt;/span&gt;=info cargo run
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;setting-default-logging-level&#34;&gt;Setting Default Logging Level&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;setting-default-logging-level&#34;&gt;
+  Setting Default Logging Level
+  &lt;a class=&#34;heading-link&#34; href=&#34;#setting-default-logging-level&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;But we can also change the default logging level explicitly.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;log&lt;/span&gt;::{&lt;span style=&#34;color:#268bd2&#34;&gt;debug&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;trace&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;info&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;warn&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;error&lt;/span&gt;};
 &lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;env_logger&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;Env&lt;/span&gt;;
@@ -127,7 +187,12 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now you can &lt;a href=&#34;https://play.rust-lang.org/?version=stable&amp;amp;mode=debug&amp;amp;edition=2018&amp;amp;gist=ff9ceff45cee38a23e818f60c3557184&#34;&gt;see&lt;/a&gt; all logs higher than specific level.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[2020-06-17T10:33:10Z WARN  playground] warn
 [2020-06-17T10:33:10Z ERROR playground] error
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;
+  References
+  &lt;a class=&#34;heading-link&#34; href=&#34;#references&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.rs/log/0.4.8/log/index.html&#34;&gt;&lt;code&gt;log&lt;/code&gt; module document&lt;/a&gt;&lt;/p&gt;
@@ -157,7 +222,12 @@
       <pubDate>Thu, 22 Aug 2019 14:33:24 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/rust-error-type/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result.html#using-result-in-main&#34;&gt;Result - Rust By Example&lt;/a&gt;中有一个示例如下:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;std&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;num&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;;
 
@@ -171,14 +241,29 @@
     &lt;span style=&#34;color:#cb4b16&#34;&gt;Ok&lt;/span&gt;(())
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里有一个问题没有明确解释: 没有足够的信息, 怎么就确认 &lt;code&gt;parse&lt;/code&gt; 返回的 &lt;code&gt;Err&lt;/code&gt; 是 &lt;code&gt;ParseIntError&lt;/code&gt; 类型了?&lt;/p&gt;
-&lt;h2 id=&#34;拨开迷雾&#34;&gt;拨开迷雾&lt;/h2&gt;
+&lt;h2 id=&#34;拨开迷雾&#34;&gt;
+  拨开迷雾
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8b%a8%e5%bc%80%e8%bf%b7%e9%9b%be&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;所幸在&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/error/result/result_map.html&#34;&gt;下一个章节&lt;/a&gt;有这么一句话:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;We first need to know what kind of error type we are dealing with. To determine the &lt;code&gt;Err&lt;/code&gt; type, we look to  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;&lt;code&gt;parse()&lt;/code&gt;&lt;/a&gt; , which is implemented with the  &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt;&lt;/a&gt;  trait for  &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.i32.html&#34;&gt;&lt;code&gt;i32&lt;/code&gt;&lt;/a&gt; . As a result, the &lt;code&gt;Err&lt;/code&gt; type is specified as  &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;&lt;code&gt;ParseIntError&lt;/code&gt;&lt;/a&gt; .&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;那我们就顺着这个线索好好梳理一下这个类型是如何确认的.&lt;/p&gt;
-&lt;h2 id=&#34;寻根溯源&#34;&gt;寻根溯源&lt;/h2&gt;
-&lt;h3 id=&#34;parse-方法分析&#34;&gt;&lt;code&gt;parse&lt;/code&gt; 方法分析&lt;/h3&gt;
+&lt;h2 id=&#34;寻根溯源&#34;&gt;
+  寻根溯源
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%af%bb%e6%a0%b9%e6%ba%af%e6%ba%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;parse-方法分析&#34;&gt;
+  &lt;code&gt;parse&lt;/code&gt; 方法分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#parse-%e6%96%b9%e6%b3%95%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;这里很容易确认 &lt;code&gt;number_str&lt;/code&gt; 是一个 &lt;code&gt;str&lt;/code&gt; 类型. 那我们需要查找的就是 &lt;code&gt;str.parse&lt;/code&gt; 这个方法的&lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;文档&lt;/a&gt;, 定义如下:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;pub&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;fn&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;parse&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;&amp;gt;(&amp;amp;&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Result&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt;, &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;F&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FromStr&lt;/span&gt;&amp;gt;::&lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt;&amp;gt;
 &lt;span style=&#34;color:#859900&#34;&gt;where&lt;/span&gt;
@@ -194,7 +279,12 @@
 &lt;p&gt;As such, &lt;code&gt;parse&lt;/code&gt; is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt;. This helps the inference algorithm understand specifically which type you’re trying to parse into.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;可以了解到, 如果需要将 &lt;code&gt;str&lt;/code&gt; 解析成什么类型, 就在 &lt;code&gt;::&amp;lt;&amp;gt;&lt;/code&gt; 中填写什么类型. 以上文为例, 就是 &lt;code&gt;i32&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;fromstr-分析&#34;&gt;&lt;code&gt;FromStr&lt;/code&gt; 分析&lt;/h3&gt;
+&lt;h3 id=&#34;fromstr-分析&#34;&gt;
+  &lt;code&gt;FromStr&lt;/code&gt; 分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#fromstr-%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;让我们仔细阅读一下 &lt;code&gt;std::str::FromStr&lt;/code&gt; 这个 method 在&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html&#34;&gt;文档&lt;/a&gt;中的一段描述:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If parsing succeeds, return the value inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Ok&#34;&gt;&lt;code&gt;Ok&lt;/code&gt;&lt;/a&gt; , otherwise when the string is ill-formatted return an error specific to the inside &lt;a href=&#34;https://doc.rust-lang.org/std/result/enum.Result.html#variant.Err&#34;&gt;Err&lt;/a&gt; . The error type is specific to implementation of the trait.&lt;/p&gt;
@@ -202,7 +292,12 @@
 &lt;p&gt;重点是&lt;strong&gt;The error type is specific to implementation of the trait&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;那我们就试着在 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#implementors&#34;&gt;Implementors&lt;/a&gt; 里找实现对应的实现, 即 &lt;code&gt;impl FromStr for i32&lt;/code&gt;. 那在这个 [implementor]([std::str::FromStr - &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&lt;/a&gt;) 中, 对应的 &lt;code&gt;Err&lt;/code&gt; 就很容易找到了:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Err&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;ParseIntError&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;
+  Conclusion
+  &lt;a class=&#34;heading-link&#34; href=&#34;#conclusion&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;让我们再简单梳理一下:&lt;/p&gt;
 &lt;p&gt;首先我们需要匹配 &lt;code&gt;number_str.parse::&amp;lt;i32&amp;gt;()&lt;/code&gt; 的结果, 如果是 &lt;code&gt;Err&lt;/code&gt; 需要作为 &lt;code&gt;main&lt;/code&gt; 函数的结果返回 (&lt;code&gt;main&lt;/code&gt; 函数不是重点).&lt;/p&gt;
 &lt;p&gt;我们从 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.str.html#method.parse&#34;&gt;parse&lt;/a&gt; 的返回中找到返回值来自方法 &lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str&#34;&gt;from_str&lt;/a&gt; 的调用. 根据其实现方式, 找到 &lt;code&gt;i32&lt;/code&gt; 的&lt;a href=&#34;https://doc.rust-lang.org/std/str/trait.FromStr.html#impl-FromStr-8&#34;&gt;实现中&lt;/a&gt;定义了 &lt;code&gt;Err&lt;/code&gt; 的类型: &lt;a href=&#34;https://doc.rust-lang.org/std/num/struct.ParseIntError.html&#34;&gt;ParseIntError&lt;/a&gt;&lt;/p&gt;
@@ -215,7 +310,12 @@
       <pubDate>Tue, 13 Aug 2019 11:13:09 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;今天跟着&lt;a href=&#34;https://dev.to/werner/practical-rust-web-development-api-rest-29g1&#34;&gt;文章&lt;/a&gt;学习的时候遇到一个问题. 我把这句导入语句&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;crate&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;schema&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;products&lt;/span&gt;::&lt;span style=&#34;color:#268bd2&#34;&gt;dsl&lt;/span&gt;::*;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;放在了顶部,  在下面定义了一个 method:&lt;/p&gt;
@@ -235,7 +335,12 @@
    |
    = note: expected &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;i32&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
               found &lt;span style=&#34;color:#cb4b16&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;schema::products::columns::id&lt;span style=&#34;color:#2aa198&#34;&gt;`&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;原因&#34;&gt;
+  原因
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8e%9f%e5%9b%a0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;原因出在 &lt;code&gt;use foo::bar::*&lt;/code&gt; 的时候, 编译器将 struct &lt;code&gt;id&lt;/code&gt; 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 &lt;code&gt;id&lt;/code&gt; 指的是一个 pattern. 所以报错.&lt;/p&gt;
 &lt;p&gt;举一个类似的例子:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Foo&lt;/span&gt;;
@@ -244,7 +349,12 @@
 
 &lt;span style=&#34;color:#268bd2&#34;&gt;main&lt;/span&gt;() {}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上例子中, 函数 &lt;code&gt;bar&lt;/code&gt; 里定义的 &lt;code&gt;Foo&lt;/code&gt; 被编译器认为是一个 pattern, 所以会提示 mismatched types.&lt;/p&gt;
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这里的主要原因是 &lt;code&gt;diesel&lt;/code&gt;  的变量名设计存在一些问题. 这里其实用 CamelCase 会更合适.&lt;/p&gt;
 &lt;p&gt;另外应该避免使用 &lt;code&gt;use foo::bar::*&lt;/code&gt; 这样的语法.&lt;/p&gt;
 &lt;p&gt;那如果不得不用的时候, 特别是针对 &lt;code&gt;diesel&lt;/code&gt; 使用的时候, 可以尽量考虑在函数内调用 &lt;code&gt;use&lt;/code&gt;.&lt;/p&gt;

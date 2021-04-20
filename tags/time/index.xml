@@ -17,7 +17,12 @@
       <pubDate>Tue, 06 Oct 2020 11:16:30 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/time-in-python/</guid>
-      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;时间差计算&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;时间差计算&#34;&gt;
+  时间差计算
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%97%b6%e9%97%b4%e5%b7%ae%e8%ae%a1%e7%ae%97&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;计算时间差最直观的方式是使用 &lt;code&gt;time.time&lt;/code&gt; 方法：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;time&lt;/span&gt;
 
@@ -45,9 +50,19 @@
       <pubDate>Tue, 09 Jun 2020 12:03:19 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/time-zone-between-systems/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Time zone 一直是一个老生常谈的问题，不同地区会划分出不同的时区（CST），同一个地区在不同季节也可能有不同的时间规则（DST）。在这里我们一起梳理一下开发过程中可能会遇到的时区问题。&lt;/p&gt;
-&lt;h2 id=&#34;naive-datetime--timezone-awared-datetime&#34;&gt;Naive Datetime &amp;amp; Timezone-awared Datetime&lt;/h2&gt;
+&lt;h2 id=&#34;naive-datetime--timezone-awared-datetime&#34;&gt;
+  Naive Datetime &amp;amp; Timezone-awared Datetime
+  &lt;a class=&#34;heading-link&#34; href=&#34;#naive-datetime--timezone-awared-datetime&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在 Python 中，我们会遇到两种显示时间的方式。转换到 ISO 8601 中，他们的显示也有差异：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -70,8 +85,18 @@
 &lt;/ul&gt;
 &lt;p&gt;Naive datetime 是没有「时区」概念的，他表示的时间通常被用做「当地时间」，然而遇到跨时区的情况，两地无法区分这个时间指代的是什么时区，导致混乱。所以当你的服务或者用户处于不同时区，&lt;strong&gt;绝对&lt;/strong&gt;不能使用 naive datetime。&lt;/p&gt;
 &lt;p&gt;而 Timezone-awared datetime 最后的 &lt;code&gt;Z&lt;/code&gt; 或 &lt;code&gt;+00:00&lt;/code&gt; 表明了时区，可以帮助不同时区的程序和系统以合适的方式显示时间。&lt;/p&gt;
-&lt;h2 id=&#34;iso-format--timestamp&#34;&gt;ISO Format &amp;amp; Timestamp&lt;/h2&gt;
-&lt;h3 id=&#34;iso-format-string-和-timestamp-各自的特点&#34;&gt;ISO Format String 和 Timestamp 各自的特点&lt;/h3&gt;
+&lt;h2 id=&#34;iso-format--timestamp&#34;&gt;
+  ISO Format &amp;amp; Timestamp
+  &lt;a class=&#34;heading-link&#34; href=&#34;#iso-format--timestamp&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;iso-format-string-和-timestamp-各自的特点&#34;&gt;
+  ISO Format String 和 Timestamp 各自的特点
+  &lt;a class=&#34;heading-link&#34; href=&#34;#iso-format-string-%e5%92%8c-timestamp-%e5%90%84%e8%87%aa%e7%9a%84%e7%89%b9%e7%82%b9&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;首先需要明确 ISO formated timezone-awared datetime和 timestamp 在服务间通讯能达到的效果是一样的，都可以无歧义地表达一个时间。让我们来分析一下他们的特点：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;ISO formated timezone-awared datetime
@@ -93,7 +118,12 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;前端对时间的处理&#34;&gt;前端对时间的处理&lt;/h3&gt;
+&lt;h3 id=&#34;前端对时间的处理&#34;&gt;
+  前端对时间的处理
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%89%8d%e7%ab%af%e5%af%b9%e6%97%b6%e9%97%b4%e7%9a%84%e5%a4%84%e7%90%86&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;如果浏览器当前时区为东八区，取一个北京时间 &lt;code&gt;2020-06-09T14:56:00.658540+08:00&lt;/code&gt; 为例，对应的秒级精度 timestamp 为 1591685760.65854。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Date&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;2020-06-09T14:56:00.658540+08:00&amp;#34;&lt;/span&gt;)
 &amp;lt; &lt;span style=&#34;color:#268bd2&#34;&gt;Tue&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Jun&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;09&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2020&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;14&lt;/span&gt;:&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;56&lt;/span&gt;:&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;00&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;GMT&lt;/span&gt;+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;0800&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;China&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Standard&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Time&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// 使用带时区 ISO format 可以正确解析
@@ -109,13 +139,23 @@
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
 &amp;gt; &lt;span style=&#34;color:#859900&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;Date&lt;/span&gt;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1591685760.65854&lt;/span&gt;)
 &amp;lt; &lt;span style=&#34;color:#268bd2&#34;&gt;Mon&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Jan&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;19&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1970&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;18&lt;/span&gt;:&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;08&lt;/span&gt;:&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;05&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;GMT&lt;/span&gt;+&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;0800&lt;/span&gt; (&lt;span style=&#34;color:#268bd2&#34;&gt;China&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Standard&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;Time&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// JavaScript 只能理解毫秒级的时间戳，秒级精度的时间戳会解析到错误时间
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用-iso-format-string-还是-timestamp&#34;&gt;使用 ISO Format String 还是 Timestamp？&lt;/h3&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用-iso-format-string-还是-timestamp&#34;&gt;
+  使用 ISO Format String 还是 Timestamp？
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bd%bf%e7%94%a8-iso-format-string-%e8%bf%98%e6%98%af-timestamp&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;根据两种表示方案的特点，我们可以这样选择：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;在后端系统见传递时间，使用时间戳。另外考虑到提供更高的精度，推荐使用毫秒级时间戳。&lt;/li&gt;
 &lt;li&gt;和前端的接口中使用带时区的 ISO Format String，提供更好的可读性，同时保证解析无歧义。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&#34;延伸阅读&#34;&gt;延伸阅读&lt;/h2&gt;
+&lt;h2 id=&#34;延伸阅读&#34;&gt;
+  延伸阅读
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%bb%b6%e4%bc%b8%e9%98%85%e8%af%bb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/3.0/topics/i18n/timezones/&#34;&gt;Django 中自带的时区处理机制&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;

@@ -17,8 +17,18 @@
       <pubDate>Wed, 23 Aug 2017 07:30:11 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/yast-learning/</guid>
-      <description>&lt;h2 id=&#34;算数操作&#34;&gt;算数操作&lt;/h2&gt;
-&lt;h3 id=&#34;基本算数操作&#34;&gt;基本算数操作&lt;/h3&gt;
+      <description>&lt;h2 id=&#34;算数操作&#34;&gt;
+  算数操作
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%ae%97%e6%95%b0%e6%93%8d%e4%bd%9c&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;基本算数操作&#34;&gt;
+  基本算数操作
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%9f%ba%e6%9c%ac%e7%ae%97%e6%95%b0%e6%93%8d%e4%bd%9c&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;函数 &lt;code&gt;exact-&amp;gt;inexact&lt;/code&gt; 用于把分数转换为浮点数.&lt;/li&gt;
 &lt;li&gt;函数 &lt;code&gt;quotient&lt;/code&gt; 用于求商数（quotient）。&lt;/li&gt;
@@ -29,10 +39,25 @@
 (&lt;span style=&#34;color:#268bd2&#34;&gt;quotient&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;→ 2&lt;/span&gt;
 (&lt;span style=&#34;color:#268bd2&#34;&gt;modulo&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;→ 1&lt;/span&gt;
 (&lt;span style=&#34;color:#268bd2&#34;&gt;sqrt&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;8&lt;/span&gt;)  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;→ 2.8284271247461903&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;练习&#34;&gt;练习&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;练习&#34;&gt;
+  练习
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%bb%83%e4%b9%a0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;练习中发现, 如果创建 scm 文件并写入多个算式, 好像不能得出每个计算的值, 得到的只能是最后一个算式的结果.&lt;/p&gt;
-&lt;h2 id=&#34;表&#34;&gt;表&lt;/h2&gt;
-&lt;h3 id=&#34;空表&#34;&gt;空表&lt;/h3&gt;
+&lt;h2 id=&#34;表&#34;&gt;
+  表
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a1%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;空表&#34;&gt;
+  空表
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%a9%ba%e8%a1%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;&#39;()&lt;/code&gt; 即为空表&lt;/p&gt;
 &lt;p&gt;有两种非常类似的 value, 实现的方式却是不同的:&lt;/p&gt;
 &lt;ul&gt;
@@ -43,23 +68,53 @@
 &lt;/ul&gt;
 &lt;p&gt;其实主要的差异是最后一个 cons 的 cdr 指向地址的不同, 上面一个是指向 1 所在的地址, 最后一个是指向一个空表 &lt;code&gt;&#39;()&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;这里指出一下&lt;a href=&#34;https://deathking.github.io/yast-cn/contents/chapter3.html&#34;&gt;中文版&lt;/a&gt;的图片有误, 请参照&lt;a href=&#34;http://www.shido.info/lisp/scheme3_e.html&#34;&gt;原版&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;引用&#34;&gt;引用&lt;/h2&gt;
+&lt;h2 id=&#34;引用&#34;&gt;
+  引用
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%bc%95%e7%94%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;&#39;()&lt;/code&gt;这里的空表就是使用了引用(quote)&lt;/p&gt;
-&lt;h2 id=&#34;list-函数&#34;&gt;list 函数&lt;/h2&gt;
+&lt;h2 id=&#34;list-函数&#34;&gt;
+  list 函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#list-%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;特别值得注意的是, list 函数返回的是其中的元素构成的表, 函数中的每个参数都是表的一个元素:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;list &lt;/span&gt;&amp;#39;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;) &amp;#39;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4&lt;/span&gt;))
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;Value 1: ((1 2) (3 4))&lt;/span&gt;
 
 (&lt;span style=&#34;color:#cb4b16&#34;&gt;cons &lt;/span&gt;&amp;#39;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;) &amp;#39;(&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4&lt;/span&gt;))
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;Value 2: ((1 2) 3 4)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;字符串操作&#34;&gt;字符串操作&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;字符串操作&#34;&gt;
+  字符串操作
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e4%b8%b2%e6%93%8d%e4%bd%9c&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;string-append&lt;/code&gt;: 字符串拼接&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;函数定义&#34;&gt;函数定义&lt;/h2&gt;
-&lt;h3 id=&#34;定义变量&#34;&gt;定义变量&lt;/h3&gt;
+&lt;h2 id=&#34;函数定义&#34;&gt;
+  函数定义
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%87%bd%e6%95%b0%e5%ae%9a%e4%b9%89&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;定义变量&#34;&gt;
+  定义变量
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9a%e4%b9%89%e5%8f%98%e9%87%8f&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;(&lt;span style=&#34;color:#859900&#34;&gt;define &lt;/span&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;vhello&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;定义函数&#34;&gt;定义函数&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;定义函数&#34;&gt;
+  定义函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9a%e4%b9%89%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;定义函数有两种方式, 一个是 lambda 一个是简写, 暂时不清楚两者的实际区别.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;;; 定义不带参数的函数&lt;/span&gt;
 
@@ -84,14 +139,34 @@
 (&lt;span style=&#34;color:#859900&#34;&gt;define &lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;hello&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt;)
   (&lt;span style=&#34;color:#cb4b16&#34;&gt;string-append &lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Hello &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;name&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;!&amp;#34;&lt;/span&gt;))
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;if-判断&#34;&gt;if 判断&lt;/h2&gt;
-&lt;h3 id=&#34;true-and-false&#34;&gt;true and false&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;if-判断&#34;&gt;
+  if 判断
+  &lt;a class=&#34;heading-link&#34; href=&#34;#if-%e5%88%a4%e6%96%ad&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;true-and-false&#34;&gt;
+  true and false
+  &lt;a class=&#34;heading-link&#34; href=&#34;#true-and-false&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在 LISP 中 true 用 &lt;code&gt;#t&lt;/code&gt; 表示, false 用 &lt;code&gt;#f&lt;/code&gt; 表示.&lt;/p&gt;
-&lt;h3 id=&#34;关于空表的判断&#34;&gt;关于空表的判断&lt;/h3&gt;
+&lt;h3 id=&#34;关于空表的判断&#34;&gt;
+  关于空表的判断
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e4%ba%8e%e7%a9%ba%e8%a1%a8%e7%9a%84%e5%88%a4%e6%96%ad&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;由于 R4RS 和 R5RS 对空表 &lt;code&gt;&#39;()&lt;/code&gt; 是否为 false (&lt;code&gt;#f&lt;/code&gt;) 的标准不同, 所以判断表为空应使用 &lt;code&gt;null?&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;null? &lt;/span&gt;&amp;#39;())
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;Value: #t&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;数字判断&#34;&gt;数字判断&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;数字判断&#34;&gt;
+  数字判断
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%95%b0%e5%ad%97%e5%88%a4%e6%96%ad&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;positive?&lt;/code&gt;: 判断正数&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;zero?&lt;/code&gt;: 是否为 0&lt;/li&gt;
@@ -99,11 +174,21 @@
 &lt;li&gt;&lt;code&gt;odd?&lt;/code&gt;: 奇数&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;even?&lt;/code&gt;: 偶数&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;原生函数&#34;&gt;原生函数&lt;/h3&gt;
+&lt;h3 id=&#34;原生函数&#34;&gt;
+  原生函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8e%9f%e7%94%9f%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;integer-&amp;gt;char&lt;/code&gt;: 正数转化为 ascii 码&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;and-和-or&#34;&gt;and 和 or&lt;/h2&gt;
+&lt;h2 id=&#34;and-和-or&#34;&gt;
+  and 和 or
+  &lt;a class=&#34;heading-link&#34; href=&#34;#and-%e5%92%8c-or&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Scheme 中的 and 和 or 相对 C 类语言来说十分特殊:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;code&gt;and&lt;/code&gt; 具有任意个数的参数，并从左到右对它们求值。
@@ -116,14 +201,29 @@
 如果所有的参数的值都是 &lt;code&gt;#f&lt;/code&gt; 的话，则返回最后一个参数的值。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;关于 &lt;code&gt;or&lt;/code&gt; 逻辑的最后依据可以看作 or 会从左往右求职到第一个非 &lt;code&gt;#f&lt;/code&gt; 的值, 如果没有 &lt;code&gt;#f&lt;/code&gt; 会一直计算到最后一个参数, 并返回其结果 &lt;code&gt;#f&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;判断函数&#34;&gt;判断函数&lt;/h2&gt;
-&lt;h3 id=&#34;eq-eqv-and-equal&#34;&gt;&lt;code&gt;eq?&lt;/code&gt;, &lt;code&gt;eqv?&lt;/code&gt; and &lt;code&gt;equal?&lt;/code&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;判断函数&#34;&gt;
+  判断函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%88%a4%e6%96%ad%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;eq-eqv-and-equal&#34;&gt;
+  &lt;code&gt;eq?&lt;/code&gt;, &lt;code&gt;eqv?&lt;/code&gt; and &lt;code&gt;equal?&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#eq-eqv-and-equal&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;eq?&lt;/code&gt; 用于判断两个对象的地址,  适合用来比较两个变量.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;eqv?&lt;/code&gt; 比较两个存储在内存中的对象的类型和值, 如果类型和值都一致的话就返回 &lt;code&gt;#t&lt;/code&gt;. 适合用来比较数值, 但是 int 和 float 比较的返回为 &lt;code&gt;#f&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;equal?&lt;/code&gt; 用于比较类似于表或者字符串一类的序列&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;单一变量的判断&#34;&gt;单一变量的判断&lt;/h2&gt;
+&lt;h2 id=&#34;单一变量的判断&#34;&gt;
+  单一变量的判断
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8d%95%e4%b8%80%e5%8f%98%e9%87%8f%e7%9a%84%e5%88%a4%e6%96%ad&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;pair?&lt;/code&gt;: 如果对象为序对则返回#t&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;list?&lt;/code&gt;: 如果对象是一个表则返回#t。要小心的是空表’()是一个表但是不是一个序对&lt;/li&gt;
@@ -139,18 +239,38 @@
 &lt;li&gt;&lt;code&gt;exact?&lt;/code&gt;: 如果对象不是一个浮点数的话则返回#t&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;inexact?&lt;/code&gt;: 如果对象是一个浮点数的话则返回#t&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;字符比较&#34;&gt;字符比较&lt;/h2&gt;
+&lt;h2 id=&#34;字符比较&#34;&gt;
+  字符比较
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%97%e7%ac%a6%e6%af%94%e8%be%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;char=?&lt;/code&gt;, &lt;code&gt;char&amp;lt;?&lt;/code&gt;, &lt;code&gt;char&amp;gt;?&lt;/code&gt;, &lt;code&gt;char&amp;lt;=?&lt;/code&gt;, &lt;code&gt;char&amp;gt;=?&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;比较字符串&#34;&gt;比较字符串&lt;/h2&gt;
+&lt;h2 id=&#34;比较字符串&#34;&gt;
+  比较字符串
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%af%94%e8%be%83%e5%ad%97%e7%ac%a6%e4%b8%b2&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;string=?&lt;/code&gt;, &lt;code&gt;string-cli=?&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;关于循环和-lambda&#34;&gt;关于循环和 lambda&lt;/h2&gt;
+&lt;h2 id=&#34;关于循环和-lambda&#34;&gt;
+  关于循环和 lambda
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e4%ba%8e%e5%be%aa%e7%8e%af%e5%92%8c-lambda&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://deathking.github.io/yast-cn/contents/chapter7.html&#34;&gt;第七章: 重复&lt;/a&gt;(或&lt;a href=&#34;http://www.shido.info/lisp/scheme7_e.html&#34;&gt;英文版&lt;/a&gt;)中有这样一道题:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;一个分别接受一个表 &lt;code&gt;ls&lt;/code&gt; 和一个对象 &lt;code&gt;x&lt;/code&gt; 的函数，该函数返回从 &lt;code&gt;ls&lt;/code&gt; 中删除 &lt;code&gt;x&lt;/code&gt; 后得到的表。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;后面给出了习题答案, 但是处理 &amp;ldquo;过于优雅&amp;rdquo;, 对初学者不是很友好, 在&lt;a href=&#34;https://stackoverflow.com/questions/1905222/how-to-delete-an-element-from-a-list-in-scheme#answer-15017744&#34;&gt;这个回答&lt;/a&gt;中可以找到更易懂的解题方法. 下面把两种做一个对照:&lt;/p&gt;
 &lt;script src=&#34;https://gist.github.com/jtr109/3f8577f07255af1e2b3d9b3fd09e8774.js&#34;&gt;&lt;/script&gt;
-&lt;h3 id=&#34;浅谈-lambda&#34;&gt;浅谈 lambda&lt;/h3&gt;
+&lt;h3 id=&#34;浅谈-lambda&#34;&gt;
+  浅谈 lambda
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b5%85%e8%b0%88-lambda&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;原答案中最让人纠结的地方就是 if&amp;hellip; lambda&amp;hellip; 的组合使用, 由于之前本课程中没有过对于 lambda 的介绍, 只有 define 函数的时候提到过, 所以难免不清楚怎么使用. 其实可以在终端中动手试试, 你会发现 lambda 的用法如下:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;((&lt;span style=&#34;color:#859900&#34;&gt;lambda &lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;x&lt;/span&gt;) (&lt;span style=&#34;color:#cb4b16&#34;&gt;* &lt;/span&gt;&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;x&lt;/span&gt;)) &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;)
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;Value: 2&lt;/span&gt;
@@ -158,23 +278,53 @@
 ((&lt;span style=&#34;color:#859900&#34;&gt;lambda &lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;y&lt;/span&gt;) (&lt;span style=&#34;color:#cb4b16&#34;&gt;* &lt;/span&gt;&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;x&lt;/span&gt; (&lt;span style=&#34;color:#cb4b16&#34;&gt;+ &lt;/span&gt;&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;y&lt;/span&gt;))) &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;3&lt;/span&gt;)
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;;Value: 16&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;以上就是定义 lambda 匿名函数的方法, 在最外层的括号中有两个组成部分, 一个是定义 lambda 匿名函数的括号, 还有一组参数. 再对应到原书中的答案, 就可以发现原答案中是根据判断定义匿名函数, 并作用在 &lt;code&gt;remove x (cdr ls)&lt;/code&gt; 上. 这样考虑就简单了许多.&lt;/p&gt;
-&lt;h2 id=&#34;named-let-and-letrec&#34;&gt;named let and letrec&lt;/h2&gt;
+&lt;h2 id=&#34;named-let-and-letrec&#34;&gt;
+  named let and letrec
+  &lt;a class=&#34;heading-link&#34; href=&#34;#named-let-and-letrec&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;named let 用于迭代, 而 letrec 用于递归.&lt;/p&gt;
 &lt;p&gt;在 named let 中使用 &lt;code&gt;let&lt;/code&gt; 初始化变量, 并在每次执行到命名的函数时循环. &lt;code&gt;letrec&lt;/code&gt; 允许递归调用本身.&lt;/p&gt;
 &lt;p&gt;从实践来看, named let 解决了 while 类循环在 scheme 中的实现, 但是 &lt;code&gt;letrec&lt;/code&gt; 感觉只是为函数定义限制了作用域.&lt;/p&gt;
-&lt;h2 id=&#34;映射&#34;&gt;映射&lt;/h2&gt;
+&lt;h2 id=&#34;映射&#34;&gt;
+  映射
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%98%a0%e5%b0%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-Scheme&#34; data-lang=&#34;Scheme&#34;&gt;(&lt;span style=&#34;color:#cb4b16&#34;&gt;map &lt;/span&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;procedure&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;list1&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;list2&lt;/span&gt; ...)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;procedure&lt;/code&gt; 是个与某个过程或 lambda 表达式相绑定的符号。作为参数的表的个数视 &lt;code&gt;procedure&lt;/code&gt; 需要的参数而定。&lt;/p&gt;
-&lt;h2 id=&#34;reduce&#34;&gt;Reduce&lt;/h2&gt;
+&lt;h2 id=&#34;reduce&#34;&gt;
+  Reduce
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reduce&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;关于 reduce 例子, 书里说的十分含糊, 经过资料查找, 可以发现示例来自&lt;a href=&#34;https://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Reduction-of-Lists.html&#34;&gt;GNU MIT-Scheme&lt;/a&gt;的官方文档, 这里可以了解到:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;The argument initial is used only if list is empty;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;apply-函数&#34;&gt;Apply 函数&lt;/h2&gt;
+&lt;h2 id=&#34;apply-函数&#34;&gt;
+  Apply 函数
+  &lt;a class=&#34;heading-link&#34; href=&#34;#apply-%e5%87%bd%e6%95%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这个函数类似于普通语言中对函数的使用方法, 由 &lt;code&gt;apply&lt;/code&gt;, 固定数量的参数, 和不固定参数构成的表组成, 类似于 Python 中的 &lt;code&gt;func(*args, **kwargs)&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;词法闭包&#34;&gt;词法闭包&lt;/h2&gt;
+&lt;h2 id=&#34;词法闭包&#34;&gt;
+  词法闭包
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%af%8d%e6%b3%95%e9%97%ad%e5%8c%85&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;作用域与源代码书写方式一致的作用域称为“词法闭包（Lexical closure）”或“静态作用域（Static scope）”。&lt;/p&gt;
-&lt;h2 id=&#34;关联表&#34;&gt;关联表&lt;/h2&gt;
+&lt;h2 id=&#34;关联表&#34;&gt;
+  关联表
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b3%e8%81%94%e8%a1%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;函数&lt;code&gt;assq&lt;/code&gt;，&lt;code&gt;assv&lt;/code&gt;，和&lt;code&gt;assoc&lt;/code&gt;从关联表中搜寻一个项。这些函数从开始一步步搜索关联表。如果它们找到序对的&lt;code&gt;car&lt;/code&gt;等于给定的&lt;code&gt;key&lt;/code&gt;，就返回该序对。如果找不到函数返回&lt;code&gt;#f&lt;/code&gt;。这些函数分别使用&lt;code&gt;eq?&lt;/code&gt;，&lt;code&gt;eqv?&lt;/code&gt;，和&lt;code&gt;equal?&lt;/code&gt;比较键，这意味着&lt;code&gt;assq&lt;/code&gt;最快，&lt;code&gt;assoc&lt;/code&gt;最慢。&lt;/p&gt;
 </description>
     </item>

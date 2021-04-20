@@ -17,13 +17,28 @@
       <pubDate>Sun, 14 Jun 2020 10:41:57 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/reading-friendly-rss-config-in-hugo/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;background&#34;&gt;
+  Background
+  &lt;a class=&#34;heading-link&#34; href=&#34;#background&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; has RSS support by default. But the implementation is not friendly for reading in RSS subscriber. If we open &lt;a href=&#34;https://jtr109.github.io/index.xml&#34;&gt;the RSS page&lt;/a&gt; we will see that the content in &lt;code&gt;&amp;lt;description&amp;gt;&lt;/code&gt; are summary with plaintext.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/reading-friendly-rss-config-in-hugo.assets/image-20200614105452252.png&#34; alt=&#34;summary-without-html-tags&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;solution&#34;&gt;Solution&lt;/h2&gt;
+&lt;h2 id=&#34;solution&#34;&gt;
+  Solution
+  &lt;a class=&#34;heading-link&#34; href=&#34;#solution&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we want to show &lt;em&gt;full content&lt;/em&gt; in our RSS pages, we need to override &lt;a href=&#34;https://gohugo.io/templates/rss/#the-embedded-rssxml&#34;&gt;the RSS template&lt;/a&gt;. Copy &lt;a href=&#34;https://github.com/gohugoio/hugo/blob/master/tpl/tplimpl/embedded/templates/_default/rss.xml&#34;&gt;the default rss template&lt;/a&gt; and save it in the local file &lt;code&gt;layouts/_default/rss.xml&lt;/code&gt;. Then, find out the &lt;a href=&#34;https://github.com/gohugoio/hugo/blob/master/tpl/tplimpl/embedded/templates/_default/rss.xml#L35&#34;&gt;&lt;code&gt;.Summary&lt;/code&gt; in &lt;code&gt;&amp;lt;description&amp;gt;&lt;/code&gt;&lt;/a&gt; and replace it into &lt;code&gt;.Content&lt;/code&gt;. &lt;a href=&#34;https://jtr109.github.io/index.xml&#34;&gt;The RSS page&lt;/a&gt; shows full content in description with HTML style.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/reading-friendly-rss-config-in-hugo.assets/image-20200614110430952.png&#34; alt=&#34;image-20200614110430952&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;h2 id=&#34;references&#34;&gt;
+  References
+  &lt;a class=&#34;heading-link&#34; href=&#34;#references&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://yongfu.name/2018/12/13/hugo_rss.html&#34;&gt;https://yongfu.name/2018/12/13/hugo_rss.html&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -36,29 +51,64 @@
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typora 可以便捷地将文件保存在本地，但是如果不合理配置，无法适应静态网页生成器（如：Hugo）的静态文件存储方式。所以需要通过 Typora 强大的配置方式解决这个问题。&lt;/p&gt;
-&lt;h2 id=&#34;目标&#34;&gt;目标&lt;/h2&gt;
+&lt;h2 id=&#34;目标&#34;&gt;
+  目标
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%9b%ae%e6%a0%87&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;将文件存放在项目目录中的 &lt;code&gt;static/images&lt;/code&gt; 目录下，同时保证能在 Typora 和 Hugo 生成的网站中可见。&lt;/p&gt;
 &lt;!-- more --&gt;
-&lt;h2 id=&#34;配置-typora&#34;&gt;配置 Typora&lt;/h2&gt;
+&lt;h2 id=&#34;配置-typora&#34;&gt;
+  配置 Typora
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-typora&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typora 有两个选项需要配置：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;图片读取的根路径。通过指定这个参数，可以使图片文件以绝对路径的方式在 Markdown 文件中显示，从而适配生成网站中图片的 URL。&lt;/li&gt;
 &lt;li&gt;图片的自动存放路径。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;指定图片根路径&#34;&gt;指定图片根路径&lt;/h3&gt;
+&lt;h3 id=&#34;指定图片根路径&#34;&gt;
+  指定图片根路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8c%87%e5%ae%9a%e5%9b%be%e7%89%87%e6%a0%b9%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;点击 Use Image Root Path，选择 &lt;code&gt;static&lt;/code&gt; 目录作为根路径。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195608916.png&#34; alt=&#34;image-20200607195608916&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;设置图片自动存放路径&lt;/h3&gt;
+&lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;
+  设置图片自动存放路径
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%ae%be%e7%bd%ae%e5%9b%be%e7%89%87%e8%87%aa%e5%8a%a8%e5%ad%98%e6%94%be%e8%b7%af%e5%be%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;在设置中选择 Image 栏，将 &lt;code&gt;static/images&lt;/code&gt; 的绝对路径设置为图片插入地址。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195835475.png&#34; alt=&#34;image-20200607195835475&#34;&gt;&lt;/p&gt;
 &lt;p&gt;也可以通过语法加入图片子目录，更好地管理图片。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200608112923095.png&#34; alt=&#34;image-20200608112923095&#34;&gt;&lt;/p&gt;
 &lt;p&gt;经过如上配置，截图便可通过 command+v 自动保存在 &lt;code&gt;static/images&lt;/code&gt; 目录中。&lt;/p&gt;
-&lt;h2 id=&#34;配置-hugo&#34;&gt;配置 Hugo&lt;/h2&gt;
+&lt;h2 id=&#34;配置-hugo&#34;&gt;
+  配置 Hugo
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-hugo&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;但是此时如果拉起网站，图片不可见，原因是 Hugo 默认读取的路径为 &lt;code&gt;static&lt;/code&gt;，符合要求。此时拉起站点，就可以正常显示图片了！&lt;/p&gt;
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;h2 id=&#34;参考&#34;&gt;
+  参考
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8f%82%e8%80%83&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://blog.dianduidian.com/post/%E4%BD%BF%E7%94%A8hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/&#34;&gt;使用hugo搭建博客系统&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://support.typora.io/Images/&#34;&gt;Images in Typora&lt;/a&gt;&lt;/li&gt;

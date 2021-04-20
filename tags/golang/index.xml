@@ -17,13 +17,23 @@
       <pubDate>Tue, 21 Aug 2018 17:33:29 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/unit-test-of-golang/</guid>
-      <description>&lt;h3 id=&#34;notes&#34;&gt;notes&lt;/h3&gt;
+      <description>&lt;h3 id=&#34;notes&#34;&gt;
+  notes
+  &lt;a class=&#34;heading-link&#34; href=&#34;#notes&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;测试最重要的就是处理依赖, 覆盖所有的流程, 合理的 assertion.&lt;/p&gt;
 &lt;p&gt;我们在一个测试中, 不应对其依赖的实现做测试, 所以我们需要 mock 掉相应的实现. 由于 Golang 中 first class function 的存在, 我们可以通过在 package 中定义变量 (&lt;code&gt;var&lt;/code&gt;) 的方式将依赖提到包级作用域中, 在测试中替换对应的逻辑, 从而不会对包中的执行代码产生影响.&lt;/p&gt;
 &lt;p&gt;依赖返回的类型主要有两种: 基本类型组合, interface&lt;/p&gt;
 &lt;p&gt;对于基本类型及其组合, 我们可以直接定义一个简单的工厂函数来生成他的返回值.&lt;/p&gt;
 &lt;p&gt;而如果依赖返回的是一个相对复杂的 interface, we need to implement an structure satisfy the interface.&lt;/p&gt;
-&lt;h3 id=&#34;links&#34;&gt;Links&lt;/h3&gt;
+&lt;h3 id=&#34;links&#34;&gt;
+  Links
+  &lt;a class=&#34;heading-link&#34; href=&#34;#links&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://blog.andreiavram.ro/golang-unit-testing-interfaces/&#34;&gt;Golang unit testing interfaces&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/MX_record&#34;&gt;MX record&lt;/a&gt;&lt;/li&gt;
@@ -38,27 +48,52 @@
       <pubDate>Thu, 16 Aug 2018 18:06:30 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/golang-init-function/</guid>
-      <description>&lt;h2 id=&#34;when-is-the-init-function-called&#34;&gt;When is the init function called?&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;when-is-the-init-function-called&#34;&gt;
+  When is the init function called?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#when-is-the-init-function-called&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;After all the variable declarations in the package have evaluated their initializers.&lt;/li&gt;
 &lt;li&gt;Only after all the imported packages have been initialized.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;order-of-package-initialization&#34;&gt;Order of package initialization&lt;/h3&gt;
+&lt;h3 id=&#34;order-of-package-initialization&#34;&gt;
+  Order of package initialization
+  &lt;a class=&#34;heading-link&#34; href=&#34;#order-of-package-initialization&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;initialization of imported packages (recursive definition)&lt;/li&gt;
 &lt;li&gt;computing and assigning initial values for variables declared in a package block&lt;/li&gt;
 &lt;li&gt;executing init functions inside the package&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&#34;usecase-of-init-function&#34;&gt;Usecase of init function&lt;/h2&gt;
+&lt;h2 id=&#34;usecase-of-init-function&#34;&gt;
+  Usecase of init function
+  &lt;a class=&#34;heading-link&#34; href=&#34;#usecase-of-init-function&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;The initializations can not be expressed as declarations.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://golang.org/doc/effective_go.html#init&#34;&gt;Verify or repair correctness of the program state&lt;/a&gt; before real execution begins.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;other-tips-about-the-init-function&#34;&gt;Other tips about the init function&lt;/h2&gt;
+&lt;h2 id=&#34;other-tips-about-the-init-function&#34;&gt;
+  Other tips about the init function
+  &lt;a class=&#34;heading-link&#34; href=&#34;#other-tips-about-the-init-function&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Many &lt;code&gt;init&lt;/code&gt; functions can be defined in the same package or file&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://medium.com/golangspec/init-functions-in-go-eac191b3860a&#34;&gt;Init functions in go&lt;/a&gt; (recommend to read)&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://golang.org/doc/effective_go.html#init&#34;&gt;The init function &amp;ndash; golang doc&lt;/a&gt;&lt;/li&gt;

@@ -17,10 +17,25 @@
       <pubDate>Thu, 24 Aug 2017 09:43:28 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/emacs-again/</guid>
-      <description>&lt;h2 id=&#34;简述&#34;&gt;简述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;简述&#34;&gt;
+  简述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%ae%80%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;再次尝试上手 emacs&lt;/p&gt;
-&lt;h2 id=&#34;配置文件&#34;&gt;配置文件&lt;/h2&gt;
-&lt;h3 id=&#34;spacemacs-file&#34;&gt;.spacemacs file&lt;/h3&gt;
+&lt;h2 id=&#34;配置文件&#34;&gt;
+  配置文件
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;spacemacs-file&#34;&gt;
+  .spacemacs file
+  &lt;a class=&#34;heading-link&#34; href=&#34;#spacemacs-file&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;按照好 spacemacs 的相关组件, 会显示 Quick Help. 建议看完.&lt;/p&gt;
 &lt;p&gt;其中写到了配置文件 &lt;code&gt;.spancemacs&lt;/code&gt; 的打开方式: &lt;code&gt;[SPC f e d]&lt;/code&gt;&lt;/p&gt;
 </description>

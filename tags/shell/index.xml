@@ -17,13 +17,28 @@
       <pubDate>Tue, 10 Dec 2019 11:00:25 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/export-or-not-in-env-file/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在项目中需要使用 &lt;code&gt;envsubst&lt;/code&gt; 从模板生成配置文件. 发现如果在环境变量文件 &lt;code&gt;env.conf&lt;/code&gt; (或 &lt;code&gt;.env&lt;/code&gt; 等) 中不使用 &lt;code&gt;export&lt;/code&gt; 命令, &lt;code&gt;envsubst&lt;/code&gt; 无法获取到所需的环境变量.&lt;/p&gt;
-&lt;h2 id=&#34;实验&#34;&gt;实验&lt;/h2&gt;
+&lt;h2 id=&#34;实验&#34;&gt;
+  实验
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e9%aa%8c&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;构建模板文件 &lt;code&gt;src.txt&lt;/code&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;now foo here: ${FOO}
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;不使用-export&#34;&gt;不使用 &lt;code&gt;export&lt;/code&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;不使用-export&#34;&gt;
+  不使用 &lt;code&gt;export&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%b8%8d%e4%bd%bf%e7%94%a8-export&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;创建环境变量配置文件 &lt;code&gt;env.conf&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;FOO&lt;/span&gt;=bar
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建执行脚本 &lt;code&gt;subenv.sh&lt;/code&gt;:&lt;/p&gt;
@@ -35,7 +50,12 @@ envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行脚本 &lt;code&gt;[subenv.sh](http://subenv.sh)&lt;/code&gt; 查看生成的 &lt;code&gt;env-tar.txt&lt;/code&gt; 文件:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;now foo here:
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;使用-export&#34;&gt;使用 &lt;code&gt;export&lt;/code&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;使用-export&#34;&gt;
+  使用 &lt;code&gt;export&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bd%bf%e7%94%a8-export&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;创建环境变量配置文件 &lt;code&gt;exp.conf&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;FOO&lt;/span&gt;=bar
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建执行脚本 &lt;code&gt;subexp.sh&lt;/code&gt;:&lt;/p&gt;
@@ -48,9 +68,19 @@ envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp
 &lt;pre&gt;&lt;code&gt;now foo here: bar
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;em&gt;可以看到, 在环境变量配置文件中使用 &lt;code&gt;export&lt;/code&gt;, 在脚本中使用 &lt;code&gt;envsubst&lt;/code&gt; 才能获取到所需的环境变量.&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;其他发现&#34;&gt;其他发现&lt;/h3&gt;
+&lt;h3 id=&#34;其他发现&#34;&gt;
+  其他发现
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%b6%e4%bb%96%e5%8f%91%e7%8e%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;如果使用上面的脚本测试时, 可以发现无论是否使用 &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;echo&lt;/code&gt; 都能正确地拿到所需的环境变量.&lt;/p&gt;
-&lt;h2 id=&#34;是否应该在配置文件中使用-export&#34;&gt;是否应该在配置文件中使用 &lt;code&gt;export&lt;/code&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;是否应该在配置文件中使用-export&#34;&gt;
+  是否应该在配置文件中使用 &lt;code&gt;export&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%98%af%e5%90%a6%e5%ba%94%e8%af%a5%e5%9c%a8%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e4%b8%ad%e4%bd%bf%e7%94%a8-export&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在配置文件中是否应该使用 &lt;code&gt;export&lt;/code&gt;, 也存在着不同的声音. 在一个&lt;a href=&#34;https://stackoverflow.com/a/19331521/6522746&#34;&gt;相关高票回答&lt;/a&gt;下, 就有这么一个评论:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If using this .env file between systems, inserting &lt;code&gt;export&lt;/code&gt; would break it for things like Java, SystemD, or other tools&lt;/p&gt;
@@ -73,7 +103,12 @@ envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp
 envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp;#34;&lt;/span&gt; &amp;gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;env-tar.txt&amp;#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即可在输出文件中获得符合期待的结果:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-txt&#34; data-lang=&#34;txt&#34;&gt;new foo here: bar
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;相关资料&#34;&gt;相关资料&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;相关资料&#34;&gt;
+  相关资料
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%9b%b8%e5%85%b3%e8%b5%84%e6%96%99&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://hackjutsu.com/2016/08/04/Difference%20between%20set&#34;&gt;Difference between set, export and env in bash&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
@@ -84,26 +119,51 @@ envsubst &amp;lt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;src.txt&amp
       <pubDate>Thu, 13 Jun 2019 23:24:57 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/bulk-replace-control-characters-in-files/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;background&#34;&gt;
+  Background
+  &lt;a class=&#34;heading-link&#34; href=&#34;#background&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Some day, I found an error in RSS page generated by Hugo.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/bulk-replace-control-characters-in-files.assets/1559796599860-e71c6a94-818f-48f4-baba-a80f1d76ba9b.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;I tried to parse the source post and found an invisible character in it on GitHub.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/bulk-replace-control-characters-in-files.assets/1559796715692-063e1faf-9883-4ce4-a3ce-ea8e576069b7.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;I found there was a backspace character &lt;code&gt;^H&lt;/code&gt; in the file and it is not the only one in the only file.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/bulk-replace-control-characters-in-files.assets/1559796907886-63c6e956-89bb-408a-98dd-3ac1cbcab8ab.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;find-all-posts-and-execute-on-them&#34;&gt;Find All Posts and Execute On Them&lt;/h2&gt;
+&lt;h2 id=&#34;find-all-posts-and-execute-on-them&#34;&gt;
+  Find All Posts and Execute On Them
+  &lt;a class=&#34;heading-link&#34; href=&#34;#find-all-posts-and-execute-on-them&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Basically, This is our idea that using the command &lt;code&gt;find&lt;/code&gt; to get all filenames and execute the command we want on them. But don&amp;rsquo;t forget to use &lt;code&gt;-print0&lt;/code&gt; to send them to &lt;code&gt;xargs&lt;/code&gt; by the pipline.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;find ./content/posts -name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;*.md&amp;#34;&lt;/span&gt; -print0 | xargs -0 wc -l
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;As we see, it works.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/bulk-replace-control-characters-in-files.assets/1559798019861-7250e7d1-ceb5-4b66-bc9e-45f8c89d022e.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;replace-invisible-character-by-sed&#34;&gt;Replace Invisible Character by Sed&lt;/h2&gt;
+&lt;h2 id=&#34;replace-invisible-character-by-sed&#34;&gt;
+  Replace Invisible Character by Sed
+  &lt;a class=&#34;heading-link&#34; href=&#34;#replace-invisible-character-by-sed&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Now we can use &lt;code&gt;sed&lt;/code&gt; to replace all &lt;code&gt;^H&lt;/code&gt; and &lt;code&gt;^M&lt;/code&gt; in our posts. Pay attention to the character like &lt;code&gt;^H&lt;/code&gt; in command, they &lt;strong&gt;must&lt;/strong&gt; be typed with such as &lt;code&gt;ctrl+v+h&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;find ./content/posts -name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;*.md&amp;#34;&lt;/span&gt; -print0 | xargs -0 sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/^H//g; s/^M//g; s/^\\//g&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Notice that we use an empty character after &lt;code&gt;-i&lt;/code&gt;  in the command instead of &lt;code&gt;sed -i -e&lt;/code&gt; because of the character after the option &lt;code&gt;-i&lt;/code&gt; of &lt;code&gt;sed&lt;/code&gt; in Mac is used as the postfix of backup files. We need to use an empty character to tell it not to save a backup one.&lt;/p&gt;
-&lt;h2 id=&#34;result&#34;&gt;Result&lt;/h2&gt;
+&lt;h2 id=&#34;result&#34;&gt;
+  Result
+  &lt;a class=&#34;heading-link&#34; href=&#34;#result&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;After refreshing the page I opened, everything done!&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/bulk-replace-control-characters-in-files.assets/1559800359769-1ae9738b-5bcc-427e-97dd-6544ca320cf8.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/54416545/6522746&#34;&gt;This answer on StackOverflow&lt;/a&gt; provide the idea. &lt;strong&gt;But not work.&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/a/11650301/6522746&#34;&gt;This answer&lt;/a&gt; shows how to execute on all files.&lt;/li&gt;

@@ -17,15 +17,30 @@
       <pubDate>Thu, 07 Nov 2019 22:41:13 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/changing-indent-in-neovim/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;使用 NeoVim 编辑 &lt;code&gt;.sql&lt;/code&gt; 文件的时候发现默认的换行是一个 8 space 的 tab. 希望能将其改成 4 spaces.&lt;/p&gt;
-&lt;h2 id=&#34;问题拆解&#34;&gt;问题拆解&lt;/h2&gt;
+&lt;h2 id=&#34;问题拆解&#34;&gt;
+  问题拆解
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8b%86%e8%a7%a3&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这其实会涉及到两个问题:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Vim (NeoVim) 中如何修改缩进&lt;/li&gt;
 &lt;li&gt;如何对指定文件类型修改配置&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;修改缩进&#34;&gt;修改缩进&lt;/h2&gt;
+&lt;h2 id=&#34;修改缩进&#34;&gt;
+  修改缩进
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bf%ae%e6%94%b9%e7%bc%a9%e8%bf%9b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;关于修改缩进的需要做几个配置, 在&lt;a href=&#34;https://vi.stackexchange.com/questions/13080/setting-tab-to-2-spaces&#34;&gt;这篇提问&lt;/a&gt;中可以找到解答:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;filetype&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;plugin&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;indent&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;on&lt;/span&gt;
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;#34; On pressing tab, insert 2 spaces&lt;/span&gt;
@@ -36,13 +51,23 @@
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;#34; when indenting with &amp;#39;&amp;gt;&amp;#39;, use 2 spaces width&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;shiftwidth&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们只要将 &lt;code&gt;2&lt;/code&gt; 改成 &lt;code&gt;4&lt;/code&gt; 就能符合我们的要求. 但是还有一个问题: 如果按照这样修改, 会全局修改我们的缩进规则, 而我们只希望这个配置在指定类型的文件中生效.&lt;/p&gt;
-&lt;h2 id=&#34;查看文件类型&#34;&gt;查看文件类型&lt;/h2&gt;
+&lt;h2 id=&#34;查看文件类型&#34;&gt;
+  查看文件类型
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9f%a5%e7%9c%8b%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;为了对指定文件做配置, 我们首先需要知道 Vim 认为当前文件属于什么类型. 可以在 Normal 状态下使用命令:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;:&lt;span style=&#34;color:#268bd2&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;filetype&lt;/span&gt;?
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果在 &lt;code&gt;.sql&lt;/code&gt; 文件中使用命令, 会得到结果:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;filetype&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;sql&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即 &lt;code&gt;filetype&lt;/code&gt; 是 &lt;code&gt;sql&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;配置指定文件类型&#34;&gt;配置指定文件类型&lt;/h2&gt;
+&lt;h2 id=&#34;配置指定文件类型&#34;&gt;
+  配置指定文件类型
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae%e6%8c%87%e5%ae%9a%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在 Vim 的配置目录 &lt;code&gt;~/.config/nvim&lt;/code&gt; (Vim为 &lt;code&gt;~/.vimrc&lt;/code&gt;) 下新建 &lt;code&gt;ftplugin&lt;/code&gt; 目录, 根据文件类型 (上面示例中为 &lt;code&gt;sql&lt;/code&gt;) 新建配置文件, 在其中添加配置.&lt;/p&gt;
 &lt;p&gt;这里需要注意的是, 配置参数时使用 &lt;code&gt;setlocal&lt;/code&gt; 而非 &lt;code&gt;set&lt;/code&gt; 来控制影响范围. 具体用法请参考&lt;a href=&#34;https://vi.stackexchange.com/a/9435&#34;&gt;这篇回答&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;所以我们需要在 &lt;code&gt;~/.config/nvim/ftplugin/sql.vim&lt;/code&gt; 中写入配置:&lt;/p&gt;
@@ -53,7 +78,12 @@
 &lt;span style=&#34;color:#268bd2&#34;&gt;setlocal&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;softtabstop&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4&lt;/span&gt;
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;#34; when indenting with &amp;#39;&amp;gt;&amp;#39;, use 4 spaces width&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2&#34;&gt;setlocal&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;shiftwidth&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;4&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;重载编辑器&#34;&gt;重载编辑器&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;重载编辑器&#34;&gt;
+  重载编辑器
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%87%8d%e8%bd%bd%e7%bc%96%e8%be%91%e5%99%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;如果想在不关闭编辑器的情况下重载, 可以使用 &lt;code&gt;source&lt;/code&gt; 命令加载主配置文件, 已 &lt;code&gt;~/.config/nvim/init.vim&lt;/code&gt; 为例:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;source&lt;/span&gt; ~&lt;span style=&#34;color:#2aa198&#34;&gt;/.config/&lt;/span&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;nvim&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;init&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;vim&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;#tech/vim&lt;/p&gt;
@@ -66,9 +96,19 @@
       <pubDate>Thu, 07 Nov 2019 22:40:05 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/replace-in-all-files/</guid>
-      <description>&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在项目开发过程中, 有时需要全局替换一些变量名. 如果使用 VSCode 这类现代编辑器, 可以十分便利地办到. 但是使用 Vim (or NeoVim) 就没有那么容易了.&lt;/p&gt;
-&lt;h2 id=&#34;方案&#34;&gt;方案&lt;/h2&gt;
+&lt;h2 id=&#34;方案&#34;&gt;
+  方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我们需要一个方案来实现全局替换的需求. 需要满足如下要求:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;可以自定义查找范围. 包括:&lt;/li&gt;
@@ -82,8 +122,18 @@
 &lt;li&gt;查看确认筛选结果后, 执行修改&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;目前想到的办法是通过 &lt;code&gt;ripgrep&lt;/code&gt; 和 &lt;code&gt;sed&lt;/code&gt; 实现, 具体方法可以参照 ripgrep 的&lt;a href=&#34;https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#how-can-i-search-and-replace-with-ripgrep&#34;&gt;文档&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;工作流&#34;&gt;工作流&lt;/h2&gt;
-&lt;h3 id=&#34;全局查找&#34;&gt;全局查找&lt;/h3&gt;
+&lt;h2 id=&#34;工作流&#34;&gt;
+  工作流
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b7%a5%e4%bd%9c%e6%b5%81&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;全局查找&#34;&gt;
+  全局查找
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%a8%e5%b1%80%e6%9f%a5%e6%89%be&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; .
 ./src/main.rs
 2:    println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Hello world!&amp;#34;&lt;/span&gt;);
@@ -99,11 +149,21 @@
 67:            println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;accomplish: &amp;lt;id&amp;gt; must be i32&amp;#34;&lt;/span&gt;);
 76:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;acco: missing &amp;lt;title&amp;gt;&amp;#34;&lt;/span&gt;);
 88:        println!(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;remove: missing &amp;lt;title&amp;gt;&amp;#34;&lt;/span&gt;);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;文件名筛选&#34;&gt;文件名筛选&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;文件名筛选&#34;&gt;
+  文件名筛选
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%96%87%e4%bb%b6%e5%90%8d%e7%ad%9b%e9%80%89&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches
 ./src/main.rs
 ./backend/src/bin/todo.rs
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;全局替换&#34;&gt;全局替换&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;全局替换&#34;&gt;
+  全局替换
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%85%a8%e5%b1%80%e6%9b%bf%e6%8d%a2&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches | xargs sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/println/pp/g&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或者&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;❯ rg &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;println&amp;#34;&lt;/span&gt; . --files-with-matches -0 | xargs -0 sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/println/pp/g&amp;#39;&lt;/span&gt;
@@ -116,16 +176,41 @@
       <pubDate>Wed, 31 Jul 2019 11:04:57 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</guid>
-      <description>&lt;h2 id=&#34;why-fzfvim&#34;&gt;Why fzf.vim&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;why-fzfvim&#34;&gt;
+  Why fzf.vim
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-fzfvim&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).&lt;/p&gt;
 &lt;p&gt;The plugin &lt;a href=&#34;https://github.com/junegunn/fzf.vim&#34;&gt;fzf.vim&lt;/a&gt; is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.&lt;/p&gt;
-&lt;h2 id=&#34;some-searching-tricks&#34;&gt;Some Searching Tricks&lt;/h2&gt;
+&lt;h2 id=&#34;some-searching-tricks&#34;&gt;
+  Some Searching Tricks
+  &lt;a class=&#34;heading-link&#34; href=&#34;#some-searching-tricks&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;You should spend some time on learning how to use fzf.vim smoothly if you have no experience of using&lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt; fzf&lt;/a&gt;. Now, let me show you some tricks.&lt;/p&gt;
-&lt;h3 id=&#34;respecting-gitignore&#34;&gt;Respecting &lt;code&gt;.gitignore&lt;/code&gt; &lt;/h3&gt;
-&lt;h4 id=&#34;tldr&#34;&gt;TL;DR&lt;/h4&gt;
+&lt;h3 id=&#34;respecting-gitignore&#34;&gt;
+  Respecting &lt;code&gt;.gitignore&lt;/code&gt; 
+  &lt;a class=&#34;heading-link&#34; href=&#34;#respecting-gitignore&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;tldr&#34;&gt;
+  TL;DR
+  &lt;a class=&#34;heading-link&#34; href=&#34;#tldr&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;Add this line in your &lt;code&gt;.vimrc&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;here-is-why&#34;&gt;Here Is Why&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;here-is-why&#34;&gt;
+  Here Is Why
+  &lt;a class=&#34;heading-link&#34; href=&#34;#here-is-why&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;Let&amp;rsquo;s say we have a rust project with &lt;code&gt;target&lt;/code&gt; directory. When calling &lt;code&gt;:Files&lt;/code&gt; we find all files even though those in the directory &lt;code&gt;target&lt;/code&gt; which we expected ignored by specified in &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Because the fzf does not understand the &lt;code&gt;.gitignore&lt;/code&gt;. Let us reproduct it in command line with fzf.&lt;/p&gt;
@@ -136,14 +221,29 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s have a look at the result now.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
-&lt;h4 id=&#34;by-the-way&#34;&gt;By The Way&lt;/h4&gt;
+&lt;h4 id=&#34;by-the-way&#34;&gt;
+  By The Way
+  &lt;a class=&#34;heading-link&#34; href=&#34;#by-the-way&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;If you perfer &lt;code&gt;ag&lt;/code&gt;, try this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;ag -g &amp;#34;&amp;#34;&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tips-with-rg&#34;&gt;Tips with &lt;code&gt;rg&lt;/code&gt;&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tips-with-rg&#34;&gt;
+  Tips with &lt;code&gt;rg&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#tips-with-rg&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If you use &lt;code&gt;rg&lt;/code&gt; as default search engine in fzf, you will find all hidden files are excluded. You need to add &lt;code&gt;--hidden&lt;/code&gt; to show them.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files --hidden&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, all hidden files which not ignored by &lt;code&gt;.gitignore&lt;/code&gt; are shown. But wait a minute, all files in &lt;code&gt;.git&lt;/code&gt; directory are shown too! Most of time, this is not our purpose. But only the way can solve it is adding &lt;code&gt;.git&lt;/code&gt; into &lt;code&gt;.gitignore&lt;/code&gt; directly. Please comment if you find a better way!&lt;/p&gt;
-&lt;h3 id=&#34;filter-by-content&#34;&gt;Filter By Content&lt;/h3&gt;
+&lt;h3 id=&#34;filter-by-content&#34;&gt;
+  Filter By Content
+  &lt;a class=&#34;heading-link&#34; href=&#34;#filter-by-content&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;If we try to search content in your project with fzf using &lt;code&gt;:Rg&lt;/code&gt;. The result will like below.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use &lt;code&gt;.&lt;/code&gt; in your pattern. The characters before &lt;code&gt;.&lt;/code&gt; will be known as a pattern for filename and as content pattern after &lt;code&gt;.&lt;/code&gt;.&lt;/p&gt;
@@ -151,7 +251,12 @@
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;What about &lt;code&gt;arg.&lt;/code&gt; for only filename?&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&#34;&gt;https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -164,7 +269,12 @@
       <pubDate>Sat, 29 Jun 2019 12:04:17 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</guid>
-      <description>&lt;h2 id=&#34;toggling-searching-highlight-in-vim&#34;&gt;Toggling Searching Highlight in Vim&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;toggling-searching-highlight-in-vim&#34;&gt;
+  Toggling Searching Highlight in Vim
+  &lt;a class=&#34;heading-link&#34; href=&#34;#toggling-searching-highlight-in-vim&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Some people disable highlight searching in Vim because it is bother about toggling between &lt;code&gt;:hl&lt;/code&gt; and &lt;code&gt;:nohl&lt;/code&gt;. Even though you can create a shortcut for it, don&amp;rsquo;t you want to do it automatically. Let&amp;rsquo;s imagine that we can highlight all matching results when search. After we moving our cursor, the highlight off automatically.&lt;/p&gt;
 &lt;p&gt;The plugin of &lt;a href=&#34;https://github.com/romainl/vim-cool&#34;&gt;vim-cool&lt;/a&gt;, is so cool just like its name, can help use make it come true!&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;You should have a try!&lt;/strong&gt;&lt;/p&gt;
@@ -189,16 +299,36 @@
       <pubDate>Wed, 25 Oct 2017 20:07:41 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/set-search-pattern-register/</guid>
-      <description>&lt;h2 id=&#34;in-english&#34;&gt;In English&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;in-english&#34;&gt;
+  In English
+  &lt;a class=&#34;heading-link&#34; href=&#34;#in-english&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Highlight the search pattern register in Vim.&lt;/p&gt;
-&lt;h2 id=&#34;实现的目的&#34;&gt;实现的目的&lt;/h2&gt;
+&lt;h2 id=&#34;实现的目的&#34;&gt;
+  实现的目的
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e7%8e%b0%e7%9a%84%e7%9b%ae%e7%9a%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;有的时候会遇到这样一个场景. 在当前文件中调用了一个函数, 而这个函数在另一个文件中被定义. 如果有 &lt;a href=&#34;https://github.com/davidhalter/jedi-vim&#34;&gt;jedi&lt;/a&gt; 之类的神器帮助跳转当然再好不过, 不过如果项目足够复杂, 有的时候 jedi 还是力不从心的. 当这时, 我们的目标可能就变成:&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;将光标下的单词能在另一个文件下通过最简单的方式定位到.&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;简单做法&#34;&gt;简单做法&lt;/h2&gt;
+&lt;h2 id=&#34;简单做法&#34;&gt;
+  简单做法
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%ae%80%e5%8d%95%e5%81%9a%e6%b3%95&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;最简单的做法, 当然是在 normal mode 下使用 &lt;code&gt;*&lt;/code&gt; 把搜索寄存器中的内容更新为光标下的单词. 但是这么做的问题是, 如果该页还有其他匹配项, 就会发生一次跳转. 需要使用 &lt;code&gt;&amp;lt;c-o&amp;gt;&lt;/code&gt; 跳转回刚刚的位置.&lt;/p&gt;
 &lt;p&gt;然后 &lt;code&gt;:b#&lt;/code&gt; 切换到另一个文件 (希望你和我一样设置了映射, 我的是 &lt;code&gt;&amp;lt;leader-b&amp;gt;&lt;/code&gt;). 文件切换我们这里不做展开.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;这样的做法比较简单, 但是不够优雅.&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;存储到搜索寄存器&#34;&gt;存储到搜索寄存器&lt;/h2&gt;
+&lt;h2 id=&#34;存储到搜索寄存器&#34;&gt;
+  存储到搜索寄存器
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ad%98%e5%82%a8%e5%88%b0%e6%90%9c%e7%b4%a2%e5%af%84%e5%ad%98%e5%99%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;那么问题就简单了 &amp;ndash; 怎样可以更新搜索寄存器.&lt;/p&gt;
 &lt;p&gt;通过 &lt;code&gt;:h registers&lt;/code&gt; 可以了解到:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;10. Last search pattern register	&amp;#34;/		*quote_/* *quote/*
@@ -225,13 +355,23 @@ register.  The search direction is available in |v:searchforward|.
 &lt;li&gt;&lt;code&gt;:let @/ &amp;lt;C-r&amp;gt;&amp;lt;C-w&amp;gt;&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;:let @/=&#39;\&amp;lt;&#39;.expand(&amp;quot;&amp;lt;cword&amp;gt;&amp;quot;).&#39;\&amp;gt;&#39;&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;将指令保存在-macro-中来调用&#34;&gt;将指令保存在 macro 中来调用&lt;/h2&gt;
+&lt;h2 id=&#34;将指令保存在-macro-中来调用&#34;&gt;
+  将指令保存在 macro 中来调用
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b0%86%e6%8c%87%e4%bb%a4%e4%bf%9d%e5%ad%98%e5%9c%a8-macro-%e4%b8%ad%e6%9d%a5%e8%b0%83%e7%94%a8&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;建议可以存到 macro 中. 这里也不特意展开了, 给一个例子, 设置 &lt;code&gt;@m&lt;/code&gt; 为寄存动作:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;qm  # 打开 m macro 的记录功能
 :let @/ &amp;lt;c-r&amp;gt;&amp;lt;c-w&amp;gt;  # 或 `:let @/=&amp;#39;\&amp;lt;&amp;#39;.expand(&amp;#34;&amp;lt;cword&amp;gt;&amp;#34;).&amp;#39;\&amp;gt;&amp;#39;`
 q  # 关闭记录
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;之后只要调用 &lt;code&gt;@m&lt;/code&gt; 就可以将当前光标下的文字存储到搜索寄存器中. 一个直观的测试方式, &lt;code&gt;:set hlsearch&lt;/code&gt; 打开你的搜索高亮, 用 &lt;code&gt;@m&lt;/code&gt; 试试吧!&lt;/p&gt;
-&lt;h2 id=&#34;使用-nmap-映射为永久可用的快捷键&#34;&gt;使用 &lt;code&gt;nmap&lt;/code&gt; 映射为永久可用的快捷键&lt;/h2&gt;
+&lt;h2 id=&#34;使用-nmap-映射为永久可用的快捷键&#34;&gt;
+  使用 &lt;code&gt;nmap&lt;/code&gt; 映射为永久可用的快捷键
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bd%bf%e7%94%a8-nmap-%e6%98%a0%e5%b0%84%e4%b8%ba%e6%b0%b8%e4%b9%85%e5%8f%af%e7%94%a8%e7%9a%84%e5%bf%ab%e6%8d%b7%e9%94%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;但是 macro 有一个问题就是随时可能被替代, 那 map 或许是一个好的解决方式.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;:&lt;span style=&#34;color:#268bd2&#34;&gt;nnoremap&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;Leader&lt;/span&gt;&amp;gt;&lt;span style=&#34;color:#268bd2&#34;&gt;m&lt;/span&gt; :&lt;span style=&#34;color:#859900&#34;&gt;let&lt;/span&gt; @/=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;\&amp;lt;&amp;#39;&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;expand&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;lt;cword&amp;gt;&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;\&amp;gt;&amp;#39;&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;CR&lt;/span&gt;&amp;gt;
 # &lt;span style=&#34;color:#268bd2&#34;&gt;或者&lt;/span&gt;
@@ -245,15 +385,45 @@ q  # 关闭记录
       <pubDate>Sun, 13 Aug 2017 13:20:52 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/vim-plugs-note/</guid>
-      <description>&lt;h2 id=&#34;1-使用技巧&#34;&gt;1. 使用技巧&lt;/h2&gt;
-&lt;h2 id=&#34;2-vim-配置&#34;&gt;2. VIM 配置&lt;/h2&gt;
-&lt;h3 id=&#34;21-vim-airline&#34;&gt;2.1 &lt;code&gt;vim-airline&lt;/code&gt;&lt;/h3&gt;
-&lt;h4 id=&#34;211-airline-显示问题&#34;&gt;2.1.1 airline 显示问题&lt;/h4&gt;
+      <description>&lt;h2 id=&#34;1-使用技巧&#34;&gt;
+  1. 使用技巧
+  &lt;a class=&#34;heading-link&#34; href=&#34;#1-%e4%bd%bf%e7%94%a8%e6%8a%80%e5%b7%a7&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h2 id=&#34;2-vim-配置&#34;&gt;
+  2. VIM 配置
+  &lt;a class=&#34;heading-link&#34; href=&#34;#2-vim-%e9%85%8d%e7%bd%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;21-vim-airline&#34;&gt;
+  2.1 &lt;code&gt;vim-airline&lt;/code&gt;
+  &lt;a class=&#34;heading-link&#34; href=&#34;#21-vim-airline&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;h4 id=&#34;211-airline-显示问题&#34;&gt;
+  2.1.1 airline 显示问题
+  &lt;a class=&#34;heading-link&#34; href=&#34;#211-airline-%e6%98%be%e7%a4%ba%e9%97%ae%e9%a2%98&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h4&gt;
 &lt;p&gt;在安装 airline 的过程中, 你很有可能会和我一样踩到很多坑, 这里就和大家分享一下我的经验.&lt;/p&gt;
-&lt;h5 id=&#34;安装成功后-airline-未显示&#34;&gt;安装成功后 airline 未显示&lt;/h5&gt;
+&lt;h5 id=&#34;安装成功后-airline-未显示&#34;&gt;
+  安装成功后 airline 未显示
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f%e5%90%8e-airline-%e6%9c%aa%e6%98%be%e7%a4%ba&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h5&gt;
 &lt;p&gt;遇到这个问题是因为没有为 airline 配置设施的行数, 请在 .vimrc 中做如下配置:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;laststatus&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;airline-箭头-符号显示乱码&#34;&gt;airline 箭头, 符号显示乱码&lt;/h5&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;airline-箭头-符号显示乱码&#34;&gt;
+  airline 箭头, 符号显示乱码
+  &lt;a class=&#34;heading-link&#34; href=&#34;#airline-%e7%ae%ad%e5%a4%b4-%e7%ac%a6%e5%8f%b7%e6%98%be%e7%a4%ba%e4%b9%b1%e7%a0%81&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h5&gt;
 &lt;p&gt;airline 的乱码问题主要是由于字体问题, 需要通过安装字体和配置 .vimrc 解决. 笔者在安装的过程中也遇到了这个问题, 寻找半天, 终于找到了最平滑易懂的解决办法. 编辑并与大家分享:&lt;/p&gt;
 &lt;p&gt;作者：&lt;a href=&#34;https://www.zhihu.com/question/25219546/answer/45554467&#34;&gt;八云&lt;/a&gt;
 原文地址: &lt;a href=&#34;http://zhihu.com/question/25219546/answer/45554467&#34;&gt;如何在 Ubuntu 下正确显示 vim-airline 的箭头符号？&lt;/a&gt;&lt;/p&gt;
@@ -304,7 +474,12 @@ endif&lt;/p&gt;
       <pubDate>Sun, 13 Aug 2017 11:50:29 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/vim-skills/</guid>
-      <description>&lt;h2 id=&#34;删除行末的空格&#34;&gt;删除行末的空格&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;删除行末的空格&#34;&gt;
+  删除行末的空格
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%88%a0%e9%99%a4%e8%a1%8c%e6%9c%ab%e7%9a%84%e7%a9%ba%e6%a0%bc&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;:%&lt;span style=&#34;color:#268bd2&#34;&gt;s&lt;/span&gt;&lt;span style=&#34;color:#2aa198&#34;&gt;/\s\+$/&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;e&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;有几点值得注意:&lt;/p&gt;
 &lt;ul&gt;

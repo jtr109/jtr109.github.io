@@ -5,26 +5,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
 
     <meta name="author" content="Ryan Li">
-    <meta name="description" content="问题描述 今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
+    <meta name="description" content="问题描述    今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
 use crate::schema::products::dsl::*; 放在了顶部, 在下面定义了一个 method:
 impl Product { pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { let connection = establish_connection(); products::table.find(id).first(&amp;connection) } } 结果编译报错:
-error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因 原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 id 指的是一个 pattern.">
+error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因    原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境.">
     <meta name="keywords" content="blog,developer,personal,python,rust">
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="use foo::bar::* 导致 mismatched types 报错"/>
-<meta name="twitter:description" content="问题描述 今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
+<meta name="twitter:description" content="问题描述    今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
 use crate::schema::products::dsl::*; 放在了顶部, 在下面定义了一个 method:
 impl Product { pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { let connection = establish_connection(); products::table.find(id).first(&amp;connection) } } 结果编译报错:
-error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因 原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 id 指的是一个 pattern."/>
+error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因    原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境."/>
 
     <meta property="og:title" content="use foo::bar::* 导致 mismatched types 报错" />
-<meta property="og:description" content="问题描述 今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
+<meta property="og:description" content="问题描述    今天跟着文章学习的时候遇到一个问题. 我把这句导入语句
 use crate::schema::products::dsl::*; 放在了顶部, 在下面定义了一个 method:
 impl Product { pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { let connection = establish_connection(); products::table.find(id).first(&amp;connection) } } 结果编译报错:
-error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因 原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 id 指的是一个 pattern." />
+error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn find(id: &amp;i32) -&gt; Result&lt;Product, diesel::result::Error&gt; { | ^^ expected i32, found struct `schema::products::columns::id` | = note: expected type `i32` found type `schema::products::columns::id` 原因    原因出在 use foo::bar::* 的时候, 编译器将 struct id 引入了环境." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-08-13T11:13:09&#43;08:00" />
@@ -41,14 +44,12 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
       <link rel="canonical" href="https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.9836c03fe5c87d102278a33e86d0591ef36c89b1e17e8e547ebf84c05cee010e.css" integrity="sha256-mDbAP&#43;XIfRAieKM&#43;htBZHvNsibHhfo5Ufr&#43;EwFzuAQ4=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -57,7 +58,7 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.717236c74e0a5208ef73964a9f44c6b443b689a95b270d8b2a40d0c012460dac.css" integrity="sha256-cXI2x04KUgjvc5ZKn0TGtEO2ialbJw2LKkDQwBJGDaw=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -80,9 +81,17 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
   
     
   
-  <body class="colorscheme-auto"
+  <body class="preload-transitions colorscheme-auto"
         onload=""
   >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
@@ -90,11 +99,6 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
       jtr109&#39;s Castle
     </a>
     
-      
-        <span id="dark-mode-toggle" class="float-right">
-          <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-        </span>
-      
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
         <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
@@ -120,11 +124,6 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
           
         
         
-        
-          <li class="navigation-item separator">
-            <span>|</span>
-          </li>
-        
       </ul>
     
   </section>
@@ -137,7 +136,11 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
     <article>
       <header>
         <div class="post-title">
-          <h1 class="title">use foo::bar::* 导致 mismatched types 报错</h1>
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/">
+              use foo::bar::* 导致 mismatched types 报错
+            </a>
+          </h1>
         </div>
         <div class="post-meta">
           <div class="date">
@@ -170,7 +173,12 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
 
       <div>
         
-        <h2 id="问题描述">问题描述</h2>
+        <h2 id="问题描述">
+  问题描述
+  <a class="heading-link" href="#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>今天跟着<a href="https://dev.to/werner/practical-rust-web-development-api-rest-29g1">文章</a>学习的时候遇到一个问题. 我把这句导入语句</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">use</span> <span style="color:#859900">crate</span>::<span style="color:#268bd2">schema</span>::<span style="color:#268bd2">products</span>::<span style="color:#268bd2">dsl</span>::*;
 </code></pre></div><p>放在了顶部,  在下面定义了一个 method:</p>
@@ -190,7 +198,12 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
    |
    = note: expected <span style="color:#cb4b16">type</span> <span style="color:#2aa198">`</span>i32<span style="color:#2aa198">`</span>
               found <span style="color:#cb4b16">type</span> <span style="color:#2aa198">`</span>schema::products::columns::id<span style="color:#2aa198">`</span>
-</code></pre></div><h2 id="原因">原因</h2>
+</code></pre></div><h2 id="原因">
+  原因
+  <a class="heading-link" href="#%e5%8e%9f%e5%9b%a0">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>原因出在 <code>use foo::bar::*</code> 的时候, 编译器将 struct <code>id</code> 引入了环境. 然后在 method 定义参数的时候, 编译器认为这里的 <code>id</code> 指的是一个 pattern. 所以报错.</p>
 <p>举一个类似的例子:</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">struct</span> <span style="color:#cb4b16">Foo</span>;
@@ -199,7 +212,12 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
 
 <span style="color:#268bd2">main</span>() {}
 </code></pre></div><p>以上例子中, 函数 <code>bar</code> 里定义的 <code>Foo</code> 被编译器认为是一个 pattern, 所以会提示 mismatched types.</p>
-<h2 id="解决方案">解决方案</h2>
+<h2 id="解决方案">
+  解决方案
+  <a class="heading-link" href="#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
 <p>这里的主要原因是 <code>diesel</code>  的变量名设计存在一些问题. 这里其实用 CamelCase 会更合适.</p>
 <p>另外应该避免使用 <code>use foo::bar::*</code> 这样的语法.</p>
 <p>那如果不得不用的时候, 特别是针对 <code>diesel</code> 使用的时候, 可以尽量考虑在函数内调用 <code>use</code>.</p>
@@ -215,7 +233,12 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
     
     
     
-      <h3>See also in Rust Notes</h3>
+      <h3 id="see-also-in-rust-notes">
+        See also in Rust Notes
+        <a class="heading-link" href="#see-also-in-rust-notes">
+          <i class="fa fa-link" aria-hidden="true"></i>
+        </a>
+      </h3>
       <nav>
         <ul>
         
@@ -285,8 +308,8 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
     </article>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     MathJax = {
       tex: {
@@ -329,9 +352,7 @@ error[E0308]: mismatched types --&gt; src/models/product.rs:17:17 | 17 | pub fn 
 
     
       
-        
-        <script src="https://jtr109.github.io/js/dark-mode.min.aee9c8a464eb7b3534c7110f7c5e169e7039e2fd92710e0626d451d6725af137.js"></script>
-      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
@@ -349,6 +370,12 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
+
+    
+
+    
+
+    
 
     
 

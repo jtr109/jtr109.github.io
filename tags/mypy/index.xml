@@ -17,7 +17,12 @@
       <pubDate>Fri, 23 Oct 2020 11:10:55 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/python-self-typing-annotation/</guid>
-      <description>&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Typing annotation 可以帮助我们更好地构建代码，但是由于在 Python 中这是一个新生事物，对它的原生支持做的并不好。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;声明：一下所有场景基于 Python 3.8.2。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;让我们一起来看看下面这个例子：&lt;/p&gt;
@@ -40,9 +45,19 @@ Traceback (most recent call last):
     def __init__(self: Foo, bar: str) -&amp;gt; None:
 NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt; is not defined
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为生命方式符合 &lt;a href=&#34;http://mypy-lang.org/&#34;&gt;mypy&lt;/a&gt; 的声明标准，所以成功通过了。但是执行时发生了报错，因为在类 &lt;code&gt;Foo&lt;/code&gt; 定义前就已经被自己的方法 &lt;code&gt;__init__&lt;/code&gt; 使用了，解释器无法理解，报出 &lt;code&gt;NameError: name &#39;Foo&#39; is not defined&lt;/code&gt; 错误。&lt;/p&gt;
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;我们需要一个生命方法，可以同时满足 &lt;code&gt;mypy&lt;/code&gt; 的类型生命校验，也可以满足解释器的运行规则。文章汇总了几种解决方案：&lt;/p&gt;
-&lt;h3 id=&#34;forward-references&#34;&gt;Forward References&lt;/h3&gt;
+&lt;h3 id=&#34;forward-references&#34;&gt;
+  Forward References
+  &lt;a class=&#34;heading-link&#34; href=&#34;#forward-references&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/#forward-references&#34;&gt;Forward references&lt;/a&gt; 方法出自 &lt;a href=&#34;https://www.python.org/dev/peps/pep-0484/&#34;&gt;PEP-484&lt;/a&gt;。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;When a type hint contains names that have not been defined yet, that definition may be expressed as a string literal, to be resolved later.&lt;/p&gt;
@@ -52,7 +67,12 @@ NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&
 
     &lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;: &lt;span style=&#34;color:#cb4b16&#34;&gt;str&lt;/span&gt;) -&amp;gt; &lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;:
         &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;bar&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;postponed-evaluation-of-annotations&#34;&gt;Postponed Evaluation of Annotations&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;postponed-evaluation-of-annotations&#34;&gt;
+  Postponed Evaluation of Annotations
+  &lt;a class=&#34;heading-link&#34; href=&#34;#postponed-evaluation-of-annotations&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0563/&#34;&gt;PEP-563&lt;/a&gt; 介绍了一个 &lt;code&gt;__future__&lt;/code&gt; 功能。使我们可以更符合直觉地使用类型声明。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.python.org/dev/peps/pep-0484&#34;&gt;PEP 484&lt;/a&gt; introduced a standard meaning to annotations: type hints. &lt;a href=&#34;https://www.python.org/dev/peps/pep-0526&#34;&gt;PEP 526&lt;/a&gt; defined variable annotations, explicitly tying them with the type hinting use case.&lt;/p&gt;

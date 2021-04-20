@@ -17,11 +17,21 @@
       <pubDate>Sat, 09 Nov 2019 22:09:45 +0000</pubDate>
       
       <guid>https://jtr109.github.io/posts/race-condition-when-using-django-get-or-create/</guid>
-      <description>&lt;h2 id=&#34;名词解释&#34;&gt;名词解释&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;名词解释&#34;&gt;
+  名词解释
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Data Race &amp;amp; Race Condition: 待补充, 可参考&lt;a href=&#34;https://stackoverflow.com/a/58161437/6522746&#34;&gt;这个 StackOverflow 回答&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;
+  问题描述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Django 的 ORM 操作中有一个非常实用的功能: &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt;, 可以判断数据库中是否有符合条件的条目, 没有则创建.&lt;/p&gt;
 &lt;p&gt;但是在使用过程中如果不加留意, 会发生 race condition. 导致数据库中创建出的条目不符合预期.&lt;/p&gt;
 &lt;p&gt;以下面这部分代码为例:&lt;/p&gt;
@@ -94,7 +104,12 @@ OK
 Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;alias&lt;/span&gt; &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;由于使用 &lt;code&gt;threading&lt;/code&gt; 实现并发, 所以不一定每次执行都会出现如上状况. 如果没有复现, 请重试几次.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;从上面的信息可以看到, 数据库中生成了不止一个条目, 而且有的 threading 在执行时报 &lt;code&gt;get() returned more than one Race&lt;/code&gt; 错误.&lt;/p&gt;
-&lt;h2 id=&#34;原因分析&#34;&gt;原因分析&lt;/h2&gt;
+&lt;h2 id=&#34;原因分析&#34;&gt;
+  原因分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%8e%9f%e5%9b%a0%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;查看 &lt;a href=&#34;https://github.com/django/django/blob/2.2.6/django/db/models/query.py#L528&#34;&gt;&lt;code&gt;get_or_create&lt;/code&gt;&lt;/a&gt; 源码可以看到, 这个操作分为两步: 查询和创建. 所以在异步场景下, 可能出现多个读操作都没有查到条目, 触发 &lt;code&gt;DoesNotExist&lt;/code&gt; 报错, 写入多条, 而非预期中的始终只有一条.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;get_or_create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;None&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;):
     &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
@@ -110,7 +125,12 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
     &lt;span style=&#34;color:#859900&#34;&gt;except&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;DoesNotExist&lt;/span&gt;:
         &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_extract_model_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;defaults&lt;/span&gt;, **&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;)
         &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;_create_object_from_params&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;kwargs&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;params&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;解决方案&#34;&gt;
+  解决方案
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;这个问题其实在文档中&lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/querysets/#get-or-create&#34;&gt;已经指出&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;This method is atomic assuming that the database enforces uniqueness of the keyword arguments (see &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.Field.unique&#34;&gt;&lt;code&gt;unique&lt;/code&gt;&lt;/a&gt; or &lt;a href=&#34;https://docs.djangoproject.com/en/dev/ref/models/options/#django.db.models.Options.unique_together&#34;&gt;&lt;code&gt;unique_together&lt;/code&gt;&lt;/a&gt;). If the fields used in the keyword arguments do not have a uniqueness constraint, concurrent calls to this method may result in multiple rows with the same parameters being inserted.&lt;/p&gt;
@@ -137,7 +157,12 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
         ]
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完整示例可以参考&lt;a href=&#34;https://github.com/jtr109/django-update-or-create-example&#34;&gt;示例项目&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;h2 id=&#34;源码分析&#34;&gt;
+  源码分析
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;在源码中是如何使用 &lt;code&gt;translation.atom&lt;/code&gt; 解决这个错误的, 待后续分析.&lt;/p&gt;
 </description>
     </item>
@@ -148,33 +173,88 @@ Destroying &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt; database 
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
-      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;Intergate Vue in Django&lt;/h1&gt;
-&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;What Project Will We Build&lt;/h2&gt;
+      <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;
+  Intergate Vue in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#intergate-vue-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h1&gt;
+&lt;h2 id=&#34;what-project-will-we-build&#34;&gt;
+  What Project Will We Build
+  &lt;a class=&#34;heading-link&#34; href=&#34;#what-project-will-we-build&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We want to build a vue project with multiple pages. The Django view render these pages as templates.&lt;/p&gt;
-&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;Why We Build Such A Project&lt;/h2&gt;
+&lt;h2 id=&#34;why-we-build-such-a-project&#34;&gt;
+  Why We Build Such A Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-we-build-such-a-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;If we seperate frond-end and back-end and all routers are handled by the front-end project. The attackers can fake the reponse of authentication and jump to the target pages. If the attackers get the front-end code all in one package without authentication, they can parse out API easily.&lt;/p&gt;
 &lt;p&gt;So we consider to use front-end service to control the router and use back-end for access control.&lt;/p&gt;
-&lt;h2 id=&#34;initial-repository&#34;&gt;Initial Repository&lt;/h2&gt;
+&lt;h2 id=&#34;initial-repository&#34;&gt;
+  Initial Repository
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initial-repository&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;mkdir vid &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; vid
 git init
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;Create Virtual Environment&lt;/h2&gt;
-&lt;h3 id=&#34;specify-python-version&#34;&gt;Specify Python Version&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-virtual-environment&#34;&gt;
+  Create Virtual Environment
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-virtual-environment&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;specify-python-version&#34;&gt;
+  Specify Python Version
+  &lt;a class=&#34;heading-link&#34; href=&#34;#specify-python-version&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv --python ~/.pyenv/versions/3.7.1/bin/python3.7
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;Change Mirror (Optional)&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;change-mirror-optional&#34;&gt;
+  Change Mirror (Optional)
+  &lt;a class=&#34;heading-link&#34; href=&#34;#change-mirror-optional&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;[[source]]
 name = &amp;#34;pypi&amp;#34;
 url = &amp;#34;https://mirrors.aliyun.com/pypi/simple/&amp;#34;
 verify_ssl = true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;Install Dependencies&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;install-dependencies&#34;&gt;
+  Install Dependencies
+  &lt;a class=&#34;heading-link&#34; href=&#34;#install-dependencies&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv install &lt;span style=&#34;color:#268bd2&#34;&gt;django&lt;/span&gt;==2.2.1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;Start Django Project&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;start-django-project&#34;&gt;
+  Start Django Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#start-django-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run django-admin startproject vid
 mv vid vid-dir &amp;amp;&amp;amp; mv ./vid-dir/* . &amp;amp;&amp;amp; rmdir vid-dir  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# move project to current path&lt;/span&gt;
 pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# check django project works&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;Create Authorization API in Django&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;create-authorization-api-in-django&#34;&gt;
+  Create Authorization API in Django
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-authorization-api-in-django&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;You should always create a custom user model in Django. &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#specifying-a-custom-user-model&#34;&gt;Here&lt;/a&gt; is why.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Remember not migrating until the custom user model is registered correctly.&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&#34;create-custom-user-model&#34;&gt;Create Custom User Model&lt;/h3&gt;
+&lt;h3 id=&#34;create-custom-user-model&#34;&gt;
+  Create Custom User Model
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-custom-user-model&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us create an app.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;pipenv&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;run&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;manage&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;startapp&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We must install it in &lt;code&gt;INSTALLED_APPS&lt;/code&gt; in settings.&lt;/p&gt;
@@ -200,7 +280,12 @@ pipenv run python manage.py runserver 127.0.0.1:8000  &lt;span style=&#34;color:
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all, migrating the user model.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py makemigrations
 pipenv run python manage.py migrate
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;Create Logining and Checking Views&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-logining-and-checking-views&#34;&gt;
+  Create Logining and Checking Views
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-logining-and-checking-views&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let&amp;rsquo;s create &lt;a href=&#34;https://docs.djangoproject.com/en/2.2/topics/class-based-views/intro/#using-class-based-views&#34;&gt;class-based views&lt;/a&gt; with json responses.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/apis.py&lt;/span&gt;
 
@@ -260,8 +345,18 @@ pipenv run python manage.py migrate
 		&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snip -----&lt;/span&gt;
     &lt;span style=&#34;color:#268bd2&#34;&gt;path&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;api/account/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;include&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;account.urls&amp;#39;&lt;/span&gt;)),
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;Creating Vue Project with Multiple Pages&lt;/h2&gt;
-&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;Initializing a Vue Project&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;creating-vue-project-with-multiple-pages&#34;&gt;
+  Creating Vue Project with Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#creating-vue-project-with-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;initializing-a-vue-project&#34;&gt;
+  Initializing a Vue Project
+  &lt;a class=&#34;heading-link&#34; href=&#34;#initializing-a-vue-project&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Frist of all, let us initialize a vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;vue create frontend
 &lt;span style=&#34;color:#cb4b16&#34;&gt;cd&lt;/span&gt; frontend
@@ -269,7 +364,12 @@ yarn install
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we run the vue development service.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Open the URL show in terminal specified by our vue service. Make sure the vue project work well on it (usually &lt;code&gt;localhost:8080&lt;/code&gt;).&lt;/p&gt;
-&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;Satisfication for Multiple Pages&lt;/h3&gt;
+&lt;h3 id=&#34;satisfication-for-multiple-pages&#34;&gt;
+  Satisfication for Multiple Pages
+  &lt;a class=&#34;heading-link&#34; href=&#34;#satisfication-for-multiple-pages&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
 mkdir -p src/pages/login
@@ -334,12 +434,27 @@ touch vue.config.js
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
 &lt;p&gt;User page:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;Inject Vue Page Into Django Template&lt;/h2&gt;
-&lt;h3 id=&#34;build-vue-dist&#34;&gt;Build Vue Dist&lt;/h3&gt;
+&lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;
+  Inject Vue Page Into Django Template
+  &lt;a class=&#34;heading-link&#34; href=&#34;#inject-vue-page-into-django-template&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;build-vue-dist&#34;&gt;
+  Build Vue Dist
+  &lt;a class=&#34;heading-link&#34; href=&#34;#build-vue-dist&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Build the vue project first.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now, you get &lt;code&gt;login.html&lt;/code&gt; and &lt;code&gt;user.html&lt;/code&gt; in the path &lt;code&gt;frontend/dist&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;Show Login Page in Django View&lt;/h3&gt;
+&lt;h3 id=&#34;show-login-page-in-django-view&#34;&gt;
+  Show Login Page in Django View
+  &lt;a class=&#34;heading-link&#34; href=&#34;#show-login-page-in-django-view&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us show login page by &lt;code&gt;TemplateView&lt;/code&gt; in Django.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# vid/urls.py&lt;/span&gt;
 
@@ -382,7 +497,12 @@ touch vue.config.js
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;render-user-page&#34;&gt;Render User Page&lt;/h3&gt;
+&lt;h3 id=&#34;render-user-page&#34;&gt;
+  Render User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#render-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now, we already have the HTML file &lt;code&gt;frontend/dist/user.html&lt;/code&gt; . Let us render it in a Django view.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# account/views.py&lt;/span&gt;
 
@@ -406,8 +526,18 @@ touch vue.config.js
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;Create a Login Form in User Page&lt;/h2&gt;
-&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;Login Form with Ant Design&lt;/h3&gt;
+&lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;
+  Create a Login Form in User Page
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-a-login-form-in-user-page&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;login-form-with-ant-design&#34;&gt;
+  Login Form with Ant Design
+  &lt;a class=&#34;heading-link&#34; href=&#34;#login-form-with-ant-design&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First, let us install the ant design vue package. &lt;a href=&#34;https://vue.ant.design/docs/vue/use-with-vue-cli/&#34;&gt;Here&lt;/a&gt; is the way to install and register ant design vue.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add ant-design-vue
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Import style in &lt;code&gt;frontend/src/pages/login/app.js&lt;/code&gt;&lt;/p&gt;
@@ -528,7 +658,12 @@ touch vue.config.js
 &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;Using Axios to Send Login Request&lt;/h3&gt;
+&lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;
+  Using Axios to Send Login Request
+  &lt;a class=&#34;heading-link&#34; href=&#34;#using-axios-to-send-login-request&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;First let add proxy in vue project.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
@@ -584,7 +719,12 @@ touch vue.config.js
     # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
     # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;Create User and Test Redirection&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-user-and-test-redirection&#34;&gt;
+  Create User and Test Redirection
+  &lt;a class=&#34;heading-link&#34; href=&#34;#create-user-and-test-redirection&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Let us create a user in django shell.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;pipenv run python manage.py shell
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1&lt;/span&gt;]: &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;account.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
@@ -592,13 +732,23 @@ touch vue.config.js
 &lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;Rebuild Frontend and Have A Try in Django Service&lt;/h3&gt;
+&lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+  Rebuild Frontend and Have A Try in Django Service
+  &lt;a class=&#34;heading-link&#34; href=&#34;#rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
 &lt;p&gt;Now let&amp;rsquo;s rebuild the frontend.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
 yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference:&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference:
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/25080236&#34;&gt;https://zhuanlan.zhihu.com/p/25080236&lt;/a&gt;&lt;/p&gt;
@@ -622,7 +772,12 @@ yarn run build
       <pubDate>Wed, 27 Mar 2019 13:59:45 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/django-password/</guid>
-      <description>&lt;h2 id=&#34;set-password-manually&#34;&gt;Set Password Manually&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;set-password-manually&#34;&gt;
+  Set Password Manually
+  &lt;a class=&#34;heading-link&#34; href=&#34;#set-password-manually&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;It is easy to set password with the instance of &lt;code&gt;User&lt;/code&gt; by &lt;code&gt;set_password&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_username&amp;#39;&lt;/span&gt;)
 &lt;span style=&#34;color:#268bd2&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;set_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
@@ -634,7 +789,12 @@ yarn run build
     &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#268bd2&#34;&gt;make_password&lt;/span&gt;(&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;my_password&amp;#39;&lt;/span&gt;)
 )
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# now you get the instance of User model&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;how-to-create-an-raw-password-automatically&#34;&gt;How to Create an Raw Password Automatically?&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;how-to-create-an-raw-password-automatically&#34;&gt;
+  How to Create an Raw Password Automatically?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#how-to-create-an-raw-password-automatically&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;Django provide a method &lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;&lt;code&gt;make_random_password&lt;/code&gt;&lt;/a&gt; in the &lt;code&gt;BaseUserManager&lt;/code&gt;. So you can generate a password like this.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;
 
@@ -645,7 +805,12 @@ yarn run build
 &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;()  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# try this one&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;)
 &lt;span style=&#34;color:#268bd2&#34;&gt;raw_password&lt;/span&gt; = &lt;span style=&#34;color:#268bd2&#34;&gt;get_random_string&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;length&lt;/span&gt;=&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;16&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;allowed_chars&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;abcdef0123456789&amp;#39;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#module-django.contrib.auth.hashers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&#34;&gt;https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.make_random_password&lt;/a&gt;&lt;/li&gt;
@@ -660,10 +825,20 @@ yarn run build
       
       <guid>https://jtr109.github.io/posts/hashers-issue-when-upgrade-django/</guid>
       <description>&lt;p&gt;&lt;em&gt;Note for &lt;code&gt;check_password&lt;/code&gt; in Django&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;h2 id=&#34;background&#34;&gt;
+  Background
+  &lt;a class=&#34;heading-link&#34; href=&#34;#background&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;We are refactoring our project from Django 1.9.10 to a new project with Django 1.11.14 and asyncpg for database connections.&lt;/p&gt;
 &lt;p&gt;I tried to fork the logic of &lt;code&gt;User.check_password&lt;/code&gt; and create an async one. But the new one does not work as my &lt;em&gt;wrong&lt;/em&gt; exception. But I learn something from that at least.&lt;/p&gt;
-&lt;h2 id=&#34;different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;Different behavior of &lt;code&gt;User.check_password&lt;/code&gt; between objects from fixture and created manual&lt;/h2&gt;
+&lt;h2 id=&#34;different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;
+  Different behavior of &lt;code&gt;User.check_password&lt;/code&gt; between objects from fixture and created manual
+  &lt;a class=&#34;heading-link&#34; href=&#34;#different-behavior-of-usercheck_password-between-objects-from-fixture-and-created-manual&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;I found when I use the official &lt;code&gt;check_password&lt;/code&gt; on a user object from fixtures, the value of the object changed. But when I execute it on which I created recently. It did! I was confused about the difference.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;code in &lt;code&gt;django/contrib/auth/base_user&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;django.contrib.auth.hashers&lt;/span&gt; &lt;span style=&#34;color:#dc322f;font-weight:bold&#34;&gt;import&lt;/span&gt; (
@@ -723,7 +898,12 @@ yarn run build
         &lt;span style=&#34;color:#268bd2&#34;&gt;setter&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;)
     &lt;span style=&#34;color:#859900&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;is_correct&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can find when executed &lt;code&gt;check_password&lt;/code&gt; of &lt;code&gt;User&lt;/code&gt; object. The setter will be called when the password &lt;code&gt;is_correct&lt;/code&gt; and &lt;code&gt;must_update&lt;/code&gt;. And I find the &lt;code&gt;must_update&lt;/code&gt; is &lt;code&gt;False&lt;/code&gt; when checking the one I creatd but &lt;code&gt;True&lt;/code&gt; in fixtures.&lt;/p&gt;
-&lt;h2 id=&#34;why-must_update&#34;&gt;Why &lt;code&gt;must_update&lt;/code&gt;?&lt;/h2&gt;
+&lt;h2 id=&#34;why-must_update&#34;&gt;
+  Why &lt;code&gt;must_update&lt;/code&gt;?
+  &lt;a class=&#34;heading-link&#34; href=&#34;#why-must_update&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;p&gt;The variable &lt;code&gt;preferred&lt;/code&gt; with attribute &lt;code&gt;must_update&lt;/code&gt; is declared by &lt;code&gt;get_hasher&lt;/code&gt; and we can find it is an instance of &lt;code&gt;PBKDF2PasswordHasher&lt;/code&gt; as default. So the dependence of updating is the &lt;code&gt;iterations&lt;/code&gt; in decoded password.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#859900&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#cb4b16&#34;&gt;PBKDF2PasswordHasher&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;BasePasswordHasher&lt;/span&gt;):
 
@@ -771,7 +951,12 @@ yarn run build
 &lt;blockquote&gt;
 &lt;p&gt;Hashed passwords will be updated when increasing (or decreasing) the number of PBKDF2 iterations or bcrypt rounds.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;h2 id=&#34;reference&#34;&gt;
+  Reference
+  &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.djangoproject.com/en/2.1/topics/auth/passwords/#password-upgrading&#34;&gt;Password upgrading - Django&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
