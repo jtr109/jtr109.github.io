@@ -6,10 +6,98 @@
     <description>Recent content on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 20 Apr 2021 11:07:34 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Apr 2021 14:08:01 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCP 滑动窗口</title>
+      <link>https://jtr109.github.io/posts/tcp-sliding-window/</link>
+      <pubDate>Wed, 21 Apr 2021 14:08:01 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/tcp-sliding-window/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;TCP 滑动窗口协议是为了帮助发送端了解数据处理的带宽或者数据处理速度，避免拥塞，从而解决包乱序问题，提供可靠传输&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;工作机制&#34;&gt;
+  工作机制
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;整理概念&#34;&gt;
+  整理概念
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%95%b4%e7%90%86%e6%a6%82%e5%bf%b5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;TCP 协议中，当接收方接收到发送方发送的数据时，会返回一个 ACK 确认信息。ACK 中包含了两个重要信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;序号（sequence number）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;窗口大小（window）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果接收方已经接收了前 $n-1$ 个字节，ACK 中返回的序号为 $n$，代表希望接收到从第 $n$ 个字节开始的数据。发送方应该根据序号确认接收方已经接收到了前 $n-1$ 个字节，而不用重复发送。&lt;/p&gt;
+&lt;p&gt;发送 ACK 前，接收方根据自己的缓存区空间计算还可以接受多少字节数据，记录在 ACK 的 window 中，我们假设值为 $m$。发送方收到确认消息后，知道自己最多再发送 $m$ 个字节的数据。&lt;/p&gt;
+&lt;p&gt;但是虽然此时发送方收到了接收方确认的前 $n-1$ 个字节，但是在此之前发送方可能已经发送到了序号 $p$。这时候发送方为了避免发生拥塞，最多只能发送 $m - (p - n)$ 个字节的数据。&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nmap.org/book/images/hdr/MJB-TCP-Header-800x564.png&#34; alt=&#34;TCP 头的格式&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图片来源：&lt;a href=&#34;https://nmap.org/book/tcpip-ref.html#tcp-header&#34;&gt;TCP Header | Nmap Network Scanning&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;从发送方视角理解滑动窗口&#34;&gt;
+  从发送方视角理解滑动窗口
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%bb%8e%e5%8f%91%e9%80%81%e6%96%b9%e8%a7%86%e8%a7%92%e7%90%86%e8%a7%a3%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;http://www.tcpipguide.com/free/diagrams/tcpswwindows.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图片来源：&lt;a href=&#34;http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo-6.htm#Figure_207&#34;&gt;The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;发送方发送完一部分数据后，不会等待接收方的确认消息，而是在继续发送其余的数据。所以在某个时间节点，对发送方而言存在 4 类数据：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;已经确认接收成功的数据&lt;/li&gt;
+&lt;li&gt;已经发送但接收方还没有确认接收到的数据&lt;/li&gt;
+&lt;li&gt;还未发送的处于窗口范围内的数据&lt;/li&gt;
+&lt;li&gt;还未发送的处于窗口范围外的数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;上面的 2、3 部分构成了窗口数据，发送方根据接收方返回的 ACK 中的 wIndow 计算第 3 部分的数据量，并继续发送。&lt;/p&gt;
+&lt;p&gt;需要注意的是，这个窗口的位置并不是静止的，当发送方收到了新的 ACK 响应时，会根据 ACK 中的信息进行窗口滑动。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://www.tcpipguide.com/free/diagrams/tcpswslide.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图片来源：&lt;a href=&#34;http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo-8.htm#Figure_209&#34;&gt;The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;延伸阅读&#34;&gt;
+  延伸阅读
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%bb%b6%e4%bc%b8%e9%98%85%e8%af%bb&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;以上只是对 TCP 滑动窗口的粗略介绍，进一步理解可以参考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;酷壳的两篇 TCP 文章：
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://coolshell.cn/articles/11564.html&#34;&gt;TCP 的那些事儿（上） | 酷 壳 - CoolShell&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3&#34;&gt;TCP 的那些事儿（下） | 酷 壳 - CoolShell&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo.htm&#34;&gt;The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://coolshell.cn/&#34;&gt;酷壳&lt;/a&gt;中对&lt;a href=&#34;https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3&#34;&gt;滑动窗口&lt;/a&gt;的介绍。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://www.zhihu.com/question/32255109/answer/68558623&#34;&gt;知乎回答&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>网络时延相关知识梳理</title>
@@ -26,7 +114,7 @@
 &lt;p&gt;最近网络上有一则新闻引发了讨论：&lt;a href=&#34;http://finance.eastmoney.com/a/202104191890144366.html&#34;&gt;华为战略部总裁张文林：实验室内可做到2千公里0.1毫秒时延 满足车联网精确需要&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;主要原因是根据标题中的描述，这种通讯方式达到了「2千公里0.1毫秒时延」。这个描述引发了两种争论：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;这种通讯方式的传输速度为 $2\times10^6/10^{-4}=2\times10^{10}(m/s)$，已经超过了光速，根本是不可能的。&lt;/li&gt;
+&lt;li&gt;这种通讯方式的传输速度为 $2\times10^6\div10^{-4}=2\times10^{10}(m/s)$，已经超过了光速，根本是不可能的。&lt;/li&gt;
 &lt;li&gt;新闻中描述的时延指的不是传播速度。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;也有报道&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;称原文中的描述应该是：0.1 毫秒的「抖动时延」。&lt;/p&gt;

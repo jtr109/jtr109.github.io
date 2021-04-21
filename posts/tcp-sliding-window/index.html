@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="背景    TCP 滑动窗口协议是为了帮助发送端了解数据处理的带宽或者数据处理速度，避免拥塞，从而解决包乱序问题，提供可靠传输1。
+工作机制    整理概念    TCP 协议中，当接收方接收到发送方发送的数据时，会返回一个 ACK 确认信息。ACK 中包含了两个重要信息：
+  序号（sequence number）
+  窗口大小（window）
+  如果接收方已经接收了前 $n-1$ 个字节，ACK 中返回的序号为 $n$，代表希望接收到从第 $n$ 个字节开始的数据。发送方应该根据序号确认接收方已经接收到了前 $n-1$ 个字节，而不用重复发送。
+发送 ACK 前，接收方根据自己的缓存区空间计算还可以接受多少字节数据，记录在 ACK 的 window 中，我们假设值为 $m$。发送方收到确认消息后，知道自己最多再发送 $m$ 个字节的数据。
+但是虽然此时发送方收到了接收方确认的前 $n-1$ 个字节，但是在此之前发送方可能已经发送到了序号 $p$。这时候发送方为了避免发生拥塞，最多只能发送 $m - (p - n)$ 个字节的数据。2
+图片来源：TCP Header | Nmap Network Scanning
+从发送方视角理解滑动窗口    图片来源：The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TCP 滑动窗口"/>
+<meta name="twitter:description" content="背景    TCP 滑动窗口协议是为了帮助发送端了解数据处理的带宽或者数据处理速度，避免拥塞，从而解决包乱序问题，提供可靠传输1。
+工作机制    整理概念    TCP 协议中，当接收方接收到发送方发送的数据时，会返回一个 ACK 确认信息。ACK 中包含了两个重要信息：
+  序号（sequence number）
+  窗口大小（window）
+  如果接收方已经接收了前 $n-1$ 个字节，ACK 中返回的序号为 $n$，代表希望接收到从第 $n$ 个字节开始的数据。发送方应该根据序号确认接收方已经接收到了前 $n-1$ 个字节，而不用重复发送。
+发送 ACK 前，接收方根据自己的缓存区空间计算还可以接受多少字节数据，记录在 ACK 的 window 中，我们假设值为 $m$。发送方收到确认消息后，知道自己最多再发送 $m$ 个字节的数据。
+但是虽然此时发送方收到了接收方确认的前 $n-1$ 个字节，但是在此之前发送方可能已经发送到了序号 $p$。这时候发送方为了避免发生拥塞，最多只能发送 $m - (p - n)$ 个字节的数据。2
+图片来源：TCP Header | Nmap Network Scanning
+从发送方视角理解滑动窗口    图片来源：The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control"/>
+
+    <meta property="og:title" content="TCP 滑动窗口" />
+<meta property="og:description" content="背景    TCP 滑动窗口协议是为了帮助发送端了解数据处理的带宽或者数据处理速度，避免拥塞，从而解决包乱序问题，提供可靠传输1。
+工作机制    整理概念    TCP 协议中，当接收方接收到发送方发送的数据时，会返回一个 ACK 确认信息。ACK 中包含了两个重要信息：
+  序号（sequence number）
+  窗口大小（window）
+  如果接收方已经接收了前 $n-1$ 个字节，ACK 中返回的序号为 $n$，代表希望接收到从第 $n$ 个字节开始的数据。发送方应该根据序号确认接收方已经接收到了前 $n-1$ 个字节，而不用重复发送。
+发送 ACK 前，接收方根据自己的缓存区空间计算还可以接受多少字节数据，记录在 ACK 的 window 中，我们假设值为 $m$。发送方收到确认消息后，知道自己最多再发送 $m$ 个字节的数据。
+但是虽然此时发送方收到了接收方确认的前 $n-1$ 个字节，但是在此之前发送方可能已经发送到了序号 $p$。这时候发送方为了避免发生拥塞，最多只能发送 $m - (p - n)$ 个字节的数据。2
+图片来源：TCP Header | Nmap Network Scanning
+从发送方视角理解滑动窗口    图片来源：The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/tcp-sliding-window/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-21T14:08:01&#43;08:00" />
+<meta property="article:modified_time" content="2021-04-21T14:08:01&#43;08:00" />
+
+
+
+    <title>
+  TCP 滑动窗口 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/tcp-sliding-window/">
+    
+
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://jtr109.github.io/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://jtr109.github.io/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.82.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/tcp-sliding-window/">
+              TCP 滑动窗口
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2021-04-21T14:08:01&#43;08:00'>
+                April 21, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              One-minute read
+            </span>
+          </div>
+          
+          <div class="categories">
+  <i class="fa fa-folder" aria-hidden="true"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <a href="https://jtr109.github.io/tags/network/">network</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/tcp/">TCP</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">
+  背景
+  <a class="heading-link" href="#%e8%83%8c%e6%99%af">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>TCP 滑动窗口协议是为了帮助发送端了解数据处理的带宽或者数据处理速度，避免拥塞，从而解决包乱序问题，提供可靠传输<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
+<h2 id="工作机制">
+  工作机制
+  <a class="heading-link" href="#%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<h3 id="整理概念">
+  整理概念
+  <a class="heading-link" href="#%e6%95%b4%e7%90%86%e6%a6%82%e5%bf%b5">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>TCP 协议中，当接收方接收到发送方发送的数据时，会返回一个 ACK 确认信息。ACK 中包含了两个重要信息：</p>
+<ul>
+<li>
+<p>序号（sequence number）</p>
+</li>
+<li>
+<p>窗口大小（window）</p>
+</li>
+</ul>
+<p>如果接收方已经接收了前 $n-1$ 个字节，ACK 中返回的序号为 $n$，代表希望接收到从第 $n$ 个字节开始的数据。发送方应该根据序号确认接收方已经接收到了前 $n-1$ 个字节，而不用重复发送。</p>
+<p>发送 ACK 前，接收方根据自己的缓存区空间计算还可以接受多少字节数据，记录在 ACK 的 window 中，我们假设值为 $m$。发送方收到确认消息后，知道自己最多再发送 $m$ 个字节的数据。</p>
+<p>但是虽然此时发送方收到了接收方确认的前 $n-1$ 个字节，但是在此之前发送方可能已经发送到了序号 $p$。这时候发送方为了避免发生拥塞，最多只能发送 $m - (p - n)$ 个字节的数据。<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<p><img src="https://nmap.org/book/images/hdr/MJB-TCP-Header-800x564.png" alt="TCP 头的格式"></p>
+<p>图片来源：<a href="https://nmap.org/book/tcpip-ref.html#tcp-header">TCP Header | Nmap Network Scanning</a></p>
+<h3 id="从发送方视角理解滑动窗口">
+  从发送方视角理解滑动窗口
+  <a class="heading-link" href="#%e4%bb%8e%e5%8f%91%e9%80%81%e6%96%b9%e8%a7%86%e8%a7%92%e7%90%86%e8%a7%a3%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p><img src="http://www.tcpipguide.com/free/diagrams/tcpswwindows.png" alt=""></p>
+<p>图片来源：<a href="http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo-6.htm#Figure_207">The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control</a></p>
+<p>发送方发送完一部分数据后，不会等待接收方的确认消息，而是在继续发送其余的数据。所以在某个时间节点，对发送方而言存在 4 类数据：</p>
+<ol>
+<li>已经确认接收成功的数据</li>
+<li>已经发送但接收方还没有确认接收到的数据</li>
+<li>还未发送的处于窗口范围内的数据</li>
+<li>还未发送的处于窗口范围外的数据</li>
+</ol>
+<p>上面的 2、3 部分构成了窗口数据，发送方根据接收方返回的 ACK 中的 wIndow 计算第 3 部分的数据量，并继续发送。</p>
+<p>需要注意的是，这个窗口的位置并不是静止的，当发送方收到了新的 ACK 响应时，会根据 ACK 中的信息进行窗口滑动。</p>
+<p><img src="http://www.tcpipguide.com/free/diagrams/tcpswslide.png" alt=""></p>
+<p>图片来源：<a href="http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo-8.htm#Figure_209">The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control</a></p>
+<h2 id="延伸阅读">
+  延伸阅读
+  <a class="heading-link" href="#%e5%bb%b6%e4%bc%b8%e9%98%85%e8%af%bb">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>以上只是对 TCP 滑动窗口的粗略介绍，进一步理解可以参考：</p>
+<ul>
+<li>酷壳的两篇 TCP 文章：
+<ul>
+<li><a href="https://coolshell.cn/articles/11564.html">TCP 的那些事儿（上） | 酷 壳 - CoolShell</a></li>
+<li><a href="https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">TCP 的那些事儿（下） | 酷 壳 - CoolShell</a></li>
+</ul>
+</li>
+<li><a href="http://www.tcpipguide.com/free/t_TCPSlidingWindowAcknowledgmentSystemForDataTranspo.htm">The TCP/IP Guide - TCP Sliding Window Acknowledgment System For Data Transport, Reliability and Flow Control</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>参考<a href="https://coolshell.cn/">酷壳</a>中对<a href="https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>的介绍。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>参考<a href="https://www.zhihu.com/question/32255109/answer/68558623">知乎回答</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2021
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+    </main>
+
+    
+      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
+    
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>
