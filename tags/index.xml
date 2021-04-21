@@ -6,15 +6,24 @@
     <description>Recent content in Tags on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Apr 2021 14:08:01 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Apr 2021 16:46:17 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>HTTP</title>
+      <link>https://jtr109.github.io/tags/http/</link>
+      <pubDate>Wed, 21 Apr 2021 16:46:17 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/tags/http/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>network</title>
       <link>https://jtr109.github.io/tags/network/</link>
-      <pubDate>Wed, 21 Apr 2021 14:08:01 +0800</pubDate>
+      <pubDate>Wed, 21 Apr 2021 16:46:17 +0800</pubDate>
       
       <guid>https://jtr109.github.io/tags/network/</guid>
       <description></description>

@@ -6,10 +6,91 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Apr 2021 14:08:01 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Apr 2021 16:46:17 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>HTTP 消息结束的标志</title>
+      <link>https://jtr109.github.io/posts/http-end-identity/</link>
+      <pubDate>Wed, 21 Apr 2021 16:46:17 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/http-end-identity/</guid>
+      <description>&lt;h2 id=&#34;请求和响应&#34;&gt;
+  请求和响应
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%af%b7%e6%b1%82%e5%92%8c%e5%93%8d%e5%ba%94&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;首先需要明确的一点是，无论是 HTTP 请求还是 HTTP 响应，都是由相同的 HTTP 消息构成&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。服务端判断 HTTP 请求结束和客户端判断 HTTP 响应结束的依据是一样的。&lt;/p&gt;
+&lt;h2 id=&#34;http-消息结构&#34;&gt;
+  HTTP 消息结构
+  &lt;a class=&#34;heading-link&#34; href=&#34;#http-%e6%b6%88%e6%81%af%e7%bb%93%e6%9e%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;首先让我们来了解一下 HTTP 消息的结构，从 RFC 2616 是这样描述&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;的：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Both types of message consist of a start-line, zero or more header fields (also known as &amp;ldquo;headers&amp;rdquo;), an empty line (i.e., a line with nothing preceding the CRLF) indicating the end of the header fields, and possibly a message-body.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;让我们看看更直观的语法定义：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;        generic-message = start-line
+                          *(message-header CRLF)
+                          CRLF
+                          [ message-body ]
+        start-line      = Request-Line | Status-Line
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;判断方法&#34;&gt;
+  判断方法
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%88%a4%e6%96%ad%e6%96%b9%e6%b3%95&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;接收方先将接收到的 HTTP 消息第一行作为起始行，在读到空行前的每一行作为消息头部。&lt;/p&gt;
+&lt;h3 id=&#34;一般情况&#34;&gt;
+  一般情况
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%b8%80%e8%88%ac%e6%83%85%e5%86%b5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;一般情况下，当读取完头部信息（读到两个连续的 CRLF&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;），需要解析头部中的 Content-Length 消息头，根据消息头确认是否有消息体，以及消息体长度。之后即可读取指定长度的数据。当读取完消息体，意味着消息结束。&lt;/p&gt;
+&lt;h3 id=&#34;chunked&#34;&gt;
+  Chunked
+  &lt;a class=&#34;heading-link&#34; href=&#34;#chunked&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;如果消息头中声明 &lt;code&gt;Transfer-Encoding: chunked&lt;/code&gt;，那么意味着使用 &lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6.1&#34;&gt;chunked transfer encoding&lt;/a&gt;。我们先看一下  Chunked-Body 的定义：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;       Chunked-Body   = *chunk
+                        last-chunk
+                        trailer
+                        CRLF
+       chunk          = chunk-size [ chunk-extension ] CRLF
+                        chunk-data CRLF
+       chunk-size     = 1*HEX
+       last-chunk     = 1*(&amp;#34;0&amp;#34;) [ chunk-extension ] CRLF
+       chunk-extension= *( &amp;#34;;&amp;#34; chunk-ext-name [ &amp;#34;=&amp;#34; chunk-ext-val ] )
+       chunk-ext-name = token
+       chunk-ext-val  = token | quoted-string
+       chunk-data     = chunk-size(OCTET)
+       trailer        = *(entity-header CRLF)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到 Chunked-Body 是 trailer 加上 CRLF&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 结尾。所以接收方应该不断读取消息体，直到读到两个连续的 CRLF&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;，说明消息结束。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;RFC 2616 中是这样&lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.1:~:text=HTTP%20messages%20consist%20of%20requests%20from%20client%20to%20server%20and%20responses%20from%20server%20to%20client.&#34;&gt;描述&lt;/a&gt;的：HTTP messages consist of requests from client to server and responses from server to client. &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;引用自 &lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html&#34;&gt;HTTP/1.1: HTTP Message&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;CRLF 的符号化表示是 &lt;code&gt;\r\n&lt;/code&gt;，十六进制编码表示为 &lt;code&gt;0d0a&lt;/code&gt;。 &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>TCP 滑动窗口</title>
