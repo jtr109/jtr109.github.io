@@ -6,10 +6,366 @@
     <description>Recent content in Posts on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Apr 2021 16:46:17 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 22 Apr 2021 15:43:41 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCP 挥手动作大赏</title>
+      <link>https://jtr109.github.io/posts/tcp-termination/</link>
+      <pubDate>Thu, 22 Apr 2021 15:43:41 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/tcp-termination/</guid>
+      <description>&lt;h2 id=&#34;四次挥手还是三次挥手&#34;&gt;
+  四次挥手还是三次挥手
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%9b%9b%e6%ac%a1%e6%8c%a5%e6%89%8b%e8%bf%98%e6%98%af%e4%b8%89%e6%ac%a1%e6%8c%a5%e6%89%8b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;我们通常说的四次挥手是指：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端完成数据传输后，发送 FIN&lt;/li&gt;
+&lt;li&gt;服务端接收到客户端的 FIN 后发送 ACK 确认收到&lt;/li&gt;
+&lt;li&gt;服务端完成消息发送后，发送 FIN&lt;/li&gt;
+&lt;li&gt;客户端接收到服务端端 FIN 后发送 ACK 确认收到&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但是实践中也有很多情况下服务端会把 2、3 阶段的 ACK 和 FIN 合并发送，从而通过三次消息发送实现了挥手&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;形态各异的挥手&#34;&gt;
+  形态各异的挥手
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%bd%a2%e6%80%81%e5%90%84%e5%bc%82%e7%9a%84%e6%8c%a5%e6%89%8b&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;标准是标准，但是各个网站对挥手的处理方式可谓五花八门，让我们来见识见识不同的网站是怎么处理的。&lt;/p&gt;
+&lt;h3 id=&#34;微信&#34;&gt;
+  微信
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%be%ae%e4%bf%a1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-termination.assets/image-20210422155103336.png&#34; alt=&#34;image-20210422155103336&#34;&gt;&lt;/p&gt;
+&lt;p&gt;微信的服务端在挥手时（No. 17995）没有把 Ack 加 1，导致客户端混乱。客户端只能理解为服务端中断，发送了一个正常的分组（No. 17997）来结束 TCP 连接。&lt;/p&gt;
+&lt;h3 id=&#34;百度&#34;&gt;
+  百度
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%99%be%e5%ba%a6&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;通过下面的命令请求百度首页。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl http://www.baidu.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-termination.assets/image-20210422155732834.png&#34; alt=&#34;image-20210422155732834&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到百度的挥手协议非常标准，可喜可贺。&lt;/p&gt;
+&lt;h3 id=&#34;github&#34;&gt;
+  GitHub
+  &lt;a class=&#34;heading-link&#34; href=&#34;#github&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;通过下面的命令请求 GitHub 首页。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl http://www.github.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-termination.assets/image-20210422155854529.png&#34; alt=&#34;image-20210422155854529&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到 GitHub 的服务端将 FIN 和 ACK 合并在了一起，只发送了一个请求。所以挥手只进行了三步。&lt;/p&gt;
+&lt;h3 id=&#34;知乎&#34;&gt;
+  知乎
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e7%9f%a5%e4%b9%8e&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;通过下面的命令请求知乎首页。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -v http://www.zhihu.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-termination.assets/image-20210422160446638.png&#34; alt=&#34;image-20210422160446638&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到知乎也只进行三次挥手。&lt;/p&gt;
+&lt;h3 id=&#34;新浪&#34;&gt;
+  新浪
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%96%b0%e6%b5%aa&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;通过以下命令请求新浪首页。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -v http://www.sina.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-termination.assets/image-20210422160942682.png&#34; alt=&#34;image-20210422160942682&#34;&gt;&lt;/p&gt;
+&lt;p&gt;新浪也只做了三次握手。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考 Wikipedia 的&lt;a href=&#34;https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_termination:~:text=It%20is%20also%20possible%20to%20terminate,host%20A%20replies%20with%20an%20ACK.%5B17%5D&#34;&gt;说明&lt;/a&gt;。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>通过 Wireshark 学习 TCP 序号和确认号</title>
+      <link>https://jtr109.github.io/posts/tcp-seq/</link>
+      <pubDate>Thu, 22 Apr 2021 10:31:46 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/tcp-seq/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;
+  概述
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%a6%82%e8%bf%b0&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;我们知道 TCP 连接通过序号（sequence number）和确认号（acknowledgment number）来避免消息的乱序。发送端通过分组头部的 序号声明分组的第一个字节的序号，通过头部的确认号声明预期接收的下一个字节的序号。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422104637194.png&#34; alt=&#34;image-20210422104637194&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图片来源：&lt;a href=&#34;https://en.wikipedia.org/wiki/Transmission_Control_Protocol#cite_ref-RFC_793_9-0:~:text=TCP%20segment%20header&#34;&gt;Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;让我们通过 Wireshark 抓取一个完整的 TCP 连接来看看具体是怎么实现的，着重关注 Seq 和 Ack 的变化。&lt;/p&gt;
+&lt;h2 id=&#34;概览&#34;&gt;
+  概览
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%a6%82%e8%a7%88&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422105141974.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;首先我们观察一个 TCP 请求的完整生命周期。可以看到：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;前三次传输的方向和标记位展示了 TCP 三次握手动作。&lt;/li&gt;
+&lt;li&gt;从 No. 17466 开始的四次请求完成了 HTTP 相关的数据传输。&lt;/li&gt;
+&lt;li&gt;从 No. 17940 开始的最后三次（除去黑色的那条）传输完成了挥手动作。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;em&gt;由于样本中挥手阶段的特殊性，如果只希望了解正确的 TCP 请求中 Seq 和 Ack 变化，请参考上述步骤中的前两个阶段（握手和数据传输）。&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;握手阶段&#34;&gt;
+  握手阶段
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8f%a1%e6%89%8b%e9%98%b6%e6%ae%b5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;h3 id=&#34;客户端-syn&#34;&gt;
+  客户端 SYN
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af-syn&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422105759101.png&#34; alt=&#34;image-20210422105759101&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们仔细查看客户端 SYN 分组，这是整个生命周期的第一个请求，可以看到 info 中显示 Seq=0。但是这个 Seq 是否真的是 0 呢？从下面的详情中可以看到，序号 0 是一个相对值，实际上客户端生成了一个随机数作为序号（2777949690）。标记位 SYN 说明了这个分组中的 Seq 是一个初始值，这对接收方来说很重要。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;所有序号都是基于一个初始的随机值，如果没有特殊说明，后续讨论中出现的序号均为相对序号。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;第一条 SYN 消息中的 ACK 标记位没有激活，所以消息头中的 Acknowledgment Number 是没有意义的，所以默认给了 0。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：客户端 -&amp;gt; 服务端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端-synack&#34;&gt;
+  服务端 SYN，ACK
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af-synack&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422110816857.png&#34; alt=&#34;image-20210422110816857&#34;&gt;&lt;/p&gt;
+&lt;p&gt;服务端作为接收方收到客户端发送的 SYN 分组后，确认 SYN 标记位激活，Seq 相对序号为 0。开始准备返回的分组。&lt;/p&gt;
+&lt;p&gt;在分组中，服务端会激活 ACK 标记位，同时将接收到的分组序号加 1 作为 Ack 的值，即 Ack 置为 1，表示接收到了 Seq 为 0 的分组。&lt;/p&gt;
+&lt;p&gt;为了建立全双工通道，服务端也需要向客户端发送 SYN 信息，服务端激活 SYN 标记为，随机生成 Seq 值（相对序号为 0），组成分组发送给客户端。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 0&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;客户端-ack&#34;&gt;
+  客户端 ACK
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af-ack&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422112007827.png&#34; alt=&#34;image-20210422112007827&#34;&gt;&lt;/p&gt;
+&lt;p&gt;客户端接收到服务端的 SYN，ACK 分组，开始构成分组。&lt;/p&gt;
+&lt;p&gt;客户端为了表示确认收到服务端发来的分组，解析分组中的 Seq 相对序号为 0，在即将发送的分组中将 ACK 标记位激活，Ack 置为 1。&lt;/p&gt;
+&lt;p&gt;同时通过接收到的来自服务端的分组中 Ack 为 1，知道自己发送的 SYN 分组已经被确认接收，把即将发送的分组的 Seq 置为 1。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：客户端 -&amp;gt; 服务端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;经过以上步骤，TCP 三次握手就完成了。&lt;/p&gt;
+&lt;h2 id=&#34;数据传输&#34;&gt;
+  数据传输
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e4%bc%a0%e8%be%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;完成握手后，客户端准备发送 HTTP 请求。由&lt;a href=&#34;#%E6%A6%82%E8%A7%88&#34;&gt;概览&lt;/a&gt;中的截图可以看出，数据传输的四个分组可以分为两组，分别是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端发送的携带 HTTP 请求数据的 TCP 分组，和服务端接收到该分组返回的 ACK 分组。以及&lt;/li&gt;
+&lt;li&gt;服务端发送的携带 HTTP 响应数据的 TCP 分组，和客户端接收到该分组返回的 ACK 分组。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;em&gt;我们这里传输的数据都比较小，不考虑 TCP 拆分数据的情况。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;客户端发送-http-请求&#34;&gt;
+  客户端发送 HTTP 请求
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e9%80%81-http-%e8%af%b7%e6%b1%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422114037381.png&#34; alt=&#34;image-20210422114037381&#34;&gt;&lt;/p&gt;
+&lt;p&gt;客户端将 HTTP 请求数据放在 TCP 分组中，指定 Seq=1，Ack=1 发送数据。这里需要留意的是，该分组大小为 935。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：客户端 -&amp;gt; 服务端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1&lt;/li&gt;
+&lt;li&gt;荷载大小：935&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端确认收到-http-请求&#34;&gt;
+  服务端确认收到 HTTP 请求
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af%e7%a1%ae%e8%ae%a4%e6%94%b6%e5%88%b0-http-%e8%af%b7%e6%b1%82&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422114530373.png&#34; alt=&#34;image-20210422114530373&#34;&gt;&lt;/p&gt;
+&lt;p&gt;服务端接收到搭载 HTTP 请求的 TCP 分组后，开始构建 ACK 分组。&lt;/p&gt;
+&lt;p&gt;服务端解析收到的分组发现这是一个 Seq=1 的长度为 935 的分组，即收到的最后一个字节的序号为 935。为了答复确认收到该分组，将即将发送的分组 ACK 标记为激活，Ack 置为 936。&lt;/p&gt;
+&lt;p&gt;接收到的分组中，Ack=1，所以即将发送的分组中将 Seq=1。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 936&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端发送-http-响应&#34;&gt;
+  服务端发送 HTTP 响应
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%8f%91%e9%80%81-http-%e5%93%8d%e5%ba%94&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422115538165.png&#34; alt=&#34;image-20210422115538165&#34;&gt;&lt;/p&gt;
+&lt;p&gt;服务端将 HTTP 响应数据放在 TCP 分组中，发送给客户端。这里需要注意的是，这个请求是基于上述 [HTTP 发送的请求](#客户端发送 HTTP 请求)，所以他的序号和确认序号设计的依据是和[前一个 ACK 分组](#服务端确认收到 HTTP 请求)是一致的。但是由于&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 936&lt;/li&gt;
+&lt;li&gt;荷载大小：1403&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;客户端确认收到响应&#34;&gt;
+  客户端确认收到响应
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e7%a1%ae%e8%ae%a4%e6%94%b6%e5%88%b0%e5%93%8d%e5%ba%94&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422133518796.png&#34; alt=&#34;image-20210422133518796&#34;&gt;&lt;/p&gt;
+&lt;p&gt;客户端收到包含 HTTP 响应的 TCP 分组后，准备向服务端发送 ACK 确认分组。&lt;/p&gt;
+&lt;p&gt;由于接收到的分组 Seq=1，荷载大小为 1403，所以返回 ACK 标记为激活，Ack=1404。&lt;/p&gt;
+&lt;p&gt;由于接收到的分组中 Ack=936，所以 Seq=936。&lt;/p&gt;
+&lt;p&gt;经过以上四个步骤，HTTP 的请求和响应就都完成了。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 936&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1404&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;挥手阶段&#34;&gt;
+  挥手阶段
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8c%a5%e6%89%8b%e9%98%b6%e6%ae%b5&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;你可能会注意到，这里的挥手只经历了三步。这个问题我们会在之后的文章中讨论，现在先看看挥手时的序号变化。&lt;/p&gt;
+&lt;h3 id=&#34;客户端发送结束分组&#34;&gt;
+  客户端发送结束分组
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e9%80%81%e7%bb%93%e6%9d%9f%e5%88%86%e7%bb%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422144424231.png&#34; alt=&#34;image-20210422144424231&#34;&gt;&lt;/p&gt;
+&lt;p&gt;当客户端发送完所有消息后，就会发送 FIN 分组（这个分组里同时激活了 ACK 标记位，原因不明）。&lt;/p&gt;
+&lt;p&gt;该 FIN 分组基于[服务端发来的 HTTP 响应](#服务端发送 HTTP 响应)，所以 Seq 和 Ack 和&lt;a href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A1%AE%E8%AE%A4%E6%94%B6%E5%88%B0%E5%93%8D%E5%BA%94&#34;&gt;客户端发送的确认响应的 TCP&lt;/a&gt; 相同。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 936&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1404&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端同时发送-finack-分组&#34;&gt;
+  服务端同时发送 FIN，ACK 分组
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%90%8c%e6%97%b6%e5%8f%91%e9%80%81-finack-%e5%88%86%e7%bb%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;理论上服务端应该先返回 ACK 分组，表示确认收到了客户端发送的 FIN 分组。但是也可以将 ACK 分组和声明服务器停止发送的 FIN 标记一起返回。所以 FIN 和 ACK 标记位同时被激活，分组被发送给客户端。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422145339782.png&#34; alt=&#34;image-20210422145339782&#34;&gt;&lt;/p&gt;
+&lt;p&gt;到了这里，我们应该已经有纠错的能力了，能够分析为什么 Wireshark 认为出现了乱序。因为这里的 FIN，ACK 分组应该返回的序号为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1404&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 937（不应该是 936）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;客户端发送-finack-分组&#34;&gt;
+  客户端发送 FIN，ACK 分组
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%8f%91%e9%80%81-finack-%e5%88%86%e7%bb%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422150857634.png&#34; alt=&#34;image-20210422150857634&#34;&gt;&lt;/p&gt;
+&lt;p&gt;客户端的 TCP 服务接收到上述分组后，发现了异常，只能当作接收到了 FIN 请求，并重新发送了 FIN，ACK 分组。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：客户端 -&amp;gt; 服务端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 936&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 1405&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端发送-ack-分组&#34;&gt;
+  服务端发送 ACK 分组
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%8f%91%e9%80%81-ack-%e5%88%86%e7%bb%84&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422150912351.png&#34; alt=&#34;image-20210422150912351&#34;&gt;&lt;/p&gt;
+&lt;p&gt;服务端收到了客户端发送到 FIN，ACK 分组，返回了 ACK 分组。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
+&lt;li&gt;Sequence Number: 1405&lt;/li&gt;
+&lt;li&gt;Acknowledgment Number: 937&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;总结&#34;&gt;
+  总结
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%80%bb%e7%bb%93&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;我们按照理想情况（握手和数据传输阶段和样本一致，挥手阶段按照四次挥手）梳理一下整个请求流程。&lt;/p&gt;
+&lt;h3 id=&#34;握手阶段-1&#34;&gt;
+  握手阶段
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8f%a1%e6%89%8b%e9%98%b6%e6%ae%b5-1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;sequenceDiagram
+    Client -&amp;gt;&amp;gt; Server: [SYN] Seq=0 Len=0
+    Server -&amp;gt;&amp;gt; Client: [SYN, ACK] Seq=0 Ack=1 Len=0
+    Client -&amp;gt;&amp;gt; Server: [ACK] Seq=1 Ack=1 Len=0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;数据传输-1&#34;&gt;
+  数据传输
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%95%b0%e6%8d%ae%e4%bc%a0%e8%be%93-1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;p&gt;客户端发送请求&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;sequenceDiagram
+    Client -&amp;gt;&amp;gt; Server: [PSH, ACK] Seq=1 Ack=1 Len=935
+    Server -&amp;gt;&amp;gt; Client: [ACK] Seq=1 Ack=936 Len=0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;服务端发送响应&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;sequenceDiagram
+    participant Client
+    participant Server
+    Server -&amp;gt;&amp;gt; Client: [PSH, ACK] Seq=1 Ack=936 Len=1403
+    Client -&amp;gt;&amp;gt; Server: [ACK] Seq=936 Ack=1404 Len=0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;挥手阶段-1&#34;&gt;
+  挥手阶段
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%8c%a5%e6%89%8b%e9%98%b6%e6%ae%b5-1&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;sequenceDiagram
+    Client -&amp;gt;&amp;gt; Server: [FIN] Seq=936 Ack=1404 Len=0
+    Server -&amp;gt;&amp;gt; Client: [ACK] Seq=1404 Ack=937 Len=0
+    Server -&amp;gt;&amp;gt; Client: [FIN] Seq=1404 Ack=937 Len=0
+    Client -&amp;gt;&amp;gt; Server: [ACK] Seq=937 Ack=1405 Len=0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以这样理解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;ACK 分组是用来确认收到某个分组 B 的。假设分组 B 中 Seq=$n$ Ack=$m$。
+&lt;ol&gt;
+&lt;li&gt;如果分组 B 中 Len=0，那么 ACK 分组中 Seq=$m$ Ack=$n+1$&lt;/li&gt;
+&lt;li&gt;如果分组 B 中 Len 为 $i$，那么 ACK 分组中 Seq=$m$ Ack=$n+i$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;如果准备发送的分组是基于发送端已经发送的 ACK 分组，那么 Seq 和 Ack 和已经发送的 ACK 分组保持一致。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
     
     <item>
       <title>HTTP 消息结束的标志</title>
