@@ -3,24 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://jtr109.github.io/categories/</loc>
-    <lastmod>2021-04-22T15:43:41+08:00</lastmod>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
+  </url><url>
+    <loc>https://jtr109.github.io/tags/git/</loc>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/</loc>
-    <lastmod>2021-04-22T15:43:41+08:00</lastmod>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/posts/</loc>
-    <lastmod>2021-04-22T15:43:41+08:00</lastmod>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/tags/</loc>
-    <lastmod>2021-04-22T15:43:41+08:00</lastmod>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
+  </url><url>
+    <loc>https://jtr109.github.io/categories/tech/</loc>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
+  </url><url>
+    <loc>https://jtr109.github.io/posts/git-pull/</loc>
+    <lastmod>2021-05-08T11:37:09+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/tags/tcp/</loc>
     <lastmod>2021-04-22T15:43:41+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/posts/tcp-termination/</loc>
-    <lastmod>2021-04-22T15:43:41+08:00</lastmod>
-  </url><url>
-    <loc>https://jtr109.github.io/categories/tech/</loc>
     <lastmod>2021-04-22T15:43:41+08:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/tags/network/</loc>
@@ -277,9 +283,6 @@
   </url><url>
     <loc>https://jtr109.github.io/tags/pypi/</loc>
     <lastmod>2019-11-27T17:27:14+00:00</lastmod>
-  </url><url>
-    <loc>https://jtr109.github.io/tags/git/</loc>
-    <lastmod>2019-11-14T14:06:16+00:00</lastmod>
   </url><url>
     <loc>https://jtr109.github.io/tags/gitlab/</loc>
     <lastmod>2019-11-14T14:06:16+00:00</lastmod>
