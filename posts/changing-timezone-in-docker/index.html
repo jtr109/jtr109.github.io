@@ -182,7 +182,7 @@ Solution    The difference of timezone between the docker container and host mak
 <li>changing the environment value <code>TZ</code></li>
 <li>changing localtime and timezone in image</li>
 </ul>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">ENV <span style="color:#268bd2">TZ</span>=Asia/Shanghai
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">NV <span style="color:#268bd2">TZ</span>=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/<span style="color:#268bd2">$TZ</span> /etc/localtime &amp;&amp; <span style="color:#cb4b16">echo</span> <span style="color:#268bd2">$TZ</span> &gt; /etc/timezone
 </code></pre></div><script src="https://gist.github.com/jtr109/21cb7ef7c79034b2ad63df8afb03e7cb.js"></script>
 <h2 id="note">
@@ -197,7 +197,7 @@ RUN ln -snf /usr/share/zoneinfo/<span style="color:#268bd2">$TZ</span> /etc/loca
 </blockquote>
 <p>Looks like this:</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">RUN apk add --no-cache tzdata
-ENV TZ America/Los_Angeles
+NV TZ America/Los_Angeles
 </code></pre></div><h2 id="reference">
   Reference
   <a class="heading-link" href="#reference">

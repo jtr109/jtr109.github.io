@@ -61,7 +61,7 @@ D---E---F---G master
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;Merge 模式会在发生冲突时，将远端分支上的改动 merge 到本地。&lt;a href=&#34;https://git-scm.com/docs/git-pull#_description&#34;&gt;官方文档&lt;/a&gt;中的实例说明了在触发 &lt;code&gt;git pull --no-rebase&lt;/code&gt; （merge 模式）之后，变化如下：&lt;/p&gt;
+&lt;p&gt;erge 模式会在发生冲突时，将远端分支上的改动 merge 到本地。&lt;a href=&#34;https://git-scm.com/docs/git-pull#_description&#34;&gt;官方文档&lt;/a&gt;中的实例说明了在触发 &lt;code&gt;git pull --no-rebase&lt;/code&gt; （merge 模式）之后，变化如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;          A---B---C origin/master
          /         \
     D---E---F---G---H master
