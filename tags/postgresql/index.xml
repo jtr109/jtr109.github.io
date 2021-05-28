@@ -41,7 +41,7 @@ pg_ctl: could not start server
 10.0.
  stop waiting
 pg_ctl: could not start server
-xamine the log output.
+Examine the log output.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你也遇到了这样的问题, 那就可以按接下来这样处理.&lt;/p&gt;
 &lt;h2 id=&#34;特别提示&#34;&gt;
   特别提示

@@ -365,7 +365,7 @@
   &lt;/a&gt;
 &lt;/h2&gt;
 &lt;p&gt;在执行 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 时遇到过这样一个问题:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;rror: Module version mismatch. Excepted 48, got 51.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;Error: Module version mismatch. Excepted 48, got 51.
 ...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;具体原因不详, 有说法是由于 node 更新导致版本不一致导致的. 下面提供几种处理方式, 或许能解决问题.&lt;/p&gt;
 &lt;ol&gt;

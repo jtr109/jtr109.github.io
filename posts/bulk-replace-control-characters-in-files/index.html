@@ -201,7 +201,7 @@ Find All Posts and Execute On Them    Basically, This is our idea that using the
   </a>
 </h2>
 <p>Now we can use <code>sed</code> to replace all <code>^H</code> and <code>^M</code> in our posts. Pay attention to the character like <code>^H</code> in command, they <strong>must</strong> be typed with such as <code>ctrl+v+h</code>.</p>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">find ./content/posts -name <span style="color:#2aa198">&#34;*.md&#34;</span> -print0 | xargs -0 sed -i <span style="color:#2aa198">&#39;&#39;</span> -e <span style="color:#2aa198">&#39;s/^H//g; s/^M//g; s/^\\//g&#39;</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">find ./content/posts -name <span style="color:#2aa198">&#34;*.md&#34;</span> -print0 | xargs -0 sed -i <span style="color:#2aa198">&#39;&#39;</span> -e <span style="color:#2aa198">&#39;s/^H//g; s/^M//g; s/^\//g&#39;</span>
 </code></pre></div><p>Notice that we use an empty character after <code>-i</code>  in the command instead of <code>sed -i -e</code> because of the character after the option <code>-i</code> of <code>sed</code> in Mac is used as the postfix of backup files. We need to use an empty character to tell it not to save a backup one.</p>
 <h2 id="result">
   Result

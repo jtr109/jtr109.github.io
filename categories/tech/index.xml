@@ -61,7 +61,7 @@ D---E---F---G master
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;erge 模式会在发生冲突时，将远端分支上的改动 merge 到本地。&lt;a href=&#34;https://git-scm.com/docs/git-pull#_description&#34;&gt;官方文档&lt;/a&gt;中的实例说明了在触发 &lt;code&gt;git pull --no-rebase&lt;/code&gt; （merge 模式）之后，变化如下：&lt;/p&gt;
+&lt;p&gt;Merge 模式会在发生冲突时，将远端分支上的改动 merge 到本地。&lt;a href=&#34;https://git-scm.com/docs/git-pull#_description&#34;&gt;官方文档&lt;/a&gt;中的实例说明了在触发 &lt;code&gt;git pull --no-rebase&lt;/code&gt; （merge 模式）之后，变化如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;          A---B---C origin/master
          /         \
     D---E---F---G---H master
@@ -1200,10 +1200,10 @@ eW91cnBhc3N3b3Jk
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ telnet smtp.example.com &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;25&lt;/span&gt;
 Trying 220.181.97.88...
 Connected to smtp.example.com.
-scape character is &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
+Escape character is &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
 &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;220&lt;/span&gt; telproxy-sm3.hmbj.internal ESMTP ready
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;首先我们建立了一个 TCP 连接，该连接保持在连接状态。我们向服务器发送 &lt;code&gt;HELO&lt;/code&gt; 命令，服务器返回响应提供服务器可以处理的命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;HLO smtp.example.com
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;EHLO smtp.example.com
 250-telproxy-sm3.hmbj.internal
 250-PIPELINING
 250-8BITMIME
@@ -1230,7 +1230,7 @@ eW91cnBhc3N3b3Jk
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;下面可以开始编写邮件内容：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;AIL FROM: &amp;lt;sender@example.com&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;MAIL FROM: &amp;lt;sender@example.com&amp;gt;
 250 2.1.0 Ok
 RCPT TO: &amp;lt;recept@example2.com&amp;gt;
 250 2.1.5 Ok
@@ -1240,7 +1240,7 @@ From: sender@example.com
 To: recept@example2.com
 Subject: Test Sending Email with Telnet
 
-ello!
+Hello!
 .
 250 2.0.0 Ok: queued as 749D640F5E
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样邮件就一个成功发送了，最后让我们断开 TCP 连接：&lt;/p&gt;
@@ -1400,7 +1400,7 @@ ello!
     - &lt;span style=&#34;color:#2aa198&#34;&gt;ReadWriteOnce&lt;/span&gt;
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;hostPath&lt;/span&gt;:
     &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/mnt/data&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the directory created on node&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After created, we can claim it on Kubernetes. Here is the config file:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After created, we can claim it on Kubernetes. Here is the config file:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# pvc.yaml&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;PersistentVolumeClaim&lt;/span&gt;
@@ -1532,7 +1532,7 @@ ello!
       <pubDate>Wed, 17 Jun 2020 19:13:42 +0800</pubDate>
       
       <guid>https://jtr109.github.io/posts/generate-ssh-key/</guid>
-      <description>&lt;p&gt;D25519 is more secure and recommended to be used as SSH key pairs now. Let&amp;rsquo;s have a try:&lt;/p&gt;
+      <description>&lt;p&gt;ED25519 is more secure and recommended to be used as SSH key pairs now. Let&amp;rsquo;s have a try:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;ssh-keygen -t ed25519 -C &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;&amp;lt;comment&amp;gt;&amp;#34;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;references&#34;&gt;
   References
@@ -2803,7 +2803,7 @@ $ cat requirements.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果执行测试, 有一定概率会返回如下信息:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ python manage.py &lt;span style=&#34;color:#cb4b16&#34;&gt;test&lt;/span&gt;
 ...
-xception in thread Thread-7:
+Exception in thread Thread-7:
 Traceback (most recent call last):
   File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 926, in _bootstrap_inner
     self.run()
@@ -2819,7 +2819,7 @@ Traceback (most recent call last):
     (self.model._meta.object_name, num)
 race.models.Race.MultipleObjectsReturned: get() returned more than one Race -- it returned 2!
 
-xception in thread Thread-9:
+Exception in thread Thread-9:
 Traceback (most recent call last):
   File &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/Users/jtr109/.pyenv/versions/3.7.4/lib/python3.7/threading.py&amp;#34;&lt;/span&gt;, line 926, in _bootstrap_inner
     self.run()
@@ -3675,7 +3675,7 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;ven though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).&lt;/p&gt;
+&lt;p&gt;Even though I am a Vimer. I prefer complete solutions, with boundless possible of customization, for coding with Vim (actually NeoVim which I use).&lt;/p&gt;
 &lt;p&gt;The plugin &lt;a href=&#34;https://github.com/junegunn/fzf.vim&#34;&gt;fzf.vim&lt;/a&gt; is such a strong performer of them. It can not only help you search files, contents from files, tags or windows, but also provide you features to change the themes of your editor in it just like a GUI editor do.&lt;/p&gt;
 &lt;h2 id=&#34;some-searching-tricks&#34;&gt;
   Some Searching Tricks
@@ -3882,7 +3882,7 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
 &lt;li&gt;changing the environment value &lt;code&gt;TZ&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;changing localtime and timezone in image&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;NV &lt;span style=&#34;color:#268bd2&#34;&gt;TZ&lt;/span&gt;=Asia/Shanghai
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;ENV &lt;span style=&#34;color:#268bd2&#34;&gt;TZ&lt;/span&gt;=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/&lt;span style=&#34;color:#268bd2&#34;&gt;$TZ&lt;/span&gt; /etc/localtime &amp;amp;&amp;amp; &lt;span style=&#34;color:#cb4b16&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$TZ&lt;/span&gt; &amp;gt; /etc/timezone
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;script src=&#34;https://gist.github.com/jtr109/21cb7ef7c79034b2ad63df8afb03e7cb.js&#34;&gt;&lt;/script&gt;
 &lt;h2 id=&#34;note&#34;&gt;
@@ -3897,7 +3897,7 @@ RUN ln -snf /usr/share/zoneinfo/&lt;span style=&#34;color:#268bd2&#34;&gt;$TZ&lt
 &lt;/blockquote&gt;
 &lt;p&gt;Looks like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;RUN apk add --no-cache tzdata
-NV TZ America/Los_Angeles
+ENV TZ America/Los_Angeles
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reference&#34;&gt;
   Reference
   &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
@@ -3946,7 +3946,7 @@ NV TZ America/Los_Angeles
   &lt;/a&gt;
 &lt;/h2&gt;
 &lt;p&gt;Now we can use &lt;code&gt;sed&lt;/code&gt; to replace all &lt;code&gt;^H&lt;/code&gt; and &lt;code&gt;^M&lt;/code&gt; in our posts. Pay attention to the character like &lt;code&gt;^H&lt;/code&gt; in command, they &lt;strong&gt;must&lt;/strong&gt; be typed with such as &lt;code&gt;ctrl+v+h&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;find ./content/posts -name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;*.md&amp;#34;&lt;/span&gt; -print0 | xargs -0 sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/^H//g; s/^M//g; s/^\\//g&amp;#39;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;find ./content/posts -name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;*.md&amp;#34;&lt;/span&gt; -print0 | xargs -0 sed -i &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; -e &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;s/^H//g; s/^M//g; s/^\//g&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Notice that we use an empty character after &lt;code&gt;-i&lt;/code&gt;  in the command instead of &lt;code&gt;sed -i -e&lt;/code&gt; because of the character after the option &lt;code&gt;-i&lt;/code&gt; of &lt;code&gt;sed&lt;/code&gt; in Mac is used as the postfix of backup files. We need to use an empty character to tell it not to save a backup one.&lt;/p&gt;
 &lt;h2 id=&#34;result&#34;&gt;
   Result
@@ -4207,7 +4207,7 @@ yarn install
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h3&gt;
-&lt;p&gt;ove the entry into appropriate path.&lt;/p&gt;
+&lt;p&gt;Move the entry into appropriate path.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in the frontend directory&lt;/span&gt;
 mkdir -p src/pages/login
 mv main.js src/pages/login/app.js
@@ -4236,7 +4236,7 @@ mv App.vue src/pages/login/app.vue
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Copy a new page named &amp;ldquo;user&amp;rdquo;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cp -r src/pages/login src/pages/user
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;dit parameter &lt;code&gt;msg&lt;/code&gt; in &lt;code&gt;src/pages/user&lt;/code&gt; to make difference between pages.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Edit parameter &lt;code&gt;msg&lt;/code&gt; in &lt;code&gt;src/pages/user&lt;/code&gt; to make difference between pages.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
 &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;msg&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;This Is The User Page&amp;#34;&lt;/span&gt;/&amp;gt;
 &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&amp;lt;!--&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; --&amp;gt;
@@ -4517,7 +4517,7 @@ touch vue.config.js
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Install Axios.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn add axios
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;ave a try to request by Axios.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Have a try to request by Axios.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vue&#34; data-lang=&#34;vue&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/src/components/LoginForm.vue
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
 &amp;lt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
@@ -4551,7 +4551,7 @@ touch vue.config.js
 &lt;p&gt;I do not find a better way to resolve it. Let disable CSRF token middleware until we find a solution.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;vid&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;settings&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt;
 
-&lt;span style=&#34;color:#268bd2&#34;&gt;IDDLEWARE&lt;/span&gt; = [
+&lt;span style=&#34;color:#268bd2&#34;&gt;MIDDLEWARE&lt;/span&gt; = [
     # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
     # &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;django.middleware.csrf.CsrfViewMiddleware&amp;#39;&lt;/span&gt;,
     # ----- &lt;span style=&#34;color:#268bd2&#34;&gt;snipped&lt;/span&gt; -----
@@ -4980,7 +4980,7 @@ yarn run build
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;ow can we get a queryset from model?&lt;/p&gt;
+&lt;p&gt;How can we get a queryset from model?&lt;/p&gt;
 &lt;h2 id=&#34;source-snippet&#34;&gt;
   Source snippet
   &lt;a class=&#34;heading-link&#34; href=&#34;#source-snippet&#34;&gt;
@@ -5253,7 +5253,7 @@ yarn run build
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;ighlight the search pattern register in Vim.&lt;/p&gt;
+&lt;p&gt;Highlight the search pattern register in Vim.&lt;/p&gt;
 &lt;h2 id=&#34;实现的目的&#34;&gt;
   实现的目的
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%ae%9e%e7%8e%b0%e7%9a%84%e7%9b%ae%e7%9a%84&#34;&gt;
@@ -5357,7 +5357,7 @@ pg_ctl: could not start server
 10.0.
  stop waiting
 pg_ctl: could not start server
-xamine the log output.
+Examine the log output.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你也遇到了这样的问题, 那就可以按接下来这样处理.&lt;/p&gt;
 &lt;h2 id=&#34;特别提示&#34;&gt;
   特别提示
@@ -6077,7 +6077,7 @@ $ brew install git --with-curl --with-openssl
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;omebrew, core, bottle 和 cask 的作用各不相同, 需要根据需求修改.&lt;/p&gt;
+&lt;p&gt;Homebrew, core, bottle 和 cask 的作用各不相同, 需要根据需求修改.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Homebrew/brew&#34;&gt;Homebrew&lt;/a&gt;: Homebrew 的整体框架. 对应 &lt;code&gt;brew upgrade&lt;/code&gt; 下载数据的源, 如果下载其他程序速度慢, 可以考虑修改此源地址.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Homebrew/homebrew-core&#34;&gt;Homebrew Core&lt;/a&gt;: Homebrew 的核心框架, &lt;code&gt;brew update&lt;/code&gt; 如果速度极慢, 需要修改的就是这个源地址.&lt;/li&gt;
@@ -6384,7 +6384,7 @@ mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt
 &lt;p&gt;找到全量恢复之前的所有 binlog 文件， 同时导入&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果出现&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;RROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ERROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;则需要重新导入全量&lt;/p&gt;
 &lt;h3 id=&#34;222-复合导入&#34;&gt;
   2.2.2 复合导入
@@ -6758,7 +6758,7 @@ endif&lt;/p&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
 &lt;p&gt;在执行 &lt;code&gt;hexo clean &amp;amp;&amp;amp; hexo g &amp;amp;&amp;amp; hexo s&lt;/code&gt; 时遇到过这样一个问题:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;rror: Module version mismatch. Excepted 48, got 51.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;Error: Module version mismatch. Excepted 48, got 51.
 ...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;具体原因不详, 有说法是由于 node 更新导致版本不一致导致的. 下面提供几种处理方式, 或许能解决问题.&lt;/p&gt;
 &lt;ol&gt;

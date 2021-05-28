@@ -41,7 +41,7 @@ pg_ctl: could not start server
 10.0.
  stop waiting
 pg_ctl: could not start server
-xamine the log output.
+Examine the log output.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你也遇到了这样的问题, 那就可以按接下来这样处理.&lt;/p&gt;
 &lt;h2 id=&#34;特别提示&#34;&gt;
   特别提示
@@ -202,7 +202,7 @@ $ brew install git --with-curl --with-openssl
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;omebrew, core, bottle 和 cask 的作用各不相同, 需要根据需求修改.&lt;/p&gt;
+&lt;p&gt;Homebrew, core, bottle 和 cask 的作用各不相同, 需要根据需求修改.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Homebrew/brew&#34;&gt;Homebrew&lt;/a&gt;: Homebrew 的整体框架. 对应 &lt;code&gt;brew upgrade&lt;/code&gt; 下载数据的源, 如果下载其他程序速度慢, 可以考虑修改此源地址.&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/Homebrew/homebrew-core&#34;&gt;Homebrew Core&lt;/a&gt;: Homebrew 的核心框架, &lt;code&gt;brew update&lt;/code&gt; 如果速度极慢, 需要修改的就是这个源地址.&lt;/li&gt;

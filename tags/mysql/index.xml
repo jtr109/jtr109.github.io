@@ -62,7 +62,7 @@
     - &lt;span style=&#34;color:#2aa198&#34;&gt;ReadWriteOnce&lt;/span&gt;
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;hostPath&lt;/span&gt;:
     &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;path&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;/mnt/data&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# the directory created on node&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After created, we can claim it on Kubernetes. Here is the config file:&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After created, we can claim it on Kubernetes. Here is the config file:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# pvc.yaml&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;apiVersion&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;v1&lt;/span&gt;
 &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;kind&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;PersistentVolumeClaim&lt;/span&gt;
@@ -360,7 +360,7 @@ mysql -hlocalhost -uroot -pjue -e &lt;span style=&#34;color:#2aa198&#34;&gt
 &lt;p&gt;找到全量恢复之前的所有 binlog 文件， 同时导入&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果出现&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;RROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ERROR &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;1062&lt;/span&gt; (23000) at line 35: Duplicate entry &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#859900&#34;&gt;for&lt;/span&gt; key &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;PRIMARY&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;则需要重新导入全量&lt;/p&gt;
 &lt;h3 id=&#34;222-复合导入&#34;&gt;
   2.2.2 复合导入

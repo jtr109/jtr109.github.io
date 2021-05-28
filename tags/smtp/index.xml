@@ -66,10 +66,10 @@ eW91cnBhc3N3b3Jk
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ telnet smtp.example.com &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;25&lt;/span&gt;
 Trying 220.181.97.88...
 Connected to smtp.example.com.
-scape character is &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
+Escape character is &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;^]&amp;#39;&lt;/span&gt;.
 &lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;220&lt;/span&gt; telproxy-sm3.hmbj.internal ESMTP ready
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;首先我们建立了一个 TCP 连接，该连接保持在连接状态。我们向服务器发送 &lt;code&gt;HELO&lt;/code&gt; 命令，服务器返回响应提供服务器可以处理的命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;HLO smtp.example.com
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;EHLO smtp.example.com
 250-telproxy-sm3.hmbj.internal
 250-PIPELINING
 250-8BITMIME
@@ -96,7 +96,7 @@ eW91cnBhc3N3b3Jk
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;下面可以开始编写邮件内容：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;AIL FROM: &amp;lt;sender@example.com&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;MAIL FROM: &amp;lt;sender@example.com&amp;gt;
 250 2.1.0 Ok
 RCPT TO: &amp;lt;recept@example2.com&amp;gt;
 250 2.1.5 Ok
@@ -106,7 +106,7 @@ From: sender@example.com
 To: recept@example2.com
 Subject: Test Sending Email with Telnet
 
-ello!
+Hello!
 .
 250 2.0.0 Ok: queued as 749D640F5E
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样邮件就一个成功发送了，最后让我们断开 TCP 连接：&lt;/p&gt;

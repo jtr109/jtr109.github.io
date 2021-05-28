@@ -250,7 +250,7 @@ mysql -hlocalhost -uroot -pjue -e <span style="color:#2aa198">&#34;show gl
 <p>找到全量恢复之前的所有 binlog 文件， 同时导入</p>
 <div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mysqlbinlog binlog.000014 binlog.000015 | mysql -uroot -p
 </code></pre></div><p>如果出现</p>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">RROR <span style="color:#2aa198;font-weight:bold">1062</span> (23000) at line 35: Duplicate entry <span style="color:#2aa198">&#39;6&#39;</span> <span style="color:#859900">for</span> key <span style="color:#2aa198">&#39;PRIMARY&#39;</span>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ERROR <span style="color:#2aa198;font-weight:bold">1062</span> (23000) at line 35: Duplicate entry <span style="color:#2aa198">&#39;6&#39;</span> <span style="color:#859900">for</span> key <span style="color:#2aa198">&#39;PRIMARY&#39;</span>
 </code></pre></div><p>则需要重新导入全量</p>
 <h3 id="222-复合导入">
   2.2.2 复合导入
