@@ -325,7 +325,7 @@ D---E---A&amp;#39; master
 &lt;/h3&gt;
 &lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/tcp-seq.assets/image-20210422114530373.png&#34; alt=&#34;image-20210422114530373&#34;&gt;&lt;/p&gt;
 &lt;p&gt;服务端接收到搭载 HTTP 请求的 TCP 分组后，开始构建 ACK 分组。&lt;/p&gt;
-&lt;p&gt;服务端解析收到的分组发现这是一个 Seq=1 的长度为 935 的分组，即收到的最后一个字节的序号为 935。为了答复确认收到该分组，将即将发送的分组 ACK 标记为激活，Ack 置为 936。&lt;/p&gt;
+&lt;p&gt;服务端解析收到的分组发现这是一个 Seq=1 的长度为 935 的分组，即收到的最后一个字节的序号为 935。为了答复确认收到该分组，将即将发送的分组 ACK 标记为激活，Ack 置为 936。&lt;/p&gt;
 &lt;p&gt;接收到的分组中，Ack=1，所以即将发送的分组中将 Seq=1。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;方向：服务端 -&amp;gt; 客户端&lt;/li&gt;
@@ -1048,7 +1048,7 @@ D---E---A&amp;#39; master
     </item>
     
     <item>
-      <title>使用 Rust 实现符合开闭原则的财务数据系统的（部分）结构</title>
+      <title>使用 Rust 实现数据库对数据模型的依赖</title>
       <link>https://jtr109.github.io/posts/rust-financial-ocp/</link>
       <pubDate>Thu, 12 Nov 2020 16:33:27 +0800</pubDate>
       
