@@ -6,10 +6,49 @@
     <description>Recent content on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 08 May 2021 11:37:09 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 May 2021 16:24:18 +0800</lastBuildDate>
     
 	<atom:link href="https://jtr109.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>查看 Rust Crates 的 Features</title>
+      <link>https://jtr109.github.io/posts/crate-feature-flags/</link>
+      <pubDate>Sat, 29 May 2021 16:24:18 +0800</pubDate>
+      
+      <guid>https://jtr109.github.io/posts/crate-feature-flags/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;在 Rust 学习过程中，我发现很多库的示例中会制定 &lt;code&gt;features&lt;/code&gt; flag，我理解 features 是用来指定使用库的部分功能。例如 Tokio 的文档说明：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Tokio has a lot of functionality (TCP, UDP, Unix sockets, timers, sync utilities, multiple scheduler types, etc). Not all applications need all functionality. When attempting to optimize compile time or the end application footprint, the application can decide to opt into &lt;strong&gt;only&lt;/strong&gt; the features it uses.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://tokio.rs/tokio/tutorial/hello-tokio#:~:text=tokio%20has%20a%20lot%20of%20functionality%20(tcp%2C%20udp%2C%20unix%20sockets%2C%20timers%2C%20sync%20utilities%2C%20multiple%20scheduler%20types%2C%20etc).%20not%20all%20applications%20need%20all%20functionality.%20when%20attempting%20to%20optimize%20compile%20time%20or%20the%20end%20application%20footprint%2C%20the%20application%20can%20decide%20to%20opt%20into%20only%20the%20features%20it%20uses.&#34;&gt;原文链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;查看可选的-features&#34;&gt;
+  查看可选的 Features
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%9f%a5%e7%9c%8b%e5%8f%af%e9%80%89%e7%9a%84-features&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;但是作为一个使用者我应该怎么知道一个库有哪些 features 可以选择，这些 features 分别代表什么含义呢？&lt;/p&gt;
+&lt;p&gt;在 Tokio 的 docs.rs &lt;a href=&#34;https://docs.rs/tokio/1.6.1/tokio/&#34;&gt;文档&lt;/a&gt; 上，我发现了最上方导航栏中的 &lt;a href=&#34;https://docs.rs/crate/tokio/1.6.1/features&#34;&gt;&lt;code&gt;Feature flags&lt;/code&gt;&lt;/a&gt; 栏，点击即可查看到可选的 features 的选项以及这些选项提供哪些功能的信息。&lt;/p&gt;
+&lt;h2 id=&#34;声明可选的-features&#34;&gt;
+  声明可选的 Features
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%a3%b0%e6%98%8e%e5%8f%af%e9%80%89%e7%9a%84-features&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;那下一个疑问就是作为 crate 作者应该怎样声明支持的 features 呢？查看 The Cargo Book 中的&lt;a href=&#34;https://doc.rust-lang.org/cargo/reference/features.html#the-features-section&#34;&gt;解释&lt;/a&gt;，是在库的 &lt;a href=&#34;https://doc.rust-lang.org/cargo/reference/features.html#the-features-section&#34;&gt;&lt;code&gt;Cargo.toml&lt;/code&gt;&lt;/a&gt; 中通过 &lt;code&gt;[features]&lt;/code&gt; 段落指定的。&lt;/p&gt;
+&lt;p&gt;另外也&lt;a href=&#34;https://doc.rust-lang.org/cargo/reference/features.html#:~:text=you%20are%20encouraged%20to%20document%20which%20features%20are%20available%20in%20your%20package.%20this%20can%20be%20done%20by%20adding%20doc%20comments%20at%20the%20top%20of%20lib.rs.&#34;&gt;建议&lt;/a&gt; crate 的作者在文档中解释 features 的用法：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You are encouraged to document which features are available in your package. This can be done by adding &lt;a href=&#34;https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html&#34;&gt;doc comments&lt;/a&gt; at the top of &lt;code&gt;lib.rs&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
     
     <item>
       <title>多种 Git Pull 模式差异分析</title>

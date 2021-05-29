@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="背景    在 Rust 学习过程中，我发现很多库的示例中会制定 features flag，我理解 features 是用来指定使用库的部分功能。例如 Tokio 的文档说明：
+ Tokio has a lot of functionality (TCP, UDP, Unix sockets, timers, sync utilities, multiple scheduler types, etc). Not all applications need all functionality. When attempting to optimize compile time or the end application footprint, the application can decide to opt into only the features it uses.
+ 原文链接
+查看可选的 Features    但是作为一个使用者我应该怎么知道一个库有哪些 features 可以选择，这些 features 分别代表什么含义呢？">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="查看 Rust Crates 的 Features"/>
+<meta name="twitter:description" content="背景    在 Rust 学习过程中，我发现很多库的示例中会制定 features flag，我理解 features 是用来指定使用库的部分功能。例如 Tokio 的文档说明：
+ Tokio has a lot of functionality (TCP, UDP, Unix sockets, timers, sync utilities, multiple scheduler types, etc). Not all applications need all functionality. When attempting to optimize compile time or the end application footprint, the application can decide to opt into only the features it uses.
+ 原文链接
+查看可选的 Features    但是作为一个使用者我应该怎么知道一个库有哪些 features 可以选择，这些 features 分别代表什么含义呢？"/>
+
+    <meta property="og:title" content="查看 Rust Crates 的 Features" />
+<meta property="og:description" content="背景    在 Rust 学习过程中，我发现很多库的示例中会制定 features flag，我理解 features 是用来指定使用库的部分功能。例如 Tokio 的文档说明：
+ Tokio has a lot of functionality (TCP, UDP, Unix sockets, timers, sync utilities, multiple scheduler types, etc). Not all applications need all functionality. When attempting to optimize compile time or the end application footprint, the application can decide to opt into only the features it uses.
+ 原文链接
+查看可选的 Features    但是作为一个使用者我应该怎么知道一个库有哪些 features 可以选择，这些 features 分别代表什么含义呢？" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jtr109.github.io/posts/crate-feature-flags/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-29T16:24:18&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-29T16:24:18&#43;08:00" />
+
+
+
+    <title>
+  查看 Rust Crates 的 Features · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://jtr109.github.io/posts/crate-feature-flags/">
+    
+
+    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://jtr109.github.io/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://jtr109.github.io/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.82.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://jtr109.github.io/">
+      jtr109&#39;s Castle
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://jtr109.github.io/posts/crate-feature-flags/">
+              查看 Rust Crates 的 Features
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2021-05-29T16:24:18&#43;08:00'>
+                May 29, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              One-minute read
+            </span>
+          </div>
+          
+          <div class="categories">
+  <i class="fa fa-folder" aria-hidden="true"></i>
+    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <a href="https://jtr109.github.io/tags/rust/">Rust</a>
+      <span class="separator">•</span>
+    <a href="https://jtr109.github.io/tags/cargo/">Cargo</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">
+  背景
+  <a class="heading-link" href="#%e8%83%8c%e6%99%af">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>在 Rust 学习过程中，我发现很多库的示例中会制定 <code>features</code> flag，我理解 features 是用来指定使用库的部分功能。例如 Tokio 的文档说明：</p>
+<blockquote>
+<p>Tokio has a lot of functionality (TCP, UDP, Unix sockets, timers, sync utilities, multiple scheduler types, etc). Not all applications need all functionality. When attempting to optimize compile time or the end application footprint, the application can decide to opt into <strong>only</strong> the features it uses.</p>
+</blockquote>
+<p><a href="https://tokio.rs/tokio/tutorial/hello-tokio#:~:text=tokio%20has%20a%20lot%20of%20functionality%20(tcp%2C%20udp%2C%20unix%20sockets%2C%20timers%2C%20sync%20utilities%2C%20multiple%20scheduler%20types%2C%20etc).%20not%20all%20applications%20need%20all%20functionality.%20when%20attempting%20to%20optimize%20compile%20time%20or%20the%20end%20application%20footprint%2C%20the%20application%20can%20decide%20to%20opt%20into%20only%20the%20features%20it%20uses.">原文链接</a></p>
+<h2 id="查看可选的-features">
+  查看可选的 Features
+  <a class="heading-link" href="#%e6%9f%a5%e7%9c%8b%e5%8f%af%e9%80%89%e7%9a%84-features">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>但是作为一个使用者我应该怎么知道一个库有哪些 features 可以选择，这些 features 分别代表什么含义呢？</p>
+<p>在 Tokio 的 docs.rs <a href="https://docs.rs/tokio/1.6.1/tokio/">文档</a> 上，我发现了最上方导航栏中的 <a href="https://docs.rs/crate/tokio/1.6.1/features"><code>Feature flags</code></a> 栏，点击即可查看到可选的 features 的选项以及这些选项提供哪些功能的信息。</p>
+<h2 id="声明可选的-features">
+  声明可选的 Features
+  <a class="heading-link" href="#%e5%a3%b0%e6%98%8e%e5%8f%af%e9%80%89%e7%9a%84-features">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>那下一个疑问就是作为 crate 作者应该怎样声明支持的 features 呢？查看 The Cargo Book 中的<a href="https://doc.rust-lang.org/cargo/reference/features.html#the-features-section">解释</a>，是在库的 <a href="https://doc.rust-lang.org/cargo/reference/features.html#the-features-section"><code>Cargo.toml</code></a> 中通过 <code>[features]</code> 段落指定的。</p>
+<p>另外也<a href="https://doc.rust-lang.org/cargo/reference/features.html#:~:text=you%20are%20encouraged%20to%20document%20which%20features%20are%20available%20in%20your%20package.%20this%20can%20be%20done%20by%20adding%20doc%20comments%20at%20the%20top%20of%20lib.rs.">建议</a> crate 的作者在文档中解释 features 的用法：</p>
+<blockquote>
+<p>You are encouraged to document which features are available in your package. This can be done by adding <a href="https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html">doc comments</a> at the top of <code>lib.rs</code>.</p>
+</blockquote>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2021
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
+    
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>
