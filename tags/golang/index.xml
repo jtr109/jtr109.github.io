@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/golang/</link>
+    <link>https://www.jtr109.com/tags/golang/</link>
     <description>Recent content in Golang on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 21 Aug 2018 17:33:29 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Unit test of Golang</title>
-      <link>https://jtr109.github.io/posts/unit-test-of-golang/</link>
+      <link>https://www.jtr109.com/posts/unit-test-of-golang/</link>
       <pubDate>Tue, 21 Aug 2018 17:33:29 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/unit-test-of-golang/</guid>
+      <guid>https://www.jtr109.com/posts/unit-test-of-golang/</guid>
       <description>&lt;h3 id=&#34;notes&#34;&gt;
   notes
   &lt;a class=&#34;heading-link&#34; href=&#34;#notes&#34;&gt;
@@ -44,10 +44,10 @@
     
     <item>
       <title>Golang Init Function</title>
-      <link>https://jtr109.github.io/posts/golang-init-function/</link>
+      <link>https://www.jtr109.com/posts/golang-init-function/</link>
       <pubDate>Thu, 16 Aug 2018 18:06:30 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/golang-init-function/</guid>
+      <guid>https://www.jtr109.com/posts/golang-init-function/</guid>
       <description>&lt;h2 id=&#34;when-is-the-init-function-called&#34;&gt;
   When is the init function called?
   &lt;a class=&#34;heading-link&#34; href=&#34;#when-is-the-init-function-called&#34;&gt;

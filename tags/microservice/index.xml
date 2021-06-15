@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>microservice on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/microservice/</link>
+    <link>https://www.jtr109.com/tags/microservice/</link>
     <description>Recent content in microservice on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 02 Jul 2020 15:31:22 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/microservice/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/microservice/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>关于微服务中日志审计实现方式的思考</title>
-      <link>https://jtr109.github.io/posts/audit-logging/</link>
+      <link>https://www.jtr109.com/posts/audit-logging/</link>
       <pubDate>Thu, 02 Jul 2020 15:31:22 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/audit-logging/</guid>
+      <guid>https://www.jtr109.com/posts/audit-logging/</guid>
       <description>&lt;h2 id=&#34;背景&#34;&gt;
   背景
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;

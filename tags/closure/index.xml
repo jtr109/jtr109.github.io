@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>closure on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/closure/</link>
+    <link>https://www.jtr109.com/tags/closure/</link>
     <description>Recent content in closure on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 24 Jul 2019 08:25:44 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/closure/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/closure/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>符合 Fn, FnMut and FnOnce 的闭包实现</title>
-      <link>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</link>
+      <link>https://www.jtr109.com/posts/closure-implement-for-fn-fnmut-and-fnonce/</link>
       <pubDate>Wed, 24 Jul 2019 08:25:44 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/closure-implement-for-fn-fnmut-and-fnonce/</guid>
+      <guid>https://www.jtr109.com/posts/closure-implement-for-fn-fnmut-and-fnonce/</guid>
       <description>&lt;p&gt;不同类型的闭包可以被指定为不同类型的 trait. 可参考rust by example 中的&lt;a href=&#34;https://doc.rust-lang.org/rust-by-example/fn/closures/input_parameters.html#as-input-parameters&#34;&gt;相关段落&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;StackOverflow 中的&lt;a href=&#34;https://stackoverflow.com/questions/30177395/when-does-a-closure-implement-fn-fnmut-and-fnonce&#34;&gt;回答&lt;/a&gt;更明白的解释了 &lt;code&gt;Fn&lt;/code&gt;, &lt;code&gt;FnMut&lt;/code&gt;, &lt;code&gt;FnOnce&lt;/code&gt; 的区别:&lt;/p&gt;
 &lt;ul&gt;

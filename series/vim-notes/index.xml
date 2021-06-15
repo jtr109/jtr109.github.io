@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vim Notes on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/series/vim-notes/</link>
+    <link>https://www.jtr109.com/series/vim-notes/</link>
     <description>Recent content in Vim Notes on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 31 Jul 2019 11:04:57 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/series/vim-notes/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/series/vim-notes/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Use fzf.vim to Show Search Result in Vim</title>
-      <link>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</link>
+      <link>https://www.jtr109.com/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</link>
       <pubDate>Wed, 31 Jul 2019 11:04:57 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</guid>
+      <guid>https://www.jtr109.com/posts/use-fzf-dot-vim-to-show-search-result-in-vim/</guid>
       <description>&lt;h2 id=&#34;why-fzfvim&#34;&gt;
   Why fzf.vim
   &lt;a class=&#34;heading-link&#34; href=&#34;#why-fzfvim&#34;&gt;
@@ -53,15 +53,15 @@
   &lt;/a&gt;
 &lt;/h4&gt;
 &lt;p&gt;Let&amp;rsquo;s say we have a rust project with &lt;code&gt;target&lt;/code&gt; directory. When calling &lt;code&gt;:Files&lt;/code&gt; we find all files even though those in the directory &lt;code&gt;target&lt;/code&gt; which we expected ignored by specified in &lt;code&gt;.gitignore&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773303637-969795e1-fa69-46a3-8cca-342e5ef485cd.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Because the fzf does not understand the &lt;code&gt;.gitignore&lt;/code&gt;. Let us reproduct it in command line with fzf.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773516508-3e3d3a52-f971-4fe5-9523-0ab84d3d1324.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561773516508-3e3d3a52-f971-4fe5-9523-0ab84d3d1324.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;But don&amp;rsquo;t be sad. We can config it to out purpose. Before that, we need a searching engine which respect &lt;code&gt;.gitignore&lt;/code&gt;, such as &lt;a href=&#34;https://www.yuque.com/jtr109/zima/tk6fdc/edit&#34;&gt;the silver searcher&lt;/a&gt; or &lt;a href=&#34;https://github.com/BurntSushi/ripgrep&#34;&gt;ripgrep&lt;/a&gt;. Let&amp;rsquo;s use ripgrep (called &lt;code&gt;rg&lt;/code&gt; as usual) as an example.&lt;/p&gt;
 &lt;p&gt;We can use the command &lt;code&gt;rg --files&lt;/code&gt; to list all files without those ignored by &lt;code&gt;.gitignore&lt;/code&gt;. And we can list them in fzf with &lt;code&gt;rg --files | fzf&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Now we just need to specify the fzf.vim use the command &lt;code&gt;rg --files&lt;/code&gt; to search as default.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s have a look at the result now.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779008133-7d660fba-b986-411f-81f3-4c265d8a7620.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;h4 id=&#34;by-the-way&#34;&gt;
   By The Way
   &lt;a class=&#34;heading-link&#34; href=&#34;#by-the-way&#34;&gt;
@@ -86,12 +86,12 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;If we try to search content in your project with fzf using &lt;code&gt;:Rg&lt;/code&gt;. The result will like below.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779585101-a49256e1-834d-4b6d-9af2-cce51a7c66e2.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;But all results match the pattern are shown even though the results matching the filename. How can we get the results only match with content? Just use &lt;code&gt;.&lt;/code&gt; in your pattern. The characters before &lt;code&gt;.&lt;/code&gt; will be known as a pattern for filename and as content pattern after &lt;code&gt;.&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s have a try which filter only with content, such as &lt;code&gt;.arg&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779567738-a83a4772-407e-4164-9b03-4be67308de20.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;What about &lt;code&gt;arg.&lt;/code&gt; for only filename?&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/use-fzf-dot-vim-to-show-search-result-in-vim.assets/1561779676551-b34a407d-4ccd-4b90-a687-a4cfc8562d4f.png&#34; alt=&#34;image.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;reference&#34;&gt;
   Reference
   &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;
@@ -106,10 +106,10 @@
     
     <item>
       <title>Toggling Searching Highlight in Vim</title>
-      <link>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</link>
+      <link>https://www.jtr109.com/posts/toggling-searching-highlight-in-vim/</link>
       <pubDate>Sat, 29 Jun 2019 12:04:17 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/toggling-searching-highlight-in-vim/</guid>
+      <guid>https://www.jtr109.com/posts/toggling-searching-highlight-in-vim/</guid>
       <description>&lt;h2 id=&#34;toggling-searching-highlight-in-vim&#34;&gt;
   Toggling Searching Highlight in Vim
   &lt;a class=&#34;heading-link&#34; href=&#34;#toggling-searching-highlight-in-vim&#34;&gt;
@@ -124,10 +124,10 @@
     
     <item>
       <title>Set Environment Variables in Vim</title>
-      <link>https://jtr109.github.io/posts/set-environment-variables-in-vim/</link>
+      <link>https://www.jtr109.com/posts/set-environment-variables-in-vim/</link>
       <pubDate>Sat, 29 Jun 2019 11:54:22 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/set-environment-variables-in-vim/</guid>
+      <guid>https://www.jtr109.com/posts/set-environment-variables-in-vim/</guid>
       <description>&lt;p&gt;Sometimes, we want to set an environment variable in Vim without contaminating the environment variable in our system.&lt;/p&gt;
 &lt;p&gt;You can try setting it only in &lt;code&gt;.vimrc&lt;/code&gt; like below.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#cb4b16&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#268bd2&#34;&gt;$FZF_DEFAULT_COMMAND&lt;/span&gt; = &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;rg --files&amp;#39;&lt;/span&gt;

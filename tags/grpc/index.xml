@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>gRPC on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/grpc/</link>
+    <link>https://www.jtr109.com/tags/grpc/</link>
     <description>Recent content in gRPC on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 07 Nov 2019 22:31:12 +0000</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/grpc/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/grpc/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Python gRPC Json Format 的小坑</title>
-      <link>https://jtr109.github.io/posts/python-grpc-json-format/</link>
+      <link>https://www.jtr109.com/posts/python-grpc-json-format/</link>
       <pubDate>Thu, 07 Nov 2019 22:31:12 +0000</pubDate>
       
-      <guid>https://jtr109.github.io/posts/python-grpc-json-format/</guid>
+      <guid>https://www.jtr109.com/posts/python-grpc-json-format/</guid>
       <description>&lt;h2 id=&#34;背景&#34;&gt;
   背景
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
@@ -78,7 +78,7 @@
   &lt;/a&gt;
 &lt;/h2&gt;
 &lt;p&gt;在调用 &lt;code&gt;MessageToDict&lt;/code&gt; 函数时, 将以上两个参数指定为 &lt;code&gt;True&lt;/code&gt; 即可解决问题. &lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos/blob/master/example.ipynb&#34;&gt;代码示例&lt;/a&gt;如下:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/python-grpc-json-format.assets/1570964227734-2317f63a-ba36-476a-8a80-58947a84aac4.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/python-grpc-json-format.assets/1570964227734-2317f63a-ba36-476a-8a80-58947a84aac4.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;示例代码可以在&lt;a href=&#34;https://github.com/jtr109/zero-value-in-protos&#34;&gt;这个项目&lt;/a&gt;中查看&lt;/p&gt;
 &lt;h2 id=&#34;思考&#34;&gt;
   思考

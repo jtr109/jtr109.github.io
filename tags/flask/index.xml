@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Flask on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/flask/</link>
+    <link>https://www.jtr109.com/tags/flask/</link>
     <description>Recent content in Flask on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 13 Aug 2017 14:06:44 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/flask/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/flask/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>关于flask-sqlalchemy中数据库操作的问题整理</title>
-      <link>https://jtr109.github.io/posts/flask-sqlalchemy-database-problems/</link>
+      <link>https://www.jtr109.com/posts/flask-sqlalchemy-database-problems/</link>
       <pubDate>Sun, 13 Aug 2017 14:06:44 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/flask-sqlalchemy-database-problems/</guid>
+      <guid>https://www.jtr109.com/posts/flask-sqlalchemy-database-problems/</guid>
       <description>&lt;p&gt;此文为本人原创，最早发布于&lt;a href=&#34;http://cocode.cc/t/flask-web-db-session-add-db-session-commit/6867&#34;&gt;求助《Flask Web 开发》第五章关于数据库db.session.add()和db.session.commit()问题&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;问题简述：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -48,10 +48,10 @@
     
     <item>
       <title>flask 数据库迁移与部署的一些经验</title>
-      <link>https://jtr109.github.io/posts/flask-database-deploy/</link>
+      <link>https://www.jtr109.com/posts/flask-database-deploy/</link>
       <pubDate>Sun, 13 Aug 2017 13:04:28 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/flask-database-deploy/</guid>
+      <guid>https://www.jtr109.com/posts/flask-database-deploy/</guid>
       <description>&lt;p&gt;最早发布于&lt;a href=&#34;http://cocode.cc/t/flask/6183/8?u=jtr_109&#34;&gt;flask开发的第五章关于创建迁移脚本的问题(已解决) - cocode.cc&lt;/a&gt;。内容并不完善，基本不会再维护.&lt;/p&gt;
 &lt;p&gt;分享一点经验，主要是自己的理解，希望能有所帮助。千辛万苦部署好的数据库，就不为了答题一一验证了，全凭记忆回答，有不对的地方欢迎指出，会及时修改。&lt;/p&gt;
 &lt;p&gt;以下内容以执行文件名为&lt;code&gt;manage.py&lt;/code&gt;举例，请自行调整。&lt;/p&gt;

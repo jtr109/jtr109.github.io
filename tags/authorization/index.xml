@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>authorization on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/authorization/</link>
+    <link>https://www.jtr109.com/tags/authorization/</link>
     <description>Recent content in authorization on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 21 Oct 2020 16:18:21 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/authorization/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/authorization/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>产品分析：Authing 中的主要实体及其关系梳理</title>
-      <link>https://jtr109.github.io/posts/authing-er/</link>
+      <link>https://www.jtr109.com/posts/authing-er/</link>
       <pubDate>Wed, 21 Oct 2020 16:18:21 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/authing-er/</guid>
+      <guid>https://www.jtr109.com/posts/authing-er/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://authing.cn/&#34;&gt;Authing&lt;/a&gt; 是一个典型的 IDaaS。提供了多种&lt;a href=&#34;https://docs.authing.cn/authentication/oidc/&#34;&gt;认证方式&lt;/a&gt;和&lt;a href=&#34;https://docs.authing.cn/social-login/web/&#34;&gt;社会化登录方式&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;实体&#34;&gt;
   实体

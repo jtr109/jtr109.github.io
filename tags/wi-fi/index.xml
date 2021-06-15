@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Wi-Fi on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/wi-fi/</link>
+    <link>https://www.jtr109.com/tags/wi-fi/</link>
     <description>Recent content in Wi-Fi on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 15 Sep 2020 23:19:50 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/wi-fi/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/wi-fi/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>使用 macOS Wireless Diagnostics 选择合适的 Wi-Fi 信道</title>
-      <link>https://jtr109.github.io/posts/using-mac-wireless-diagnostics-to-choose-wifi-channels/</link>
+      <link>https://www.jtr109.com/posts/using-mac-wireless-diagnostics-to-choose-wifi-channels/</link>
       <pubDate>Tue, 15 Sep 2020 23:19:50 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/using-mac-wireless-diagnostics-to-choose-wifi-channels/</guid>
+      <guid>https://www.jtr109.com/posts/using-mac-wireless-diagnostics-to-choose-wifi-channels/</guid>
       <description>&lt;h2 id=&#34;wi-fi-信道&#34;&gt;
   Wi-Fi 信道
   &lt;a class=&#34;heading-link&#34; href=&#34;#wi-fi-%e4%bf%a1%e9%81%93&#34;&gt;
@@ -39,7 +39,7 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;首先我们需要打开 Wireless Diagnostics。可以启用 Alfred 或者 Spotlight，输入 Wireless Diagnostics 即可打开。或者按住 &lt;kbd&gt;option&lt;/kbd&gt; 键，点击右上角的 Wi-Fi 图标，在选单中选择 &amp;ldquo;Open Wireless Diagnostics&amp;hellip;&amp;quot;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/using-mac-wireless-diagnostics-to-choose-wifi-channels.assets/image-20200915232936215.png&#34; alt=&#34;image-20200915232936215&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/using-mac-wireless-diagnostics-to-choose-wifi-channels.assets/image-20200915232936215.png&#34; alt=&#34;image-20200915232936215&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;打开-scan-窗口&#34;&gt;
   打开 Scan 窗口
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%89%93%e5%bc%80-scan-%e7%aa%97%e5%8f%a3&#34;&gt;

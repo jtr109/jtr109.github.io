@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>font on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/font/</link>
+    <link>https://www.jtr109.com/tags/font/</link>
     <description>Recent content in font on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 13 Jun 2020 20:44:59 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/font/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/font/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>VSCode 字体配置</title>
-      <link>https://jtr109.github.io/posts/vscode-font-configuration/</link>
+      <link>https://www.jtr109.com/posts/vscode-font-configuration/</link>
       <pubDate>Sat, 13 Jun 2020 20:44:59 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/vscode-font-configuration/</guid>
+      <guid>https://www.jtr109.com/posts/vscode-font-configuration/</guid>
       <description>&lt;p&gt;在修改 VSCode 的 color theme 时会看到一些 theme 的效果图中使用了非常好看的手写体字样。今天就让我们一起&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34; alt=&#34;https://raw.githubusercontent.com/ahmadawais/shades-of-purple-vscode/master/images/JavaScript.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图片来自 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple&#34;&gt;Shades of Purple&lt;/a&gt;&lt;/p&gt;
@@ -40,8 +40,8 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;下载并解压字体包，可以看到各种 Operator Mono 字体，全选拖拽到 Font Book 中。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/Untitled.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/2.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%202.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/Untitled.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/2.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%202.png&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;配置-vscode-使用的字体&#34;&gt;
   配置 VSCode 使用的字体
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%85%8d%e7%bd%ae-vscode-%e4%bd%bf%e7%94%a8%e7%9a%84%e5%ad%97%e4%bd%93&#34;&gt;
@@ -49,7 +49,7 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;打开 VSCode，打开设置，搜索 &lt;em&gt;font family&lt;/em&gt;，将 Operator Mono 设置在最前。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/3.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%203.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/3.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%203.png&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;下载和使用合适的-theme&#34;&gt;
   下载和使用合适的 Theme
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e4%b8%8b%e8%bd%bd%e5%92%8c%e4%bd%bf%e7%94%a8%e5%90%88%e9%80%82%e7%9a%84-theme&#34;&gt;
@@ -58,7 +58,7 @@
 &lt;/h3&gt;
 &lt;p&gt;如果你当前的 color theme 已经有较好的语法高亮规则，你就可以看到自己的配置已经生效，字体变为 Operator Mono 了。&lt;/p&gt;
 &lt;p&gt;如果不知道用什么 theme 比较好，可以考虑尝试 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=sdras.night-owl&#34;&gt;Night Owl&lt;/a&gt; 或者 &lt;a href=&#34;https://marketplace.visualstudio.com/items?itemName=ahmadawais.shades-of-purple&#34;&gt;Shade of Purple&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/4.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%204.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/4.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%204.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图片中的 theme 为 Shade of Purple，可以看到注释中的字体变成了斜体。&lt;/p&gt;
 &lt;h3 id=&#34;中文字体&#34;&gt;
   中文字体
@@ -68,7 +68,7 @@
 &lt;/h3&gt;
 &lt;p&gt;大部分的流行字体都是 ASCII 类型，没有提供中文字体支持。所以 VSCode 中的中文字体会显示默认字体。如果有喜欢的中文字体，可以写在 Operator Mono 后面。VSCode 会按序查找字符集。&lt;/p&gt;
 &lt;p&gt;我使用的是方正和可口可乐推出的&lt;a href=&#34;https://www.foundertype.com/index.php/FontInfo/index/id/4792&#34;&gt;在乎体&lt;/a&gt;。个人可免费使用。感兴趣的朋友可以尝试一下。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/5.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%205.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/5.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%205.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;补充说明&#34;&gt;
   补充说明
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%a1%a5%e5%85%85%e8%af%b4%e6%98%8e&#34;&gt;
@@ -97,7 +97,7 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;Italic&lt;/em&gt; 后缀说明了这个字体是否是纯斜体，而非 italic 字体提示同时包含了正体和斜体字形。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/vscode-font-configuration.assets/6.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%206.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/vscode-font-configuration.assets/6.png&#34; alt=&#34;VSCode%202a432b75b011476185f70e223ceaaf31/Untitled%206.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果直接使用 italic 后缀的字体，你的界面会变成全斜体。&lt;/p&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;

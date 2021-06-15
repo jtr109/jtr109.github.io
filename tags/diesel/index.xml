@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Diesel on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/diesel/</link>
+    <link>https://www.jtr109.com/tags/diesel/</link>
     <description>Recent content in Diesel on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 07 Nov 2019 22:36:29 +0000</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/diesel/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/diesel/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Diesel UUID Problem Note</title>
-      <link>https://jtr109.github.io/posts/diesel-uuid/</link>
+      <link>https://www.jtr109.com/posts/diesel-uuid/</link>
       <pubDate>Thu, 07 Nov 2019 22:36:29 +0000</pubDate>
       
-      <guid>https://jtr109.github.io/posts/diesel-uuid/</guid>
+      <guid>https://www.jtr109.com/posts/diesel-uuid/</guid>
       <description>&lt;h2 id=&#34;背景描述&#34;&gt;
   背景描述
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af%e6%8f%8f%e8%bf%b0&#34;&gt;
@@ -127,10 +127,10 @@ _builder::order_clause::NoOrderClause, diesel::query_builder::limit_clause::Limi
     
     <item>
       <title>use foo::bar::* 导致 mismatched types 报错</title>
-      <link>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</link>
+      <link>https://www.jtr109.com/posts/error-caused-by-implicit-use-in-rust/</link>
       <pubDate>Tue, 13 Aug 2019 11:13:09 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/error-caused-by-implicit-use-in-rust/</guid>
+      <guid>https://www.jtr109.com/posts/error-caused-by-implicit-use-in-rust/</guid>
       <description>&lt;h2 id=&#34;问题描述&#34;&gt;
   问题描述
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;

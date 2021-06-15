@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/linux/</link>
+    <link>https://www.jtr109.com/tags/linux/</link>
     <description>Recent content in Linux on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 19 Oct 2017 22:01:55 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>ArchLinux 安装初探</title>
-      <link>https://jtr109.github.io/posts/archlinux-begin/</link>
+      <link>https://www.jtr109.com/posts/archlinux-begin/</link>
       <pubDate>Thu, 19 Oct 2017 22:01:55 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/archlinux-begin/</guid>
+      <guid>https://www.jtr109.com/posts/archlinux-begin/</guid>
       <description>&lt;h2 id=&#34;前言&#34;&gt;
   前言
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%89%8d%e8%a8%80&#34;&gt;

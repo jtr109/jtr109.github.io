@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Neovim on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/neovim/</link>
+    <link>https://www.jtr109.com/tags/neovim/</link>
     <description>Recent content in Neovim on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 07 Nov 2019 22:41:13 +0000</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/neovim/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/neovim/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>在 NeoVim 中修改指定文件类型的缩进</title>
-      <link>https://jtr109.github.io/posts/changing-indent-in-neovim/</link>
+      <link>https://www.jtr109.com/posts/changing-indent-in-neovim/</link>
       <pubDate>Thu, 07 Nov 2019 22:41:13 +0000</pubDate>
       
-      <guid>https://jtr109.github.io/posts/changing-indent-in-neovim/</guid>
+      <guid>https://www.jtr109.com/posts/changing-indent-in-neovim/</guid>
       <description>&lt;h2 id=&#34;问题描述&#34;&gt;
   问题描述
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0&#34;&gt;

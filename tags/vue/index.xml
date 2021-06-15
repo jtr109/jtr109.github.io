@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vue on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/vue/</link>
+    <link>https://www.jtr109.com/tags/vue/</link>
     <description>Recent content in Vue on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Fri, 31 May 2019 14:08:00 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/vue/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/vue/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Intergate Vue in Django</title>
-      <link>https://jtr109.github.io/posts/intergrate-vue-in-django/</link>
+      <link>https://www.jtr109.com/posts/intergrate-vue-in-django/</link>
       <pubDate>Fri, 31 May 2019 14:08:00 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/intergrate-vue-in-django/</guid>
+      <guid>https://www.jtr109.com/posts/intergrate-vue-in-django/</guid>
       <description>&lt;h1 id=&#34;intergate-vue-in-django&#34;&gt;
   Intergate Vue in Django
   &lt;a class=&#34;heading-link&#34; href=&#34;#intergate-vue-in-django&#34;&gt;
@@ -275,9 +275,9 @@ touch vue.config.js
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run serve
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now you can view the login and user pages corresponding url, such as &lt;code&gt;localhost:8080/login/&lt;/code&gt; and &lt;code&gt;localhost:8080/user/&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Login page:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190529202025524.png&#34; alt=&#34;image-20190529202025524&#34;&gt;&lt;/p&gt;
 &lt;p&gt;User page:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190529202405290.png&#34; alt=&#34;image-20190529202405290&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;inject-vue-page-into-django-template&#34;&gt;
   Inject Vue Page Into Django Template
   &lt;a class=&#34;heading-link&#34; href=&#34;#inject-vue-page-into-django-template&#34;&gt;
@@ -322,7 +322,7 @@ touch vue.config.js
     },
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After Changing template path, the login view works well. But we find the static files is not found.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529205044695.png&#34; alt=&#34;image-20190529205044695&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190529205044695.png&#34; alt=&#34;image-20190529205044695&#34;&gt;&lt;/p&gt;
 &lt;p&gt;We setting &lt;code&gt;assetsDir&lt;/code&gt; as &lt;code&gt;&#39;static&#39;&lt;/code&gt; in &lt;code&gt;vue.config.js&lt;/code&gt; will ask vue-cli to build all assets in the same directory &lt;code&gt;frontend/dist/static&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;// frontend/vue.config.js
 &lt;/span&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;&lt;/span&gt;
@@ -340,7 +340,7 @@ touch vue.config.js
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now, we can rebuild the vue project and refresh the page.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After that, all files can be load correctly.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190529210423475.png&#34; alt=&#34;image-20190529210423475&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;render-user-page&#34;&gt;
   Render User Page
   &lt;a class=&#34;heading-link&#34; href=&#34;#render-user-page&#34;&gt;
@@ -369,7 +369,7 @@ touch vue.config.js
     &lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# ----- snipped -----&lt;/span&gt;
 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try browsing the URL of user page (usually &lt;code&gt;localhost:8000/user&lt;/code&gt;). Focus on the network tracks. We can see the request is redirected to the login page because we did not log in.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190530095235106.png&#34; alt=&#34;image-20190530095235106&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;create-a-login-form-in-user-page&#34;&gt;
   Create a Login Form in User Page
   &lt;a class=&#34;heading-link&#34; href=&#34;#create-a-login-form-in-user-page&#34;&gt;
@@ -501,7 +501,7 @@ touch vue.config.js
 }
 &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we have a login form.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190530115347454.png&#34; alt=&#34;image-20190530115347454&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;using-axios-to-send-login-request&#34;&gt;
   Using Axios to Send Login Request
   &lt;a class=&#34;heading-link&#34; href=&#34;#using-axios-to-send-login-request&#34;&gt;
@@ -554,7 +554,7 @@ touch vue.config.js
 }
 &amp;lt;/&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You will find CSRF token error.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530143518162.png&#34; alt=&#34;image-20190530143518162&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190530143518162.png&#34; alt=&#34;image-20190530143518162&#34;&gt;&lt;/p&gt;
 &lt;p&gt;I do not find a better way to resolve it. Let disable CSRF token middleware until we find a solution.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;# &lt;span style=&#34;color:#268bd2&#34;&gt;vid&lt;/span&gt;/&lt;span style=&#34;color:#268bd2&#34;&gt;settings&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;py&lt;/span&gt;
 
@@ -575,7 +575,7 @@ touch vue.config.js
 &lt;span style=&#34;color:#268bd2&#34;&gt;In&lt;/span&gt; [&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;objects&lt;/span&gt;.&lt;span style=&#34;color:#268bd2&#34;&gt;create_user&lt;/span&gt;(&lt;span style=&#34;color:#268bd2&#34;&gt;username&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;email&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;john@vid.com&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#268bd2&#34;&gt;password&lt;/span&gt;=&lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;weakpwd&amp;#39;&lt;/span&gt;)
 &lt;span style=&#34;color:#268bd2&#34;&gt;Out&lt;/span&gt;[&lt;span style=&#34;color:#2aa198;font-weight:bold&#34;&gt;2&lt;/span&gt;]: &amp;lt;&lt;span style=&#34;color:#268bd2&#34;&gt;User&lt;/span&gt;: &lt;span style=&#34;color:#268bd2&#34;&gt;john&lt;/span&gt;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And now we can use the account on vue service (usually &lt;code&gt;localhost:8080/login/&lt;/code&gt;) go to the user page (usually &lt;code&gt;localhost:8080/user/&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190530150502432.png&#34; alt=&#34;image-20190530150502432&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
   Rebuild Frontend and Have A Try in Django Service
   &lt;a class=&#34;heading-link&#34; href=&#34;#rebuild-frontend-and-have-a-try-in-django-service&#34;&gt;
@@ -586,7 +586,7 @@ touch vue.config.js
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;color:#93a1a1;font-style:italic&#34;&gt;# in frontend directory&lt;/span&gt;
 yarn run build
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can login and see the user page (&lt;code&gt;localhost:8000/user/&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/intergrate-vue-in-django.assets/image-20190530153935383.png&#34; alt=&#34;image-20190530153935383&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;reference&#34;&gt;
   Reference:
   &lt;a class=&#34;heading-link&#34; href=&#34;#reference&#34;&gt;

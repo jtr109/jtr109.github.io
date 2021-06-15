@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>log on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/log/</link>
+    <link>https://www.jtr109.com/tags/log/</link>
     <description>Recent content in log on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 17 Jun 2020 15:35:25 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/log/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/log/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>How to Log in Rust</title>
-      <link>https://jtr109.github.io/posts/rust-log-level/</link>
+      <link>https://www.jtr109.com/posts/rust-log-level/</link>
       <pubDate>Wed, 17 Jun 2020 15:35:25 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/rust-log-level/</guid>
+      <guid>https://www.jtr109.com/posts/rust-log-level/</guid>
       <description>&lt;h2 id=&#34;using-log-module&#34;&gt;
   Using &lt;code&gt;log&lt;/code&gt; Module
   &lt;a class=&#34;heading-link&#34; href=&#34;#using-log-module&#34;&gt;

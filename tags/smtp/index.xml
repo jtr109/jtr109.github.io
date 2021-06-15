@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SMTP on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/smtp/</link>
+    <link>https://www.jtr109.com/tags/smtp/</link>
     <description>Recent content in SMTP on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 22 Aug 2020 23:10:13 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/smtp/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/smtp/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>使用 Telnet 模拟邮件客户端发送邮件</title>
-      <link>https://jtr109.github.io/posts/telnet-smpt/</link>
+      <link>https://www.jtr109.com/posts/telnet-smpt/</link>
       <pubDate>Sat, 22 Aug 2020 23:10:13 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/telnet-smpt/</guid>
+      <guid>https://www.jtr109.com/posts/telnet-smpt/</guid>
       <description>&lt;h2 id=&#34;基础知识&#34;&gt;
   基础知识
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86&#34;&gt;

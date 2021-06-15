@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Virtualenv on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/virtualenv/</link>
+    <link>https://www.jtr109.com/tags/virtualenv/</link>
     <description>Recent content in Virtualenv on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 13 Aug 2017 14:08:41 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/virtualenv/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/virtualenv/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Install MySQLdb in virtualenv，从入门到放弃</title>
-      <link>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</link>
+      <link>https://www.jtr109.com/posts/mysqldb-installation-in-virtualenv/</link>
       <pubDate>Sun, 13 Aug 2017 14:08:41 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/mysqldb-installation-in-virtualenv/</guid>
+      <guid>https://www.jtr109.com/posts/mysqldb-installation-in-virtualenv/</guid>
       <description>&lt;p&gt;本人使用的是OSX，在安装MySQLdb的过程中遇到不少坑，和大家分享一下，也为以后留存。只是做一个整理，并不会有太多个人心得。多以评注为主。&lt;/p&gt;
 &lt;h1 id=&#34;mysql-server-密码重置&#34;&gt;
   MySQL Server 密码重置

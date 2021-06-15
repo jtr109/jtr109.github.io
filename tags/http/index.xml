@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>HTTP on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/http/</link>
+    <link>https://www.jtr109.com/tags/http/</link>
     <description>Recent content in HTTP on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 21 Apr 2021 16:46:17 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/http/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/http/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>HTTP 消息结束的标志</title>
-      <link>https://jtr109.github.io/posts/http-end-identity/</link>
+      <link>https://www.jtr109.com/posts/http-end-identity/</link>
       <pubDate>Wed, 21 Apr 2021 16:46:17 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/http-end-identity/</guid>
+      <guid>https://www.jtr109.com/posts/http-end-identity/</guid>
       <description>&lt;h2 id=&#34;请求和响应&#34;&gt;
   请求和响应
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%af%b7%e6%b1%82%e5%92%8c%e5%93%8d%e5%ba%94&#34;&gt;

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>macOS on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/macos/</link>
+    <link>https://www.jtr109.com/tags/macos/</link>
     <description>Recent content in macOS on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 13 Jun 2019 10:03:50 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/macos/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/macos/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Fix Tiny Icon in Mac Dock</title>
-      <link>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</link>
+      <link>https://www.jtr109.com/posts/fix-tiny-icon-in-mac-dock/</link>
       <pubDate>Thu, 13 Jun 2019 10:03:50 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/fix-tiny-icon-in-mac-dock/</guid>
+      <guid>https://www.jtr109.com/posts/fix-tiny-icon-in-mac-dock/</guid>
       <description>&lt;h2 id=&#34;description&#34;&gt;
   Description
   &lt;a class=&#34;heading-link&#34; href=&#34;#description&#34;&gt;

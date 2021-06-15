@@ -35,7 +35,7 @@
  前三次传输的方向和标记位展示了 TCP 三次握手动作。 从 No. 17466 开始的四次请求完成了 HTTP 相关的数据传输。 从 No. 17940 开始的最后三次（除去黑色的那条）传输完成了挥手动作。  由于样本中挥手阶段的特殊性，如果只希望了解正确的 TCP 请求中 Seq 和 Ack 变化，请参考上述步骤中的前两个阶段（握手和数据传输）。
 握手阶段    客户端 SYN    我们仔细查看客户端 SYN 分组，这是整个生命周期的第一个请求，可以看到 info 中显示 Seq=0。但是这个 Seq 是否真的是 0 呢？从下面的详情中可以看到，序号 0 是一个相对值，实际上客户端生成了一个随机数作为序号（2777949690）。标记位 SYN 说明了这个分组中的 Seq 是一个初始值，这对接收方来说很重要。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/tcp-seq/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://www.jtr109.com/posts/tcp-seq/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-04-22T10:31:46&#43;08:00" />
 <meta property="article:modified_time" content="2021-04-22T10:31:46&#43;08:00" />
 
@@ -46,15 +46,15 @@
 </title>
 
     
-      <link rel="canonical" href="https://jtr109.github.io/posts/tcp-seq/">
+      <link rel="canonical" href="https://www.jtr109.com/posts/tcp-seq/">
     
 
-    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://www.jtr109.com/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://www.jtr109.com/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -63,7 +63,7 @@
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://www.jtr109.com/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -71,11 +71,11 @@
 
     
 
-    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-16x16.png" sizes="16x16">
 
-    <link rel="apple-touch-icon" href="https://jtr109.github.io/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://jtr109.github.io/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="https://www.jtr109.com/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.jtr109.com/images/apple-touch-icon.png">
 
     
 
@@ -100,7 +100,7 @@
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="https://jtr109.github.io/">
+    <a class="navigation-title" href="https://www.jtr109.com/">
       jtr109&#39;s Castle
     </a>
     
@@ -112,19 +112,19 @@
         
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+              <a class="navigation-link" href="https://www.jtr109.com/posts/">Blog</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+              <a class="navigation-link" href="https://www.jtr109.com/categories/">Categories</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+              <a class="navigation-link" href="https://www.jtr109.com/series/">Series</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+              <a class="navigation-link" href="https://www.jtr109.com/tags/">Tags</a>
             </li>
           
         
@@ -142,7 +142,7 @@
       <header>
         <div class="post-title">
           <h1 class="title">
-            <a class="title-link" href="https://jtr109.github.io/posts/tcp-seq/">
+            <a class="title-link" href="https://www.jtr109.com/posts/tcp-seq/">
               通过 Wireshark 学习 TCP 序号和确认号
             </a>
           </h1>
@@ -163,13 +163,13 @@
           
           <div class="categories">
   <i class="fa fa-folder" aria-hidden="true"></i>
-    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+    <a href="https://www.jtr109.com/categories/tech/">tech</a></div>
 
           <div class="tags">
   <i class="fa fa-tag" aria-hidden="true"></i>
-    <a href="https://jtr109.github.io/tags/network/">network</a>
+    <a href="https://www.jtr109.com/tags/network/">network</a>
       <span class="separator">•</span>
-    <a href="https://jtr109.github.io/tags/tcp/">TCP</a></div>
+    <a href="https://www.jtr109.com/tags/tcp/">TCP</a></div>
 
         </div>
       </header>
@@ -183,7 +183,7 @@
   </a>
 </h2>
 <p>我们知道 TCP 连接通过序号（sequence number）和确认号（acknowledgment number）来避免消息的乱序。发送端通过分组头部的 序号声明分组的第一个字节的序号，通过头部的确认号声明预期接收的下一个字节的序号。</p>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422104637194.png" alt="image-20210422104637194"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422104637194.png" alt="image-20210422104637194"></p>
 <p>图片来源：<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#cite_ref-RFC_793_9-0:~:text=TCP%20segment%20header">Wikipedia</a></p>
 <p>让我们通过 Wireshark 抓取一个完整的 TCP 连接来看看具体是怎么实现的，着重关注 Seq 和 Ack 的变化。</p>
 <h2 id="概览">
@@ -192,7 +192,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h2>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422105141974.png" alt=""></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422105141974.png" alt=""></p>
 <p>首先我们观察一个 TCP 请求的完整生命周期。可以看到：</p>
 <ol>
 <li>前三次传输的方向和标记位展示了 TCP 三次握手动作。</li>
@@ -212,7 +212,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422105759101.png" alt="image-20210422105759101"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422105759101.png" alt="image-20210422105759101"></p>
 <p>我们仔细查看客户端 SYN 分组，这是整个生命周期的第一个请求，可以看到 info 中显示 Seq=0。但是这个 Seq 是否真的是 0 呢？从下面的详情中可以看到，序号 0 是一个相对值，实际上客户端生成了一个随机数作为序号（2777949690）。标记位 SYN 说明了这个分组中的 Seq 是一个初始值，这对接收方来说很重要。</p>
 <p><em>所有序号都是基于一个初始的随机值，如果没有特殊说明，后续讨论中出现的序号均为相对序号。</em></p>
 <p>第一条 SYN 消息中的 ACK 标记位没有激活，所以消息头中的 Acknowledgment Number 是没有意义的，所以默认给了 0。</p>
@@ -226,7 +226,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422110816857.png" alt="image-20210422110816857"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422110816857.png" alt="image-20210422110816857"></p>
 <p>服务端作为接收方收到客户端发送的 SYN 分组后，确认 SYN 标记位激活，Seq 相对序号为 0。开始准备返回的分组。</p>
 <p>在分组中，服务端会激活 ACK 标记位，同时将接收到的分组序号加 1 作为 Ack 的值，即 Ack 置为 1，表示接收到了 Seq 为 0 的分组。</p>
 <p>为了建立全双工通道，服务端也需要向客户端发送 SYN 信息，服务端激活 SYN 标记为，随机生成 Seq 值（相对序号为 0），组成分组发送给客户端。</p>
@@ -241,7 +241,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422112007827.png" alt="image-20210422112007827"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422112007827.png" alt="image-20210422112007827"></p>
 <p>客户端接收到服务端的 SYN，ACK 分组，开始构成分组。</p>
 <p>客户端为了表示确认收到服务端发来的分组，解析分组中的 Seq 相对序号为 0，在即将发送的分组中将 ACK 标记位激活，Ack 置为 1。</p>
 <p>同时通过接收到的来自服务端的分组中 Ack 为 1，知道自己发送的 SYN 分组已经被确认接收，把即将发送的分组的 Seq 置为 1。</p>
@@ -269,7 +269,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422114037381.png" alt="image-20210422114037381"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422114037381.png" alt="image-20210422114037381"></p>
 <p>客户端将 HTTP 请求数据放在 TCP 分组中，指定 Seq=1，Ack=1 发送数据。这里需要留意的是，该分组大小为 935。</p>
 <ul>
 <li>方向：客户端 -&gt; 服务端</li>
@@ -283,7 +283,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422114530373.png" alt="image-20210422114530373"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422114530373.png" alt="image-20210422114530373"></p>
 <p>服务端接收到搭载 HTTP 请求的 TCP 分组后，开始构建 ACK 分组。</p>
 <p>服务端解析收到的分组发现这是一个 Seq=1 的长度为 935 的分组，即收到的最后一个字节的序号为 935。为了答复确认收到该分组，将即将发送的分组 ACK 标记为激活，Ack 置为 936。</p>
 <p>接收到的分组中，Ack=1，所以即将发送的分组中将 Seq=1。</p>
@@ -298,7 +298,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422115538165.png" alt="image-20210422115538165"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422115538165.png" alt="image-20210422115538165"></p>
 <p>服务端将 HTTP 响应数据放在 TCP 分组中，发送给客户端。这里需要注意的是，这个请求是基于上述 [HTTP 发送的请求](#客户端发送 HTTP 请求)，所以他的序号和确认序号设计的依据是和[前一个 ACK 分组](#服务端确认收到 HTTP 请求)是一致的。但是由于</p>
 <ul>
 <li>方向：服务端 -&gt; 客户端</li>
@@ -312,7 +312,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422133518796.png" alt="image-20210422133518796"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422133518796.png" alt="image-20210422133518796"></p>
 <p>客户端收到包含 HTTP 响应的 TCP 分组后，准备向服务端发送 ACK 确认分组。</p>
 <p>由于接收到的分组 Seq=1，荷载大小为 1403，所以返回 ACK 标记为激活，Ack=1404。</p>
 <p>由于接收到的分组中 Ack=936，所以 Seq=936。</p>
@@ -335,7 +335,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422144424231.png" alt="image-20210422144424231"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422144424231.png" alt="image-20210422144424231"></p>
 <p>当客户端发送完所有消息后，就会发送 FIN 分组（这个分组里同时激活了 ACK 标记位，原因不明）。</p>
 <p>该 FIN 分组基于[服务端发来的 HTTP 响应](#服务端发送 HTTP 响应)，所以 Seq 和 Ack 和<a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A1%AE%E8%AE%A4%E6%94%B6%E5%88%B0%E5%93%8D%E5%BA%94">客户端发送的确认响应的 TCP</a> 相同。</p>
 <ul>
@@ -350,7 +350,7 @@
   </a>
 </h3>
 <p>理论上服务端应该先返回 ACK 分组，表示确认收到了客户端发送的 FIN 分组。但是也可以将 ACK 分组和声明服务器停止发送的 FIN 标记一起返回。所以 FIN 和 ACK 标记位同时被激活，分组被发送给客户端。</p>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422145339782.png" alt="image-20210422145339782"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422145339782.png" alt="image-20210422145339782"></p>
 <p>到了这里，我们应该已经有纠错的能力了，能够分析为什么 Wireshark 认为出现了乱序。因为这里的 FIN，ACK 分组应该返回的序号为：</p>
 <ul>
 <li>方向：服务端 -&gt; 客户端</li>
@@ -363,7 +363,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422150857634.png" alt="image-20210422150857634"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422150857634.png" alt="image-20210422150857634"></p>
 <p>客户端的 TCP 服务接收到上述分组后，发现了异常，只能当作接收到了 FIN 请求，并重新发送了 FIN，ACK 分组。</p>
 <ul>
 <li>方向：客户端 -&gt; 服务端</li>
@@ -376,7 +376,7 @@
     <i class="fa fa-link" aria-hidden="true"></i>
   </a>
 </h3>
-<p><img src="https://jtr109.github.io/images/tcp-seq.assets/image-20210422150912351.png" alt="image-20210422150912351"></p>
+<p><img src="https://www.jtr109.com/images/tcp-seq.assets/image-20210422150912351.png" alt="image-20210422150912351"></p>
 <p>服务端收到了客户端发送到 FIN，ACK 分组，返回了 ACK 分组。</p>
 <ul>
 <li>方向：服务端 -&gt; 客户端</li>
@@ -516,7 +516,7 @@
 
     
       
-      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
+      <script src="https://www.jtr109.com/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     

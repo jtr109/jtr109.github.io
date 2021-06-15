@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>authentication on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/authentication/</link>
+    <link>https://www.jtr109.com/tags/authentication/</link>
     <description>Recent content in authentication on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 21 Oct 2020 16:18:21 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/authentication/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/authentication/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>产品分析：Authing 中的主要实体及其关系梳理</title>
-      <link>https://jtr109.github.io/posts/authing-er/</link>
+      <link>https://www.jtr109.com/posts/authing-er/</link>
       <pubDate>Wed, 21 Oct 2020 16:18:21 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/authing-er/</guid>
+      <guid>https://www.jtr109.com/posts/authing-er/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://authing.cn/&#34;&gt;Authing&lt;/a&gt; 是一个典型的 IDaaS。提供了多种&lt;a href=&#34;https://docs.authing.cn/authentication/oidc/&#34;&gt;认证方式&lt;/a&gt;和&lt;a href=&#34;https://docs.authing.cn/social-login/web/&#34;&gt;社会化登录方式&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;实体&#34;&gt;
   实体
@@ -124,17 +124,17 @@
     
     <item>
       <title>OpenID Connection (OIDC) 原理实践</title>
-      <link>https://jtr109.github.io/posts/oidc/</link>
+      <link>https://www.jtr109.com/posts/oidc/</link>
       <pubDate>Thu, 06 Aug 2020 14:04:44 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/oidc/</guid>
+      <guid>https://www.jtr109.com/posts/oidc/</guid>
       <description>&lt;h2 id=&#34;流程概览&#34;&gt;
   流程概览
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e6%b5%81%e7%a8%8b%e6%a6%82%e8%a7%88&#34;&gt;
     &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
   &lt;/a&gt;
 &lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Sequence_Diagram1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/oidc.assets/Sequence_Diagram1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;名词解释&#34;&gt;
   名词解释
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e5%90%8d%e8%af%8d%e8%a7%a3%e9%87%8a&#34;&gt;
@@ -163,7 +163,7 @@
 &lt;li&gt;redirect URLs 可以填写多个，每行填写一个，在向 OpenID provider 请求身份的时候必须携带一个重定向地址，这个地址必须包含在配置中。&lt;/li&gt;
 &lt;li&gt;scopes 指定为 &lt;code&gt;openid&lt;/code&gt; 如果需要 profile 或者 email 信息，也可以指定，例如： &lt;code&gt;openid profile email&lt;/code&gt;。（⚠️ 注意：目前测试下来，这里的 scope 配置并不影响 relying party 请求授权的 scopes）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/oidc.assets/Untitled.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;OIDC 模块在 Django Admin 中提供的配置页面&lt;/p&gt;
 &lt;h2 id=&#34;relying-party-获取身份信息&#34;&gt;
   Relying Party 获取身份信息
@@ -212,10 +212,10 @@
 &lt;p&gt;提取出参数 &lt;code&gt;id_token&lt;/code&gt; ，该参数为 JWT 形式，可以在 &lt;a href=&#34;https://jwt.io&#34;&gt;jwt.io&lt;/a&gt; 中模仿验证过程。首先提取 &lt;code&gt;id_token&lt;/code&gt;：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IjExNmRhNzAxMDE1ODQyMmZmODM2MTBiMzYzYTA0MGNmIn0.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvb3BlbmlkIiwic3ViIjoiMSIsImF1ZCI6IjkzMjk4MSIsImV4cCI6MTU5NTg0MTUyNSwiaWF0IjoxNTk1ODQwOTI1LCJhdXRoX3RpbWUiOjE1OTU4MjIxOTUsIm5vbmNlIjoibi0wUzZfV3pBMk1qIiwiYXRfaGFzaCI6IkdadDZOUjUwMElWU3ZqbXZaZGFIbUEifQ.FSEqMu_xOfYlCEXRyB5vvFQPpQKuax6gQ2axKF3AmI-IytX9g1lWpw6q0jppaMkBCNHi5mses_EbEOWMwXVMDndJDuzIhiL6ZvU0e9hPDdSVRkKRVkgEHCqHKmIOmUe6wYdTfhcZANGVzAjFum81jVuTX5wSMvrVIYk5bad7XoKUJ30WlauPqnykmfZG6Jfw_LDzSe10yJm0EPudI1Tc5lSRysZGqUYXkjcpkzTHYIiSv0NVr88As-bLFwQdyTDMD3DPqnGI2Ruasdeo-ewxjEHFJbINndoKN5PNeLQ2OUoXuAx_pwFInQKm4FNYOHb0ogSvu7d6HAq0LGZESJx51Q
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以注意到 jwt.io 中在解析 JWT 后，解析了 ID token 中 &lt;code&gt;iss&lt;/code&gt; 指定的地址，向 &lt;code&gt;.well-known/openid-configuration&lt;/code&gt; 地址发送请求，获取了 JWK 的存放地址 &lt;code&gt;jwks_uri&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%201.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/oidc.assets/Untitled%201.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;http://jwt.io&#34;&gt;jwt.io&lt;/a&gt; 请求 &lt;code&gt;iss&lt;/code&gt; 下的 &lt;code&gt;/.well-known/openid-configuration&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;通过请求到的公钥验证了 ID token。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%202.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/oidc.assets/Untitled%202.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;通过 &lt;code&gt;iss&lt;/code&gt; 下的 &lt;code&gt;/jwks&lt;/code&gt; 获取公钥&lt;/p&gt;
 &lt;h3 id=&#34;获取用户身份&#34;&gt;
   获取用户身份
@@ -242,7 +242,7 @@
 &lt;/h3&gt;
 &lt;p&gt;RP 根据指定的 &lt;code&gt;token_type&lt;/code&gt; 和 &lt;code&gt;access_token&lt;/code&gt; 获取被授权的用户信息。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -X GET http://localhost:8000/openid/userinfo -H &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#34;Authorization: Bearer 3f0a65d53906451393cab6b0f12a8106&amp;#34;&lt;/span&gt; -i
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/oidc.assets/Untitled%203.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/oidc.assets/Untitled%203.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;返回已授权的用户信息&lt;/p&gt;
 &lt;h3 id=&#34;用户登录-rp&#34;&gt;
   用户登录 RP

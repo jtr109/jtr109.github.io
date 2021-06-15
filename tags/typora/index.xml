@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Typora on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/typora/</link>
+    <link>https://www.jtr109.com/tags/typora/</link>
     <description>Recent content in Typora on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 07 Jun 2020 19:48:37 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/typora/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/typora/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>在 Typora 和 Hugo 中正确显示图片</title>
-      <link>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</link>
+      <link>https://www.jtr109.com/posts/manage-images-in-typora-and-hugo/</link>
       <pubDate>Sun, 07 Jun 2020 19:48:37 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/manage-images-in-typora-and-hugo/</guid>
+      <guid>https://www.jtr109.com/posts/manage-images-in-typora-and-hugo/</guid>
       <description>&lt;h2 id=&#34;背景&#34;&gt;
   背景
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
@@ -50,7 +50,7 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;点击 Use Image Root Path，选择 &lt;code&gt;static&lt;/code&gt; 目录作为根路径。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195608916.png&#34; alt=&#34;image-20200607195608916&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/manage-images-in-typora-and-hugo.assets/image-20200607195608916.png&#34; alt=&#34;image-20200607195608916&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;设置图片自动存放路径&#34;&gt;
   设置图片自动存放路径
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%ae%be%e7%bd%ae%e5%9b%be%e7%89%87%e8%87%aa%e5%8a%a8%e5%ad%98%e6%94%be%e8%b7%af%e5%be%84&#34;&gt;
@@ -58,9 +58,9 @@
   &lt;/a&gt;
 &lt;/h3&gt;
 &lt;p&gt;在设置中选择 Image 栏，将 &lt;code&gt;static/images&lt;/code&gt; 的绝对路径设置为图片插入地址。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200607195835475.png&#34; alt=&#34;image-20200607195835475&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/manage-images-in-typora-and-hugo.assets/image-20200607195835475.png&#34; alt=&#34;image-20200607195835475&#34;&gt;&lt;/p&gt;
 &lt;p&gt;也可以通过语法加入图片子目录，更好地管理图片。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/manage-images-in-typora-and-hugo.assets/image-20200608112923095.png&#34; alt=&#34;image-20200608112923095&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/manage-images-in-typora-and-hugo.assets/image-20200608112923095.png&#34; alt=&#34;image-20200608112923095&#34;&gt;&lt;/p&gt;
 &lt;p&gt;经过如上配置，截图便可通过 command+v 自动保存在 &lt;code&gt;static/images&lt;/code&gt; 目录中。&lt;/p&gt;
 &lt;h2 id=&#34;配置-hugo&#34;&gt;
   配置 Hugo
@@ -84,10 +84,10 @@
     
     <item>
       <title>Post Blog with Hexo with Next</title>
-      <link>https://jtr109.github.io/posts/hexo-typora-github/</link>
+      <link>https://www.jtr109.com/posts/hexo-typora-github/</link>
       <pubDate>Thu, 07 Nov 2019 19:48:56 +0000</pubDate>
       
-      <guid>https://jtr109.github.io/posts/hexo-typora-github/</guid>
+      <guid>https://www.jtr109.com/posts/hexo-typora-github/</guid>
       <description>&lt;h2 id=&#34;install-hexo-asset-image&#34;&gt;
   Install Hexo Asset Image
   &lt;a class=&#34;heading-link&#34; href=&#34;#install-hexo-asset-image&#34;&gt;
@@ -126,7 +126,7 @@
 &lt;li&gt;修改图片存放目录为 &lt;code&gt;./${filename}&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;勾选 &lt;code&gt;Use relative path if possible&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191107200154200.png&#34; alt=&#34;image-20191107200154200&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/hexo-typora-github.assets/image-20191107200154200.png&#34; alt=&#34;image-20191107200154200&#34;&gt;&lt;/p&gt;
 &lt;p&gt;尝试截图, 使用 &lt;code&gt;Ctrl-v&lt;/code&gt; 粘贴到 Typora 中, 图片地址为: &lt;code&gt;![image-20191107200154200](hexo-typora-github/image-20191107200154200.png)&lt;/code&gt;. 符合预期, 图片可以正常显示了.&lt;/p&gt;
 &lt;h2 id=&#34;deploying-to-github&#34;&gt;
   Deploying to Github
@@ -155,7 +155,7 @@
   &lt;/a&gt;
 &lt;/h2&gt;
 &lt;p&gt;Next theme 默认生成的 icon 比较朴素, 可以使用 &lt;a href=&#34;https://favicon.io/favicon-generator/&#34;&gt;favicon generator&lt;/a&gt; 生成自己的 favicon, 既可以享受定制化的乐趣, 也避免了版权纠纷.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://jtr109.github.io/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.jtr109.com/images/hexo-typora-github.assets/image-20191109115147241.png&#34; alt=&#34;favicon generator | favicon.io&#34;&gt;&lt;/p&gt;
 &lt;p&gt;点击右上角 Download 下载到本地, 解压并复制到 &lt;code&gt;themes/next/source/images&lt;/code&gt; 下, 并修改 Next 的配置文件 &lt;code&gt;nvim themes/next/_config.yml&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;favicon&lt;/span&gt;:
   &lt;span style=&#34;color:#268bd2;font-weight:bold&#34;&gt;small&lt;/span&gt;: &lt;span style=&#34;color:#2aa198&#34;&gt;/images/favicon-16x16-next.png&lt;/span&gt;

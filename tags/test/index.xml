@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>test on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/test/</link>
+    <link>https://www.jtr109.com/tags/test/</link>
     <description>Recent content in test on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 07 Nov 2019 22:38:24 +0000</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/test/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/test/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Rust Unit Test Example</title>
-      <link>https://jtr109.github.io/posts/rust-unittest-example/</link>
+      <link>https://www.jtr109.com/posts/rust-unittest-example/</link>
       <pubDate>Thu, 07 Nov 2019 22:38:24 +0000</pubDate>
       
-      <guid>https://jtr109.github.io/posts/rust-unittest-example/</guid>
+      <guid>https://www.jtr109.com/posts/rust-unittest-example/</guid>
       <description>&lt;h2 id=&#34;起因&#34;&gt;
   起因
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%b5%b7%e5%9b%a0&#34;&gt;
@@ -85,10 +85,10 @@ The syntax given to this macro is the same syntax as the  &lt;a href=&#34;https:
     
     <item>
       <title>Unit test of Golang</title>
-      <link>https://jtr109.github.io/posts/unit-test-of-golang/</link>
+      <link>https://www.jtr109.com/posts/unit-test-of-golang/</link>
       <pubDate>Tue, 21 Aug 2018 17:33:29 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/unit-test-of-golang/</guid>
+      <guid>https://www.jtr109.com/posts/unit-test-of-golang/</guid>
       <description>&lt;h3 id=&#34;notes&#34;&gt;
   notes
   &lt;a class=&#34;heading-link&#34; href=&#34;#notes&#34;&gt;

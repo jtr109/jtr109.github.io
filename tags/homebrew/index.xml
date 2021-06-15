@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Homebrew on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/homebrew/</link>
+    <link>https://www.jtr109.com/tags/homebrew/</link>
     <description>Recent content in Homebrew on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 18 Oct 2017 10:08:27 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/homebrew/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/homebrew/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Homebrew 自动更新 PostgreSQL 后对应数据库的更新处理</title>
-      <link>https://jtr109.github.io/posts/after-postgresql-upgrade/</link>
+      <link>https://www.jtr109.com/posts/after-postgresql-upgrade/</link>
       <pubDate>Wed, 18 Oct 2017 10:08:27 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/after-postgresql-upgrade/</guid>
+      <guid>https://www.jtr109.com/posts/after-postgresql-upgrade/</guid>
       <description>&lt;p&gt;今天 PostgreSQL 更新到了 10.0, 对于我这样的新手, 可以说是悲喜交加. Server 本身更新了, 但是数据库还是老的, 会导致无法使用的问题. 在这里分享一下数据库的无痛恢复过程.&lt;/p&gt;
 &lt;h2 id=&#34;问题描述&#34;&gt;
   问题描述
@@ -151,10 +151,10 @@ server started
     
     <item>
       <title>Homebrew 报错汇总</title>
-      <link>https://jtr109.github.io/posts/brew-curl-error/</link>
+      <link>https://www.jtr109.com/posts/brew-curl-error/</link>
       <pubDate>Wed, 06 Sep 2017 11:50:17 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/brew-curl-error/</guid>
+      <guid>https://www.jtr109.com/posts/brew-curl-error/</guid>
       <description>&lt;h2 id=&#34;curl-超限错误&#34;&gt;
   curl 超限错误
   &lt;a class=&#34;heading-link&#34; href=&#34;#curl-%e8%b6%85%e9%99%90%e9%94%99%e8%af%af&#34;&gt;
@@ -171,10 +171,10 @@ $ brew install git --with-curl --with-openssl
     
     <item>
       <title>Homebrew 镜像推荐</title>
-      <link>https://jtr109.github.io/posts/brew-mirror-recommend/</link>
+      <link>https://www.jtr109.com/posts/brew-mirror-recommend/</link>
       <pubDate>Fri, 18 Aug 2017 09:03:47 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/brew-mirror-recommend/</guid>
+      <guid>https://www.jtr109.com/posts/brew-mirror-recommend/</guid>
       <description>&lt;h2 id=&#34;镜像选择&#34;&gt;
   镜像选择
   &lt;a class=&#34;heading-link&#34; href=&#34;#%e9%95%9c%e5%83%8f%e9%80%89%e6%8b%a9&#34;&gt;

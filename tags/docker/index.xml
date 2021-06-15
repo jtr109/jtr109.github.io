@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Docker on jtr109&#39;s Castle</title>
-    <link>https://jtr109.github.io/tags/docker/</link>
+    <link>https://www.jtr109.com/tags/docker/</link>
     <description>Recent content in Docker on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 24 Jun 2020 11:26:40 +0800</lastBuildDate>
     
-	<atom:link href="https://jtr109.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://www.jtr109.com/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Mysql Service With K3s on Raspberry Pi</title>
-      <link>https://jtr109.github.io/posts/mysql-service-with-k3s-on-raspberry-pi/</link>
+      <link>https://www.jtr109.com/posts/mysql-service-with-k3s-on-raspberry-pi/</link>
       <pubDate>Wed, 24 Jun 2020 11:26:40 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/mysql-service-with-k3s-on-raspberry-pi/</guid>
+      <guid>https://www.jtr109.com/posts/mysql-service-with-k3s-on-raspberry-pi/</guid>
       <description>&lt;h2 id=&#34;dependences&#34;&gt;
   Dependences
   &lt;a class=&#34;heading-link&#34; href=&#34;#dependences&#34;&gt;
@@ -190,10 +190,10 @@
     
     <item>
       <title>Changing Timezone in Docker</title>
-      <link>https://jtr109.github.io/posts/changing-timezone-in-docker/</link>
+      <link>https://www.jtr109.com/posts/changing-timezone-in-docker/</link>
       <pubDate>Mon, 17 Jun 2019 11:40:44 +0800</pubDate>
       
-      <guid>https://jtr109.github.io/posts/changing-timezone-in-docker/</guid>
+      <guid>https://www.jtr109.com/posts/changing-timezone-in-docker/</guid>
       <description>&lt;h2 id=&#34;background&#34;&gt;
   Background
   &lt;a class=&#34;heading-link&#34; href=&#34;#background&#34;&gt;

@@ -32,7 +32,7 @@ openssl rsa -in private_key.pem -outform PEM -pubout -out public.pem 使用 Pyth
 from Crypto.PublicKey import RSA key = RSA.generate(2048) private_key = key.export_key() file_out = open(&#34;private.pem&#34;, &#34;wb&#34;) file_out.write(private_key) file_out.close() public_key = key.publickey().export_key() file_out = open(&#34;receiver.pem&#34;, &#34;wb&#34;) file_out.write(public_key) file_out.close() 使用 Python 加解密    使用 PyCryptodome 实现 RSA-2048 加解密。
 In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://jtr109.github.io/posts/python-rsa-2048/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://www.jtr109.com/posts/python-rsa-2048/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-06-10T14:54:41&#43;08:00" />
 <meta property="article:modified_time" content="2020-06-10T14:54:41&#43;08:00" />
 
@@ -43,15 +43,15 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
 </title>
 
     
-      <link rel="canonical" href="https://jtr109.github.io/posts/python-rsa-2048/">
+      <link rel="canonical" href="https://www.jtr109.com/posts/python-rsa-2048/">
     
 
-    <link rel="preload" href="https://jtr109.github.io/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://www.jtr109.com/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
 
     
       
       
-      <link rel="stylesheet" href="https://jtr109.github.io/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://www.jtr109.com/css/coder.min.04d6bedce375c4fcb6bf1e2c89e70f9e45a3431f1926a9f5f63749517718d366.css" integrity="sha256-BNa&#43;3ON1xPy2vx4siecPnkWjQx8ZJqn19jdJUXcY02Y=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -60,7 +60,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
       
         
         
-        <link rel="stylesheet" href="https://jtr109.github.io/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
+        <link rel="stylesheet" href="https://www.jtr109.com/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
       
     
 
@@ -68,11 +68,11 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
 
     
 
-    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="https://jtr109.github.io/favicon/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-16x16.png" sizes="16x16">
 
-    <link rel="apple-touch-icon" href="https://jtr109.github.io/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://jtr109.github.io/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="https://www.jtr109.com/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.jtr109.com/images/apple-touch-icon.png">
 
     
 
@@ -97,7 +97,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
-    <a class="navigation-title" href="https://jtr109.github.io/">
+    <a class="navigation-title" href="https://www.jtr109.com/">
       jtr109&#39;s Castle
     </a>
     
@@ -109,19 +109,19 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
         
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/posts/">Blog</a>
+              <a class="navigation-link" href="https://www.jtr109.com/posts/">Blog</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/categories/">Categories</a>
+              <a class="navigation-link" href="https://www.jtr109.com/categories/">Categories</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/series/">Series</a>
+              <a class="navigation-link" href="https://www.jtr109.com/series/">Series</a>
             </li>
           
             <li class="navigation-item">
-              <a class="navigation-link" href="https://jtr109.github.io/tags/">Tags</a>
+              <a class="navigation-link" href="https://www.jtr109.com/tags/">Tags</a>
             </li>
           
         
@@ -139,7 +139,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
       <header>
         <div class="post-title">
           <h1 class="title">
-            <a class="title-link" href="https://jtr109.github.io/posts/python-rsa-2048/">
+            <a class="title-link" href="https://www.jtr109.com/posts/python-rsa-2048/">
               在 Python 中使用 RSA 2048
             </a>
           </h1>
@@ -160,13 +160,13 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
           
           <div class="categories">
   <i class="fa fa-folder" aria-hidden="true"></i>
-    <a href="https://jtr109.github.io/categories/tech/">tech</a></div>
+    <a href="https://www.jtr109.com/categories/tech/">tech</a></div>
 
           <div class="tags">
   <i class="fa fa-tag" aria-hidden="true"></i>
-    <a href="https://jtr109.github.io/tags/rsa/">RSA</a>
+    <a href="https://www.jtr109.com/tags/rsa/">RSA</a>
       <span class="separator">•</span>
-    <a href="https://jtr109.github.io/tags/cryptographic/">Cryptographic</a></div>
+    <a href="https://www.jtr109.com/tags/cryptographic/">Cryptographic</a></div>
 
         </div>
       </header>
@@ -320,7 +320,7 @@ In [1]: from Crypto.PublicKey import RSA In [2]: from Crypto." />
 
     
       
-      <script src="https://jtr109.github.io/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
+      <script src="https://www.jtr109.com/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
     
 
     
