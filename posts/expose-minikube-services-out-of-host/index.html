@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="color-scheme" content="light dark">
+
+    
+
+    <meta name="author" content="Ryan Li">
+    <meta name="description" content="背景    minikube 是一款基于 Kubernetes 的定位于快速验证功能的小型容器编排环境。
+由于它的定位特性，我们在使用中会发现 minikube 虚拟出了一个 IP 作为自身的节点 IP，该 IP 和宿主机不同。对于 NodePort 类型的 Service 也没有办法通过 127.0.0.1 访问。
+Host 内访问     The minikube VM is exposed to the host system via a host-only IP address, that can be obtained with the minikube ip command.
+ 我们必须通过 minikube ip 找到 minikube 的 IP 并通过它来访问 NodePort 类型的 service。
+另外可以留意到 LoadBalancer 类型的 service 在默认情况下 external IP 为 &lt;pending&gt;，为了要能够访问到 service，需要通过 minikube tunnel 建立隧道和服务通信。在执行 minikube tunnel 后，可以发现 external IP 被设置成和 cluster IP 一样的值，这时候就可以通过 &lt;minikube-ip&gt;:&lt;service-port&gt; 来访问 service 了。">
+    <meta name="keywords" content="blog,developer,personal,python,rust">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="将 minikube 的服务暴露到宿主机外"/>
+<meta name="twitter:description" content="背景    minikube 是一款基于 Kubernetes 的定位于快速验证功能的小型容器编排环境。
+由于它的定位特性，我们在使用中会发现 minikube 虚拟出了一个 IP 作为自身的节点 IP，该 IP 和宿主机不同。对于 NodePort 类型的 Service 也没有办法通过 127.0.0.1 访问。
+Host 内访问     The minikube VM is exposed to the host system via a host-only IP address, that can be obtained with the minikube ip command.
+ 我们必须通过 minikube ip 找到 minikube 的 IP 并通过它来访问 NodePort 类型的 service。
+另外可以留意到 LoadBalancer 类型的 service 在默认情况下 external IP 为 &lt;pending&gt;，为了要能够访问到 service，需要通过 minikube tunnel 建立隧道和服务通信。在执行 minikube tunnel 后，可以发现 external IP 被设置成和 cluster IP 一样的值，这时候就可以通过 &lt;minikube-ip&gt;:&lt;service-port&gt; 来访问 service 了。"/>
+
+    <meta property="og:title" content="将 minikube 的服务暴露到宿主机外" />
+<meta property="og:description" content="背景    minikube 是一款基于 Kubernetes 的定位于快速验证功能的小型容器编排环境。
+由于它的定位特性，我们在使用中会发现 minikube 虚拟出了一个 IP 作为自身的节点 IP，该 IP 和宿主机不同。对于 NodePort 类型的 Service 也没有办法通过 127.0.0.1 访问。
+Host 内访问     The minikube VM is exposed to the host system via a host-only IP address, that can be obtained with the minikube ip command.
+ 我们必须通过 minikube ip 找到 minikube 的 IP 并通过它来访问 NodePort 类型的 service。
+另外可以留意到 LoadBalancer 类型的 service 在默认情况下 external IP 为 &lt;pending&gt;，为了要能够访问到 service，需要通过 minikube tunnel 建立隧道和服务通信。在执行 minikube tunnel 后，可以发现 external IP 被设置成和 cluster IP 一样的值，这时候就可以通过 &lt;minikube-ip&gt;:&lt;service-port&gt; 来访问 service 了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.jtr109.com/posts/expose-minikube-services-out-of-host/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-24T22:45:45&#43;08:00" />
+<meta property="article:modified_time" content="2021-06-24T22:45:45&#43;08:00" />
+
+
+
+    <title>
+  将 minikube 的服务暴露到宿主机外 · jtr109&#39;s Castle
+</title>
+
+    
+      <link rel="canonical" href="https://www.jtr109.com/posts/expose-minikube-services-out-of-host/">
+    
+
+    <link rel="preload" href="https://www.jtr109.com/fonts/forkawesome-webfont.woff2?v=1.1.7" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="https://www.jtr109.com/css/coder.min.cbf6f68b2a836dd1d34f005153262dd21d148461cf33684940f1bb4c048821b1.css" integrity="sha256-y/b2iyqDbdHTTwBRUyYt0h0UhGHPM2hJQPG7TASIIbE=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="https://www.jtr109.com/css/coder-dark.min.dde8a61eb31a32353b4baf3d9113f03c4ea2a8ca9bb736f59ca2d2b2cb664f0b.css" integrity="sha256-3eimHrMaMjU7S689kRPwPE6iqMqbtzb1nKLSsstmTws=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://www.jtr109.com/favicon/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://www.jtr109.com/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.jtr109.com/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.83.1" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://www.jtr109.com/">
+      jtr109&#39;s Castle
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://www.jtr109.com/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://www.jtr109.com/categories/">Categories</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://www.jtr109.com/series/">Series</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://www.jtr109.com/tags/">Tags</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://cse.google.com/cse?cx=8d7eb1fd80fe234e7">Search</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://www.jtr109.com/posts/expose-minikube-services-out-of-host/">
+              将 minikube 的服务暴露到宿主机外
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2021-06-24T22:45:45&#43;08:00'>
+                June 24, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              One-minute read
+            </span>
+          </div>
+          
+          <div class="categories">
+  <i class="fa fa-folder" aria-hidden="true"></i>
+    <a href="https://www.jtr109.com/categories/tech/">tech</a></div>
+
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <a href="https://www.jtr109.com/tags/kubernetes/">Kubernetes</a>
+      <span class="separator">•</span>
+    <a href="https://www.jtr109.com/tags/minikube/">minikube</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h2 id="背景">
+  背景
+  <a class="heading-link" href="#%e8%83%8c%e6%99%af">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p><a href="https://minikube.sigs.k8s.io/">minikube</a> 是一款基于 Kubernetes 的定位于快速验证功能的小型容器编排环境。</p>
+<p>由于它的定位特性，我们在使用中会发现 minikube 虚拟出了一个 IP 作为自身的节点 IP，该 IP 和宿主机不同。对于 <code>NodePort</code> 类型的 Service 也没有办法通过 <code>127.0.0.1</code> 访问。</p>
+<h2 id="host-内访问">
+  Host 内访问
+  <a class="heading-link" href="#host-%e5%86%85%e8%ae%bf%e9%97%ae">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<blockquote>
+<p>The minikube VM is exposed to the host system via a host-only IP address, that can be obtained with the <code>minikube ip</code> command.</p>
+</blockquote>
+<p>我们必须通过 <code>minikube ip</code> 找到 minikube 的 IP 并通过它来<a href="https://minikube.sigs.k8s.io/docs/handbook/accessing/#getting-the-nodeport-using-kubectl">访问 <code>NodePort</code> 类型的 service</a>。</p>
+<p>另外可以留意到 <code>LoadBalancer</code> 类型的 service 在默认情况下 external IP 为 <code>&lt;pending&gt;</code>，为了要能够<a href="https://minikube.sigs.k8s.io/docs/handbook/accessing/#loadbalancer-access">访问到 service</a>，需要通过 <code>minikube tunnel</code> 建立隧道和服务通信。在执行 <code>minikube tunnel</code> 后，可以发现 external IP 被设置成和 cluster IP 一样的值，这时候就可以通过 <code>&lt;minikube-ip&gt;:&lt;service-port&gt;</code> 来访问 service 了。</p>
+<h2 id="host-外访问">
+  Host 外访问
+  <a class="heading-link" href="#host-%e5%a4%96%e8%ae%bf%e9%97%ae">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>通过 minikube 可以很方便地在本机访问，同时避免了对宿主机端口的占用。但是也带来了另一个问题：无法直接通过访问宿主机的端口来访问 services 进行调试。</p>
+<p>比如我的实验机是一台云服务虚拟机，我在自己的电脑上可以访问这台虚拟机，但是不能访问虚拟机上 minikube 暴露的服务。</p>
+<p>虽然没有办法让 minikube 直接通过宿主机端口对外暴露 services，但是如果我们把问题换个角度思考，就很容易找到解决办法：如何将一个 service（不特定类型）暴露到本机。</p>
+<p>这时候最简单的办法就是通过 <code>kubectl port-forward</code> 转发端口。</p>
+<p>假设我有 <code>service/istio-ingressgateway</code>，service 监听 80 端口，我希望暴露在宿主机的 31303 端口，就可以使用以下命令<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>：·</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl port-forward --address 0.0.0.0 -n istio-system service/istio-ingressgateway 31303:80
+</code></pre></div><section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>参考问答：<a href="https://superuser.com/questions/1634658/expose-host-only-minikube-for-local-network?newreg=d9bd6e22b82f4a0fbce2a9af14fddafb">virtualbox - Expose host-only minikube for local network - Super User</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jtr109" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>Welcome to My Castle.</p>
+      
+      
+        ©
+        
+        2021
+         Ryan Li 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+      <script src="https://www.jtr109.com/js/coder.min.235666b114443867d43eeb5799d51f6252965e5163f338285e113fa381d3d27e.js" integrity="sha256-I1ZmsRREOGfUPutXmdUfYlKWXlFj8zgoXhE/o4HT0n4="></script>
+    
+
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-169289956-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

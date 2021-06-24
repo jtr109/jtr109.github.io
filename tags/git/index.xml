@@ -112,10 +112,10 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;注意！只是打个比方，没有这种操作方式。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;注意！只是打个比方，没有这种操作方式。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考[官方文档](&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&#34;&gt;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&lt;/a&gt; phrase that another way%2C when you try to merge one commit with a commit that can be reached by following the first commit&amp;rsquo;s history%2C git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a &amp;ldquo;fast-forward.&amp;quot;)。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考[官方文档](&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&#34;&gt;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&lt;/a&gt; phrase that another way%2C when you try to merge one commit with a commit that can be reached by following the first commit&amp;rsquo;s history%2C git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a &amp;ldquo;fast-forward.&amp;quot;)。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;

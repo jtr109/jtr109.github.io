@@ -6,10 +6,58 @@
     <description>Recent content in tech on jtr109&#39;s Castle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 29 May 2021 16:24:18 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 24 Jun 2021 22:45:45 +0800</lastBuildDate>
     
 	<atom:link href="https://www.jtr109.com/categories/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>将 minikube 的服务暴露到宿主机外</title>
+      <link>https://www.jtr109.com/posts/expose-minikube-services-out-of-host/</link>
+      <pubDate>Thu, 24 Jun 2021 22:45:45 +0800</pubDate>
+      
+      <guid>https://www.jtr109.com/posts/expose-minikube-services-out-of-host/</guid>
+      <description>&lt;h2 id=&#34;背景&#34;&gt;
+  背景
+  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%83%8c%e6%99%af&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://minikube.sigs.k8s.io/&#34;&gt;minikube&lt;/a&gt; 是一款基于 Kubernetes 的定位于快速验证功能的小型容器编排环境。&lt;/p&gt;
+&lt;p&gt;由于它的定位特性，我们在使用中会发现 minikube 虚拟出了一个 IP 作为自身的节点 IP，该 IP 和宿主机不同。对于 &lt;code&gt;NodePort&lt;/code&gt; 类型的 Service 也没有办法通过 &lt;code&gt;127.0.0.1&lt;/code&gt; 访问。&lt;/p&gt;
+&lt;h2 id=&#34;host-内访问&#34;&gt;
+  Host 内访问
+  &lt;a class=&#34;heading-link&#34; href=&#34;#host-%e5%86%85%e8%ae%bf%e9%97%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The minikube VM is exposed to the host system via a host-only IP address, that can be obtained with the &lt;code&gt;minikube ip&lt;/code&gt; command.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们必须通过 &lt;code&gt;minikube ip&lt;/code&gt; 找到 minikube 的 IP 并通过它来&lt;a href=&#34;https://minikube.sigs.k8s.io/docs/handbook/accessing/#getting-the-nodeport-using-kubectl&#34;&gt;访问 &lt;code&gt;NodePort&lt;/code&gt; 类型的 service&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;另外可以留意到 &lt;code&gt;LoadBalancer&lt;/code&gt; 类型的 service 在默认情况下 external IP 为 &lt;code&gt;&amp;lt;pending&amp;gt;&lt;/code&gt;，为了要能够&lt;a href=&#34;https://minikube.sigs.k8s.io/docs/handbook/accessing/#loadbalancer-access&#34;&gt;访问到 service&lt;/a&gt;，需要通过 &lt;code&gt;minikube tunnel&lt;/code&gt; 建立隧道和服务通信。在执行 &lt;code&gt;minikube tunnel&lt;/code&gt; 后，可以发现 external IP 被设置成和 cluster IP 一样的值，这时候就可以通过 &lt;code&gt;&amp;lt;minikube-ip&amp;gt;:&amp;lt;service-port&amp;gt;&lt;/code&gt; 来访问 service 了。&lt;/p&gt;
+&lt;h2 id=&#34;host-外访问&#34;&gt;
+  Host 外访问
+  &lt;a class=&#34;heading-link&#34; href=&#34;#host-%e5%a4%96%e8%ae%bf%e9%97%ae&#34;&gt;
+    &lt;i class=&#34;fa fa-link&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;通过 minikube 可以很方便地在本机访问，同时避免了对宿主机端口的占用。但是也带来了另一个问题：无法直接通过访问宿主机的端口来访问 services 进行调试。&lt;/p&gt;
+&lt;p&gt;比如我的实验机是一台云服务虚拟机，我在自己的电脑上可以访问这台虚拟机，但是不能访问虚拟机上 minikube 暴露的服务。&lt;/p&gt;
+&lt;p&gt;虽然没有办法让 minikube 直接通过宿主机端口对外暴露 services，但是如果我们把问题换个角度思考，就很容易找到解决办法：如何将一个 service（不特定类型）暴露到本机。&lt;/p&gt;
+&lt;p&gt;这时候最简单的办法就是通过 &lt;code&gt;kubectl port-forward&lt;/code&gt; 转发端口。&lt;/p&gt;
+&lt;p&gt;假设我有 &lt;code&gt;service/istio-ingressgateway&lt;/code&gt;，service 监听 80 端口，我希望暴露在宿主机的 31303 端口，就可以使用以下命令&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;：·&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;kubectl port-forward --address 0.0.0.0 -n istio-system service/istio-ingressgateway 31303:80
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考问答：&lt;a href=&#34;https://superuser.com/questions/1634658/expose-host-only-minikube-for-local-network?newreg=d9bd6e22b82f4a0fbce2a9af14fddafb&#34;&gt;virtualbox - Expose host-only minikube for local network - Super User&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+</description>
+    </item>
     
     <item>
       <title>查看 Rust Crates 的 Features</title>
@@ -151,10 +199,10 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;注意！只是打个比方，没有这种操作方式。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;注意！只是打个比方，没有这种操作方式。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考[官方文档](&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&#34;&gt;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&lt;/a&gt; phrase that another way%2C when you try to merge one commit with a commit that can be reached by following the first commit&amp;rsquo;s history%2C git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a &amp;ldquo;fast-forward.&amp;quot;)。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考[官方文档](&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&#34;&gt;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#:~:text=to&lt;/a&gt; phrase that another way%2C when you try to merge one commit with a commit that can be reached by following the first commit&amp;rsquo;s history%2C git simplifies things by moving the pointer forward because there is no divergent work to merge together — this is called a &amp;ldquo;fast-forward.&amp;quot;)。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -242,7 +290,7 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考 Wikipedia 的&lt;a href=&#34;https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_termination:~:text=It%20is%20also%20possible%20to%20terminate,host%20A%20replies%20with%20an%20ACK.%5B17%5D&#34;&gt;说明&lt;/a&gt;。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考 Wikipedia 的&lt;a href=&#34;https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_termination:~:text=It%20is%20also%20possible%20to%20terminate,host%20A%20replies%20with%20an%20ACK.%5B17%5D&#34;&gt;说明&lt;/a&gt;。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -587,13 +635,13 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;RFC 2616 中是这样&lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.1:~:text=HTTP%20messages%20consist%20of%20requests%20from%20client%20to%20server%20and%20responses%20from%20server%20to%20client.&#34;&gt;描述&lt;/a&gt;的：HTTP messages consist of requests from client to server and responses from server to client. &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;RFC 2616 中是这样&lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.1:~:text=HTTP%20messages%20consist%20of%20requests%20from%20client%20to%20server%20and%20responses%20from%20server%20to%20client.&#34;&gt;描述&lt;/a&gt;的：HTTP messages consist of requests from client to server and responses from server to client.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;引用自 &lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html&#34;&gt;HTTP/1.1: HTTP Message&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;引用自 &lt;a href=&#34;https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html&#34;&gt;HTTP/1.1: HTTP Message&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;CRLF 的符号化表示是 &lt;code&gt;\r\n&lt;/code&gt;，十六进制编码表示为 &lt;code&gt;0d0a&lt;/code&gt;。 &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;CRLF 的符号化表示是 &lt;code&gt;\r\n&lt;/code&gt;，十六进制编码表示为 &lt;code&gt;0d0a&lt;/code&gt;。&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -678,10 +726,10 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考&lt;a href=&#34;https://coolshell.cn/&#34;&gt;酷壳&lt;/a&gt;中对&lt;a href=&#34;https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3&#34;&gt;滑动窗口&lt;/a&gt;的介绍。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://coolshell.cn/&#34;&gt;酷壳&lt;/a&gt;中对&lt;a href=&#34;https://coolshell.cn/articles/11609.html#TCP%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3&#34;&gt;滑动窗口&lt;/a&gt;的介绍。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考&lt;a href=&#34;https://www.zhihu.com/question/32255109/answer/68558623&#34;&gt;知乎回答&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://www.zhihu.com/question/32255109/answer/68558623&#34;&gt;知乎回答&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -758,13 +806,13 @@ D---E---A&amp;#39; master
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://finance.sina.com.cn/7x24/2021-04-19/doc-ikmxzfmk7670920.shtml&#34;&gt;华为战略部总裁张文林：实验室内可做到2千公里0.1毫秒抖动时_7x24小时财经新闻_新浪网&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://finance.sina.com.cn/7x24/2021-04-19/doc-ikmxzfmk7670920.shtml&#34;&gt;华为战略部总裁张文林：实验室内可做到2千公里0.1毫秒抖动时_7x24小时财经新闻_新浪网&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;链路中的传输速度取决于使用的物理介质。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;链路中的传输速度取决于使用的物理介质。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;这里可能会有疑问，链路传输速率 $R$ 和链路传播速度 $s$，是成正比的，只是单位不一样而已。 &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这里可能会有疑问，链路传输速率 $R$ 和链路传播速度 $s$，是成正比的，只是单位不一样而已。&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1174,10 +1222,10 @@ NameError: name &lt;span style=&#34;color:#2aa198&#34;&gt;&amp;#39;Foo&amp;#39;&
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;以 &lt;code&gt;usize&lt;/code&gt; 为例，提供了 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.usize.html#method.to_be_bytes&#34;&gt;&lt;code&gt;to_be_bytes&lt;/code&gt;&lt;/a&gt; 方法。&lt;code&gt;u32&lt;/code&gt;, &lt;code&gt;u64&lt;/code&gt; 等也均有此方法。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;以 &lt;code&gt;usize&lt;/code&gt; 为例，提供了 &lt;a href=&#34;https://doc.rust-lang.org/std/primitive.usize.html#method.to_be_bytes&#34;&gt;&lt;code&gt;to_be_bytes&lt;/code&gt;&lt;/a&gt; 方法。&lt;code&gt;u32&lt;/code&gt;, &lt;code&gt;u64&lt;/code&gt; 等也均有此方法。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;code&gt;num_bigint&lt;/code&gt; 也实现了 byte array 转换，但是使用了的名称 &lt;a href=&#34;https://docs.rs/num-bigint/0.2.3/num_bigint/struct.BigUint.html#method.to_bytes_be&#34;&gt;to_bytes_be&lt;/a&gt;，和标准库中（如 &lt;code&gt;std::usize::to_be_types&lt;/code&gt;）不一致，需留意。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;num_bigint&lt;/code&gt; 也实现了 byte array 转换，但是使用了的名称 &lt;a href=&#34;https://docs.rs/num-bigint/0.2.3/num_bigint/struct.BigUint.html#method.to_bytes_be&#34;&gt;to_bytes_be&lt;/a&gt;，和标准库中（如 &lt;code&gt;std::usize::to_be_types&lt;/code&gt;）不一致，需留意。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1290,7 +1338,7 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.ietf.org/archive/id/draft-murchison-sasl-login-00.txt&#34;&gt;协议标准&lt;/a&gt;供参考。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.ietf.org/archive/id/draft-murchison-sasl-login-00.txt&#34;&gt;协议标准&lt;/a&gt;供参考。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1332,7 +1380,7 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;研究中，使用方式暂不明确。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;研究中，使用方式暂不明确。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1378,10 +1426,10 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;截图来自&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82&#34;&gt;维基百科「字节」词条&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;截图来自&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E5%AD%97%E8%8A%82&#34;&gt;维基百科「字节」词条&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;摘自&lt;a href=&#34;https://zh.wikipedia.org/wiki/Gibibyte&#34;&gt;维基百科 Gibibyte 词条&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;摘自&lt;a href=&#34;https://zh.wikipedia.org/wiki/Gibibyte&#34;&gt;维基百科 Gibibyte 词条&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1552,13 +1600,13 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;An article can help for your &lt;a href=&#34;https://opensource.com/article/20/3/kubernetes-raspberry-pi-k3s&#34;&gt;installation&lt;/a&gt;. &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;An article can help for your &lt;a href=&#34;https://opensource.com/article/20/3/kubernetes-raspberry-pi-k3s&#34;&gt;installation&lt;/a&gt;.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;You can reference &lt;a href=&#34;https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#create-a-pod&#34;&gt;here&lt;/a&gt; to configure persistent volume storage. &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can reference &lt;a href=&#34;https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#create-a-pod&#34;&gt;here&lt;/a&gt; to configure persistent volume storage.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;Follow the &lt;a href=&#34;https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually&#34;&gt;example&lt;/a&gt; in the official document. &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Follow the &lt;a href=&#34;https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually&#34;&gt;example&lt;/a&gt; in the official document.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1683,7 +1731,7 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;All avaliable implementations are listed &lt;a href=&#34;https://docs.rs/log/0.4.8/log/#available-logging-implementations&#34;&gt;here&lt;/a&gt;. &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;All avaliable implementations are listed &lt;a href=&#34;https://docs.rs/log/0.4.8/log/#available-logging-implementations&#34;&gt;here&lt;/a&gt;.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1816,7 +1864,7 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;官方字体需要购买，不清楚为何 CUFON Fonts 可以直接免费下载。下载是否侵权，请各位自行判断。懂行的朋友可以评论指导一下，如果涉嫌侵权，可联系我删除链接。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;官方字体需要购买，不清楚为何 CUFON Fonts 可以直接免费下载。下载是否侵权，请各位自行判断。懂行的朋友可以评论指导一下，如果涉嫌侵权，可联系我删除链接。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1839,7 +1887,7 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;Comment satisfied to the object above &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Comment satisfied to the object above&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -2258,10 +2306,10 @@ Hello!
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;Google Authenticator 的特殊性参考&lt;a href=&#34;https://github.com/avacariu/rust-oath#google-authenticator&#34;&gt;这个项目中的说明&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Google Authenticator 的特殊性参考&lt;a href=&#34;https://github.com/avacariu/rust-oath#google-authenticator&#34;&gt;这个项目中的说明&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/hanskorg/google-authenticator-rust/pull/3&#34;&gt;已提交 pull request&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/hanskorg/google-authenticator-rust/pull/3&#34;&gt;已提交 pull request&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
