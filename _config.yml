@@ -145,6 +145,9 @@ theme_config:
     -
       icon: mastodon
       link: https://mastodon.world/@jtr109
+    -
+      icon: mail
+      link: mailto:conbas2019@gmail.com
   rss: atom.xml
   google_analytics:
     enabled: true
