@@ -43,3 +43,6 @@ logo:
   gravatar: false
   grayout: true
 tags_overview: true
+copyright:
+  start_year: 2017
+  end_year:
