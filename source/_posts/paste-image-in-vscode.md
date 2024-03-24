@@ -7,7 +7,6 @@ series:
 tags:
     - Hugo
     - VSCode
-    - Visual Studio Code
     - Markdown
     - Image
 ---
