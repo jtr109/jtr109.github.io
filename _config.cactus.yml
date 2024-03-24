@@ -42,3 +42,4 @@ logo:
   url: /images/avatar/peep.png
   gravatar: false
   grayout: true
+tags_overview: true
