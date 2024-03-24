@@ -2,6 +2,7 @@ nav:
   home: /
   about: /about/
   articles: /archives/
+  Feed: /atom.xml
 posts_overview:
   show_all_posts: true
 social_links:
