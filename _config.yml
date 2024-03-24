@@ -126,53 +126,6 @@ marked:
 # theme: landscape
 theme: cactus
 
-## cactus
-theme_config:
-  nav:
-    home: /
-    about: /about/
-    articles: /archives/
-  posts_overview:
-    show_all_posts: true
-  social_links:
-    -
-      icon: github
-      link: https://github.com/jtr109
-    -
-      icon: twitter
-      label: "fab fa-twitter fa-2x"
-      link: https://twitter.com/conbas2019
-    -
-      icon: mastodon
-      link: https://mastodon.world/@jtr109
-    -
-      icon: mail
-      link: mailto:conbas2019@gmail.com
-  rss: atom.xml
-  google_analytics:
-    enabled: true
-    id: "UA-169289956-1"
-  disqus:
-    enabled: true
-    shortname: "jtr109"
-  favicon:
-      desktop:
-        url: /images/favicon/favicon.ico
-        gravatar: false
-      android:
-        url: /images/favicon/android-chrome-192x192.png
-        gravatar: false
-      apple:
-        url: /images/favicon/apple-touch-icon.png
-        gravatar: false
-  logo:
-    enabled: true
-    width: 50
-    height: 50
-    url: /images/avatar/peep.png
-    gravatar: false
-    grayout: true
-
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
