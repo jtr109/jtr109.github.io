@@ -152,6 +152,23 @@ theme_config:
   disqus:
     enabled: true
     shortname: "jtr109"
+  favicon:
+      desktop:
+        url: /images/favicon/favicon.ico
+        gravatar: false
+      android:
+        url: /images/favicon/android-chrome-192x192.png
+        gravatar: false
+      apple:
+        url: /images/favicon/apple-touch-icon.png
+        gravatar: false
+  logo:
+    enabled: true
+    width: 50
+    height: 50
+    url: /images/avatar/peep.png
+    gravatar: false
+    grayout: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
