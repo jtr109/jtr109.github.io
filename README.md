@@ -31,3 +31,9 @@ hexo server --draft
 ```shell
 hexo publish "<Title>"
 ```
+
+### Remove Unused Tags
+
+```shell
+hexo clean
+```
