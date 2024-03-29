@@ -13,3 +13,21 @@ hexo new "<Title>"
 ```shell
 hexo server
 ```
+
+### Draft a Post
+
+```shell
+hexo new draft "<Title>"
+```
+
+### Show Drafts When Running Server Locally
+
+```shell
+hexo server --draft
+```
+
+### Publish a Draft
+
+```shell
+hexo publish "<Title>"
+```
