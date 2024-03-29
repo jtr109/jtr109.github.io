@@ -1,7 +1,7 @@
 ---
 title: Preview Image in Both VSCode And Hexo
 date: 2024-03-23 22:42:54
-tags:
+tags: Hexo, Markdown, VSCode
 ---
 
 When following [Assert Folders document of Hexo](https://hexo.io/docs/asset-folders#Embedding-an-image-using-markdown) to enable `post_asset_folder` and install hexo-render-marked. You can render an image through executing `hexo server`.
