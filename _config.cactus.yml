@@ -1,6 +1,7 @@
 nav:
   home: /
-  about: /about/
+  # about: /about/
+  search: /search/
   articles: /archives/
   Feed: /atom.xml
 posts_overview:
