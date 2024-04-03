@@ -108,3 +108,16 @@ Finally: Number count = 1
 ```
 
 Unfortunately, the answer is **A**. As an explanation, when one thread initialize the instance by `_instance = new Singleton();`, one another code find the instance is not null and expect the `Number` has been set to 1. But actually, the value of `Number` property is not set yet. Then, the DCL (double-checked locking) doesn't achieve the target it is used in this case.
+
+---
+
+Update on April 3th, 2024
+
+The article [Double-checked lock is not thread-safe](https://codeql.github.com/codeql-query-help/csharp/cs-unsafe-double-checked-lock/) says the insecurity of using double-checked lock in C#. It recommends several ways to make the code thread-safe:
+
+> - Avoid double-checked locking, and simply perform everything within the lock statement.
+> - Make the field volatile using the volatile keyword.
+> - Use the System.Lazy class, which is guaranteed to be thread-safe. This can often lead to more elegant code.
+> - Use System.Threading.LazyInitializer.
+
+Examples can be found in the original article.
