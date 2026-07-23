@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>补充 · 矩阵作为变换</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .matrix{display:inline-block;font-family:"SF Mono",Consolas,monospace;font-size:15px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 16px;margin:6px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="06-qkv.html" style="color:#6ea8fe;text-decoration:none">← 相关：Q/K/V</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <span style="color:#3a4050">数学补充</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · 数学补充</span>
+    <span class="badge">Supplement A</span>
+    <span class="badge">矩阵 vs 向量</span>
+  </div>
+  <h1>矩阵作为"变换"</h1>
+  <p class="lead">纠正一个关键混淆：W_Q / W_K / W_V 是<b>矩阵（变换）</b>，不是向量。向量是被加工的"料"，矩阵是"加工机"。</p>
+
+  <h2>① 两个概念，别混</h2>
+  <div class="card why">
+    <table class="meta">
+      <tr><td>向量 vector</td><td>一串数，代表空间里一个<b>点 / 箭头</b>。例：<code>x = [2, 3]</code></td></tr>
+      <tr><td>矩阵 matrix</td><td>一个<b>变换（加工机）</b>，把一个向量映成另一个向量。例：<code>q = x · W</code></td></tr>
+    </table>
+    <p>在 attention 里：<code>x</code>（词向量）是料；<code>W_Q, W_K, W_V</code> 是三台不同的加工机；<code>q, k, v</code> 是加工出来的三个新向量。</p>
+  </div>
+
+  <h2>② 怎么算：q 的每个分量 = x 与 W 某列的点积</h2>
+  <div class="card how">
+    <p>设 <span class="matrix">x = [2, 3]</span> ， <span class="matrix">W_Q =<br>| 1&nbsp;&nbsp;0 |<br>| 0&nbsp;&nbsp;2 |</span></p>
+    <p class="mono" style="padding-left:10px">
+      q₁ = 2×1 + 3×0 = <b style="color:#9ec5ff">2</b>　（x 点乘 W_Q 第 1 列 [1,0]）<br>
+      q₂ = 2×0 + 3×2 = <b style="color:#9ec5ff">6</b>　（x 点乘 W_Q 第 2 列 [0,2]）<br>
+      q = [2, 6]
+    </p>
+    <p><b>几何含义：</b>这台 W_Q 把"竖直方向拉伸 2 倍"。x=[2,3] → q=[2,6]：横坐标不变(2→2)，纵坐标翻倍(3→6)。</p>
+  </div>
+
+  <h2>③ 关键：同一个 x，换台机器就大不同</h2>
+  <div class="card key">
+    <p>同一个 <span class="matrix">x = [2, 3]</span>，换成 <span class="matrix">W_K =<br>| 0&nbsp;-1 |<br>| 1&nbsp;&nbsp;0 |</span>（这台做"旋转 90°"）：</p>
+    <p class="mono" style="padding-left:10px">
+      k₁ = 2×0 + 3×1 = <b style="color:#9fe6f2">3</b><br>
+      k₂ = 2×(-1) + 3×0 = <b style="color:#9fe6f2">-2</b><br>
+      k = [3, -2]
+    </p>
+    <p>同一个 x，经 W_Q 变 <code>[2,6]</code>，经 W_K 变 <code>[3,-2]</code>——<b>方向完全不同</b>。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 480 420" role="img" aria-label="two matrices transform same x">
+      <!-- grid -->
+      <defs></defs>
+      <g stroke="#20242f" stroke-width="1">
+        <line x1="40" y1="210" x2="440" y2="210"/><line x1="240" y1="20" x2="240" y2="400"/>
+        <line x1="140" y1="20" x2="140" y2="400"/><line x1="340" y1="20" x2="340" y2="400"/>
+        <line x1="40" y1="110" x2="440" y2="110"/><line x1="40" y1="310" x2="440" y2="310"/>
+      </g>
+      <!-- axes labels -->
+      <text x="435" y="226" fill="#5a6070" font-size="11">x</text>
+      <text x="248" y="30" fill="#5a6070" font-size="11">y</text>
+      <!-- scale: 1 unit = 50 px, origin (240,210) -->
+      <!-- x vector [2,3] -->
+      <line x1="240" y1="210" x2="340" y2="60" stroke="#a78bfa" stroke-width="3"/>
+      <polygon points="340,60 329,64 337,71" fill="#a78bfa"/>
+      <text x="345" y="58" fill="#c9b8f5" font-size="13" font-family="Consolas">x=[2,3]</text>
+      <!-- q=[2,6] would be off-grid (y=6 -> 300px up). show clipped with dashed -->
+      <line x1="240" y1="210" x2="340" y2="-90" stroke="#6ea8fe" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <text x="300" y="35" fill="#9ec5ff" font-size="12" font-family="Consolas">q=[2,6] ↑（纵向拉伸2×）</text>
+      <!-- k=[3,-2] -->
+      <line x1="240" y1="210" x2="390" y2="310" stroke="#22d3ee" stroke-width="3"/>
+      <polygon points="390,310 379,306 381,315" fill="#22d3ee"/>
+      <text x="360" y="330" fill="#9fe6f2" font-size="13" font-family="Consolas">k=[3,-2]（旋转）</text>
+      <!-- origin -->
+      <circle cx="240" cy="210" r="3" fill="#e6e8ee"/>
+    </svg>
+    <figcaption>同一个 x（紫）：W_Q 把它纵向拉伸成 q（蓝虚，指向更高）；W_K 把它旋转成 k（青，指向右下）。两台机器 → 两个方向。</figcaption>
+  </figure>
+
+  <h2>④ 这就是"打分不对称"的数学根源</h2>
+  <div class="card">
+    <p>朴素版打分 <code>xᵢ·xⱼ</code> 天然对称、且 <code>xᵢ·xᵢ</code> 最大。换成 Q/K/V 后，打分是 <code>qᵢ·kⱼ = (xᵢW_Q)·(xⱼW_K)</code>。因为 <b>W_Q ≠ W_K 是两台不同的机器</b>，先加工再点积的结果通常 <code>qᵢ·kⱼ ≠ qⱼ·kᵢ</code>——<b>不对称</b>，也不再天然最爱自己。</p>
+    <div class="fix"><b>一句话：</b>矩阵是"变换"，不是"向量"。W_Q/W_K/W_V 是三台不同的加工机，把同一个词向量塑造成用途不同的 q/k/v。这正是 Q/K/V 能给注意力"松绑"的数学本质。</div>
+  </div>
+
+  <div class="callout">
+    <b>🅿️ 顺带（不展开）：</b>真实模型里 W 不是 2×2，而是像 <code>512×64</code> 这种"矮胖"矩阵——它同时做<b>降维</b>（512→64）和上面说的"变换方向"。降维的意义（多头、效率）在 Multi-head 课再说。
+  </div>
+
+  <div class="footer">AI Learning System · Supplement A 矩阵作为变换 · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

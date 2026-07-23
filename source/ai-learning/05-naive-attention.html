@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 05 · 朴素注意力</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:.3px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)}
+  .how{border-left:3px solid var(--cyan)}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  .steps{counter-reset:step;list-style:none;padding-left:0}
+  .steps li{position:relative;padding:12px 14px 12px 52px;margin:10px 0;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:12px;
+    width:28px;height:28px;border-radius:50%;background:var(--accent);color:#0b0d13;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:14px}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="04-softmax.html" style="color:#6ea8fe;text-decoration:none">← 上一课：softmax</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <a href="06-qkv.html" style="color:#6ea8fe;text-decoration:none">下一课：Q/K/V →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 05</span>
+    <span class="badge">核心直觉（无 Q/K/V）</span>
+  </div>
+  <h1>朴素注意力</h1>
+  <p class="lead">只用你已会的两样工具——点积 + softmax——拼出注意力的核心动作：<b>让每个词按"和别人有多像"去混合大家的信息</b>。这一课先不碰 Q/K/V。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>朴素（自）注意力：相似度加权平均</td></tr>
+    <tr><td>Objectives</td><td>建立"注意力 = 按相似度混合上下文"的核心直觉；看清整条计算链</td></tr>
+    <tr><td>Prerequisites</td><td>点积 ✅、softmax ✅、embedding=向量 ✅</td></tr>
+    <tr><td>Outcome</td><td>能用点积+softmax+加权和描述一个 token 如何吸收上下文</td></tr>
+    <tr><td>Warning</td><td>这是<b>简化版</b>——故意省掉 Q/K/V。下一课会指出它的不足并修好</td></tr>
+  </table>
+
+  <h2>① Why — 我们想要什么</h2>
+  <div class="card why">
+    <p>Embedding 给的向量是<b>孤立</b>的：<code>bank</code> 不管在 "river bank" 还是 "bank account" 里，拿到的向量都一样。我们想让每个词能<b>看看整句、把相关词的信息揉进自己</b>，变成"懂上下文的词"。</p>
+    <p>手上的线索：词都是向量，而点积能测"两个向量有多像"。那最朴素的想法就是——<b>每个词，按它和句中各词的相似度，加权平均大家的向量</b>。相似的多拿一点，不相似的少拿一点。这就是朴素注意力。</p>
+  </div>
+
+  <h2>② How — 三步（全是已学工具）</h2>
+  <p>设一句话有 3 个词，它们的 embedding 向量是 <code>x₁, x₂, x₃</code>。现在算<b>第 1 个词</b>的新向量：</p>
+  <ol class="steps">
+    <li><b>打分（点积）</b>：拿 <code>x₁</code> 和每个词点积 → <code>s₁₁ = x₁·x₁</code>, <code>s₁₂ = x₁·x₂</code>, <code>s₁₃ = x₁·x₃</code>。三个"相似度分数"。</li>
+    <li><b>归一化（softmax）</b>：<code>[s₁₁, s₁₂, s₁₃]</code> → softmax → <code>[w₁₁, w₁₂, w₁₃]</code>，加起来 =1 的权重。</li>
+    <li><b>加权求和</b>：<code>x₁ 的新向量 = w₁₁·x₁ + w₁₂·x₂ + w₁₃·x₃</code>。按权重把大家的向量混进来。</li>
+  </ol>
+
+  <div class="formula">
+    new(xᵢ) = Σⱼ softmax<sub>j</sub>( xᵢ · xⱼ ) · xⱼ
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 300" role="img" aria-label="naive attention flow">
+      <text x="360" y="20" fill="#e6e8ee" font-size="14" text-anchor="middle">算 x₁ 的新向量（数字为示意）</text>
+      <!-- x1 -->
+      <rect x="20" y="130" width="90" height="34" rx="8" fill="#2a2140" stroke="#a78bfa"/>
+      <text x="65" y="152" fill="#c9b8f5" font-size="13" text-anchor="middle" font-family="Consolas">x₁</text>
+      <!-- others -->
+      <g font-family="Consolas" font-size="12">
+        <rect x="180" y="55" width="80" height="30" rx="7" fill="#1e2230" stroke="#2a2f3d"/><text x="220" y="75" fill="#e6e8ee" text-anchor="middle">x₁</text>
+        <rect x="180" y="135" width="80" height="30" rx="7" fill="#1e2230" stroke="#2a2f3d"/><text x="220" y="155" fill="#e6e8ee" text-anchor="middle">x₂</text>
+        <rect x="180" y="215" width="80" height="30" rx="7" fill="#1e2230" stroke="#2a2f3d"/><text x="220" y="235" fill="#e6e8ee" text-anchor="middle">x₃</text>
+      </g>
+      <!-- dot lines -->
+      <g stroke="#6ea8fe" stroke-width="1.4" fill="none">
+        <path d="M110 143 L180 70"/><path d="M110 147 L180 150"/><path d="M110 151 L180 230"/>
+      </g>
+      <!-- scores -->
+      <g font-family="Consolas" font-size="12" fill="#9ec5ff">
+        <text x="280" y="74" text-anchor="start">·=8.0</text>
+        <text x="280" y="154" text-anchor="start">·=1.0</text>
+        <text x="280" y="234" text-anchor="start">·=3.0</text>
+      </g>
+      <text x="230" y="278" fill="#9aa3b2" font-size="11" text-anchor="middle">① 点积打分</text>
+      <!-- softmax arrow -->
+      <path d="M350 150 L410 150" stroke="#9aa3b2" stroke-width="1.5" fill="none"/><polygon points="410,150 402,146 402,154" fill="#9aa3b2"/>
+      <text x="380" y="140" fill="#fbbf24" font-size="11" text-anchor="middle">softmax</text>
+      <!-- weights -->
+      <g font-family="Consolas" font-size="12">
+        <rect x="420" y="55" width="110" height="30" rx="7" fill="#13233b" stroke="#4ade80"/><text x="475" y="75" fill="#bff0cf" text-anchor="middle">0.99 ·x₁</text>
+        <rect x="420" y="135" width="110" height="30" rx="7" fill="#171a23" stroke="#2a2f3d"/><text x="475" y="155" fill="#9aa3b2" text-anchor="middle">0.002·x₂</text>
+        <rect x="420" y="215" width="110" height="30" rx="7" fill="#171a23" stroke="#2a2f3d"/><text x="475" y="235" fill="#9aa3b2" text-anchor="middle">0.008·x₃</text>
+      </g>
+      <text x="475" y="278" fill="#9aa3b2" font-size="11" text-anchor="middle">② 权重（和=1）</text>
+      <!-- sum -->
+      <g stroke="#4ade80" stroke-width="1.4" fill="none">
+        <path d="M530 70 L610 150"/><path d="M530 150 L610 152"/><path d="M530 230 L610 154"/>
+      </g>
+      <rect x="600" y="132" width="100" height="40" rx="8" fill="#13233b" stroke="#4ade80"/>
+      <text x="650" y="150" fill="#bff0cf" font-size="11" text-anchor="middle" font-family="Consolas">x₁ 的</text>
+      <text x="650" y="165" fill="#bff0cf" font-size="11" text-anchor="middle" font-family="Consolas">新向量</text>
+      <text x="650" y="278" fill="#9aa3b2" font-size="11" text-anchor="middle">③ 加权求和</text>
+    </svg>
+    <figcaption>点积打分 → softmax 成权重 → 按权重混合各词向量。每个词都这样算一遍，得到各自"吸收了上下文"的新向量。</figcaption>
+  </figure>
+
+  <div class="callout">
+    <b>⚠️ "Self（自）" 的含义：</b>打分用的向量和被混合的向量<b>来自同一句话里的这些词</b>——自己跟自己人比、混自己人。所以叫 <b>self-attention</b>。（对比：如果拿另一段文字来混，那叫 cross-attention，以后再说。）
+  </div>
+
+  <h2>③ 关键直觉</h2>
+  <div class="card key">
+    <p class="center" style="font-size:17px;color:#cfe9d8"><b>注意力 = 按相似度，对上下文做一次加权平均</b></p>
+    <ul>
+      <li>相似度高的词 → 权重大 → 它的信息被大量揉进来</li>
+      <li>每个词都得到一个"看过全句、吸收了相关信息"的新向量</li>
+      <li>用的全是老工具：<b>点积</b>(打分) + <b>softmax</b>(变权重) + <b>加权和</b>(混合)</li>
+    </ul>
+  </div>
+
+  <h2>④ 🅿️ 这个朴素版有个大问题（预告下一课）</h2>
+  <div class="callout">
+    <b>⚠️ 不展开，只留个悬念：</b>上面每个词只用<b>一个</b>向量 <code>xᵢ</code> 同时干了三件事——<b>发起比较</b>、<b>被别人比较</b>、<b>提供内容</b>。这三个角色被硬绑在同一个向量上，导致注意力不够灵活（比如"我想找的"和"我能提供的"其实该是两回事）。下一课的 <b>Query / Key / Value</b> 就是把这三个角色<b>拆开</b>，各给一个专门的向量。今天先记住朴素版的直觉即可。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>朴素注意力的三步分别是什么？每一步用了哪个已学工具？</li>
+      <li>一句话说：为什么算完之后，每个词的新向量比原来的 embedding "更懂上下文"？</li>
+      <li>图里 <code>x₁</code> 拿到的权重 <code>[0.99, 0.002, 0.008]</code> 里，<code>x₁·x₁</code> 那项几乎总是最大的。你觉得为什么？（提示：一个向量和它自己的点积）</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，下一课 <b>C. Query / Key / Value</b>——把"比较 / 被比较 / 提供内容"三个角色拆开，修好朴素版的死板。</p>
+
+  <div class="footer">AI Learning System · Lesson 05 朴素注意力 · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

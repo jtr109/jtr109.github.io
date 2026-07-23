@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 06 · Query / Key / Value</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:.3px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)}
+  .how{border-left:3px solid var(--cyan)}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="05-naive-attention.html" style="color:#6ea8fe;text-decoration:none">← 上一课：朴素注意力</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <a href="07-scaled-dot-product.html" style="color:#6ea8fe;text-decoration:none">下一课：缩放点积 →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 06</span>
+    <span class="badge">给朴素版松绑</span>
+  </div>
+  <h1>Query / Key / Value</h1>
+  <p class="lead">上一课的朴素注意力有个死板之处：每个词只用一个向量同时干三件事。这一课把这三件事拆成三个专门的向量——这就是 Q / K / V。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>Query / Key / Value 三个投影</td></tr>
+    <tr><td>Objectives</td><td>理解朴素版的两个毛病；看 Q/K/V 如何各修一个；知道它们是学出来的</td></tr>
+    <tr><td>Prerequisites</td><td>朴素注意力 ✅（点积打分 → softmax → 加权和）</td></tr>
+    <tr><td>Outcome</td><td>能说清为什么要三个投影，而不是直接用 embedding</td></tr>
+    <tr><td>Warning</td><td>Q/K/V 是同一个词的三个"角色向量"，不是三个词</td></tr>
+  </table>
+
+  <h2>① 先回顾：朴素版哪里不好？</h2>
+  <div class="card why">
+    <p>朴素注意力里，每个词的<b>同一个向量 <code>xᵢ</code></b> 被拿去做了三件不同的事：</p>
+    <table class="meta" style="margin-top:10px">
+      <tr><td style="width:120px">发起比较</td><td>"我在找什么样的词"（当它是<b>主动方</b>时）</td></tr>
+      <tr><td>被人比较</td><td>"我是什么样的词，好让别人来匹配我"（当它是<b>被查方</b>时）</td></tr>
+      <tr><td>提供内容</td><td>"匹配上之后，我把什么信息交出去"</td></tr>
+    </table>
+    <p>三个角色被<b>硬绑在一个向量上</b>，带来两个具体毛病：</p>
+    <ul>
+      <li><b>毛病 A："我要找的" ≠ "我本身是什么"。</b> 例：<code>it</code> 想找一个"名词、可作主语的东西"，但 <code>it</code> 自己这个词本身平平无奇。用同一个向量既表达"我要找什么"又表达"我是什么"，表达不清。</li>
+      <li><b>毛病 B：对称，且最爱自己。</b> 朴素打分 <code>xᵢ·xⱼ = xⱼ·xᵢ</code>（对称）；而 <code>xᵢ·xᵢ=|xᵢ|²</code> 恒大 → 每个词天然最关注自己，不够灵活。</li>
+    </ul>
+  </div>
+
+  <h2>② 解法：把一个向量拆成三个角色</h2>
+  <div class="card how">
+    <p>给每个词的向量 <code>xᵢ</code> 配<b>三个学出来的矩阵</b> <code>W_Q, W_K, W_V</code>，投影出三个专门的向量：</p>
+    <table class="meta" style="margin-top:10px">
+      <tr><td>Query qᵢ = xᵢ·W_Q</td><td>"我在找什么" —— 当<b>主动方</b>时用（像搜索词）</td></tr>
+      <tr><td>Key kᵢ = xᵢ·W_K</td><td>"我是关于什么的" —— 当<b>被查方</b>时用（像索引标签）</td></tr>
+      <tr><td>Value vᵢ = xᵢ·W_V</td><td>"我能提供的信息" —— 匹配上后<b>交出去</b>的内容（像正文）</td></tr>
+    </table>
+    <p style="margin-top:14px">三个矩阵全模型共用、由训练学出。于是打分和混合都用<b>专门的</b>向量：</p>
+    <div class="formula">打分 sᵢⱼ = qᵢ · kⱼ &nbsp;→&nbsp; softmax &nbsp;→&nbsp; 新(xᵢ) = Σⱼ wᵢⱼ · <b>vⱼ</b></div>
+    <p class="center" style="color:var(--muted);font-size:13px">对比朴素版：<code>xᵢ·xⱼ</code> → <code>qᵢ·kⱼ</code>；混合 <code>xⱼ</code> → 混合 <code>vⱼ</code></p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 560 250" role="img" aria-label="one vector to three roles">
+      <text x="280" y="22" fill="#e6e8ee" font-size="14" text-anchor="middle">同一个词向量 xᵢ → 三个角色向量</text>
+      <rect x="200" y="45" width="160" height="36" rx="8" fill="#2a2140" stroke="#a78bfa"/>
+      <text x="280" y="68" fill="#c9b8f5" font-size="14" text-anchor="middle" font-family="Consolas">xᵢ（embedding）</text>
+      <!-- three arrows -->
+      <g stroke="#5a6070" stroke-width="1.5" fill="none">
+        <path d="M240 81 L120 150"/><path d="M280 81 L280 150"/><path d="M320 81 L440 150"/>
+      </g>
+      <text x="165" y="125" fill="#6ea8fe" font-size="11" font-family="Consolas">×W_Q</text>
+      <text x="292" y="125" fill="#22d3ee" font-size="11" font-family="Consolas">×W_K</text>
+      <text x="395" y="125" fill="#4ade80" font-size="11" font-family="Consolas">×W_V</text>
+      <!-- q k v -->
+      <rect x="60" y="150" width="120" height="36" rx="8" fill="#13233b" stroke="#6ea8fe"/>
+      <text x="120" y="167" fill="#9ec5ff" font-size="12" text-anchor="middle" font-family="Consolas">qᵢ</text>
+      <text x="120" y="182" fill="#7f9bc4" font-size="10" text-anchor="middle">我在找什么</text>
+      <rect x="220" y="150" width="120" height="36" rx="8" fill="#0e2233" stroke="#22d3ee"/>
+      <text x="280" y="167" fill="#9fe6f2" font-size="12" text-anchor="middle" font-family="Consolas">kᵢ</text>
+      <text x="280" y="182" fill="#6fb3c0" font-size="10" text-anchor="middle">我是什么</text>
+      <rect x="380" y="150" width="120" height="36" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="440" y="167" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">vᵢ</text>
+      <text x="440" y="182" fill="#7fc498" font-size="10" text-anchor="middle">我提供什么</text>
+      <text x="280" y="225" fill="#9aa3b2" font-size="12" text-anchor="middle">每个词都同时拥有自己的 q、k、v</text>
+    </svg>
+    <figcaption>W_Q/W_K/W_V 把一个词向量投影成三个专门角色。三个矩阵是训练学出来的参数。</figcaption>
+  </figure>
+
+  <h2>③ 这样怎么就修好了？</h2>
+  <div class="card key">
+    <ul>
+      <li><b>修毛病 A：</b> "我要找的"由 <code>q</code> 表达，"我是什么"由 <code>k</code> 表达，两者<b>解耦</b>。<code>it</code> 的 <code>q</code> 可以专门指向"名词性、可作主语"，与它自身平淡的词义无关。</li>
+      <li><b>修毛病 B：</b> 打分变成 <code>qᵢ·kⱼ</code>，因为 <code>W_Q≠W_K</code>，<b>不再对称</b>（i 关注 j ≠ j 关注 i），也不再天然最爱自己。谁关注谁，由训练自由决定。</li>
+      <li><b>额外好处：</b> 用于混合的是 <code>v</code> 而非原始 <code>x</code>——模型可以让"用来匹配的样子(k)"和"实际交出的信息(v)"不一样。</li>
+    </ul>
+    <p class="center" style="font-size:16px;color:#cfe9d8"><b>一句话：Q/K/V = 把"找 / 被找 / 给"三个角色各配一个专用、可学习的向量。</b></p>
+  </div>
+
+  <div class="callout">
+    <b>⚠️ 别误解：</b> Q、K、V 不是三个 token，而是<b>同一个 token 的三个投影</b>。句中每个词都各自算出自己的 q、k、v。所谓"self"就是 q 和 k、v 都来自同一句话里的这些词。
+  </div>
+
+  <div class="card">
+    <h3>💬 q / k / v 和原始 x 是什么关系？k 和 v 既然都来自 x，凭什么不一样？（讨论补充）</h3>
+    <p>三者<b>平级</b>——都是 x 经一个学出来的矩阵投影出的"视角"：</p>
+    <div class="formula" style="text-align:left;font-size:14px">
+      x ×W_Q → q（我在找什么）<br>
+      x ×W_K → k（我展示给别人的"标签"）<br>
+      x ×W_V → v（我匹配上后交出的内容）
+    </div>
+    <p>每个都可以从"几乎等于 x"到"很不一样"，由训练决定。k 和 v 的差别<b>不在</b>它们与 x 的关系类型（都是投影），而在<b>用途不同 → 被训练成不同的样子</b>：</p>
+    <table class="meta">
+      <tr><td style="width:90px">k</td><td>去和别人的 q 做点积（打分）→ 被训练成"<b>便于被正确匹配</b>的标签"（广告词）</td></tr>
+      <tr><td>v</td><td>匹配后被加权求和进输出 → 被训练成"<b>值得传给别人</b>的内容"（货）</td></tr>
+    </table>
+    <p><b>例（it → animal）：</b> <code>k(animal)</code> 装"我是可作主语的生物名词"（便于被搜到）；<code>v(animal)</code> 装"那只具体的动物：单数、非人称、话题主体"（搜到后真正吸收的内容）。像搜索：你用关键词匹配<b>标题(k)</b>，但真正要的是<b>正文(v)</b>。</p>
+    <p><b>更极端的例（功能词）：</b> 逗号 / <code>the</code> 的原始 <code>x</code> 几乎没语义，但模型可让它的 <code>v</code> 交出"句子结构/边界"信号 —— 体现 <code>x</code>（我是谁）和 <code>v</code>（我能给你什么）可以差很远。</p>
+    <div class="fix"><b>收口：</b>q/k/v 是 x 的三个平级投影视角，各因用途（找 / 被找 / 给）被训练成不同样子。诚实边界：浅层里 v 常和 x 差别不大——"分工"是模型<b>可用的自由度</b>，用不用由"怎样预测更准"决定。</div>
+  </div>
+
+  <div class="card">
+    <h3>💬 模型存的是 W_Q/W_K/W_V 还是投影结果 q/k/v？为什么不预投影好、以空间换时间？（讨论补充）</h3>
+    <p><b>存 W_Q/W_K/W_V（和 embedding 表），不存 q/k/v。</b> q/k/v 是运行时用 <code>x·W</code> 现算的中间结果。</p>
+    <p><b>为什么不能预存 q/k/v：因为它依赖的 x 不是固定的。</b> 第 1 层的 x 是 embedding（固定），但<b>第 2 层及以后</b>的 x 是上一层 attention 现算出的"带上下文的新向量"，取决于整句话、每句不同。所以"某个词的 k"没有一个固定值可存——同一个词在不同句子/不同层，x 都不同。</p>
+    <table class="meta">
+      <tr><td style="width:150px">embedding 表</td><td>✅ 可存：输入是固定整数 id，查表，组合有限（词表大小）</td></tr>
+      <tr><td>W_Q/W_K/W_V</td><td>✅ 可存：学出来的固定参数</td></tr>
+      <tr><td>q/k/v</td><td>❌ 不存：依赖运行时的 x，x 随上下文/层变化，无固定值</td></tr>
+    </table>
+    <p>就算只对第 1 层预存也不划算：词表 ~10 万 × 3 个向量 × 几百维 = 空间爆炸，省下的只是一次矩阵乘法（GPU 最便宜的操作）；推理瓶颈是内存带宽，多搬数据反而更慢。</p>
+    <div class="fix"><b>收口：</b>不是"不愿以空间换时间"，而是"要换的量不是常量，根本没得换"。真正值得缓存的是<b>一次生成过程中已算出的 k/v</b>（叫 KV Cache，Module 3 讲），不是预先为所有词算好的 k/v。</div>
+  </div>
+
+  <h2>④ 🅿️ 还差两块（预告，不展开）</h2>
+  <div class="callout">
+    <b>不展开，只留名：</b>（1）打分 <code>qᵢ·kⱼ</code> 后面还会<b>除以 √d</b> 再 softmax（缩放，稳定数值）；（2）实际会并行开<b>多组</b> Q/K/V 捕捉不同关系，叫 <b>Multi-head</b>。这两个都在待讲清单里，下面几课讲。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>朴素注意力的哪个"死板之处"，是 Q/K/V 要解决的？用一句话说。</li>
+      <li>Query、Key、Value 分别扮演什么角色？为什么打分用 q·k，而混合用 v？</li>
+      <li>朴素版打分 <code>xᵢ·xⱼ</code> 是对称的（i 对 j = j 对 i）。为什么换成 <code>qᵢ·kⱼ</code> 后就不对称了？（提示：W_Q 和 W_K 是不是同一个矩阵）</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，下一课 <b>D. 缩放点积（÷√d）</b>——一个很小的数值稳定技巧，然后是 Multi-head。</p>
+
+  <div class="footer">AI Learning System · Lesson 06 Query/Key/Value · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

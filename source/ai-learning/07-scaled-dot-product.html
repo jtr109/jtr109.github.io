@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 07 · 缩放点积 ÷√d</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:.3px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)}
+  .how{border-left:3px solid var(--cyan)}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:16px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="06-qkv.html" style="color:#6ea8fe;text-decoration:none">← 上一课：Q/K/V</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <a href="overview-attention-pipeline.html" style="color:#22d3ee;text-decoration:none">总览：注意力全链 →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 07</span>
+    <span class="badge">数值稳定小技巧</span>
+  </div>
+  <h1>缩放点积 ÷√d</h1>
+  <p class="lead">一个很小、但真实存在于公式里的步骤：打分 q·k 之后、softmax 之前，先除以 √d。只为一个目的——别让分数太大把 softmax 逼成"死板的一个独大"。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>Scaled Dot-Product：÷√d 缩放</td></tr>
+    <tr><td>Objectives</td><td>理解分数为何会随维度变大；√d 如何把它拉回正常范围</td></tr>
+    <tr><td>Prerequisites</td><td>点积 ✅、softmax（含"独大"行为）✅、Q/K/V ✅</td></tr>
+    <tr><td>Outcome</td><td>能说清完整公式 softmax(q·k/√d)·v 里 √d 的作用</td></tr>
+    <tr><td>Warning</td><td>这是数值稳定技巧，不改变注意力的核心思想</td></tr>
+  </table>
+
+  <h2>① 问题：维度一高，点积就"爆"了</h2>
+  <div class="card why">
+    <p>回忆点积：<code>q·k = q₁k₁ + q₂k₂ + … + q_d k_d</code>，把 <b>d 个乘积加起来</b>。d 就是向量维度（<code>d_model</code>，常见 64、128 甚至更大）。</p>
+    <p>关键观察：<b>加的项越多，和的波动越大</b>。若每个 q、k 分量大致是均值 0、方差 1 的随机数，那么 d 个乘积加起来，这个和的<b>标准差大约是 √d</b>。也就是说：</p>
+    <ul>
+      <li>d = 4 → 分数典型幅度 ≈ ±2</li>
+      <li>d = 64 → 分数典型幅度 ≈ ±8</li>
+      <li>d = 512 → 分数典型幅度 ≈ ±23</li>
+    </ul>
+    <p>维度越高，点积分数天然越大——<b>不是因为更相关，纯粹因为加的项更多。</b></p>
+  </div>
+
+  <h2>② 为什么"分数太大"是个问题</h2>
+  <div class="card how">
+    <p>回忆 softmax 的性质：某个分数<b>明显大</b>时，权重会接近"一个独大"（≈ one-hot）。当分数普遍很大（比如差距是 20 vs 15），softmax 会变得<b>极端</b>——几乎把全部权重压给最大那个，其余几乎为 0。</p>
+    <p>这带来两个坏处：</p>
+    <ul>
+      <li><b>太死板</b>：注意力退化成"只看一个词"，丢掉了"按比例混合多个词"的灵活性。</li>
+      <li><b>训练难</b>：softmax 进入这种极端区后，梯度几乎为 0（"饱和"），模型学不动。</li>
+    </ul>
+  </div>
+
+  <h2>③ 解法：除以 √d</h2>
+  <div class="card key">
+    <p>既然分数的典型幅度 ≈ √d，那就<b>除掉这个 √d</b>，把幅度拉回到 ≈ ±1 的正常范围：</p>
+    <div class="formula">Attention(Q,K,V) = softmax( <b>Q·Kᵀ / √d</b> ) · V</div>
+    <p>效果：无论维度多高，进入 softmax 的分数都在一个稳定的、温和的范围，softmax 就不会一上来就饱和成 one-hot，能保留"按比例分配注意力"的能力。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 700 220" role="img" aria-label="scaling effect on softmax">
+      <text x="180" y="22" fill="#f87171" font-size="13" text-anchor="middle">不缩放：分数 [20, 15, 14]</text>
+      <text x="520" y="22" fill="#4ade80" font-size="13" text-anchor="middle">缩放后：分数 [2.5, 1.9, 1.75]</text>
+      <!-- left bars: extreme -->
+      <g font-family="Consolas" font-size="11">
+        <rect x="70" y="60" width="220" height="22" fill="#3a1a1a" stroke="#2a2f3d"/><rect x="70" y="60" width="216" height="22" fill="#f87171"/><text x="300" y="76" fill="#f7c9c9">0.98</text>
+        <rect x="70" y="92" width="220" height="22" fill="#3a1a1a" stroke="#2a2f3d"/><rect x="70" y="92" width="4" height="22" fill="#f87171"/><text x="300" y="108" fill="#9aa3b2">0.013</text>
+        <rect x="70" y="124" width="220" height="22" fill="#3a1a1a" stroke="#2a2f3d"/><rect x="70" y="124" width="3" height="22" fill="#f87171"/><text x="300" y="140" fill="#9aa3b2">0.005</text>
+      </g>
+      <text x="180" y="172" fill="#f87171" font-size="11" text-anchor="middle">≈ 只看第一个（死板）</text>
+      <!-- right bars: soft -->
+      <g font-family="Consolas" font-size="11">
+        <rect x="410" y="60" width="220" height="22" fill="#13231a" stroke="#2a2f3d"/><rect x="410" y="60" width="110" height="22" fill="#4ade80"/><text x="640" y="76" fill="#bff0cf">0.50</text>
+        <rect x="410" y="92" width="220" height="22" fill="#13231a" stroke="#2a2f3d"/><rect x="410" y="92" width="60" height="22" fill="#4ade80"/><text x="640" y="108" fill="#bff0cf">0.27</text>
+        <rect x="410" y="124" width="220" height="22" fill="#13231a" stroke="#2a2f3d"/><rect x="410" y="124" width="50" height="22" fill="#4ade80"/><text x="640" y="140" fill="#bff0cf">0.23</text>
+      </g>
+      <text x="520" y="172" fill="#4ade80" font-size="11" text-anchor="middle">按比例分配（灵活）</text>
+    </svg>
+    <figcaption>同样的相对大小关系，分数整体偏大时 softmax 极端化；÷√d 把分数压回温和范围，保留"软"分配。</figcaption>
+  </figure>
+
+  <div class="callout">
+    <b>⚠️ 别过度解读：</b>÷√d <b>不改变</b>谁比谁大的顺序，也不改变注意力的核心思想。它只是把分数缩放到"softmax 工作得最好"的范围。名字叫 <b>Scaled</b> Dot-Product Attention 里的 "Scaled" 就是指这一步。为什么偏偏是 √d（而不是 d 或别的）——因为前面说的"和的标准差 ≈ √d"，除以它正好把方差normalize回 1。
+  </div>
+
+  <h2>④ 几何直觉：不是"压扁曲线"，是把输入落点挪回平缓区</h2>
+  <div class="card key">
+    <p>回忆 softmax 里的 <code>e^x</code> 曲线（右边陡到爆炸）。÷√d <b>不改曲线本身</b>——它把送进曲线的<b>分数先缩小</b>（20 → 2.5），让落点从"陡峭区"回到"平缓区"。等价地看：若把 x 轴当作原始分数，就是把响应曲线<b>沿 x 轴横向撑开</b>，同样的输出变化需要跨越更大的分数范围才发生。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 640 340" role="img" aria-label="scaling moves input into gentle region">
+      <text x="320" y="20" fill="#e6e8ee" font-size="14" text-anchor="middle">e^x：同一条曲线，两个落点</text>
+      <!-- axes -->
+      <line x1="60" y1="290" x2="600" y2="290" stroke="#5a6070" stroke-width="1.5"/>
+      <line x1="90" y1="40" x2="90" y2="300" stroke="#5a6070" stroke-width="1.5"/>
+      <polygon points="600,290 591,286 591,294" fill="#5a6070"/>
+      <text x="606" y="294" fill="#9aa3b2" font-size="11">分数 x</text>
+      <text x="98" y="48" fill="#9aa3b2" font-size="11">e^x</text>
+      <!-- curve e^x: sample points mapped. x from 0..5 -> px 90..560 (94px per unit). y=e^x scaled: y up to ~ e^5=148, clamp; use y_px=290 - e^x*? choose visual -->
+      <!-- We'll draw a rising steep curve -->
+      <polyline fill="none" stroke="#6ea8fe" stroke-width="2.5"
+        points="90,288 150,286 210,283 270,277 330,266 360,255 390,238 420,212 450,172 480,112 500,60"/>
+      <!-- gentle region marker at x=2.5 (px ~ 90+2.5*94=325) -->
+      <line x1="325" y1="290" x2="325" y2="268" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="325" cy="266" r="5" fill="#4ade80"/>
+      <text x="325" y="308" fill="#4ade80" font-size="12" text-anchor="middle" font-family="Consolas">2.5</text>
+      <text x="240" y="250" fill="#4ade80" font-size="11">缩放后：平缓区</text>
+      <text x="240" y="266" fill="#4ade80" font-size="11">→ softmax 柔和</text>
+      <!-- steep region marker at x~4.7 (px ~ 90+4.7*94=532) off to steep -->
+      <line x1="490" y1="290" x2="490" y2="128" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="490" cy="128" r="5" fill="#f87171"/>
+      <text x="490" y="308" fill="#f87171" font-size="12" text-anchor="middle" font-family="Consolas">20</text>
+      <text x="500" y="150" fill="#f87171" font-size="11">不缩放：陡峭区</text>
+      <text x="500" y="166" fill="#f87171" font-size="11">→ softmax 爆炸/独大</text>
+      <!-- arrow from 20 back to 2.5 -->
+      <path d="M478 320 Q400 336 337 320" stroke="#fbbf24" stroke-width="1.6" fill="none"/>
+      <polygon points="337,320 346,318 342,326" fill="#fbbf24"/>
+      <text x="405" y="336" fill="#fbbf24" font-size="11" text-anchor="middle">÷√d 把落点拉回来</text>
+    </svg>
+    <figcaption>曲线（e^x）是固定的"放大机"；÷√d 把分数从陡峭区（20）拉回平缓区（2.5）。换个视角：等于把曲线沿 x 轴横向撑开。</figcaption>
+  </figure>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>为什么向量维度 d 越大，q·k 的分数天然越大？（跟"相关性"有关系吗？）</li>
+      <li>如果不缩放、分数普遍很大，softmax 出来的权重会变成什么样？为什么这不好？</li>
+      <li>一句话：÷√d 这一步的目的是什么？它改变"谁比谁更相关"的排序吗？</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，我们就把单个注意力的公式 <code>softmax(QKᵀ/√d)V</code> 完整拼齐了。下一课 <b>E. Multi-head</b>——为什么要并行开多组注意力。</p>
+
+  <div class="footer">AI Learning System · Lesson 07 缩放点积 ÷√d · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 nav:
   home: /
   # about: /about/
+  AI Learning: /ai-learning/
   search: /search/
   articles: /archives/
   Feed: /atom.xml

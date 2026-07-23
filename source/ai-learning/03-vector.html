@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 03 · Vector（点积 / 相似度）</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:.3px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)}
+  .how{border-left:3px solid var(--cyan)}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px}
+  li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px}
+  .q li{margin:12px 0}
+  .tag-good{color:var(--good)} .tag-bad{color:var(--bad)} .tag-mid{color:var(--warn)}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:16px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="02-embedding.html" style="color:#6ea8fe;text-decoration:none">← 上一课：Embedding</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <a href="04-softmax.html" style="color:#6ea8fe;text-decoration:none">下一课：softmax →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 0 · Foundations</span>
+    <span class="badge">Lesson 03</span>
+    <span class="badge">收尾 → 通往 Transformer</span>
+  </div>
+  <h1>Vector · 点积与相似度</h1>
+  <p class="lead">向量的"位置/方向"直觉你已经有了。这一课只补一个运算——<b>点积</b>，它就是 attention 用来衡量"两个 token 有多相关"的核心工具。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>点积（dot product）作为相似度度量</td></tr>
+    <tr><td>Objectives</td><td>会算点积；理解它衡量"两个向量有多对齐"；知道它就是 attention 打分的原理</td></tr>
+    <tr><td>Prerequisites</td><td>Embedding ✅（token = 高维空间里的向量）</td></tr>
+    <tr><td>Outcome</td><td>能一句话说清"两个向量点积大 = 语义相近"，为 Transformer 的 Q·K 铺路</td></tr>
+    <tr><td>Warning</td><td>点积同时混了"方向"和"长度"两个因素——想只看方向要用余弦</td></tr>
+  </table>
+
+  <div class="callout" style="background:#0e1a2b;border-color:#1d3a5a;border-left-color:#6ea8fe">
+    <b style="color:#6ea8fe">📌 本课你只需掌握两件事：</b>
+    <ol style="margin:8px 0 10px">
+      <li><b>点积怎么算</b>（对应位置相乘，再全部加起来）</li>
+      <li>点积可以当作 <b>"两个向量有多对齐/多相似"的一个分数</b>（大=像，≈0=无关，负=相反）</li>
+    </ol>
+    <b style="color:#9aa3b2">🅿️ 以下都是「预告」，本课不用纠结，后面专门讲：</b>
+    <ul style="margin:8px 0 10px;color:#9aa3b2">
+      <li>softmax（把相似度分数变成「注意力权重」）— 下一课</li>
+      <li>Query / Key / Value、÷√d 缩放、attention 打分 — Module 1</li>
+    </ul>
+    概念层次链：<code>点积</code> → 可解读为 <code>相似度</code>（本课到这为止）→〔后面〕过 softmax → <code>注意力权重</code>
+  </div>
+
+  <h2>① Why — 为什么需要它？</h2>
+  <div class="card why">
+    <p>下一模块 Transformer 的核心问题是：读到某个词时，<b>它该"关注"前面哪些词？</b> 例如 “The animal didn't cross the street because <b>it</b> was tired” —— <code>it</code> 指的是 animal 还是 street？</p>
+    <p>要回答，模型得能<b>量化"两个 token 有多相关"</b>。而 token 现在都是向量（Embedding 课），所以问题变成：<b>怎么用一个数字衡量两个向量有多"像"？</b></p>
+    <p>答案就是 <b>点积</b>。</p>
+  </div>
+
+  <h2>② What — 点积怎么算</h2>
+  <div class="card how">
+    <p>两个同维向量，<b>对应位置相乘，再全部加起来</b>，得到一个<b>标量</b>（单个数字）：</p>
+    <div class="formula">a · b = a₁b₁ + a₂b₂ + … + a<sub>n</sub>b<sub>n</sub></div>
+    <p class="center mono" style="color:#cfe9d8">
+      a = [2, 1, 3], &nbsp; b = [1, 0, 2]<br>
+      a · b = 2×1 + 1×0 + 3×2 = <b>8</b>
+    </p>
+    <p>就这么简单：一串数字 × 一串数字 → 一个数。</p>
+  </div>
+
+  <h2>③ 关键直觉 — 点积衡量"对齐程度"</h2>
+  <p>点积还有个几何身份，这才是重点：</p>
+  <div class="formula">a · b = |a| × |b| × cos θ &nbsp;&nbsp;（θ = 两向量夹角）</div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 260" role="img" aria-label="dot product sign by angle">
+      <!-- case 1: aligned -->
+      <g transform="translate(40,30)">
+        <text x="90" y="0" fill="#e6e8ee" font-size="13" text-anchor="middle">方向相近</text>
+        <line x1="20" y1="170" x2="160" y2="60" stroke="#4ade80" stroke-width="3"/>
+        <polygon points="160,60 150,62 156,72" fill="#4ade80"/>
+        <line x1="20" y1="170" x2="150" y2="80" stroke="#22d3ee" stroke-width="3"/>
+        <polygon points="150,80 140,82 147,92" fill="#22d3ee"/>
+        <text x="90" y="205" fill="#4ade80" font-size="14" text-anchor="middle" font-family="Consolas">a·b 大正数</text>
+        <text x="90" y="226" fill="#9aa3b2" font-size="11" text-anchor="middle">cosθ ≈ 1</text>
+      </g>
+      <!-- case 2: perpendicular -->
+      <g transform="translate(280,30)">
+        <text x="90" y="0" fill="#e6e8ee" font-size="13" text-anchor="middle">互相垂直</text>
+        <line x1="20" y1="170" x2="160" y2="170" stroke="#4ade80" stroke-width="3"/>
+        <polygon points="160,170 150,165 150,175" fill="#4ade80"/>
+        <line x1="20" y1="170" x2="20" y2="50" stroke="#22d3ee" stroke-width="3"/>
+        <polygon points="20,50 15,60 25,60" fill="#22d3ee"/>
+        <text x="90" y="205" fill="#fbbf24" font-size="14" text-anchor="middle" font-family="Consolas">a·b = 0</text>
+        <text x="90" y="226" fill="#9aa3b2" font-size="11" text-anchor="middle">cosθ = 0 · 无关</text>
+      </g>
+      <!-- case 3: opposite -->
+      <g transform="translate(520,30)">
+        <text x="90" y="0" fill="#e6e8ee" font-size="13" text-anchor="middle">方向相反</text>
+        <line x1="90" y1="110" x2="160" y2="60" stroke="#4ade80" stroke-width="3"/>
+        <polygon points="160,60 150,62 156,72" fill="#4ade80"/>
+        <line x1="90" y1="110" x2="20" y2="170" stroke="#f87171" stroke-width="3"/>
+        <polygon points="20,170 30,166 28,176" fill="#f87171"/>
+        <text x="90" y="205" fill="#f87171" font-size="14" text-anchor="middle" font-family="Consolas">a·b 负数</text>
+        <text x="90" y="226" fill="#9aa3b2" font-size="11" text-anchor="middle">cosθ ≈ -1</text>
+      </g>
+    </svg>
+    <figcaption>方向越一致，点积越大（正）；垂直为 0；相反为负。<b>点积大 ↔ 两向量"指向同一方向" ↔ 语义相近。</b></figcaption>
+  </figure>
+
+  <div class="card key">
+    <p>把它接回 Embedding 课：语义相近的 token，向量指向相近的方向 → <b>它们的点积大</b>。所以点积给了我们一把尺子：</p>
+    <p class="center" style="font-size:17px;color:#cfe9d8"><b>点积大 = 相关；点积接近 0 = 无关；点积为负 = 相反</b></p>
+  </div>
+
+  <h2>④ 一个小坑：方向 vs 长度</h2>
+  <div class="callout">
+    <b>⚠️</b> 点积 <code>= |a|·|b|·cosθ</code> 同时混了<b>两个因素</b>：夹角（方向）<b>和</b>向量长度。一个"很长但方向一般"的向量，点积也可能不小。若只想比"方向像不像"，要除掉长度 → 这就是<b>余弦相似度</b> <code>cosθ = (a·b)/(|a||b|)</code>。<br>
+    Transformer 里用的是<b>原始点积</b>（还会除以一个 √d 做缩放，后面 attention 课讲），先知道"点积 ≈ 相似度打分"即可。
+  </div>
+
+  <h2>⑤ 🅿️ 预告（不用纠结）— 这一步通往 attention</h2>
+  <div class="card" style="opacity:.9">
+    <p style="color:var(--muted)"><b>下面只是让你知道点积会用在哪，不要求现在理解，后面 Module 1 会从头讲：</b></p>
+    <p>Transformer 里，每个 token 会生成一个 <b>Query</b>（"我在找什么"）和一个 <b>Key</b>（"我能提供什么"），用 <b>Query · Key 的点积</b>当作"该给别的 token 多少注意力"的原始分数——这个分数再过 softmax 才变成真正的<b>注意力权重</b>。</p>
+    <p class="center mono" style="color:#9ec5ff">点积 → 相似度分数 →〔softmax〕→ 注意力权重</p>
+    <p style="color:var(--muted)">记住这条链的位置即可；Query/Key/Value、softmax 都在待讲清单里。</p>
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>算一下：<code>a = [1, 2, 0]</code>，<code>b = [3, 1, 4]</code>，点积是多少？</li>
+      <li>两个 token 的向量点积很大，说明它们语义上大概是什么关系？点积接近 0 呢？</li>
+      <li>判断对错并说理由：<i>"点积只取决于两个向量的夹角，跟它们的长度无关。"</i></li>
+    </ol>
+  </div>
+  <p class="lead">（你已在讨论中答过这 3 题并通过 ✅）下一小课：<b>softmax</b>——把相似度分数变成"和为 1 的权重"。</p>
+
+  <div class="footer">AI Learning System · Lesson 03 Vector · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

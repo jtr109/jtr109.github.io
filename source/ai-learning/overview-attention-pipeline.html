@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>总览 · 注意力全链</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .key{border-left:3px solid var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:17px;color:#dbe4ff}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:160px;background:var(--panel2)}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="07-scaled-dot-product.html" style="color:#6ea8fe;text-decoration:none">← 缩放点积</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <span style="color:#3a4050">复习锚点</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">总览</span>
+    <span class="badge">复习锚点</span>
+  </div>
+  <h1>注意力全链</h1>
+  <p class="lead">把学过的 5 节课拼成一条流水线。处理词 <code>i</code> 时，它如何吸收上下文——一张图看全。</p>
+
+  <div class="formula">Attention(Q,K,V) = softmax( Q·Kᵀ / √d ) · V</div>
+
+  <h2>① 四步流水线</h2>
+  <figure class="fig">
+    <svg viewBox="0 0 720 400" role="img" aria-label="attention pipeline">
+      <text x="360" y="22" fill="#e6e8ee" font-size="14" text-anchor="middle">处理词 i：对句中每个词 j 走这四步</text>
+
+      <!-- Step 0: inputs q_i, k_j, v_j -->
+      <rect x="30" y="45" width="170" height="70" rx="10" fill="#171a23" stroke="#a78bfa"/>
+      <text x="115" y="68" fill="#c9b8f5" font-size="12" text-anchor="middle">每个词 x → 投影</text>
+      <text x="115" y="88" fill="#9ec5ff" font-size="12" text-anchor="middle" font-family="Consolas">q=xW_Q  k=xW_K</text>
+      <text x="115" y="105" fill="#9ec5ff" font-size="12" text-anchor="middle" font-family="Consolas">v=xW_V</text>
+      <text x="115" y="132" fill="#9aa3b2" font-size="11" text-anchor="middle">Q/K/V 课</text>
+
+      <!-- arrow -->
+      <path d="M200 80 L250 80" stroke="#5a6070" stroke-width="1.5" fill="none"/><polygon points="250,80 242,76 242,84" fill="#5a6070"/>
+
+      <!-- Step 1: dot -->
+      <rect x="250" y="45" width="200" height="70" rx="10" fill="#0e1a2b" stroke="#6ea8fe"/>
+      <text x="350" y="70" fill="#9ec5ff" font-size="13" text-anchor="middle">① 打分（点积）</text>
+      <text x="350" y="92" fill="#e6e8ee" font-size="13" text-anchor="middle" font-family="Consolas">s_j = q_i · k_j</text>
+      <text x="350" y="108" fill="#9aa3b2" font-size="11" text-anchor="middle">点积课 · "有多相关"</text>
+
+      <!-- arrow -->
+      <path d="M450 80 L500 80" stroke="#5a6070" stroke-width="1.5" fill="none"/><polygon points="500,80 492,76 492,84" fill="#5a6070"/>
+
+      <!-- Step 2: scale -->
+      <rect x="500" y="45" width="190" height="70" rx="10" fill="#1a1508" stroke="#fbbf24"/>
+      <text x="595" y="70" fill="#fbe08a" font-size="13" text-anchor="middle">② 缩放</text>
+      <text x="595" y="92" fill="#e6e8ee" font-size="13" text-anchor="middle" font-family="Consolas">s_j = s_j / √d</text>
+      <text x="595" y="108" fill="#9aa3b2" font-size="11" text-anchor="middle">缩放点积课 · 防饱和</text>
+
+      <!-- down arrow -->
+      <path d="M595 115 L595 155" stroke="#5a6070" stroke-width="1.5" fill="none"/><polygon points="595,155 591,147 599,147" fill="#5a6070"/>
+
+      <!-- Step 3: softmax -->
+      <rect x="470" y="155" width="220" height="80" rx="10" fill="#1a1508" stroke="#fbbf24"/>
+      <text x="580" y="180" fill="#fbe08a" font-size="13" text-anchor="middle">③ softmax</text>
+      <text x="580" y="204" fill="#e6e8ee" font-size="12" text-anchor="middle" font-family="Consolas">w_j = e^(s_j) / Σ e^(s)</text>
+      <text x="580" y="222" fill="#9aa3b2" font-size="11" text-anchor="middle">softmax 课 · 变成和=1 的权重</text>
+
+      <!-- arrow left -->
+      <path d="M470 195 L420 195" stroke="#5a6070" stroke-width="1.5" fill="none"/><polygon points="420,195 428,191 428,199" fill="#5a6070"/>
+
+      <!-- Step 4: weighted sum -->
+      <rect x="180" y="155" width="240" height="80" rx="10" fill="#13231a" stroke="#4ade80"/>
+      <text x="300" y="180" fill="#bff0cf" font-size="13" text-anchor="middle">④ 加权求和</text>
+      <text x="300" y="204" fill="#e6e8ee" font-size="12" text-anchor="middle" font-family="Consolas">new_i = Σ w_j · v_j</text>
+      <text x="300" y="222" fill="#9aa3b2" font-size="11" text-anchor="middle">朴素注意力课 · 混合 value</text>
+
+      <!-- down arrow to output -->
+      <path d="M300 235 L300 280" stroke="#4ade80" stroke-width="1.5" fill="none"/><polygon points="300,280 296,272 304,272" fill="#4ade80"/>
+
+      <!-- output -->
+      <rect x="200" y="280" width="200" height="56" rx="10" fill="#13231a" stroke="#4ade80"/>
+      <text x="300" y="304" fill="#bff0cf" font-size="13" text-anchor="middle">词 i 的新向量</text>
+      <text x="300" y="323" fill="#7fc498" font-size="11" text-anchor="middle">"吸收了上下文"</text>
+
+      <text x="360" y="372" fill="#9aa3b2" font-size="12" text-anchor="middle">每个词都走一遍这条链，各自得到自己的新向量</text>
+    </svg>
+    <figcaption>①点积打分 → ②÷√d 缩放 → ③softmax 成权重 → ④加权求和 value。这就是 softmax(QKᵀ/√d)V。</figcaption>
+  </figure>
+
+  <h2>② 每一步 = 哪一课</h2>
+  <table class="meta">
+    <tr><td>投影 q/k/v</td><td>Q/K/V 课 —— 三台矩阵把 x 加工成"找/被找/给"三个角色</td></tr>
+    <tr><td>① 打分 q·k</td><td>点积课 —— 点积衡量两向量"有多对齐/相关"</td></tr>
+    <tr><td>② 缩放 /√d</td><td>缩放点积课 —— 维度高→分数大→softmax 饱和；除掉拉回平缓区</td></tr>
+    <tr><td>③ softmax</td><td>softmax 课 —— e 的幂 ÷ 总和 → 和为 1 的权重</td></tr>
+    <tr><td>④ 加权求和</td><td>朴素注意力课 —— 按权重混合各词的 value</td></tr>
+  </table>
+
+  <h2>③ 一句话记忆</h2>
+  <div class="card key">
+    <p class="mono" style="font-size:15px;color:#cfe9d8;text-align:center">
+      q·k 测相关 → ÷√d 稳一稳 → softmax 变权重 → 乘 v 求平均
+    </p>
+    <p class="center" style="color:var(--muted);font-size:13px">softmax 的算法一直没变（e 的幂÷总和）；变的只是喂给它的分数 = 真实的 q·k/√d。</p>
+  </div>
+
+  <div class="footer">AI Learning System · 总览 注意力全链 · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 04 · softmax</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px;letter-spacing:.3px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)}
+  .how{border-left:3px solid var(--cyan)}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:16px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="03-vector.html" style="color:#6ea8fe;text-decoration:none">← 上一课：Vector 点积</a>
+    <a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a>
+    <a href="05-naive-attention.html" style="color:#6ea8fe;text-decoration:none">下一课：朴素注意力 →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 04</span>
+    <span class="badge">数学小工具（just-in-time）</span>
+  </div>
+  <h1>softmax</h1>
+  <p class="lead">一个独立的小工具：把"一串任意分数"变成"一串加起来 =1 的权重"。学它是为了下一课把点积分数变成注意力权重——但本课只讲 softmax 本身。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>softmax：分数 → 归一化权重</td></tr>
+    <tr><td>Objectives</td><td>会算 softmax；理解它做的两步（指数化 + 归一化）和为什么</td></tr>
+    <tr><td>Prerequisites</td><td>会加减乘除、知道 e^x 是个越大越陡的增函数即可</td></tr>
+    <tr><td>Outcome</td><td>能把 [2,1,0] 这种分数手算成和为 1 的权重，并说清 softmax 的性质</td></tr>
+    <tr><td>Warning</td><td>本课不碰 attention / Q / K；那是下一课</td></tr>
+  </table>
+
+  <h2>① Why — 解决什么问题</h2>
+  <div class="card why">
+    <p>很多时候我们手上有<b>一串"分数"</b>（可以是任意实数，有正有负），但我们想拿它当作<b>"该分配多少比重"</b>来用。比如把三个分数变成"分别占多少权重"。</p>
+    <p>直接拿原始分数当权重不行，因为我们通常想要权重满足两个条件：</p>
+    <ul>
+      <li>都是<b>非负</b>（负的比重没意义）</li>
+      <li>加起来正好 <b>=1</b>（这样它是一套完整的"分配比例"）</li>
+    </ul>
+    <p><b>softmax</b> 就是把任意一串分数，转换成满足这两条的权重的标准工具。</p>
+  </div>
+
+  <h2>② What — 怎么算（就两步）</h2>
+  <div class="card how">
+    <div class="formula">softmax(x)<sub>i</sub> = e<sup>x<sub>i</sub></sup> / Σ<sub>j</sub> e<sup>x<sub>j</sub></sup></div>
+    <p>拆成两个动作：</p>
+    <ul>
+      <li><b>第一步 指数化</b>：每个分数取 <code>e^x</code>。作用：把任何数变成<b>正数</b>，且大的被放得更大。</li>
+      <li><b>第二步 归一化</b>：每个 <code>e^x</code> 除以它们的<b>总和</b>。作用：让结果<b>加起来 =1</b>。</li>
+    </ul>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 700 210" role="img" aria-label="softmax pipeline">
+      <text x="350" y="20" fill="#e6e8ee" font-size="14" text-anchor="middle">softmax([2, 1, 0])</text>
+      <!-- raw -->
+      <text x="80" y="50" fill="#9aa3b2" font-size="12" text-anchor="middle">分数 x</text>
+      <g font-family="Consolas" font-size="13" fill="#e6e8ee">
+        <rect x="30" y="60" width="100" height="26" rx="6" fill="#1e2230" stroke="#2a2f3d"/><text x="80" y="78" text-anchor="middle">2</text>
+        <rect x="30" y="94" width="100" height="26" rx="6" fill="#1e2230" stroke="#2a2f3d"/><text x="80" y="112" text-anchor="middle">1</text>
+        <rect x="30" y="128" width="100" height="26" rx="6" fill="#1e2230" stroke="#2a2f3d"/><text x="80" y="146" text-anchor="middle">0</text>
+      </g>
+      <!-- arrow exp -->
+      <path d="M140 107 L210 107" stroke="#9aa3b2" stroke-width="1.5" fill="none"/><polygon points="210,107 202,103 202,111" fill="#9aa3b2"/>
+      <text x="175" y="98" fill="#22d3ee" font-size="11" text-anchor="middle">e^x</text>
+      <!-- exp values -->
+      <text x="290" y="50" fill="#9aa3b2" font-size="12" text-anchor="middle">指数化</text>
+      <g font-family="Consolas" font-size="13" fill="#9fe6f2">
+        <rect x="230" y="60" width="120" height="26" rx="6" fill="#0e2233" stroke="#22d3ee"/><text x="290" y="78" text-anchor="middle">7.39</text>
+        <rect x="230" y="94" width="120" height="26" rx="6" fill="#0e2233" stroke="#22d3ee"/><text x="290" y="112" text-anchor="middle">2.72</text>
+        <rect x="230" y="128" width="120" height="26" rx="6" fill="#0e2233" stroke="#22d3ee"/><text x="290" y="146" text-anchor="middle">1.00</text>
+      </g>
+      <text x="290" y="178" fill="#9aa3b2" font-size="11" text-anchor="middle">总和 = 11.11</text>
+      <!-- arrow normalize -->
+      <path d="M360 107 L430 107" stroke="#9aa3b2" stroke-width="1.5" fill="none"/><polygon points="430,107 422,103 422,111" fill="#9aa3b2"/>
+      <text x="395" y="98" fill="#fbbf24" font-size="11" text-anchor="middle">÷ 总和</text>
+      <!-- weights -->
+      <text x="530" y="50" fill="#9aa3b2" font-size="12" text-anchor="middle">权重（和 =1）</text>
+      <g font-family="Consolas" font-size="13" fill="#bff0cf">
+        <rect x="460" y="60" width="150" height="26" rx="6" fill="#13233b" stroke="#4ade80"/><text x="535" y="78" text-anchor="middle">0.665</text>
+        <rect x="460" y="94" width="150" height="26" rx="6" fill="#13233b" stroke="#4ade80"/><text x="535" y="112" text-anchor="middle">0.245</text>
+        <rect x="460" y="128" width="150" height="26" rx="6" fill="#13233b" stroke="#4ade80"/><text x="535" y="146" text-anchor="middle">0.090</text>
+      </g>
+      <text x="535" y="178" fill="#4ade80" font-size="11" text-anchor="middle">0.665+0.245+0.090 = 1</text>
+    </svg>
+    <figcaption>分数 → 每个取 e^x → 各除以总和 → 一套加起来 =1 的权重。</figcaption>
+  </figure>
+
+  <h2>③ 三个要记的性质</h2>
+  <div class="card key">
+    <ul>
+      <li><b>和为 1、全非负</b>：结果是一套"分配比例"（数学上叫概率分布）。</li>
+      <li><b>大分数 → 大权重</b>：单调，原来大的还是大，只是被压进 0~1。</li>
+      <li><b>"soft"（软）不是"硬"</b>：它不是简单挑最大的那个给 1、其余给 0；小分数也留一点点比重。名字 <b>soft + max</b> 就是"温柔版的取最大"。</li>
+    </ul>
+    <p>当某个分数<b>明显大</b>时，softmax 会接近"一个独大"。例如 <code>softmax([9.1, 1.2, 4.0]) ≈ [0.994, 0.0004, 0.006]</code>——几乎全给了第一个。</p>
+  </div>
+
+  <h2>④ 一个小问：为什么要先 e^x，不直接除以总和？</h2>
+  <div class="callout">
+    <b>⚠️</b> 因为原始分数<b>可能有负数</b>。直接"每个 ÷ 总和"会出问题：负权重、甚至分母为 0 或负。先套 <code>e^x</code> 保证每项都是正数，归一化才干净；顺带它还会把"大的更突出"。这就是为什么是 soft<b>max</b>——放大差距、偏向大的。
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 560 320" role="img" aria-label="y = e^x 曲线">
+      <text x="280" y="22" fill="#e6e8ee" font-size="14" text-anchor="middle">y = e^x</text>
+      <!-- axes -->
+      <line x1="60" y1="280" x2="530" y2="280" stroke="#5a6070" stroke-width="1.5"/>
+      <line x1="290" y1="40" x2="290" y2="292" stroke="#5a6070" stroke-width="1.5"/>
+      <polygon points="530,280 521,276 521,284" fill="#5a6070"/>
+      <polygon points="290,40 286,49 294,49" fill="#5a6070"/>
+      <text x="538" y="284" fill="#9aa3b2" font-size="11">x</text>
+      <text x="299" y="49" fill="#9aa3b2" font-size="11">y</text>
+      <!-- x ticks -->
+      <g fill="#9aa3b2" font-size="11" font-family="Consolas">
+        <line x1="136.7" y1="277" x2="136.7" y2="283" stroke="#5a6070"/><text x="136.7" y="297" text-anchor="middle">-2</text>
+        <line x1="290" y1="277" x2="290" y2="283" stroke="#5a6070"/><text x="290" y="297" text-anchor="middle">0</text>
+        <line x1="443.3" y1="277" x2="443.3" y2="283" stroke="#5a6070"/><text x="443.3" y="297" text-anchor="middle">2</text>
+      </g>
+      <!-- y tick at 1 -->
+      <line x1="286" y1="250" x2="294" y2="250" stroke="#5a6070"/>
+      <text x="282" y="254" fill="#9aa3b2" font-size="11" font-family="Consolas" text-anchor="end">1</text>
+      <!-- curve y=e^x -->
+      <polyline fill="none" stroke="#6ea8fe" stroke-width="2.5"
+        points="60,278.5 98.3,277.5 136.7,275.9 174.9,273.3 213.3,269 251.6,261.8 290,250 328.3,230.5 366.7,198.5 405,145.5 443.3,58.3"/>
+      <!-- key points -->
+      <circle cx="136.7" cy="275.9" r="4" fill="#4ade80"/>
+      <circle cx="290" cy="250" r="4" fill="#e6e8ee"/>
+      <circle cx="443.3" cy="58.3" r="4" fill="#fbbf24"/>
+      <text x="150" y="264" fill="#4ade80" font-size="11" font-family="Consolas" text-anchor="start">e⁻²≈0.14</text>
+      <text x="300" y="244" fill="#e6e8ee" font-size="11" font-family="Consolas" text-anchor="start">e⁰=1</text>
+      <text x="438" y="52" fill="#fbbf24" font-size="11" font-family="Consolas" text-anchor="end">e²≈7.39</text>
+      <!-- annotation 1: always positive -->
+      <text x="70" y="120" fill="#4ade80" font-size="12">① 连负的 x，曲线也在</text>
+      <text x="70" y="138" fill="#4ade80" font-size="12">&nbsp;&nbsp;&nbsp;x 轴上方 → e^x 永远 &gt; 0</text>
+      <path d="M120 148 L138 268" stroke="#4ade80" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
+      <polygon points="138,268 132,260 140,259" fill="#4ade80"/>
+      <!-- annotation 2: steep -->
+      <text x="330" y="118" fill="#fbbf24" font-size="12">② 越往右越陡</text>
+      <text x="330" y="136" fill="#fbbf24" font-size="12">&nbsp;&nbsp;&nbsp;→ 放大大分数、拉开差距</text>
+      <path d="M405 140 L438 68" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="3 3" fill="none"/>
+      <polygon points="438,68 430,72 437,77" fill="#fbbf24"/>
+    </svg>
+    <figcaption>e^x 的两个关键性质：<b class="tag-good">永远为正</b>（连负输入也给正输出 → 解决"负权重/负分母"）＋ <b class="tag-mid">向右快速变陡</b>（→ 放大较大的分数、拉开差距）。这正是 softmax 用它的两个理由。</figcaption>
+  </figure>
+
+  <div class="card">
+    <h3>💬 为什么"有负数"就不能直接除以总和？（讨论补充）</h3>
+    <p>先澄清：<b>输入分数完全可以是负的</b>，softmax 照收。会崩的是"直接每个 ÷ 总和"这种<b>朴素归一化</b>——遇负数就出问题：</p>
+    <table class="meta">
+      <tr><td style="width:200px">分数 [-2, -5]，总和 -7</td><td>权重 [0.29, 0.71] —— <b class="tag-bad">-5 更小却权重更大，顺序反了 ❌</b></td></tr>
+      <tr><td>分数 [3, -3]，总和 0</td><td>÷ 0，<b class="tag-bad">除以零，未定义 ❌</b></td></tr>
+      <tr><td>分数 [-1, 2]，总和 1</td><td>权重 [-1, 2] —— <b class="tag-bad">负权重、还有 &gt;1，不是合法比例 ❌</b></td></tr>
+    </table>
+    <p>e^x 先把所有数变正，上面三种崩溃全避免：<code>[-2,-5]</code> → e^x → <code>[0.14, 0.0067]</code> → 归一化 <code>[0.95, 0.045]</code> ✅ 全正、和为 1、大的仍然大。</p>
+    <div class="fix"><b>精确说法：</b>不是"输入不能有负数"，而是"<b>参与 ÷总和 那一步的数不能有负</b>"；原始分数可以负，e^x 就是负责把它们先变正的那一步。</div>
+  </div>
+
+  <div class="card">
+    <h3>💬 为什么要"和为 1"？（讨论补充）</h3>
+    <p>因为这组权重接下来是拿去做<b>加权平均（按比例混合）</b>的。和为 1，混合结果才会停在和原料<b>同一个尺度</b>上——不放大、不缩小。拿混合两个向量 A、B 举例：</p>
+    <table class="meta">
+      <tr><td style="width:180px">权重 [0.7, 0.3]（和=1）</td><td>0.7·A + 0.3·B → 落在 A、B <b class="tag-good">之间</b>，同尺度 ✅ 真正的平均</td></tr>
+      <tr><td>权重 [7, 3]（和=10）</td><td>≈ 放大 10 倍 <b class="tag-bad">❌ 不是平均了</b></td></tr>
+      <tr><td>权重 [0.07, 0.03]（和=0.1）</td><td>≈ 缩小 10 倍 <b class="tag-bad">❌</b></td></tr>
+    </table>
+    <p>还有个好处是<b>可比性</b>：一个词关注 2 个词、另一个词关注 50 个词，若权重不归一，后者输出会因"数量多"而虚高；和为 1 让两者站在同一起跑线。</p>
+    <div class="fix"><b>直觉：</b>和为 1 + 全非负 = 把 <b>100% 的"注意力预算"分配出去</b>。具体"混合的是什么"（Value 向量）在<b>下一课</b>讲。</div>
+  </div>
+
+  <h2>⑤ 🅿️ 它接下来用在哪（预告，不展开）</h2>
+  <div class="card" style="opacity:.9">
+    <p style="color:var(--muted)">下一课：把上一课的<b>点积相似度分数</b>喂给 softmax，就得到<b>注意力权重</b>（"该给每个词多少注意力"，加起来 =1）。本课到此为止，softmax 本身你已经会了。</p>
+    <p class="center mono" style="color:#9ec5ff">点积分数 →〔softmax〕→ 注意力权重</p>
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>手算：<code>softmax([1, 1])</code> 等于多少？（提示：两个分数一样大）</li>
+      <li>如果一串分数里有一个<b>远大于</b>其它，softmax 出来的权重大致长什么样？</li>
+      <li>为什么 softmax 要先做 <code>e^x</code>，而不是直接"每个分数 ÷ 总和"？</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，我们进 <b>B. 朴素注意力</b>——只用点积 + softmax，先把"按相似度混合上下文"的核心直觉立住（还不引入 Q/K/V）。</p>
+
+  <div class="footer">AI Learning System · Lesson 04 softmax · 自包含 HTML，可离线打开</div>
+</div>
+</body>
+</html>
