@@ -1,0 +1,225 @@
+# AI Learning System
+
+> 本文档由 Copilot 维护。学生 = @liryan。Copilot 同时担任 **Tutor（讲课/出题/纠错）** 和 **Knowledge Manager（存档/维护进度）**。
+> Roadmap 低频变化；每节课后更新的是 `Current Status` / `Lesson Log`。
+>
+> **📍 讲义位置（2026-07 起）**：HTML 讲义现位于本仓库 `source/ai-learning/`，push `master` 后由 GitHub Actions 自动部署到 **https://jtr109.com/ai-learning/**。旧的独立仓库 `jtr109/AI-Learning` 已归档弃用。本文件（进度追踪）在仓库根，不发布到网站。
+
+## Goal
+
+建立系统性的 AI / LLM / AI Engineering 知识体系。
+
+核心目标：
+
+> **Build Mental Models, not memorize definitions.**
+
+不是背概念，而是能回答：为什么这个技术存在？它解决什么问题？它和已有知识如何连接？它在整个体系里处于什么位置？
+
+学习范围：Transformer · LLM · LLM Inference · AI Engineering · RAG · Agents · AI System Design
+
+---
+
+## Roles（本 session 合并版）
+
+- **Copilot = Tutor + Knowledge Manager**
+  - 设计每节课、讲解、建立 mental model、出诊断题、发现并纠正误区、按需补 just-in-time 数学
+  - 维护本文档：`Current Status`、`Lesson Log`、`Knowledge`
+  - 不随意改 `Roadmap`（那是课程设计文档，改动需学生同意）
+- **Student（@liryan）**
+  - 主动思考、提问、**用自己的话总结**、判断自己是否真的懂
+
+### 学生画像（影响讲课深度）
+- 软件工程师（Microsoft, Windows 365 Data Platform），工程背景强
+- 数学：线代 + 微积分学过但生疏 → **需要时用直觉+图+最小必要公式快速复习，不硬上推导**
+- 偏好：图 / 具体例子 > 公式；先建直觉再上细节
+
+---
+
+## Learning Workflow
+
+**产出格式** — 课程内容（讲解 + 图表）以**自包含 HTML** 输出到 `lessons/NN-topic.html`（内嵌 CSS + SVG，可离线打开）；进度追踪继续用本 markdown 文档。
+
+**每节课前** — 根据 Roadmap + Current Status 输出 `Today's Lesson`（Topic / Objectives / Prerequisites / Expected Outcome / Warnings）。
+
+**课中** — 讲 What / Why / How，配具体例子和图，随时抓误区。
+
+**课后** — 学生用自己的话按下面格式总结，Copilot 检查逻辑、纠错、更新 Current Status：
+```
+# Lesson Summary
+## My Understanding      （用自己的话）
+## Key Mental Models     （核心理解）
+## Remaining Questions   （未解决）
+## Misconceptions Fixed  （错 -> 对）
+```
+
+### Learning Principles
+1. Mental Model > Definition
+2. Understanding > Speed
+3. Math is learned Just-in-Time
+4. 新知识必须接到已有知识上
+5. 缺前置知识就暂停补齐
+6. 图和例子优先于死记
+7. 每个概念都要回答：解决什么问题 / 为何存在 / 如何工作
+
+### 教学颗粒度原则 (Granularity)
+- **一课一个新概念**：每个讲义只引入一个主要新概念；数学小工具（点积、softmax…）拆成独立微课，在需要它的前一刻讲（just-in-time）。
+- **严格循序渐进**：一次解释里不砸一堆没铺垫过的概念。用到的东西必须"要么已教、要么明确标注为🅿️预告"。
+- **预告即登记**：提到但暂不展开的概念 → 记入「待讲清单」，只说"后面讲"。
+- **概念分层**：区分"算法 / 对算法的解读 / 下游概念"三层，不混谈（例：点积 → 相似度 → 注意力权重）。
+- **先确认再前进**：每个概念确认掌握后再进下一个；鼓励随时打断提问。
+
+---
+
+## Roadmap
+
+### Module 0 — Foundations
+建立 LLM 基础 mental model。
+- Token · Embedding · Vector（向量空间直觉）· Linear Algebra Basics（按需）
+
+### Module 1 — Transformer
+理解 Transformer 为什么能工作。**Self-Attention 按颗粒度原则拆成微课链：**
+- **softmax**（工具）→ **朴素注意力**（点积+softmax 的加权平均，先立核心直觉）→ **Q/K/V**（引入投影修朴素版不足）→ **Attention Score / ÷√d 缩放** → **Multi-head** → **FFN** → **Residual** → **LayerNorm** → **Positional Encoding** → **RoPE**
+- **Outcome**：能解释 Transformer 如何根据已有 token 预测下一个 token。
+
+### Module 2 — Large Language Models
+- Decoder-only 架构 · Next-Token Prediction · Context Window · Sampling · Temperature · Top-k · Top-p · Tokenization 细节 · BPE
+
+### Module 3 — LLM Inference Engineering
+- Prefill · Decode · KV Cache · FlashAttention · Continuous Batching · Speculative Decoding · vLLM
+
+### Module 4 — Training
+- Loss · Gradient Descent · Backprop · Pretraining · SFT · RLHF · DPO
+- 原则：理解流程与核心思想，不追求成为 ML researcher。
+
+### Module 5 — AI Engineering
+- Prompt Engineering · Embedding Models · RAG · MCP · Agents · Memory · Evaluation · AI System Architecture
+- **Outcome**：能设计一个完整 AI 应用系统。
+
+### Module 6 — Advanced（按兴趣）
+- MoE · LoRA · PEFT · Diffusion · Multimodal · Reasoning Models · Long Context · Mamba · SSM · AI Coding Agents · Latest Research
+
+---
+
+## Current Status
+
+**Current Module:** Module 1 — Transformer
+**Current Lesson:** E. Multi-head Attention（下次开始；单头注意力全链已闭环）
+
+### Completed
+- **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
+  - ✅ token ≠ 单词（subword，如 `liked → like + d`）
+  - ✅ 不同模型用不同 tokenizer，切分结果可不同
+  - ✅ 同一 tokenizer 对同一文本是确定性的
+  - ✅ 误区 A 已补：tokenizer 输出是整数序列，不是矩阵；"变矩阵"发生在 embedding 层
+  - ✅ 误区 B 已补：transformer 吃的是向量，不是整数 id
+- **Embedding** — ✅ 通过，mental model 完整正确
+  - ✅ token id = 行号/座位号（index），无语义，可任意分配但需前后一致
+  - ✅ embedding = 查表取多维向量，按序叠成 `[N × d_model]` 矩阵
+  - ✅ 意义存在于向量在高维空间的"位置"；相近 token 位置近，方向也有含义
+  - ✅ 区分两种训练：① tokenizer(BPE) 建词表并冻结；② 模型训练只改向量数值，index 不迁移
+- **Vector / 点积** — ✅ 通过（讨论中证明掌握，`lessons/03-vector.html`）
+  - ✅ 点积 = 对应位置相乘求和 = 衡量两向量"对齐程度" = 相似度
+  - ✅ 点积大 ⟹ 该关注（attention 里）；但"点积大 ⟺ 方向最像"❌（长度会掺入，纯方向用余弦）
+  - ✅ 深挖：长度不是绝对重要性、是模型可用的自由度；"重要"是上下文相关
+- **softmax** — ✅ 通过（`lessons/04-softmax.html`，3 题全对）
+  - ✅ 两步：指数化（e^x，全变正、放大大的）+ 归一化（÷总和 → 和为 1）
+  - ✅ 性质：和为1/全非负、单调、soft（非硬 argmax）；独大分数→接近 one-hot
+  - ✅ 为何用 e^x：朴素"÷总和"遇负数会崩（负权重/÷0/顺序反）；e^x 先变正
+- **朴素注意力** — ✅ 通过（`lessons/05-naive-attention.html`，3 题全对）
+  - ✅ 三步：点积打分 → softmax 成权重 → 加权求和混合上下文
+  - ✅ 核心直觉：注意力=按相似度对上下文做加权平均；新向量=邻居向量的加权平均
+  - ✅ 洞察：xᵢ·xᵢ=|xᵢ|² 恒正且方向一致 → 朴素版天生最关注自己（后面要松绑的动机）
+- **Query / Key / Value** — ✅ 通过（`lessons/06-qkv.html`，3 题全对）
+  - ✅ 三个学出来的矩阵 W_Q/W_K/W_V 把 x 投影成三个角色向量：q（我找谁）/ k（谁找我）/ v（交出的内容）
+  - ✅ 修朴素版：q·k 打分不再对称、不再最爱自己；混合用 v 而非 x
+  - ✅ 深挖：q/k/v 是 x 的平级投影，差异源于用途；不预存 q/k/v（x 随上下文/层变化）
+  - 🔧 纠正用词：W_Q/W_K/W_V 是矩阵(变换)，不是向量；q=x·W 是"向量经矩阵变换"
+- **缩放点积 ÷√d** — ✅ 通过（`lessons/07-scaled-dot-product.html`，3 题全对）
+  - ✅ 维度 d 大 → 点积和的波动≈√d → 分数天然大（非更相关）
+  - ✅ 分数大 → softmax 落 e^x 陡峭区 → 一家独大 + 梯度饱和难训练
+  - ✅ ÷√d 把落点拉回平缓区（几何：横向撑开曲线）；不改排序、只缩小分差
+  - ✅ 完整单头注意力公式闭环：softmax(QKᵀ/√d)·V
+
+### Open Questions
+- （无）
+
+### Next Lesson
+- 完成 Self-Attention 检查题 → Multi-head Attention → FFN / 残差 / LayerNorm / 位置编码
+
+---
+
+## 待讲清单 (Parking Lot)
+> 已在讲解中提到、但承诺"后面再展开"的概念。讲到时勾掉。
+
+**数学补充讲义**：`lessons/A-matrix-as-transform.html`（矩阵=变换 vs 向量=料，Q/K/V 打分不对称的数学根源）
+**总览/复习**：`lessons/overview-attention-pipeline.html`（注意力四步全链：q·k→÷√d→softmax→加权和 v；每步对应哪一课）
+
+| 概念 | 何处提到 | 计划何时讲 |
+|---|---|---|
+| softmax（把分数变成和为 1 的权重） | lesson 03/04 | ✅ 已讲（`lessons/04-softmax.html`） |
+| ÷√d 缩放（scaled dot-product） | lesson 04 公式 | ✅ 已讲（`lessons/07-scaled-dot-product.html`） |
+| Multi-head Attention（多头） | lesson 04 | Self-Attention 之后 |
+| W_O 注意力输出投影 | 概念问答 | Multi-head 一并讲 |
+| FFN（前馈网络） | roadmap | Module 1 |
+| 残差连接 Residual | roadmap | Module 1 |
+| LayerNorm | roadmap | Module 1 |
+| 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
+| 输出层 / unembedding（映射回词表） | 概念问答 | Module 2（预测下一个 token 时） |
+| 多层堆叠（Stacking N Transformer Blocks / depth） | 多次提及（W 每层一套、深层 x 非固定） | Module 1 收尾（先学完单个 block 的零件） |
+| KV Cache（缓存已算出的 k/v） | qkv 预存讨论 | Module 3 |
+
+---
+
+## Lesson Log
+
+### 2026-07-20 — Token（诊断）
+- 形式：5 题诊断，测 mental model 而非记忆
+- 结果：Q2/Q3/Q4 ✅；Q1（把"变矩阵"错记到 tokenizer 头上）、Q5（以为整数直接喂 transformer）需修
+- 结论：不重学 Token，直接进 Embedding，两个缺口在 Embedding 课自然补上
+
+### 2026-07-20 — Embedding（✅ 完成）
+- 首次采用 HTML 输出：`lessons/02-embedding.html`（含 SVG 查找表图 + 向量空间直觉图 + 两段沉淀问答）
+- 覆盖：Why（整数不能直接喂 NN）/ How（token id = 行号，查表取向量）/ 意义来自训练学出的向量位置
+- 深入问答沉淀进讲义：① id 编号任意但需一致；② 两种训练，index 不迁移、只改向量
+- 学生总结完整正确，判定通过
+- 追加 FAQ：tokenizer 锁死/重训、重训三档（预训练 / 词表迁移 / 蒸馏）
+
+### 2026-07-22 — Vector / 点积（✅ 完成）
+- `lessons/03-vector.html`：点积=相似度、方向 vs 长度、通往 attention 的桥
+- 深挖讨论：点积大≠方向最像（长度反例 [3,4] vs [1,1]）；长度非绝对重要性、是模型自由度
+- 未正式答检查题，但讨论中已充分证明掌握，判定通过
+
+### 2026-07-22 — Self-Attention（旧 lesson 04 作废，改为微课链）
+- 反馈：原 lesson 04 一次塞入 Q/K/V+softmax+√d+多头，违背"一课一概念"
+- lesson 03 也把 点积/相似度/注意力权重 混谈 → 已补"本课只需掌握 + 🅿️后面讲"标注，明确概念层次链
+- 重构为微课链：softmax → 朴素注意力 → Q/K/V → scaled score → Multi-head
+- 新增「教学颗粒度原则」到文档
+
+### 2026-07-22 — softmax（✅ 完成）
+- `lessons/04-softmax.html`：分数→(指数化+归一化)→和为1的权重；性质；为什么用 e^x
+- 加 y=e^x 曲线图（永远>0 + 越右越陡）；FAQ 补"为何负数不能直接÷总和"、"为何要和为1"
+- 3 题全对，判定通过
+
+### 2026-07-23 — 朴素注意力（✅ 完成）
+- `lessons/05-naive-attention.html`：只用点积+softmax+加权和，建立"按相似度混合上下文"核心直觉，不引入 Q/K/V
+- §④ 留悬念：单一向量兼任 比较/被比较/提供内容 三角色 → 下一课 Q/K/V 拆开
+- 3 题全对；学生自己推出 xᵢ·xᵢ=|xᵢ|²、空间上向相关邻居偏移
+- 判定通过
+
+### 2026-07-23 — Query/Key/Value（✅ 完成）
+- `lessons/06-qkv.html`：从朴素版两毛病（角色纠缠、对称最爱自己）引出 Q/K/V 三投影
+- FAQ 沉淀：q/k/v vs x 关系（平级投影，用途决定差异，k=广告词/v=货）；为何不预存 q/k/v
+- 待讲清单加：多层堆叠、KV Cache
+- 3 题全对；纠正"矩阵 vs 向量"用词（W 是变换矩阵）
+- 判定通过
+
+### 2026-07-23 — 缩放点积 ÷√d（✅ 完成）
+- `lessons/07-scaled-dot-product.html`：维度高→点积和的std≈√d→分数偏大→softmax饱和成one-hot；÷√d 拉回温和范围
+- 承接 softmax"独大"性质 + Q/K/V 打分；完整公式 softmax(QKᵀ/√d)V 拼齐
+- 加"e^x 落点"图（陡峭区20 vs 平缓区2.5，横向撑开直觉）
+- 附加产出：数学补充 A（矩阵=变换）、总览讲义（注意力全链）、index 目录页 + 各课导航条
+- 3 题全对，判定通过
+
+### 下次预告 — E. Multi-head Attention
+- 学生已提前踩到门口：512维拆成若干64维head、算完拼回512；W_O 整合
+- 动机：单头只有一种"关注视角"，多头并行捕捉不同关系
