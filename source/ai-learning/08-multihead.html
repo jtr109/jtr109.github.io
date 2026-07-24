@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 08 · Multi-head Attention</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="07-scaled-dot-product.html" style="color:#6ea8fe;text-decoration:none">← 上一课：缩放点积</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <a href="overview-attention-pipeline.html" style="color:#22d3ee;text-decoration:none">总览：注意力全链 →</a>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 08</span>
+    <span class="badge">注意力最后一块</span>
+  </div>
+  <h1>Multi-head Attention</h1>
+  <p class="lead">单个注意力只能"用一种方式关注"。多头 = 并行开好几套注意力，各看一种关系，最后拼起来。正好解答你之前的 512→64→512 疑问。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>Multi-head Attention（多头注意力）</td></tr>
+    <tr><td>Objectives</td><td>理解为什么要多个头；看清 512→拆成 h 个 64→拼回 512 的维度流</td></tr>
+    <tr><td>Prerequisites</td><td>单头注意力全链 ✅（softmax(QKᵀ/√d)V）、矩阵=变换 ✅</td></tr>
+    <tr><td>Outcome</td><td>能解释多头的动机、维度如何拆分与合并、W_O 的作用</td></tr>
+    <tr><td>Warning</td><td>各头不是人为指定分工的，是训练中自己分化出来的</td></tr>
+  </table>
+
+  <h2>① Why — 单个头只能"关注一种关系"</h2>
+  <div class="card why">
+    <p>一次注意力，每个词最终得到<b>一组</b> softmax 权重、<b>一个</b>加权平均结果。这意味着它只能表达<b>一种</b>"该关注谁"的模式。但语言里，一个词同时和别人有<b>多种</b>关系：</p>
+    <ul>
+      <li><b>指代</b>：<code>it</code> → <code>animal</code>（它指谁）</li>
+      <li><b>句法</b>：动词 → 它的主语 / 宾语</li>
+      <li><b>邻接</b>：和前后相邻的词（局部搭配）</li>
+    </ul>
+    <p>如果只有一个头，这些不同关系被<b>挤进同一组权重里平均</b>，互相干扰、变得模糊。解决办法很直接：<b>开多个头，每个头独立地关注一种关系。</b></p>
+  </div>
+
+  <h2>② How — 拆成 h 个小注意力，并行跑</h2>
+  <div class="card how">
+    <p>设 <code>d_model = 512</code>，头数 <code>h = 8</code>。做法：</p>
+    <ul>
+      <li>不再用一套 512→512 的大 Q/K/V，而是给<b>每个头</b>一套<b>更小</b>的矩阵：<code>W_Q/W_K/W_V</code> 形状 <code>512×64</code>（64 = 512/8）。</li>
+      <li>每个头把 512 维的词向量投影成自己的 <b>64 维</b> q/k/v，独立跑一遍完整的 <code>softmax(qkᵀ/√d)v</code>，得到一个 <b>64 维</b>输出。</li>
+      <li>8 个头 → 8 个 64 维输出，<b>拼接</b>（concat）成 <code>8×64 = 512</code> 维。</li>
+      <li>再过一个<b>输出矩阵 W_O</b>（512×512）整合各头信息 → 最终 512 维输出。</li>
+    </ul>
+    <div class="formula">
+      head<sub>i</sub> = softmax(q<sub>i</sub>k<sub>i</sub>ᵀ/√d)v<sub>i</sub> &nbsp;·&nbsp; 每个 64 维<br>
+      输出 = Concat(head<sub>1</sub>,…,head<sub>8</sub>) · W_O &nbsp;·&nbsp; 512 维
+    </div>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 380" role="img" aria-label="multi-head dimension flow">
+      <text x="360" y="20" fill="#e6e8ee" font-size="14" text-anchor="middle">一个词的维度流（d_model=512, h=8, 每头 64）</text>
+      <!-- input 512 -->
+      <rect x="290" y="40" width="140" height="34" rx="8" fill="#2a2140" stroke="#a78bfa"/>
+      <text x="360" y="62" fill="#c9b8f5" font-size="13" text-anchor="middle" font-family="Consolas">x：512 维</text>
+      <!-- split arrows to heads -->
+      <g stroke="#5a6070" stroke-width="1.3" fill="none">
+        <path d="M300 74 L120 110"/><path d="M330 74 L300 110"/><path d="M390 74 L470 110"/><path d="M420 74 L620 110"/>
+      </g>
+      <!-- heads -->
+      <g font-family="Consolas" font-size="11">
+        <rect x="60" y="112" width="120" height="70" rx="8" fill="#0e1a2b" stroke="#6ea8fe"/>
+        <text x="120" y="132" fill="#9ec5ff" text-anchor="middle">head 1</text>
+        <text x="120" y="150" fill="#7f9bc4" text-anchor="middle">W_Q/K/V 512×64</text>
+        <text x="120" y="168" fill="#7f9bc4" text-anchor="middle">→ attn → 64维</text>
+
+        <rect x="240" y="112" width="120" height="70" rx="8" fill="#0e1a2b" stroke="#6ea8fe"/>
+        <text x="300" y="132" fill="#9ec5ff" text-anchor="middle">head 2</text>
+        <text x="300" y="150" fill="#7f9bc4" text-anchor="middle">W_Q/K/V 512×64</text>
+        <text x="300" y="168" fill="#7f9bc4" text-anchor="middle">→ attn → 64维</text>
+
+        <text x="430" y="155" fill="#9aa3b2" font-size="20" text-anchor="middle">…</text>
+
+        <rect x="560" y="112" width="120" height="70" rx="8" fill="#0e1a2b" stroke="#6ea8fe"/>
+        <text x="620" y="132" fill="#9ec5ff" text-anchor="middle">head 8</text>
+        <text x="620" y="150" fill="#7f9bc4" text-anchor="middle">W_Q/K/V 512×64</text>
+        <text x="620" y="168" fill="#7f9bc4" text-anchor="middle">→ attn → 64维</text>
+      </g>
+      <!-- concat arrows -->
+      <g stroke="#4ade80" stroke-width="1.3" fill="none">
+        <path d="M120 182 L300 230"/><path d="M300 182 L340 230"/><path d="M620 182 L420 230"/>
+      </g>
+      <!-- concat bar -->
+      <rect x="180" y="232" width="360" height="34" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="360" y="254" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">Concat 8×64 = 512 维</text>
+      <!-- W_O -->
+      <path d="M360 266 L360 292" stroke="#5a6070" stroke-width="1.4" fill="none"/><polygon points="360,292 356,284 364,284" fill="#5a6070"/>
+      <rect x="270" y="294" width="180" height="34" rx="8" fill="#1a1508" stroke="#fbbf24"/>
+      <text x="360" y="316" fill="#fbe08a" font-size="12" text-anchor="middle" font-family="Consolas">× W_O (512×512)</text>
+      <!-- output -->
+      <path d="M360 328 L360 348" stroke="#5a6070" stroke-width="1.4" fill="none"/><polygon points="360,348 356,340 364,340" fill="#5a6070"/>
+      <rect x="285" y="350" width="150" height="26" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="360" y="368" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">输出 512 维</text>
+    </svg>
+    <figcaption>512 拆成 8 个 64（各头独立做注意力）→ 拼回 512 → 过 W_O 整合。进 512、出 512，可以继续叠下一层。</figcaption>
+  </figure>
+
+  <div class="fix"><b>✅ 回答你之前的疑问：</b> 你早就发现"512→W(512×64)→64，那 64 怎么接下一层"。答案就在这：那个 64 维只在<b>单个头内部</b>用；8 个头各出 64 维，<b>拼接又回到 512</b>，再过 W_O。所以整层<b>进 512、出 512</b>，维度对得上，能一层层叠下去。</div>
+
+  <h2>③ 关键直觉</h2>
+  <div class="card key">
+    <p class="center" style="font-size:17px;color:#cfe9d8"><b>多头 = 多个并行的"注意力视角"，各看一种关系，再汇总</b></p>
+    <ul>
+      <li>每个头有<b>自己独立</b>的 W_Q/W_K/W_V → 可以学到不同的"该关注谁"的模式</li>
+      <li>总计算量和单个 512 维大注意力<b>差不多</b>（8 个头各 64 维 ≈ 一个 512 维的活，拆开并行）</li>
+      <li>W_O 负责把各头的结论<b>融合</b>成一个统一的输出</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <b>⚠️ 别误解"分工"：</b>没有人给每个头指定"你管指代、你管句法"。它们是在训练中<b>自发分化</b>的——因为独立的权重 + 预测压力，不同头自然学到不同模式。（诚实边界：也有些头学得冗余、甚至可被剪掉，这是后话。）
+  </div>
+
+  <h2>④ 🅿️ 注意力到此完成，接下来（预告）</h2>
+  <div class="callout">
+    <b>不展开，只留名：</b>一个 Transformer Block 里，多头注意力之后还有 <b>残差连接</b>、<b>LayerNorm</b>、<b>FFN（前馈网络）</b>；然后把整个 Block <b>叠 N 层</b>（你多次问到的"多层"）。这些是接下来几课，最后拼出完整 Transformer。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>为什么一个头不够用？多个头解决了什么问题？</li>
+      <li>d_model=512、h=8 时，每个头的 q/k/v 是多少维？8 个头的输出怎么变回 512 维？</li>
+      <li>各个头的"分工"（比如一个管指代、一个管邻接）是人为设定的，还是怎么来的？</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，注意力机制就整个通关了 🎉 下一课进入 Block 的其余零件：残差 / LayerNorm / FFN。</p>
+
+  <div class="footer">AI Learning System · Lesson 08 Multi-head Attention · 自包含 HTML</div>
+</div>
+</body>
+</html>
