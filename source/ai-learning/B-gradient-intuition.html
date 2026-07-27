@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>补充 B · 梯度（直觉预告）</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .steps{counter-reset:step;list-style:none;padding-left:0}
+  .steps li{position:relative;padding:12px 14px 12px 52px;margin:10px 0;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:12px;
+    width:28px;height:28px;border-radius:50%;background:var(--accent);color:#0b0d13;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:14px}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="08-multihead.html" style="color:#6ea8fe;text-decoration:none">← 相关：Multi-head</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">直觉预告</span>
+  </nav>
+
+  <div>
+    <span class="badge">数学补充</span>
+    <span class="badge">Supplement B</span>
+    <span class="badge">🅿️ 完整版在 Module 4</span>
+  </div>
+  <h1>梯度（直觉预告）</h1>
+  <p class="lead">为了解释"多头为什么会自发分化"顺带引出。这里只建直觉；完整的 loss / 反向传播 / 梯度下降在 <b>Module 4 (Training)</b> 系统讲。</p>
+
+  <div class="callout">
+    <b>⚠️ 这是预告，不是正课。</b>目标只有一个：让你对"训练怎么调参数、为什么每个参数调得不一样"有个感觉。看完够用即可，不必深究细节。
+  </div>
+
+  <h2>① 梯度是什么（一句话）</h2>
+  <div class="card why">
+    <p><b>梯度 = "把某个参数（某个 W 里的一个数）往上微调一点点，预测误差会变大还是变小、变化多快"。</b> 就是误差对这个参数的"斜率 / 敏感度"。</p>
+    <table class="meta" style="margin-top:10px">
+      <tr><td>梯度为正</td><td>调大这个数 → 误差<b>变大</b> → 那就该<b class="tag-good">调小</b>它</td></tr>
+      <tr><td>梯度为负</td><td>调大这个数 → 误差<b>变小</b> → 那就该<b class="tag-good">调大</b>它</td></tr>
+      <tr><td>梯度大/小</td><td>大 → 影响大，调整幅度大；小 → 只需微调</td></tr>
+    </table>
+  </div>
+
+  <h2>② 梯度在哪里体现：训练的 4 步循环</h2>
+  <ol class="steps">
+    <li><b>前向</b>：输入 → 一路算到输出 → 预测下一个词</li>
+    <li><b>算误差</b>：预测 vs 正确答案 → 一个数 <code>loss</code>（有多错）</li>
+    <li><b>反向</b>：从 loss 倒推，给<b>每一个参数</b>各算一个梯度　<span style="color:var(--good)">← 梯度在这里产生</span></li>
+    <li><b>更新</b>：<code>参数 = 旧值 − 学习率 × 它的梯度</code>　<span style="color:var(--good)">← 梯度在这里被用掉</span></li>
+  </ol>
+  <p>亿万次这个循环，参数被慢慢雕刻成有用的样子。第 ③ 步（<b>反向传播</b>）会对模型里<b>每一个数</b>（包括 8 组 W_Q/K/V 里的每个元素）都算出一个专属梯度。</p>
+
+  <h2>③ 几何直觉：下山</h2>
+  <figure class="fig">
+    <svg viewBox="0 0 560 240" role="img" aria-label="gradient descent on a loss curve">
+      <text x="280" y="20" fill="#e6e8ee" font-size="13" text-anchor="middle">loss 地形（一个参数的切面）</text>
+      <line x1="40" y1="200" x2="530" y2="200" stroke="#5a6070"/>
+      <line x1="40" y1="40" x2="40" y2="200" stroke="#5a6070"/>
+      <text x="524" y="216" fill="#9aa3b2" font-size="11">参数值</text>
+      <text x="52" y="50" fill="#9aa3b2" font-size="11">loss</text>
+      <!-- bowl curve -->
+      <path d="M70 70 Q280 260 500 90" fill="none" stroke="#6ea8fe" stroke-width="2.5"/>
+      <!-- current point on slope -->
+      <circle cx="150" cy="150" r="6" fill="#f87171"/>
+      <text x="150" y="138" fill="#f7c9c9" font-size="11" text-anchor="middle">现在</text>
+      <!-- slope arrow (downhill) -->
+      <path d="M150 150 L210 178" stroke="#fbbf24" stroke-width="2" fill="none"/>
+      <polygon points="210,178 200,175 203,184" fill="#fbbf24"/>
+      <text x="235" y="180" fill="#fbbf24" font-size="11">梯度指示的下坡方向</text>
+      <!-- minimum -->
+      <circle cx="278" cy="197" r="5" fill="#4ade80"/>
+      <text x="278" y="223" fill="#bff0cf" font-size="11" text-anchor="middle">误差最低</text>
+    </svg>
+    <figcaption>把 loss 想成丘陵，每个参数是一个坐标轴。梯度 = 脚下的坡度，告诉这个参数"往哪边是下坡"。梯度下降 = 所有参数各自朝下坡挪一小步。</figcaption>
+  </figure>
+
+  <h2>④ 为什么每个参数（每个头）的梯度不同</h2>
+  <div class="card key">
+    <p>同一个 loss 倒推时，<b>每个参数分到的梯度取决于：它当前的值 + 它在网络里的位置 + 流经它的数据</b>。</p>
+    <p>head 1 的 <code>W_Q</code> 和 head 2 的 <code>W_Q</code>：值不同（随机初始化起点不同）、路径不同 → 倒推给它们的梯度<b>不同</b> → 每步往不同方向走 → 越走越<b>分化</b>。</p>
+    <div class="fix"><b>接回多头：</b>"独立权重"= 8 组各自的 (W_Q,W_K,W_V)。训练前随机初始化（起点不同），训练中各自被不同梯度推动（终点不同），而"降低误差"的压力奖励分工 → 8 个头自发学到不同关注模式。</div>
+  </div>
+
+  <div class="callout">
+    <b>🅿️ 后面才展开：</b>loss 具体怎么定义、反向传播怎么把梯度一层层倒推、学习率怎么选、各种优化器——这些都在 <b>Module 4 (Training)</b>。今天只需记住"梯度 = 往哪调能降低误差，在反向传播算、在更新用"。
+  </div>
+
+  <div class="footer">AI Learning System · Supplement B 梯度（直觉预告）· 自包含 HTML</div>
+</div>
+</body>
+</html>

@@ -53,7 +53,8 @@
   <a class="card" href="08-multihead.html"><span class="s">进行中</span><span class="n">08</span><span class="t">Multi-head Attention</span><div class="d">单头只能关注一种关系；多头并行开 h 套注意力各看一种。512→拆 h 个 64→拼回 512→W_O。注意力通关。</div></a>
 
   <h2>补充 &amp; 复习</h2>
-  <a class="card supp" href="A-matrix-as-transform.html"><span class="n">补充 A</span><span class="t">矩阵作为"变换"</span><div class="d">矩阵=加工机(变换)、向量=料；同一个 x 经 W_Q/W_K 得到不同方向 → 打分不对称的数学根源。</div></a>
+  <a class="card supp" href="A-matrix-as-transform.html"><span class="n">补充 A</span><span class="t">矩阵作为"变换"</span><div class="d">矩阵=加工机(变换)、向量=料；同一个 x 经 W_Q/W_K 得到不同方向 → 打分不对称的数学根源。含 X·W=Q 形状图。</div></a>
+  <a class="card supp" href="B-gradient-intuition.html"><span class="n">补充 B</span><span class="t">梯度（直觉预告）</span><div class="d">梯度=往哪调参数能降低误差；训练 4 步循环；为何各头梯度不同→自发分化。完整版在 Module 4。</div></a>
   <a class="card review" href="overview-attention-pipeline.html"><span class="n">总览</span><span class="t">注意力全链（复习锚点）</span><div class="d">一张图：q·k → ÷√d → softmax → 加权和 v，每步对应哪一课。断片时先看这张。</div></a>
 
   <div class="footer">AI Learning System · 课程目录 · 自包含 HTML，可离线打开</div>

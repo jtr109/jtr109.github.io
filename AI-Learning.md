@@ -103,7 +103,7 @@
 ## Current Status
 
 **Current Module:** Module 1 — Transformer
-**Current Lesson:** E. Multi-head Attention（下次开始；单头注意力全链已闭环）
+**Current Lesson:** E. Multi-head Attention（讲解中，`08-multihead.html`）+ 补充 A(矩阵形状) / B(梯度直觉)
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -158,8 +158,9 @@
 |---|---|---|
 | softmax（把分数变成和为 1 的权重） | lesson 03/04 | ✅ 已讲（`lessons/04-softmax.html`） |
 | ÷√d 缩放（scaled dot-product） | lesson 04 公式 | ✅ 已讲（`lessons/07-scaled-dot-product.html`） |
-| Multi-head Attention（多头） | lesson 04 | Self-Attention 之后 |
-| W_O 注意力输出投影 | 概念问答 | Multi-head 一并讲 |
+| Multi-head Attention（多头） | lesson 04 | 🔨 讲解中（`08-multihead.html`） |
+| W_O 注意力输出投影 | 概念问答 | ✅ 已讲（Multi-head 08 中） |
+| 梯度 / 反向传播 / 梯度下降 | 多头分化讨论 | 🅿️ 直觉预告已给（`B-gradient-intuition.html`）；完整版 Module 4 |
 | FFN（前馈网络） | roadmap | Module 1 |
 | 残差连接 Residual | roadmap | Module 1 |
 | LayerNorm | roadmap | Module 1 |
