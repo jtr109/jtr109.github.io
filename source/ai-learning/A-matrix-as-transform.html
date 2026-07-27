@@ -129,6 +129,38 @@
     <b>🅿️ 顺带（不展开）：</b>真实模型里 W 不是 2×2，而是像 <code>512×64</code> 这种"矮胖"矩阵——它同时做<b>降维</b>（512→64）和上面说的"变换方向"。降维的意义（多头、效率）在 Multi-head 课再说。
   </div>
 
+  <h2>⑤ 整句话一起变换：X · W_Q = Q</h2>
+  <div class="card">
+    <p>上面是单个向量。实际一句话有 <b>N 个词</b>，堆成一个矩阵 <code>X</code>（每行一个词的 embedding）。<b>一个</b> W_Q 同时作用在所有词上：</p>
+    <div class="formula" style="font-size:14px">
+      X <span style="color:#9aa3b2">[N × d_model]</span> &nbsp;×&nbsp; W_Q <span style="color:#9aa3b2">[d_model × d_k]</span> &nbsp;=&nbsp; Q <span style="color:#9aa3b2">[N × d_k]</span>
+    </div>
+    <figure class="fig" style="margin:14px 0 0">
+      <svg viewBox="0 0 560 210" role="img" aria-label="X times W_Q equals Q shapes">
+        <!-- X -->
+        <rect x="20" y="50" width="90" height="110" rx="6" fill="#2a2140" stroke="#a78bfa"/>
+        <text x="65" y="40" fill="#c9b8f5" font-size="12" text-anchor="middle" font-family="Consolas">X</text>
+        <text x="65" y="100" fill="#c9b8f5" font-size="11" text-anchor="middle" font-family="Consolas">3 × 512</text>
+        <text x="65" y="178" fill="#9aa3b2" font-size="10" text-anchor="middle">3 个词</text>
+        <text x="130" y="110" fill="#e6e8ee" font-size="18" text-anchor="middle">×</text>
+        <!-- W_Q -->
+        <rect x="150" y="30" width="150" height="150" rx="6" fill="#0e1a2b" stroke="#6ea8fe"/>
+        <text x="225" y="20" fill="#9ec5ff" font-size="12" text-anchor="middle" font-family="Consolas">W_Q</text>
+        <text x="225" y="110" fill="#9ec5ff" font-size="11" text-anchor="middle" font-family="Consolas">512 × 64</text>
+        <text x="320" y="110" fill="#e6e8ee" font-size="18" text-anchor="middle">=</text>
+        <!-- Q -->
+        <rect x="345" y="50" width="60" height="110" rx="6" fill="#13231a" stroke="#4ade80"/>
+        <text x="375" y="40" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">Q</text>
+        <text x="375" y="105" fill="#bff0cf" font-size="10" text-anchor="middle" font-family="Consolas">3 × 64</text>
+        <!-- alignment note -->
+        <text x="225" y="200" fill="#fbbf24" font-size="11" text-anchor="middle">左边列数 512 = 右边行数 512（对齐）</text>
+        <path d="M110 158 L150 175" stroke="#fbbf24" stroke-width="1" fill="none" stroke-dasharray="3 3"/>
+      </svg>
+      <figcaption>X 每行（一个词）各自乘同一个 W_Q，得到 Q 的对应行。W_K、W_V 同理，把 X 变成 K、V。</figcaption>
+    </figure>
+    <div class="fix" style="margin-top:14px"><b>记牢：</b>W_Q 是<b>固定参数</b>（学出来的）；X 是这次输入的词向量矩阵；Q/K/V 是算出来的结果。一个 W 作用于全部 N 个词，不是每词一个矩阵。</div>
+  </div>
+
   <div class="footer">AI Learning System · Supplement A 矩阵作为变换 · 自包含 HTML，可离线打开</div>
 </div>
 </body>
