@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>总览 · 全局数据流</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td,table.meta th{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta th{background:var(--panel2);color:var(--accent);font-size:13px}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .done{color:var(--good)} .todo{color:var(--warn)}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="08-multihead.html" style="color:#6ea8fe;text-decoration:none">← Multi-head</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">全局地图</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">总览</span>
+    <span class="badge">全局地图</span>
+  </div>
+  <h1>全局数据流：字符串 → 下一个词</h1>
+  <p class="lead">一张图看清整条管道，以及"我们现在学到哪、还差什么"。到目前为止，我们只做了"向量 → 更好的向量"的加工，还没产出任何能读的输出。</p>
+
+  <h2>① 完整管道（含进度标注）</h2>
+  <figure class="fig">
+    <svg viewBox="0 0 760 560" role="img" aria-label="full data flow pipeline">
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="#5a6070"/></marker>
+      </defs>
+      <!-- helper: each stage box -->
+      <!-- 1 string -->
+      <rect x="270" y="20" width="220" height="42" rx="10" fill="#1e2230" stroke="#2a2f3d"/>
+      <text x="380" y="40" fill="#e6e8ee" font-size="13" text-anchor="middle">字符串 "The cat sat"</text>
+      <text x="380" y="55" fill="#9aa3b2" font-size="10" text-anchor="middle">原始输入</text>
+      <line x1="380" y1="62" x2="380" y2="82" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 2 tokenize -->
+      <rect x="255" y="84" width="250" height="48" rx="10" fill="#13231a" stroke="#4ade80"/>
+      <text x="380" y="104" fill="#bff0cf" font-size="13" text-anchor="middle">① Tokenize</text>
+      <text x="380" y="122" fill="#9aa3b2" font-size="11" text-anchor="middle" font-family="Consolas">→ N 个整数 [1917, 995, …]</text>
+      <text x="640" y="112" fill="#4ade80" font-size="11">✅ 已学</text>
+      <line x1="380" y1="132" x2="380" y2="152" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 3 embedding -->
+      <rect x="255" y="154" width="250" height="48" rx="10" fill="#13231a" stroke="#4ade80"/>
+      <text x="380" y="174" fill="#bff0cf" font-size="13" text-anchor="middle">② Embedding（查表）</text>
+      <text x="380" y="192" fill="#9aa3b2" font-size="11" text-anchor="middle" font-family="Consolas">→ [N × d_model] 向量</text>
+      <text x="640" y="182" fill="#4ade80" font-size="11">✅ 已学</text>
+      <line x1="380" y1="202" x2="380" y2="222" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 4 transformer blocks -->
+      <rect x="200" y="224" width="360" height="150" rx="12" fill="#0e1a2b" stroke="#6ea8fe" stroke-width="1.5"/>
+      <text x="380" y="246" fill="#9ec5ff" font-size="13" text-anchor="middle">③ N 层 Transformer Block（叠 N 次）</text>
+      <!-- inner block -->
+      <rect x="235" y="258" width="290" height="46" rx="8" fill="#13233b" stroke="#4ade80"/>
+      <text x="380" y="278" fill="#bff0cf" font-size="12" text-anchor="middle">Multi-head 注意力</text>
+      <text x="380" y="294" fill="#4ade80" font-size="10" text-anchor="middle">✅ 已学（含 Q/K/V·softmax·÷√d·多头）</text>
+      <rect x="235" y="310" width="290" height="46" rx="8" fill="#1a1508" stroke="#fbbf24"/>
+      <text x="380" y="330" fill="#fbe08a" font-size="12" text-anchor="middle">残差 + LayerNorm + FFN</text>
+      <text x="380" y="346" fill="#fbbf24" font-size="10" text-anchor="middle">🅿️ 下一课（Module 1 收尾）</text>
+      <text x="588" y="292" fill="#9aa3b2" font-size="10">每层：</text>
+      <text x="588" y="306" fill="#9aa3b2" font-size="10">向量→</text>
+      <text x="588" y="320" fill="#9aa3b2" font-size="10">更好的</text>
+      <text x="588" y="334" fill="#9aa3b2" font-size="10">向量</text>
+      <line x1="380" y1="374" x2="380" y2="394" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 5 still vectors -->
+      <rect x="240" y="396" width="280" height="44" rx="10" fill="#1e2230" stroke="#a78bfa"/>
+      <text x="380" y="416" fill="#c9b8f5" font-size="12" text-anchor="middle" font-family="Consolas">[N × d_model] 向量（更懂上下文）</text>
+      <text x="380" y="432" fill="#9aa3b2" font-size="10" text-anchor="middle">⬅ 我们现在到这里：还是向量，不是词！</text>
+      <line x1="380" y1="440" x2="380" y2="460" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 6 output head -->
+      <rect x="255" y="462" width="250" height="48" rx="10" fill="#2a1520" stroke="#f472b6"/>
+      <text x="380" y="482" fill="#f9c6e0" font-size="13" text-anchor="middle">④ 输出层（unembedding）</text>
+      <text x="380" y="500" fill="#9aa3b2" font-size="11" text-anchor="middle">取最后一个词的向量 → 词表概率</text>
+      <text x="628" y="490" fill="#fbbf24" font-size="11">🅿️ Module 2</text>
+      <line x1="380" y1="510" x2="380" y2="530" stroke="#5a6070" stroke-width="1.5" marker-end="url(#ar)"/>
+      <!-- 7 next token -->
+      <rect x="285" y="532" width="190" height="26" rx="10" fill="#13231a" stroke="#4ade80"/>
+      <text x="380" y="550" fill="#bff0cf" font-size="12" text-anchor="middle">下一个词 "on"</text>
+    </svg>
+    <figcaption>绿=已学，黄=待学。到"更懂上下文的向量"为止都是<b>向量加工</b>；变成能读的下一个词要靠 ④ 输出层（Module 2）。</figcaption>
+  </figure>
+
+  <h2>② 现在的位置</h2>
+  <div class="card">
+    <p class="mono" style="font-size:14px;line-height:2.2">
+      字符串<br>
+      &nbsp;&nbsp;→ <span class="done">tokenize ✅</span> → N 个整数<br>
+      &nbsp;&nbsp;→ <span class="done">embedding ✅</span> → [N × d_model] 向量<br>
+      &nbsp;&nbsp;→ <span class="done">Multi-head 注意力 ✅</span> <span class="todo">+ 残差/LN/FFN 🅿️</span>，叠 N 层 → [N × d_model] 向量（更懂上下文）　<b>⬅ 现在在这</b><br>
+      &nbsp;&nbsp;→ <span class="todo">输出层 🅿️ (Module 2)</span> → 词表概率 → 采样 → 下一个词
+    </p>
+  </div>
+
+  <h2>③ 各环节状态</h2>
+  <table class="meta">
+    <tr><th>环节</th><th>做什么</th><th>状态</th></tr>
+    <tr><td>Tokenize</td><td>文本 → N 个整数 id</td><td class="done">✅ 已学</td></tr>
+    <tr><td>Embedding</td><td>查表 → [N × d_model] 向量</td><td class="done">✅ 已学</td></tr>
+    <tr><td>Multi-head 注意力</td><td>每个词吸收上下文（Q/K/V·softmax·÷√d·多头）</td><td class="done">✅ 已学</td></tr>
+    <tr><td>残差 / LayerNorm / FFN</td><td>Block 的其余零件，稳训练 + 增强表达</td><td class="todo">🅿️ 下一课</td></tr>
+    <tr><td>多层堆叠</td><td>把 Block 叠 N 层，逐层精炼</td><td class="todo">🅿️ Module 1 收尾</td></tr>
+    <tr><td>输出层 (unembedding)</td><td>最后一个词的向量 → 词表概率 → 采样下一个词</td><td class="todo">🅿️ Module 2</td></tr>
+  </table>
+
+  <div class="card">
+    <p><b>关键提醒：</b>Transformer 主干自始至终在做<b>"向量 → 更好的向量"</b>，不直接吐词。要得到能读的"下一个词"，必须靠最后的<b>输出层</b>把向量翻译回词表概率。预测时<b>只用最后一个位置</b>的向量（因为要接在整句后面预测下一个）。</p>
+  </div>
+
+  <div class="footer">AI Learning System · 总览 全局数据流 · 自包含 HTML</div>
+</div>
+</body>
+</html>
