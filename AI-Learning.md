@@ -103,7 +103,7 @@
 ## Current Status
 
 **Current Module:** Module 1 — Transformer
-**Current Lesson:** E. Multi-head Attention（讲解中，`08-multihead.html`）+ 补充 A(矩阵形状) / B(梯度直觉)
+**Current Lesson:** Multi-head 已通关 → 下一课 F. Block 其余零件（残差 / LayerNorm / FFN）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -139,12 +139,19 @@
   - ✅ 分数大 → softmax 落 e^x 陡峭区 → 一家独大 + 梯度饱和难训练
   - ✅ ÷√d 把落点拉回平缓区（几何：横向撑开曲线）；不改排序、只缩小分差
   - ✅ 完整单头注意力公式闭环：softmax(QKᵀ/√d)·V
+- **Multi-head Attention** — ✅ 通过（`lessons/08-multihead.html`，3 题全对）
+  - ✅ 动机：单头只表达一种关系 → 多头并行各看一种（指代/句法/邻接…）
+  - ✅ 维度流：8 头各 [N×64]，concat 回 [N×512]，再过 W_O(512×512)
+  - ✅ 8 组独立 (W_Q,W_K,W_V)（≠ Q/K/V 是三个头）；头数 vs 角色数是两个轴
+  - ✅ 分化机制：随机初始化(起点不同) + 各头不同梯度(确定但不同) + 降误差压力奖励分工
+  - 深挖沉淀：补充 A（X·W=Q 形状/矩阵=变换）、补充 B（梯度直觉，完整版 Module 4）
+  - 🔧 纠正：N=词数 vs d_model=向量维度；单头 d_k 自由(常=d_model)，多头才 =d_model/h；梯度非随机(确定)、随机的是初始值
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- 完成 Self-Attention 检查题 → Multi-head Attention → FFN / 残差 / LayerNorm / 位置编码
+- Module 1 收尾：残差连接 → LayerNorm → FFN → 多层堆叠 → 完整 Transformer Block
 
 ---
 
@@ -158,7 +165,7 @@
 |---|---|---|
 | softmax（把分数变成和为 1 的权重） | lesson 03/04 | ✅ 已讲（`lessons/04-softmax.html`） |
 | ÷√d 缩放（scaled dot-product） | lesson 04 公式 | ✅ 已讲（`lessons/07-scaled-dot-product.html`） |
-| Multi-head Attention（多头） | lesson 04 | 🔨 讲解中（`08-multihead.html`） |
+| Multi-head Attention（多头） | lesson 04 | ✅ 已讲（`08-multihead.html`） |
 | W_O 注意力输出投影 | 概念问答 | ✅ 已讲（Multi-head 08 中） |
 | 梯度 / 反向传播 / 梯度下降 | 多头分化讨论 | 🅿️ 直觉预告已给（`B-gradient-intuition.html`）；完整版 Module 4 |
 | FFN（前馈网络） | roadmap | Module 1 |
