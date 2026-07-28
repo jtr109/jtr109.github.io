@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 09 · 残差连接</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:16px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="08-multihead.html" style="color:#6ea8fe;text-decoration:none">← 上一课：Multi-head</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">下一课：LayerNorm</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 09</span>
+    <span class="badge">Block 零件 1/3</span>
+  </div>
+  <h1>残差连接 Residual</h1>
+  <p class="lead">一个极简但极关键的技巧：不让每层"重做"，而是让它在原输入上"加一点改动"。这是 Transformer 能堆几十层还训得动的钥匙。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>残差连接（Residual / Skip Connection）</td></tr>
+    <tr><td>Objectives</td><td>理解 output = x + Layer(x) 为什么让深层网络训得动</td></tr>
+    <tr><td>Prerequisites</td><td>多头注意力 ✅、梯度直觉 ✅（补充 B）</td></tr>
+    <tr><td>Outcome</td><td>能说清残差的三个好处：梯度高速路 / 易学恒等 / 逐层微调</td></tr>
+    <tr><td>Warning</td><td>它不是注意力的一部分，是"包在每个子层外面"的通用技巧</td></tr>
+  </table>
+
+  <h2>① Why — 深层网络的麻烦</h2>
+  <div class="card why">
+    <p>Transformer 要堆很多层（几十甚至上百）。但朴素地"一层接一层"堆，会遇到两个坑：</p>
+    <ul>
+      <li><b>梯度消失</b>：回忆补充 B——训练靠梯度从输出<b>倒推</b>回每个参数。层数一多，梯度一路乘下来会越乘越小，传到前面几层时几乎归零 → 前面的层<b>学不动</b>。</li>
+      <li><b>越深越差</b>：反直觉但真实——不加技巧时，56 层的网络训练误差反而比 20 层<b>更高</b>。深度本该更强，却因为难训练而退化。</li>
+    </ul>
+    <p>残差连接就是解决这个的：一个改动小到几乎"作弊"，效果却是革命性的。</p>
+  </div>
+
+  <h2>② What — 加一条"捷径"</h2>
+  <div class="card how">
+    <p>普通做法：一层直接输出它的加工结果。</p>
+    <div class="formula" style="color:#f7c9c9">普通：output = Layer(x)</div>
+    <p>残差做法：把<b>原输入 x 原封不动加回来</b>，层只负责算"该加多少改动"。</p>
+    <div class="formula" style="color:#bff0cf">残差：output = x + Layer(x)</div>
+    <p>那条把 x 直接搬到输出的线，叫 <b>skip connection（捷径 / 跳连）</b>。于是 <code>Layer(x)</code> 学的不再是"完整的新表示"，而是"<b>在 x 基础上的增量（residual，残差）</b>"。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 640 240" role="img" aria-label="residual connection">
+      <!-- input -->
+      <rect x="30" y="100" width="80" height="40" rx="8" fill="#1e2230" stroke="#a78bfa"/>
+      <text x="70" y="125" fill="#c9b8f5" font-size="14" text-anchor="middle" font-family="Consolas">x</text>
+      <!-- split point -->
+      <circle cx="150" cy="120" r="4" fill="#9aa3b2"/>
+      <line x1="110" y1="120" x2="150" y2="120" stroke="#9aa3b2" stroke-width="1.5"/>
+      <!-- main path to layer -->
+      <line x1="150" y1="120" x2="150" y2="60" stroke="#22d3ee" stroke-width="1.5"/>
+      <line x1="150" y1="60" x2="230" y2="60" stroke="#22d3ee" stroke-width="1.5"/>
+      <rect x="230" y="38" width="180" height="44" rx="8" fill="#0e1a2b" stroke="#22d3ee"/>
+      <text x="320" y="58" fill="#9fe6f2" font-size="12" text-anchor="middle">Layer（注意力 / FFN）</text>
+      <text x="320" y="74" fill="#7fb3c0" font-size="11" text-anchor="middle">学"增量"Layer(x)</text>
+      <line x1="410" y1="60" x2="480" y2="60" stroke="#22d3ee" stroke-width="1.5"/>
+      <line x1="480" y1="60" x2="480" y2="112" stroke="#22d3ee" stroke-width="1.5"/>
+      <!-- skip path -->
+      <line x1="150" y1="120" x2="150" y2="180" stroke="#4ade80" stroke-width="2"/>
+      <line x1="150" y1="180" x2="480" y2="180" stroke="#4ade80" stroke-width="2"/>
+      <line x1="480" y1="180" x2="480" y2="128" stroke="#4ade80" stroke-width="2"/>
+      <text x="300" y="200" fill="#4ade80" font-size="12" text-anchor="middle">skip connection：x 原样直达（捷径）</text>
+      <!-- plus -->
+      <circle cx="480" cy="120" r="14" fill="#13231a" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="480" y="126" fill="#bff0cf" font-size="16" text-anchor="middle">+</text>
+      <!-- output -->
+      <line x1="494" y1="120" x2="540" y2="120" stroke="#9aa3b2" stroke-width="1.5"/>
+      <rect x="540" y="100" width="90" height="40" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="585" y="120" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">x+Layer(x)</text>
+    </svg>
+    <figcaption>输入 x 兵分两路：一路进 Layer 算增量，一路走捷径原样过去；末端相加。Layer 只需学"改动量"。</figcaption>
+  </figure>
+
+  <h2>③ 为什么这么有效（三个好处）</h2>
+  <div class="card key">
+    <ul>
+      <li><b>① 梯度高速路。</b> 倒推时，那条 <code>+x</code> 的捷径让梯度能<b>直接穿过</b>（x 对 x 的梯度恒为 1，不衰减）。所以哪怕上百层，梯度也能顺着捷径畅通传到前面，不再消失。</li>
+      <li><b>② 易学"什么都不做"。</b> 如果某层没用，它只要让 <code>Layer(x) ≈ 0</code>，输出就 ≈ x（原样通过）。所以<b>加层最差也不会变差</b> —— 深度不再是负担。</li>
+      <li><b>③ 逐层微调。</b> 每层只在"跑动的表示"上加一点小改进，而不是从头重造。呼应你早学的"向量 → 更好的向量"：残差让它变成"向量 += 一点改进"。</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <b>⚠️ 维度对齐（呼应你之前的洞察）：</b>要能算 <code>x + Layer(x)</code>，两者形状必须一样，都是 <code>[N × d_model]</code>。这正是为什么整条主干把 d_model 保持恒定（多头也要拼回 512）—— 不然这个"加回来"就做不成。<b>残差是 d_model 恒定的又一个理由。</b>
+  </div>
+
+  <h2>④ 在 Transformer 里用在哪</h2>
+  <div class="card">
+    <p>一个 Block 里有<b>两个子层</b>，每个都包一层残差：</p>
+    <div class="formula" style="font-size:14px">
+      x = x + 多头注意力(x)<br>
+      x = x + FFN(x)　<span style="color:#9aa3b2">（FFN 是下下课）</span>
+    </div>
+    <p>这条一路被不断"加改动"的向量流，有个形象的名字叫 <b>残差流（residual stream）</b>：从 embedding 出发，每个子层往上叠一点信息，一直流到最后。</p>
+  </div>
+
+  <div class="callout">
+    <b>🅿️ 还差一点（预告）：</b>实际每个子层还会配一个 <b>LayerNorm</b>（归一化，稳住数值）——就是下一课。残差 + LayerNorm 常一起出现，合称 "Add &amp; Norm"。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>普通层输出 <code>Layer(x)</code>，残差层输出什么？多出来的那条"捷径"叫什么？</li>
+      <li>残差为什么能缓解"深层梯度消失"？（提示：捷径那条路，梯度怎么走）</li>
+      <li>为什么说"加了残差，网络加层最差也不会变差"？（提示：某层没用时它能学成什么）</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，下一课 <b>LayerNorm</b>——和残差搭档的"数值稳定器"。</p>
+
+  <div class="footer">AI Learning System · Lesson 09 残差连接 · 自包含 HTML</div>
+</div>
+</body>
+</html>
