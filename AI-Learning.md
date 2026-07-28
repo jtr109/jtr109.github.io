@@ -112,7 +112,7 @@
 ## Current Status
 
 **Current Module:** Module 1 — Transformer
-**Current Lesson:** Multi-head 已通关 → 下一课 F. Block 其余零件（残差 / LayerNorm / FFN）
+**Current Lesson:** 残差连接已通过 → 下一课 LayerNorm（Add & Norm 的 Norm）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -155,12 +155,19 @@
   - ✅ 分化机制：随机初始化(起点不同) + 各头不同梯度(确定但不同) + 降误差压力奖励分工
   - 深挖沉淀：补充 A（X·W=Q 形状/矩阵=变换）、补充 B（梯度直觉，完整版 Module 4）
   - 🔧 纠正：N=词数 vs d_model=向量维度；单头 d_k 自由(常=d_model)，多头才 =d_model/h；梯度非随机(确定)、随机的是初始值
+- **残差连接 Residual** — ✅ 通过（`lessons/09-residual.html`，3 题基本正确）
+  - ✅ 核心：output = x + Layer(x)；Layer 只算 delta(偏移量)，不算绝对值
+  - ✅ 三好处：① 梯度高速路(捷径 skip connection 导数=1，1+f' 连乘不塌→不消失) ② 易学恒等(f≈0 即原样通过，加层最差不变差) ③ 逐层微调(向量 += delta)
+  - ✅ 维度对齐：x+Layer(x) 要求同形状 [N×d_model] → d_model 恒定的又一理由
+  - 深挖沉淀(FAQ)：x+f(x) 与 g(x) 表达能力相同，残差赢在优化(梯度不消失+inductive bias 锚在 x)，非表达能力；g(x)=普通堆叠层
+  - 🔧 Q2 修正：梯度不消失的直接原因是"捷径给梯度留了导数=1 的直通路"，不是"带了起点信息"(那是好处②)
+  - 📌 名词：跳连/捷径 = skip connection（shortcut）
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- Module 1 收尾：残差连接 → LayerNorm → FFN → 多层堆叠 → 完整 Transformer Block
+- LayerNorm（残差的搭档，Add & Norm）→ FFN → 多层堆叠 → 完整 Transformer Block
 
 ---
 
@@ -178,7 +185,7 @@
 | W_O 注意力输出投影 | 概念问答 | ✅ 已讲（Multi-head 08 中） |
 | 梯度 / 反向传播 / 梯度下降 | 多头分化讨论 | 🅿️ 直觉预告已给（`B-gradient-intuition.html`）；完整版 Module 4 |
 | FFN（前馈网络） | roadmap | Module 1 |
-| 残差连接 Residual | roadmap | Module 1 |
+| 残差连接 Residual | roadmap | ✅ 已讲（`09-residual.html`） |
 | LayerNorm | roadmap | Module 1 |
 | 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
 | 输出层 / unembedding（映射回词表） | 概念问答 | Module 2（预测下一个 token 时） |
