@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>如何用 AI 这样学</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 6px}
+  h2{font-size:22px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:22px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  ul{margin:10px 0;padding-left:22px} li{margin:8px 0}
+  ol{margin:10px 0;padding-left:22px} ol li{margin:8px 0}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td,table.meta th{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta th{background:var(--panel2);color:var(--accent);font-size:13px}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  .quote{background:var(--panel2);border-left:3px solid var(--accent);border-radius:8px;padding:12px 16px;margin:14px 0;color:#cfe0ff;font-family:"SF Mono",Consolas,monospace;font-size:13px;white-space:pre-wrap}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <span style="color:#3a4050">方法论</span>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050"></span>
+  </nav>
+
+  <div>
+    <span class="badge">方法论</span>
+    <span class="badge">给学习者 &amp; 给接手的 AI</span>
+  </div>
+  <h1>如何用 AI 这样学</h1>
+  <p class="lead">这个课程本身不是重点——真正可复制的是<b>方法</b>：一个人 + 一个 AI 陪练，用"复述-纠错"闭环建立心智模型。你带着自己的 AI、用这套方法，就能长出属于你自己的课件。</p>
+
+  <div class="callout">
+    <b>⚠️ 先说清楚：</b>直接读这些 HTML 讲义，效果有限。它们是<b>为某个具体学习者的卡点</b>生成的沉淀物（像别人的笔记）。真正让人学会的是下面这套<b>互动方法</b>，不是成品课件。
+  </div>
+
+  <h2>① 核心理念</h2>
+  <div class="card why">
+    <p style="font-size:17px;color:#cfe9d8;text-align:center"><b>Build Mental Models, not memorize definitions.</b></p>
+    <p>目标不是背概念，而是能回答：这技术<b>解决什么问题</b>？<b>为何存在</b>？<b>如何工作</b>？它和已有知识<b>怎么连接</b>？</p>
+  </div>
+
+  <h2>② 三个角色</h2>
+  <table class="meta">
+    <tr><th>角色</th><th>职责</th></tr>
+    <tr><td><b>AI = Tutor + 记录员</b></td><td>讲解、出诊断题、抓误区、按需补 just-in-time 数学；同时维护进度文档和 HTML 讲义</td></tr>
+    <tr><td><b>你 = 学生</b></td><td>主动思考、提问、<b>用自己的话复述</b>、判断自己是否真懂</td></tr>
+  </table>
+
+  <h2>③ 关键闭环：复述 → 纠错</h2>
+  <div class="card key">
+    <p>这是整套方法的心脏，也是课件替代不了的部分：</p>
+    <ol>
+      <li>AI 讲一个概念（What / Why / How + 图 + 例子）</li>
+      <li><b>你用自己的话复述一遍</b>（不是复制，是重新表达）</li>
+      <li>AI 抓出你复述里的偏差 —— 哪怕是"矩阵说成向量"这种小错也点出来</li>
+      <li>你修正，直到复述准确 → 这个概念才算真正进脑子</li>
+    </ol>
+    <div class="fix"><b>为什么有效：</b>能用自己的话准确重讲，才证明是"理解"而非"眼熟"。AI 的价值就在于<b>实时抓到你没意识到的错位</b>。</div>
+  </div>
+
+  <h2>④ 五条操作原则</h2>
+  <div class="card how">
+    <ul>
+      <li><b>一课一个新概念</b>：数学小工具（点积、softmax…）拆成独立微课，在需要它的前一刻讲。</li>
+      <li><b>严格循序渐进</b>：一次别砸一堆没铺垫过的概念；用到的东西要么已教、要么明确标为"🅿️ 后面讲"。</li>
+      <li><b>待讲清单（Parking Lot）</b>：提到但暂不展开的概念记下来，只说"后面讲"，不当场跑偏。</li>
+      <li><b>概念分层</b>：区分"算法 / 对算法的解读 / 下游概念"，不混谈（例：点积 → 相似度 → 注意力权重）。</li>
+      <li><b>先确认再前进</b>：每个概念确认掌握后再进下一个；鼓励随时打断提问。</li>
+    </ul>
+  </div>
+
+  <h2>⑤ 产出物分工</h2>
+  <table class="meta">
+    <tr><th>载体</th><th>放什么</th></tr>
+    <tr><td>聊天对话</td><td>实时讨论、复述、纠错（易被刷掉，不作长期存档）</td></tr>
+    <tr><td>HTML 讲义</td><td>讲解 + 图 + 沉淀下来的重要问答（自包含、可离线、能互相跳转）</td></tr>
+    <tr><td>进度文档（Markdown）</td><td>Roadmap、Current Status、Lesson Log、待讲清单 —— AI 每课后更新</td></tr>
+  </table>
+
+  <h2>⑥ 怎么开始（给学习者）</h2>
+  <div class="card">
+    <p>拿一个能长对话、能生成文件的 AI（如带工具的 Copilot / Claude / GPT），把下面这段话丢给它当"教学契约"：</p>
+    <div class="quote">我想系统学 &lt;某主题&gt;。请你当我的 tutor，遵循：
+1. 目标是建立 mental model，不是背定义；每个概念讲清 What/Why/How。
+2. 一次只讲一个新概念，循序渐进，不要突然引入没铺垫的东西；
+   要提前用到的概念，先记进"待讲清单"，只说"后面讲"。
+3. 每讲完一个概念，让我用自己的话复述，然后抓我的错、纠正我。
+4. 确认我真懂了再进下一个；我可以随时打断提问。
+5. 把讲解和图做成讲义存下来，把进度记在一个文档里，每课更新。
+先别急着讲，先问我几个问题诊断我的起点。</div>
+    <p>然后就按"讲 → 复述 → 纠错 → 确认 → 下一个"循环。AI 会针对<b>你自己的</b>卡点生成<b>你自己的</b>课件——那比读别人的更有效。</p>
+  </div>
+
+  <div class="callout">
+    <b>🤖 也给"接手的 AI"：</b>如果你（AI）被指派继续这个课程，先读仓库根目录的 <code>AI-Learning.md</code> —— 顶部有给 agent 的引导（学生画像、教学偏好、当前进度、下一课、待讲清单）。讲义在 <code>source/ai-learning/</code>，push master 自动部署到 jtr109.com/ai-learning/。
+  </div>
+
+  <div class="footer">AI Learning System · 方法论 · 自包含 HTML</div>
+</div>
+</body>
+</html>

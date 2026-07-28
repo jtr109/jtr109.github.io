@@ -1,6 +1,15 @@
 # AI Learning System
 
-> 本文档由 Copilot 维护。学生 = @liryan。Copilot 同时担任 **Tutor（讲课/出题/纠错）** 和 **Knowledge Manager（存档/维护进度）**。
+> **🤖 给接手的 AI（先读这段）**：你被指派继续给 @liryan 教 AI/LLM。开始前请：
+> 1. 读本文件的 **教学偏好**（下方）、**Current Status**（学到哪）、**Next Lesson**（下一课）、**待讲清单**（欠讲的概念）。
+> 2. 教学契约（务必遵守）：目标是建 mental model 不是背定义；**一课一个新概念**、严格循序渐进，别砸没铺垫的概念；提前用到的概念记进「待讲清单」只说"后面讲"；每讲完一个概念**让学生用自己的话复述→你抓错纠正→确认再前进**；学生可随时打断。
+> 3. 学生画像：软件工程师（工程直觉强）；线代/微积分学过但生疏 → 用**直觉+图+最小公式**，不硬推导；节奏偏慢、爱刨根问底（这是优点，顺着走）。
+> 4. 产出：讲义是**自包含 HTML**（内嵌 CSS+SVG，顶部带导航条），写在 `source/ai-learning/`，`git push origin master` 由 GitHub Actions 自动部署到 **https://jtr109.com/ai-learning/**；沿用现有配色/结构（照抄任一现有讲义当模板）。每课后更新本文件的 Current Status / Lesson Log / 待讲清单。
+> 5. 方法论详见 `source/ai-learning/how-to-learn.html`。
+>
+> ---
+>
+> 本文档由 AI 维护。学生 = @liryan。AI 同时担任 **Tutor（讲课/出题/纠错）** 和 **Knowledge Manager（存档/维护进度）**。
 > Roadmap 低频变化；每节课后更新的是 `Current Status` / `Lesson Log`。
 >
 > **📍 讲义位置（2026-07 起）**：HTML 讲义现位于本仓库 `source/ai-learning/`，push `master` 后由 GitHub Actions 自动部署到 **https://jtr109.com/ai-learning/**。旧的独立仓库 `jtr109/AI-Learning` 已归档弃用。本文件（进度追踪）在仓库根，不发布到网站。
