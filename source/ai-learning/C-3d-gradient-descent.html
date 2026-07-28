@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>补充 C · 3D 梯度下降（Plotly Demo）</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --violet:#a78bfa; --cyan:#22d3ee;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  #plot{width:100%;height:520px;background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:18px 0}
+  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 16px;
+    font-size:14px;cursor:pointer;margin-right:8px}
+  .btn:hover{border-color:var(--good)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="B-gradient-intuition.html" style="color:#6ea8fe;text-decoration:none">← 相关：梯度直觉</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">Plotly Demo</span>
+  </nav>
+
+  <div>
+    <span class="badge">数学补充</span>
+    <span class="badge">Supplement C</span>
+    <span class="badge">交互 3D · Plotly</span>
+  </div>
+  <h1>3D 梯度下降（可旋转）</h1>
+  <p class="lead">补充 B 里的"下山"是 2D 切面。这里用 Plotly 画真正的 3D loss 曲面 + 梯度下降路径——<b>用鼠标拖动可旋转</b>，看小球怎么一步步滚到谷底。</p>
+
+  <div class="callout">
+    <b>🖱️ 试试：</b>在下图上<b>按住拖动</b>旋转视角，滚轮缩放。红点=起点，绿点=最低点，黄线=梯度下降每一步的落点。若图没出现，说明当前离线（Plotly 走 CDN，需要联网）。
+  </div>
+
+  <div id="plot"></div>
+  <div style="margin:-6px 0 10px">
+    <button class="btn" onclick="stepOnce()">▶ 走一步</button>
+    <button class="btn" onclick="resetPath()">↺ 重来</button>
+    <span id="status" style="color:#9aa3b2;font-size:13px;margin-left:8px"></span>
+  </div>
+
+  <h2>这张图在讲什么</h2>
+  <div class="card key">
+    <ul>
+      <li><b>曲面</b> = loss 地形：高处误差大、谷底误差小。两个水平轴是<b>两个参数</b>，竖轴是 <b>loss</b>。</li>
+      <li><b>梯度</b> = 曲面在当前点的坡度方向。每一步：<code>参数 ← 参数 − 学习率 × 梯度</code>，即朝下坡挪一小步。</li>
+      <li><b>黄线</b> = 参数被一步步更新的轨迹，最终滚进谷底（loss 最低）。</li>
+    </ul>
+    <div class="fix"><b>接回真实模型：</b>真实模型有<b>上亿个参数</b>（这里只画 2 个好可视化）；loss 地形是"上亿维"的，没法画，但"沿坡度下山"的道理一模一样。</div>
+  </div>
+
+  <h2>它是"声明式"的（像 Mermaid，但 3D）</h2>
+  <div class="card">
+    <p>整张图就是喂给 Plotly 一个 <code>data</code>（曲面 z 值 + 路径点）+ <code>layout</code> 的对象，它负责渲染+交互。核心就这么点：</p>
+    <pre style="background:#1e2230;border:1px solid #2a2f3d;border-radius:8px;padding:14px;overflow:auto;font-size:12px;color:#dbe4ff"><code>Plotly.newPlot('plot', [
+  { type:'surface', x, y, z },              // loss 曲面
+  { type:'scatter3d', x:px, y:py, z:pz,     // 下降路径
+    mode:'lines+markers' }
+], layout);</code></pre>
+  </div>
+
+  <div class="footer">AI Learning System · Supplement C · Plotly 交互 3D</div>
+</div>
+
+<script>
+// ---- loss surface: z = 0.15*(x^2 + y^2) （一个碗）----
+const A = 0.15;
+function loss(x,y){ return A*(x*x + y*y); }
+function grad(x,y){ return [2*A*x, 2*A*y]; }   // ∂z/∂x, ∂z/∂y
+
+// build surface grid
+const xs=[], ys=[];
+for(let v=-4; v<=4.0001; v+=0.4){ xs.push(+v.toFixed(2)); ys.push(+v.toFixed(2)); }
+const zs = ys.map(y => xs.map(x => loss(x,y)));
+
+// gradient-descent path state
+const lr = 0.55;
+let start = [3.6, 2.7];
+let path = [ [start[0], start[1], loss(start[0],start[1])] ];
+
+const layout = {
+  paper_bgcolor:'#171a23', plot_bgcolor:'#171a23',
+  font:{color:'#e6e8ee'}, margin:{l:0,r:0,t:10,b:0},
+  showlegend:false,
+  scene:{
+    xaxis:{title:'参数 1', color:'#9aa3b2', gridcolor:'#2a2f3d', backgroundcolor:'#0f1117', showbackground:true},
+    yaxis:{title:'参数 2', color:'#9aa3b2', gridcolor:'#2a2f3d', backgroundcolor:'#0f1117', showbackground:true},
+    zaxis:{title:'loss（误差）', color:'#9aa3b2', gridcolor:'#2a2f3d', backgroundcolor:'#0f1117', showbackground:true},
+    camera:{eye:{x:1.5, y:1.5, z:1.1}}
+  }
+};
+
+function traces(){
+  const px=path.map(p=>p[0]), py=path.map(p=>p[1]), pz=path.map(p=>p[2]+0.05);
+  return [
+    { type:'surface', x:xs, y:ys, z:zs, colorscale:'Viridis', opacity:0.9, showscale:false,
+      contours:{z:{show:true, usecolormap:true, project:{z:true}}} },
+    { type:'scatter3d', x:px, y:py, z:pz, mode:'lines+markers',
+      line:{color:'#fbbf24', width:5}, marker:{size:4, color:'#fbbf24'} },
+    { type:'scatter3d', x:[px[0]], y:[py[0]], z:[pz[0]], mode:'markers',
+      marker:{size:7, color:'#f87171'} },
+    { type:'scatter3d', x:[0], y:[0], z:[0.05], mode:'markers',
+      marker:{size:7, color:'#4ade80'} }
+  ];
+}
+function render(){ Plotly.react('plot', traces(), layout, {responsive:true, displayModeBar:false}); updateStatus(); }
+function updateStatus(){
+  const last=path[path.length-1];
+  document.getElementById('status').textContent =
+    `第 ${path.length-1} 步 · 参数=(${last[0].toFixed(2)}, ${last[1].toFixed(2)}) · loss=${last[2].toFixed(3)}`;
+}
+function stepOnce(){
+  const [x,y]=path[path.length-1];
+  const [gx,gy]=grad(x,y);
+  const nx=x-lr*gx, ny=y-lr*gy;
+  path.push([nx,ny,loss(nx,ny)]);
+  if(path.length>40) path.shift();
+  render();
+}
+function resetPath(){ path=[[start[0],start[1],loss(start[0],start[1])]]; render(); }
+
+// auto-run a few steps on load so the path is visible immediately
+window.addEventListener('load', ()=>{
+  render();
+  let n=0; const t=setInterval(()=>{ stepOnce(); if(++n>=12) clearInterval(t); }, 350);
+});
+</script>
+</body>
+</html>
