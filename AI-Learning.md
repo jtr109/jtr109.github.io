@@ -112,7 +112,7 @@
 ## Current Status
 
 **Current Module:** Module 1 — Transformer
-**Current Lesson:** LayerNorm 已通过 → 下一课 FFN（前馈网络）
+**Current Lesson:** FFN 已通过 → Block 零件全通关 🎉 → 下一课 Module 1 收尾（拼装 Block + 多层堆叠）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -168,12 +168,20 @@
   - ✅ "Layer"=在一个词向量内部统计，不跨词/不跨样本；和缩放点积 ÷√d 同精神
   - ✅ 与残差搭档 = Add & Norm：x = LayerNorm(x + 子层(x))
   - 深挖沉淀(FAQ)：控的是数值分布(非仅长度)+居中；γ/β 可控不失控(参数被梯度监督+下层再归一化，非被动漂移)；"均值0标准差1"vs"γ/β学"是两个时间点
+- **FFN（前馈网络）** — ✅ 通过（`lessons/11-ffn.html`，3 题全对）
+  - ✅ 结构：W₁ 放大(512→2048) → 激活(ReLU/GELU 非线性) → W₂ 缩回(2048→512)
+  - ✅ 非线性是灵魂：无激活则两矩阵相乘还是线性、白叠；激活引入折线拐点→能逼近复杂函数
+  - ✅ 逐词独立(position-wise)，不看别的词；所有位置共用同一套 W₁/W₂
+  - ✅ 分工：注意力=交流(开会)、FFN=计算/提炼(会后复盘)；一个 Block = 交流→提炼
+  - ✅ 参数大户：d_ff=4×d_model → FFN 约占 2/3 参数；知识多编码于此
+  - 深挖沉淀(FAQ)：激活=门控(非0/1二元化)；FFN=提炼(非淘汰)；注意力更新的是表示非W参数
+  - 📌 名词：激活函数=activation function；两种weight(模型权重 vs 注意力权重)已入补充D
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- FFN（前馈网络，Block 第二个子层）→ 多层堆叠 → 完整 Transformer Block
+- 🎯 Module 1 收尾（综合，非新概念）：拼装完整 Block + 多层堆叠 N 层 + 接输出层 → 完整 Transformer → 回答"如何预测下一个 token"
 
 ---
 
@@ -190,7 +198,7 @@
 | Multi-head Attention（多头） | lesson 04 | ✅ 已讲（`08-multihead.html`） |
 | W_O 注意力输出投影 | 概念问答 | ✅ 已讲（Multi-head 08 中） |
 | 梯度 / 反向传播 / 梯度下降 | 多头分化讨论 | 🅿️ 直觉预告已给（`B-gradient-intuition.html`）；完整版 Module 4 |
-| FFN（前馈网络） | roadmap | Module 1 |
+| FFN（前馈网络） | roadmap | ✅ 已讲（`11-ffn.html`） |
 | 残差连接 Residual | roadmap | ✅ 已讲（`09-residual.html`） |
 | LayerNorm | roadmap | ✅ 已讲（`10-layernorm.html`） |
 | 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
