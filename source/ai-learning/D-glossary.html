@@ -69,6 +69,18 @@
   </table>
   <p class="mono" style="text-align:center;color:#cfe9d8">参数 = 机器学的　·　超参数 = 人设的</p>
 
+  <h2>②½ 两种 "weight"（易混）</h2>
+  <p>"权重(weight)"这个词在两个完全不同的地方出现，是常见困惑源：</p>
+  <table class="g">
+    <tr><th></th><th>模型权重 / 参数</th><th>注意力权重</th></tr>
+    <tr><td>英文</td><td>weights / parameters</td><td>attention weights</td></tr>
+    <tr><td>是什么</td><td>W_Q/K/V、W_O、W₁/W₂、γ/β… 学出来的矩阵</td><td>softmax 出来的"该关注每个词多少"的分配比例（和为1）</td></tr>
+    <tr><td>变不变</td><td class="tag-com">训练后固定（编译时）</td><td class="tag-run">每次输入都变（运行时）</td></tr>
+    <tr><td>类比</td><td>几 GB 权重文件里的内容</td><td>一次计算的临时中间产物</td></tr>
+  </table>
+  <p class="mono" style="text-align:center;color:#cfe9d8">同名不同物：模型权重(W)固定 · 注意力权重每次现算</p>
+  <p style="color:var(--muted);font-size:13px;text-align:center">注：<b>weights ≈ parameters</b>（日常通用）；严格分：W=weights、b=bias，合称 parameters。</p>
+
   <h2>③ 名词对照表</h2>
   <table class="g">
     <tr><th>名词</th><th>指什么</th><th>阶段</th></tr>
