@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 11 · FFN（前馈网络）</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="10-layernorm.html" style="color:#6ea8fe;text-decoration:none">← 上一课：LayerNorm</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">下一课：拼装 Block</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 11</span>
+    <span class="badge">Block 零件 3/3</span>
+  </div>
+  <h1>FFN（前馈网络）</h1>
+  <p class="lead">Block 的最后一个零件。注意力让词之间"横向交流"；FFN 让每个词"自己纵向深加工"。学完它，一个 Transformer Block 的部件就齐了。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>Feed-Forward Network（FFN / MLP）</td></tr>
+    <tr><td>Objectives</td><td>理解 FFN 做什么、为什么需要非线性、"交流 vs 计算"的分工</td></tr>
+    <tr><td>Prerequisites</td><td>矩阵=变换 ✅、注意力 ✅、残差/LayerNorm ✅</td></tr>
+    <tr><td>Outcome</td><td>能说清 FFN 的两层结构、非线性的必要性、逐词独立</td></tr>
+    <tr><td>Warning</td><td>FFN 对<b>每个词单独</b>处理，不看别的词（交流是注意力干的）</td></tr>
+  </table>
+
+  <h2>① Why — 注意力缺了点什么</h2>
+  <div class="card why">
+    <p>注意力做的事本质是<b>加权平均</b>（把别的词的 value 按权重混进来）——这基本是<b>线性</b>操作：混合、搬运信息。它擅长"让词之间交流"，但<b>不擅长对单个词做复杂的非线性加工</b>。</p>
+    <p>一个关键事实：<b>纯线性变换叠再多层，等价于一层</b>（多个矩阵相乘还是一个矩阵）。要让模型能表达复杂函数，必须引入<b>非线性</b>。</p>
+    <p>FFN 就是补这个：给每个词的向量做一次<b>带非线性的深加工</b>，增强表达能力。</p>
+  </div>
+
+  <h2>② What — 两层 + 中间一个非线性</h2>
+  <div class="card how">
+    <p>对<b>一个词向量</b>做三步（先放大、非线性、再缩回）：</p>
+    <div class="formula">FFN(x) = W₂ · <span style="color:#fbbf24">激活</span>( W₁ · x + b₁ ) + b₂</div>
+    <ul>
+      <li><b>W₁：放大</b> <code>d_model → d_ff</code>（通常 d_ff = 4×d_model，如 512 → 2048）。给它一个更宽的"草稿纸"做计算。</li>
+      <li><b>激活函数：非线性</b>（ReLU 或 GELU）。这是关键的非线性一步——比如 ReLU：负数变 0，正数保留。</li>
+      <li><b>W₂：缩回</b> <code>d_ff → d_model</code>（2048 → 512）。压缩回原来的宽度，好接下一步（呼应残差/主干 d_model 恒定）。</li>
+    </ul>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 640 220" role="img" aria-label="ffn expand-nonlinear-contract">
+      <!-- input 512 -->
+      <rect x="20" y="86" width="70" height="48" rx="8" fill="#1e2230" stroke="#a78bfa"/>
+      <text x="55" y="106" fill="#c9b8f5" font-size="12" text-anchor="middle" font-family="Consolas">x</text>
+      <text x="55" y="122" fill="#9aa3b2" font-size="10" text-anchor="middle">512</text>
+      <line x1="90" y1="110" x2="130" y2="110" stroke="#5a6070" stroke-width="1.5"/><text x="110" y="100" fill="#6ea8fe" font-size="10" text-anchor="middle" font-family="Consolas">W₁</text>
+      <!-- hidden 2048 (tall) -->
+      <rect x="130" y="30" width="90" height="160" rx="8" fill="#0e1a2b" stroke="#22d3ee"/>
+      <text x="175" y="106" fill="#9fe6f2" font-size="12" text-anchor="middle">放大</text>
+      <text x="175" y="124" fill="#9fe6f2" font-size="11" text-anchor="middle" font-family="Consolas">2048</text>
+      <!-- activation -->
+      <line x1="220" y1="110" x2="260" y2="110" stroke="#5a6070" stroke-width="1.5"/>
+      <rect x="260" y="70" width="110" height="80" rx="8" fill="#1a1508" stroke="#fbbf24"/>
+      <text x="315" y="104" fill="#fbe08a" font-size="12" text-anchor="middle">激活（非线性）</text>
+      <text x="315" y="122" fill="#9aa3b2" font-size="10" text-anchor="middle">ReLU / GELU</text>
+      <line x1="370" y1="110" x2="410" y2="110" stroke="#5a6070" stroke-width="1.5"/><text x="390" y="100" fill="#6ea8fe" font-size="10" text-anchor="middle" font-family="Consolas">W₂</text>
+      <!-- back to 512 -->
+      <rect x="410" y="86" width="90" height="48" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="455" y="106" fill="#bff0cf" font-size="12" text-anchor="middle">缩回</text>
+      <text x="455" y="122" fill="#bff0cf" font-size="11" text-anchor="middle" font-family="Consolas">512</text>
+      <line x1="500" y1="110" x2="540" y2="110" stroke="#9aa3b2" stroke-width="1.5"/><polygon points="540,110 532,106 532,114" fill="#9aa3b2"/>
+      <rect x="540" y="86" width="80" height="48" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="580" y="106" fill="#bff0cf" font-size="12" text-anchor="middle">输出</text>
+      <text x="580" y="122" fill="#bff0cf" font-size="10" text-anchor="middle" font-family="Consolas">512</text>
+    </svg>
+    <figcaption>512 → 放大到 2048（宽草稿纸）→ 非线性激活 → 缩回 512。每个词向量各自独立走一遍这条路。</figcaption>
+  </figure>
+
+  <h2>③ 关键点</h2>
+  <div class="card key">
+    <ul>
+      <li><b>逐词独立（position-wise）</b>：FFN 对每个词向量<b>单独</b>处理，<b>不看别的词</b>。而且所有位置<b>共用同一套</b> W₁/W₂（同一个 FFN 套在每个词上）。横向交流早由注意力做完了，FFN 只管"各自消化"。</li>
+      <li><b>非线性是灵魂</b>：没有中间那个激活函数，两个矩阵相乘 W₂W₁ 还是一个线性变换，白叠。激活（ReLU/GELU）才让它能表达复杂映射。</li>
+      <li><b>参数大户</b>：因为 d_ff=4×d_model，W₁、W₂ 很大——FFN 通常占一个模型<b>约 2/3 的参数</b>。很多"知识"就存在这里。</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <b>🧠 一句话分工：</b>注意力 = <b>交流</b>（词之间交换信息）；FFN = <b>计算</b>（每个词自己深加工）。一个 Block = 先交流、再计算。这就是 Transformer 反复做的两件事。
+  </div>
+
+  <h2>④ 🎯 Block 部件到齐了</h2>
+  <div class="card">
+    <p>一个 Transformer Block 的两个子层，现在你都学完了：</p>
+    <div class="formula" style="font-size:14px">
+      x = LayerNorm( x + <span style="color:#22d3ee">多头注意力</span>(x) )　<span style="color:#9aa3b2">← 交流</span><br>
+      x = LayerNorm( x + <span style="color:#fbbf24">FFN</span>(x) )　　　　<span style="color:#9aa3b2">← 计算</span>
+    </div>
+    <p><b>下一课（收尾综合，不是新概念）：</b>把这个 Block <b>叠 N 层</b>（你多次问到的"多层"），再接输出层，就是完整的 Transformer——终于能回答"如何预测下一个 token"。</p>
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>FFN 的三步是什么？（放大 → ? → 缩回）中间那步为什么不能省？</li>
+      <li>用"交流 / 计算"概括：注意力和 FFN 各负责哪个？</li>
+      <li>FFN 处理一个词时，会参考句子里别的词吗？（对比注意力）</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，Block 的零件就全通关了 🎉 下一课把它们拼装 + 多层堆叠 → 完整 Transformer。</p>
+
+  <div class="footer">AI Learning System · Lesson 11 FFN · 自包含 HTML</div>
+</div>
+</body>
+</html>
