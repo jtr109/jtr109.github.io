@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 10 · LayerNorm</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="09-residual.html" style="color:#6ea8fe;text-decoration:none">← 上一课：残差连接</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">下一课：FFN</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 1 · Transformer</span>
+    <span class="badge">Lesson 10</span>
+    <span class="badge">Block 零件 2/3</span>
+  </div>
+  <h1>LayerNorm</h1>
+  <p class="lead">残差的搭档。作用只有一个：在数据进下一步之前，把每个向量的数值"重新校准"到一个稳定、标准的范围，让训练不乱飘。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>Layer Normalization（层归一化）</td></tr>
+    <tr><td>Objectives</td><td>理解"归一化"在做什么、为什么稳训练、γ/β 是干嘛的</td></tr>
+    <tr><td>Prerequisites</td><td>残差 ✅、均值/标准差的概念（缩放点积课提过 std）</td></tr>
+    <tr><td>Outcome</td><td>能说清 LayerNorm 把一个向量变成什么、为什么需要它</td></tr>
+    <tr><td>Warning</td><td>它对<b>每个词向量单独</b>做，不跨词、不跨样本</td></tr>
+  </table>
+
+  <h2>① Why — 数值会"漂"</h2>
+  <div class="card why">
+    <p>向量流过一层又一层，每层都做加法、乘法、加 delta……<b>数值的大小会慢慢漂移</b>：某些维度越变越大，某些越变越小，整个向量的"音量"忽高忽低、层与层之间不一致。</p>
+    <p>这会让训练很难受：</p>
+    <ul>
+      <li>数值忽大忽小 → 梯度跟着忽大忽小（爆炸或消失）→ 学习率难选、训练不稳。</li>
+      <li>某个维度数值特别大 → 主导了后续计算，淹没其它维度的信息。</li>
+    </ul>
+    <p>我们想要：<b>每进下一步之前，先把向量的数值拉回一个统一、温和的范围。</b>这就是 LayerNorm。（呼应缩放点积课的 ÷√d——都是"别让数值失控"，LayerNorm 是更通用的那把尺子。）</p>
+  </div>
+
+  <h2>② What — 把一个向量标准化</h2>
+  <div class="card how">
+    <p>对<b>一个词向量</b>（d_model 个数）做三步：</p>
+    <ol>
+      <li><b>算这一个向量自己的均值 μ 和标准差 σ</b>（对它的 d_model 个分量统计）。</li>
+      <li><b>标准化</b>：每个分量减 μ、除以 σ → 这个向量变成 <b>均值 0、标准差 1</b>（数值被拉到统一尺度）。</li>
+      <li><b>缩放 + 平移</b>：再乘一个可学习的 γ、加一个可学习的 β → 让模型能按需调整"标准化的力度"。</li>
+    </ol>
+    <div class="formula">
+      x̂ᵢ = (xᵢ − μ) / √(σ² + ε)　→　yᵢ = γᵢ · x̂ᵢ + βᵢ
+    </div>
+    <p style="color:var(--muted);font-size:13px">ε 是个极小数，只为避免 σ=0 时除以零。γ、β 各有 d_model 个，是<b>学出来的参数</b>。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 680 240" role="img" aria-label="layernorm before/after">
+      <text x="170" y="20" fill="#f87171" font-size="13" text-anchor="middle">前：数值乱飘</text>
+      <text x="510" y="20" fill="#4ade80" font-size="13" text-anchor="middle">后：均值0、标准差1</text>
+      <!-- baseline left -->
+      <line x1="40" y1="140" x2="300" y2="140" stroke="#5a6070"/>
+      <!-- bars left (drifted) -->
+      <g>
+        <rect x="60" y="70" width="24" height="70" fill="#f87171"/>
+        <rect x="100" y="120" width="24" height="20" fill="#f87171"/>
+        <rect x="140" y="50" width="24" height="90" fill="#f87171"/>
+        <rect x="180" y="132" width="24" height="8" fill="#f87171"/>
+        <rect x="220" y="100" width="24" height="40" fill="#f87171"/>
+        <rect x="260" y="60" width="24" height="80" fill="#f87171"/>
+      </g>
+      <text x="170" y="160" fill="#9aa3b2" font-size="11" text-anchor="middle">一个向量的 6 个分量（示意）</text>
+      <!-- arrow -->
+      <path d="M310 130 L360 130" stroke="#9aa3b2" stroke-width="1.5" fill="none"/><polygon points="360,130 352,126 352,134" fill="#9aa3b2"/>
+      <text x="335" y="120" fill="#fbbf24" font-size="11" text-anchor="middle">LayerNorm</text>
+      <!-- baseline right (zero line in middle) -->
+      <line x1="380" y1="110" x2="640" y2="110" stroke="#5a6070" stroke-dasharray="3 3"/>
+      <text x="648" y="114" fill="#9aa3b2" font-size="10">0</text>
+      <!-- bars right (centered around 0) -->
+      <g>
+        <rect x="400" y="85" width="24" height="25" fill="#4ade80"/>
+        <rect x="440" y="110" width="24" height="22" fill="#4ade80"/>
+        <rect x="480" y="72" width="24" height="38" fill="#4ade80"/>
+        <rect x="520" y="110" width="24" height="30" fill="#4ade80"/>
+        <rect x="560" y="98" width="24" height="12" fill="#4ade80"/>
+        <rect x="600" y="80" width="24" height="30" fill="#4ade80"/>
+      </g>
+      <text x="510" y="165" fill="#9aa3b2" font-size="11" text-anchor="middle">同一向量：拉到统一尺度、以 0 为中心</text>
+    </svg>
+    <figcaption>把一个向量的各分量减均值、除标准差 → 数值居中、尺度统一。每个词向量各自独立做一遍。</figcaption>
+  </figure>
+
+  <h2>③ 关键点</h2>
+  <div class="card key">
+    <ul>
+      <li><b>"Layer"的含义：对每个词向量<b>单独</b>做</b>——只在它自己的 d_model 个分量之间统计均值/标准差，<b>不跨其它词、不跨其它样本</b>。所以处理一个词不依赖别的词，变长序列、逐字生成都不受影响。</li>
+      <li><b>γ、β 让归一化"可调"</b>：强行把每个向量都压成"均值0标准差1"可能太死板；γ（缩放）和 β（平移）是学出来的，让模型能把尺度<b>调回</b>它需要的样子。相当于"先标准化，再让模型自己决定要不要放大/偏移"。</li>
+      <li><b>稳训练</b>：数值被约束在温和范围 → 梯度稳定 → 可以用更大学习率、训得更快更稳。</li>
+    </ul>
+  </div>
+
+  <h2>④ 在 Transformer 里：Add &amp; Norm</h2>
+  <div class="card">
+    <p>它和残差是搭档，每个子层配一组，合称 <b>"Add &amp; Norm"</b>：</p>
+    <div class="formula" style="font-size:14px">
+      x = LayerNorm( x + 多头注意力(x) )<br>
+      x = LayerNorm( x + FFN(x) )
+    </div>
+    <p><b>Add</b> = 残差把 x 加回来；<b>Norm</b> = LayerNorm 把结果校准。两者一起：既有梯度高速路，又有数值稳定。</p>
+  </div>
+
+  <div class="callout">
+    <b>🅿️ 小注（不展开）：</b>LayerNorm 放"残差相加之后"（Post-LN）还是"子层之前"（Pre-LN）有两种流派，现代大模型多用 Pre-LN（更稳）。细节以后需要时再说，今天记住"残差 + 归一化搭档"即可。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>LayerNorm 对一个向量做了什么？（两步：标准化 + 什么）标准化后这个向量的均值和标准差大约是多少？</li>
+      <li>为什么需要它？数值"漂移"会给训练带来什么麻烦？</li>
+      <li>"Layer" 的意思是它对谁单独做统计？（一个词向量内部 / 跨所有词 / 跨所有样本）</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，下一课 <b>FFN（前馈网络）</b>——Block 的最后一个零件，然后就能拼出完整 Transformer Block 了。</p>
+
+  <div class="footer">AI Learning System · Lesson 10 LayerNorm · 自包含 HTML</div>
+</div>
+</body>
+</html>
