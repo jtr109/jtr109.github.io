@@ -53,7 +53,7 @@
   <a class="card" href="07-scaled-dot-product.html"><span class="s">✅</span><span class="n">07</span><span class="t">缩放点积 ÷√d</span><div class="d">维度高→分数大→softmax 饱和；÷√d 把落点拉回平缓区。完整公式 softmax(QKᵀ/√d)V。</div></a>
   <a class="card" href="08-multihead.html"><span class="s">✅</span><span class="n">08</span><span class="t">Multi-head Attention</span><div class="d">单头只能关注一种关系；多头并行开 h 套注意力各看一种。512→拆 h 个 64→拼回 512→W_O。注意力通关。</div></a>
   <a class="card" href="09-residual.html"><span class="s">✅</span><span class="n">09</span><span class="t">残差连接 Residual</span><div class="d">output = x + Layer(x)：加一条捷径让层只学"增量"。梯度高速路 / 易学恒等 / 逐层微调 → 能堆几十层。</div></a>
-  <a class="card" href="10-layernorm.html"><span class="s">进行中</span><span class="n">10</span><span class="t">LayerNorm</span><div class="d">把每个词向量减均值除标准差→均值0标准差1，再 γ/β 可调。稳住数值防漂移。和残差合称 Add & Norm。</div></a>
+  <a class="card" href="10-layernorm.html"><span class="s">✅</span><span class="n">10</span><span class="t">LayerNorm</span><div class="d">把每个词向量减均值除标准差→均值0标准差1，再 γ/β 可调。稳住数值防漂移。和残差合称 Add & Norm。</div></a>
 
   <h2>补充 &amp; 复习</h2>
   <a class="card supp" href="A-matrix-as-transform.html"><span class="n">补充 A</span><span class="t">矩阵作为"变换"</span><div class="d">矩阵=加工机(变换)、向量=料；同一个 x 经 W_Q/W_K 得到不同方向 → 打分不对称的数学根源。含 X·W=Q 形状图。</div></a>

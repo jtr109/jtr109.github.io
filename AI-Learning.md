@@ -112,7 +112,7 @@
 ## Current Status
 
 **Current Module:** Module 1 — Transformer
-**Current Lesson:** 残差连接已通过 → 下一课 LayerNorm（Add & Norm 的 Norm）
+**Current Lesson:** LayerNorm 已通过 → 下一课 FFN（前馈网络）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -162,12 +162,18 @@
   - 深挖沉淀(FAQ)：x+f(x) 与 g(x) 表达能力相同，残差赢在优化(梯度不消失+inductive bias 锚在 x)，非表达能力；g(x)=普通堆叠层
   - 🔧 Q2 修正：梯度不消失的直接原因是"捷径给梯度留了导数=1 的直通路"，不是"带了起点信息"(那是好处②)
   - 📌 名词：跳连/捷径 = skip connection（shortcut）
+- **LayerNorm** — ✅ 通过（`lessons/10-layernorm.html`，3 题全对）
+  - ✅ 对每个词向量单独：减均值除标准差 → 均值0标准差1，再 γ·x̂+β（γ/β 学出来，初始 γ=1 β=0）
+  - ✅ 作用：防数值漂移（忽大忽小/单维拉爆）→ 梯度稳、可用更大学习率
+  - ✅ "Layer"=在一个词向量内部统计，不跨词/不跨样本；和缩放点积 ÷√d 同精神
+  - ✅ 与残差搭档 = Add & Norm：x = LayerNorm(x + 子层(x))
+  - 深挖沉淀(FAQ)：控的是数值分布(非仅长度)+居中；γ/β 可控不失控(参数被梯度监督+下层再归一化，非被动漂移)；"均值0标准差1"vs"γ/β学"是两个时间点
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- LayerNorm（残差的搭档，Add & Norm）→ FFN → 多层堆叠 → 完整 Transformer Block
+- FFN（前馈网络，Block 第二个子层）→ 多层堆叠 → 完整 Transformer Block
 
 ---
 
@@ -186,7 +192,7 @@
 | 梯度 / 反向传播 / 梯度下降 | 多头分化讨论 | 🅿️ 直觉预告已给（`B-gradient-intuition.html`）；完整版 Module 4 |
 | FFN（前馈网络） | roadmap | Module 1 |
 | 残差连接 Residual | roadmap | ✅ 已讲（`09-residual.html`） |
-| LayerNorm | roadmap | Module 1 |
+| LayerNorm | roadmap | ✅ 已讲（`10-layernorm.html`） |
 | 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
 | 输出层 / unembedding（映射回词表） | 概念问答 | Module 2（预测下一个 token 时） |
 | 多层堆叠（Stacking N Transformer Blocks / depth） | 多次提及（W 每层一套、深层 x 非固定） | Module 1 收尾（先学完单个 block 的零件） |
