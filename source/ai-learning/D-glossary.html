@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>补充 D · 术语表 &amp; 三段心智分层</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --violet:#a78bfa; --cyan:#22d3ee; --pink:#f472b6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.g{width:100%;border-collapse:collapse;margin:16px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
+  table.g td,table.g th{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  table.g tr:last-child td{border-bottom:none}
+  table.g th{background:var(--panel2);color:var(--accent);font-size:13px}
+  table.g td:first-child{color:#e6e8ee;font-weight:600;white-space:nowrap}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:18px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .tag-cfg{color:var(--violet)} .tag-com{color:var(--warn)} .tag-run{color:var(--cyan)}
+  .flow{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:14px 0;font-family:"SF Mono",Consolas,monospace;font-size:13px;color:#dbe4ff;line-height:1.9}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="10-layernorm.html" style="color:#6ea8fe;text-decoration:none">← 相关：LayerNorm</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">随时来查</span>
+  </nav>
+
+  <div>
+    <span class="badge">补充 D</span>
+    <span class="badge">术语表</span>
+    <span class="badge">名词混了就翻这里</span>
+  </div>
+  <h1>术语表 &amp; 三段心智分层</h1>
+  <p class="lead">把散落各课的名词收在一处。核心洞察（来自讨论）：整个系统像程序一样分<b>配置 / 编译时 / 运行时</b>三段。</p>
+
+  <h2>① 三段心智分层（像程序）</h2>
+  <table class="g">
+    <tr><th>阶段</th><th>类比</th><th>谁定 / 何时定</th><th>例子</th></tr>
+    <tr><td class="tag-cfg">配置</td><td>编译参数 / config</td><td><b>人</b>在训练前手动设</td><td>超参数：d_model(512)、头数 h(8)、层数 N、学习率</td></tr>
+    <tr><td class="tag-com">编译时</td><td>编译进二进制的常量</td><td><b>训练</b>学出来 → 之后<b>冻结</b>，存在权重文件</td><td>参数：embedding <b>表</b>、W_Q/W_K/W_V、W_O、γ/β</td></tr>
+    <tr><td class="tag-run">运行时</td><td>一次函数调用的临时变量</td><td><b>每次输入</b>现算，不存模型</td><td>token id、词向量、hidden state、Q/K/V、注意力权重、各层激活</td></tr>
+  </table>
+  <div class="card">
+    <p><b>⚠️ 最易混的一处：</b><code>embedding 表</code>（编译时·固定参数）<b>≠</b> 从表里取出并被各层加工的<code>词向量 / hidden state</code>（运行时·随输入变）。<br>类比：<b>表 = 固定的座位表；流动的向量 = 每次进来的人。</b></p>
+  </div>
+
+  <h2>② 参数 vs 超参数</h2>
+  <table class="g">
+    <tr><th></th><th>模型参数 (parameters/weights)</th><th>超参数 (hyperparameters)</th></tr>
+    <tr><td>谁</td><td>γ、β、W_Q/K/V、W_O、embedding 表…</td><td>学习率、层数 N、头数 h、d_model…</td></tr>
+    <tr><td>谁定</td><td><b>训练自动学</b>（梯度下降）</td><td><b>人手动设</b>（训练前）</td></tr>
+    <tr><td>数量</td><td>亿万个</td><td>几十个</td></tr>
+    <tr><td>口语"调参"</td><td>❌ 一般不指这个</td><td>✅ 通常指这个（炼丹）</td></tr>
+  </table>
+  <p class="mono" style="text-align:center;color:#cfe9d8">参数 = 机器学的　·　超参数 = 人设的</p>
+
+  <h2>③ 名词对照表</h2>
+  <table class="g">
+    <tr><th>名词</th><th>指什么</th><th>阶段</th></tr>
+    <tr><td>token</td><td>文本切出的片段（≠单词，可能是 subword）</td><td>—</td></tr>
+    <tr><td>token id</td><td>该片段在词表里的行号（整数）</td><td class="tag-run">运行时</td></tr>
+    <tr><td>embedding 表 (E)</td><td>那张 [vocab × d_model] 大查找表</td><td class="tag-com">编译时</td></tr>
+    <tr><td>词向量 / input embedding</td><td>查表取出的<b>初始</b>向量（还没被上下文加工）</td><td class="tag-run">运行时·起点</td></tr>
+    <tr><td>hidden state<br>（隐藏状态）</td><td>经过若干层加工后的向量（含上下文）；每层输出一个</td><td class="tag-run">运行时</td></tr>
+    <tr><td>d_model</td><td>每个向量的维度（如 512）= 主干统一宽度</td><td class="tag-cfg">配置</td></tr>
+    <tr><td>N（序列长度）</td><td>这句话有几个 token</td><td class="tag-run">运行时</td></tr>
+    <tr><td>Q / K / V</td><td>一个词经 W_Q/K/V 投影出的三个角色向量</td><td class="tag-run">运行时</td></tr>
+    <tr><td>W_Q/W_K/W_V, W_O</td><td>注意力的投影矩阵（学出来的）</td><td class="tag-com">编译时</td></tr>
+    <tr><td>γ / β</td><td>LayerNorm 的缩放/平移参数（学出来的）</td><td class="tag-com">编译时</td></tr>
+    <tr><td>parameters</td><td>训练学的所有数（= 几 GB 权重文件）</td><td class="tag-com">编译时</td></tr>
+    <tr><td>hyperparameters</td><td>人设的：d_model、h、N层、学习率…</td><td class="tag-cfg">配置</td></tr>
+    <tr><td>skip connection</td><td>残差里把 x 原样搬到输出的"捷径"</td><td>结构</td></tr>
+  </table>
+
+  <h2>④ 一句话数据流（名词全串起来）</h2>
+  <div class="flow">
+    字符串<br>
+    &nbsp;→ tokenize → N 个 <span class="tag-run">token id</span><br>
+    &nbsp;→ 查 <span class="tag-com">embedding 表</span> → 初始<span class="tag-run">词向量</span> [N × d_model]<br>
+    &nbsp;→ 逐层加工（注意力/残差/LayerNorm/FFN）→ 每层一个新的 <span class="tag-run">hidden state</span><br>
+    &nbsp;→ 最后一层 hidden state → 输出层 → 下一个词
+  </div>
+  <p class="lead" style="text-align:center">token → id → 查表得<b>词向量</b> → 逐层加工成 <b>hidden state</b> → 预测下一个词</p>
+
+  <div class="footer">AI Learning System · Supplement D 术语表 · 自包含 HTML</div>
+</div>
+</body>
+</html>
