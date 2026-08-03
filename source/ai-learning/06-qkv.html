@@ -97,6 +97,7 @@
     <p style="margin-top:14px">三个矩阵全模型共用、由训练学出。于是打分和混合都用<b>专门的</b>向量：</p>
     <div class="formula">打分 sᵢⱼ = qᵢ · kⱼ &nbsp;→&nbsp; softmax &nbsp;→&nbsp; 新(xᵢ) = Σⱼ wᵢⱼ · <b>vⱼ</b></div>
     <p class="center" style="color:var(--muted);font-size:13px">对比朴素版：<code>xᵢ·xⱼ</code> → <code>qᵢ·kⱼ</code>；混合 <code>xⱼ</code> → 混合 <code>vⱼ</code></p>
+    <div class="fix" style="margin-top:12px"><b>🔑 关键（易被忽略）：</b>最后<b>加权求和的对象是 V</b>，不是 Q 或 K。<b>Q、K 只用来算"该关注谁多少"的权重</b>（算完就退场）；<b>V 才是被搬运、真正流出注意力的内容</b>。所以注意力输出 = Σⱼ (权重ⱼ × <b>vⱼ</b>) —— Q/K 决定路由，V 是货。</div>
   </div>
 
   <figure class="fig">
