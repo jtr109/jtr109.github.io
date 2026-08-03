@@ -2,7 +2,7 @@
 
 > **🤖 给接手的 AI（先读这段）**：你被指派继续给 @liryan 教 AI/LLM。开始前请：
 > 1. 读本文件的 **教学偏好**（下方）、**Current Status**（学到哪）、**Next Lesson**（下一课）、**待讲清单**（欠讲的概念）。
-> 2. 教学契约（务必遵守）：目标是建 mental model 不是背定义；**一课一个新概念**、严格循序渐进，别砸没铺垫的概念；提前用到的概念记进「待讲清单」只说"后面讲"；每讲完一个概念**让学生用自己的话复述→你抓错纠正→确认再前进**；学生可随时打断。**讲深度：每个零件都要讲到"它具体在算什么、语义作用是什么"的机制层（如 FFN=检测特征+联想记忆），别停在"增强表达能力"这种宽泛说法。**
+> 2. 教学契约（务必遵守）：目标是建 mental model 不是背定义；**一课一个新概念**、严格循序渐进，别砸没铺垫的概念；提前用到的概念记进「待讲清单」只说"后面讲"；每讲完一个概念**让学生用自己的话复述→你抓错纠正→确认再前进**；学生可随时打断。**讲深度：每个零件都要讲到"它具体在算什么、语义作用是什么"的机制层（如 FFN=检测特征+联想记忆），别停在"增强表达能力"这种宽泛说法。** **课程结构（从 Module 2 起）：每个 Module 先上「概览课」自顶向下给完整骨架（各框一句话+🅿️细节后挖），再逐块下钻——详见 Roadmap 上方「教学结构」。**
 > 3. 学生画像：软件工程师（工程直觉强）；线代/微积分学过但生疏 → 用**直觉+图+最小公式**，不硬推导；节奏偏慢、爱刨根问底（这是优点，顺着走）。
 > 4. 产出：讲义是**自包含 HTML**（内嵌 CSS+SVG，顶部带导航条），写在 `source/ai-learning/`，`git push origin master` 由 GitHub Actions 自动部署到 **https://jtr109.com/ai-learning/**；沿用现有配色/结构（照抄任一现有讲义当模板）。每课后更新本文件的 Current Status / Lesson Log / 待讲清单。
 > 5. 方法论详见 `source/ai-learning/how-to-learn.html`。
@@ -70,12 +70,20 @@
 6. 图和例子优先于死记
 7. 每个概念都要回答：解决什么问题 / 为何存在 / 如何工作
 
+### 教学结构：自顶向下 + 逐块下钻（螺旋式）⭐ 从 Module 2 起采用
+> 学生反馈：Module 1 总复习那种"先给完整链路骨架、再逐块往里挖"的顺序最合理。据此，每个 Module 采用两遍螺旋：
+> 1. **第一遍·概览课（自顶向下骨架）**：先给这个 Module 的完整链路当"一串黑盒"，每个框只一句话（干什么/在全局地图哪个位置），细节全标「🅿️ 后面挖」。这一遍在抽象层仍是"一个概念一个框"，不深入。
+> 2. **第二遍·逐块下钻**：一个框一个框展开，框内部仍按下面的颗粒度原则自底向上严谨讲——但此刻学生已知道它在整图的位置与作用（动机前置）。
+>
+> 好处：自顶向下给动机+地图，自底向上给严谨。限制：概览必须克制（框=一句话+🅿️，不展开）；纯数学微工具（点积/softmax 类）不进骨架，仍在下钻到需要处 just-in-time 补。
+
 ### 教学颗粒度原则 (Granularity)
 - **一课一个新概念**：每个讲义只引入一个主要新概念；数学小工具（点积、softmax…）拆成独立微课，在需要它的前一刻讲（just-in-time）。
 - **严格循序渐进**：一次解释里不砸一堆没铺垫过的概念。用到的东西必须"要么已教、要么明确标注为🅿️预告"。
 - **预告即登记**：提到但暂不展开的概念 → 记入「待讲清单」，只说"后面讲"。
 - **概念分层**：区分"算法 / 对算法的解读 / 下游概念"三层，不混谈（例：点积 → 相似度 → 注意力权重）。
 - **先确认再前进**：每个概念确认掌握后再进下一个；鼓励随时打断提问。
+- **机制层深度**：每个零件讲到"它具体在算什么、语义作用是什么"（如 FFN=检测特征+联想记忆），别停在"增强表达能力"这种宽泛说法。
 
 ---
 
@@ -85,13 +93,15 @@
 建立 LLM 基础 mental model。
 - Token · Embedding · Vector（向量空间直觉）· Linear Algebra Basics（按需）
 
-### Module 1 — Transformer
-理解 Transformer 为什么能工作。**Self-Attention 按颗粒度原则拆成微课链：**
-- **softmax**（工具）→ **朴素注意力**（点积+softmax 的加权平均，先立核心直觉）→ **Q/K/V**（引入投影修朴素版不足）→ **Attention Score / ÷√d 缩放** → **Multi-head** → **FFN** → **Residual** → **LayerNorm** → **Positional Encoding** → **RoPE**
-- **Outcome**：能解释 Transformer 如何根据已有 token 预测下一个 token。
+### Module 1 — Transformer ✅ 完结
+理解 Transformer 为什么能工作。（自底向上讲的，总复习 `overview-module1-review.html` 补了自顶向下地图）
+- 微课链：softmax → 朴素注意力 → Q/K/V → ÷√d 缩放 → Multi-head → 残差 → LayerNorm → FFN
+- **Outcome**：能解释 Transformer 如何根据已有 token 加工出 hidden state（预测下一个 token 的输出层留给 Module 2）。
 
-### Module 2 — Large Language Models
-- Decoder-only 架构 · Next-Token Prediction · Context Window · Sampling · Temperature · Top-k · Top-p · Tokenization 细节 · BPE
+### Module 2 — Large Language Models（下一个）
+**先上「Module 2 概览课」**（自顶向下：从 hidden state 到吐出下一个词的完整骨架），再逐块下钻：
+- 输出层/unembedding · Next-Token Prediction · Context Window · Sampling · Temperature · Top-k · Top-p · Tokenization 细节 · BPE
+- 衔接：Module 1 停在"最后一层 hidden state"，Module 2 从这里把它变成下一个词。
 
 ### Module 3 — LLM Inference Engineering
 - Prefill · Decode · KV Cache · FlashAttention · Continuous Batching · Speculative Decoding · vLLM
@@ -111,8 +121,8 @@
 
 ## Current Status
 
-**Current Module:** Module 1 — Transformer
-**Current Lesson:** FFN 已通过 → Block 零件全通关 🎉 → 下一课 Module 1 收尾（拼装 Block + 多层堆叠）
+**Current Module:** Module 1 ✅ 完结 → 下一个 Module 2（Large Language Models）
+**Current Lesson:** 🎉 Module 1 全通关（含总复习 + 缺口补齐）→ 下次从「Module 2 概览课」开始（自顶向下）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
