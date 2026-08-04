@@ -56,6 +56,9 @@
   <a class="card" href="10-layernorm.html"><span class="s">✅</span><span class="n">10</span><span class="t">LayerNorm</span><div class="d">把每个词向量减均值除标准差→均值0标准差1，再 γ/β 可调。稳住数值防漂移。和残差合称 Add & Norm。</div></a>
   <a class="card" href="11-ffn.html"><span class="s">✅</span><span class="n">11</span><span class="t">FFN（前馈网络）</span><div class="d">两层+中间非线性：512→放大2048→激活→缩回512。逐词独立深加工。注意力=交流，FFN=计算。约占2/3参数。</div></a>
 
+  <h2>Module 2 · Large Language Models（LLM 如何生成文字）</h2>
+  <a class="card" href="12-module2-overview.html"><span class="s">进行中</span><span class="n">12</span><span class="t">Module 2 概览（自顶向下地图）</span><div class="d">先看清整条生成链路骨架：hidden state→输出层→softmax→采样→下一个词→循环。关键新观念：生成是自回归循环。</div></a>
+
   <h2>补充 &amp; 复习</h2>
   <a class="card review" href="overview-module1-review.html"><span class="n">总复习</span><span class="t">Module 1 总复习（图 + 挖空自测）⭐</span><div class="d">整张心智模型图 + 一键挖空自测 + 引导复述提纲。对着马赛克版复述整条链路 = 真学会。学完 Module 1 必做。</div></a>
   <a class="card supp" href="A-matrix-as-transform.html"><span class="n">补充 A</span><span class="t">矩阵作为"变换"</span><div class="d">矩阵=加工机(变换)、向量=料；同一个 x 经 W_Q/W_K 得到不同方向 → 打分不对称的数学根源。含 X·W=Q 形状图。</div></a>
