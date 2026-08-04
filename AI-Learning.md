@@ -121,8 +121,8 @@
 
 ## Current Status
 
-**Current Module:** Module 1 ✅ 完结 → 下一个 Module 2（Large Language Models）
-**Current Lesson:** 🎉 Module 1 全通关（含总复习 + 缺口补齐）→ 下次从「Module 2 概览课」开始（自顶向下）
+**Current Module:** Module 2 — Large Language Models（进行中）
+**Current Lesson:** 自回归 & 因果掩码已讲（`13`）→ 下一课下钻「输出层」（hidden state → 词表概率）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -273,3 +273,9 @@
 ### 下次预告 — E. Multi-head Attention
 - 学生已提前踩到门口：512维拆成若干64维head、算完拼回512；W_O 整合
 - 动机：单头只有一种"关注视角"，多头并行捕捉不同关系
+
+### 2026-08-04 — Module 2 概览 + 自回归/因果掩码（完成）
+- 采用自顶向下：先 12 概览（生成链路骨架 + 自回归循环），再 13 下钻（每位置预测下一词 + 因果掩码）
+- 12 修 SVG bug（text 元素内不能放 HTML 标签）；改用常驻本地克隆 repos\jtr109.github.io（不再反复 clone）
+- FAQ 沉淀：最后位置预测下一词、因果掩码、聊天=拼接续写、模型无状态、稳定性→KV Cache（Module 3 伏笔）
+- 学生自己推出「模型无状态 + 前面位置可缓存」，理解很深
