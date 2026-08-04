@@ -215,6 +215,8 @@
 | 输出层 / unembedding（映射回词表） | 概念问答 | Module 2（预测下一个 token 时） |
 | 多层堆叠（Stacking N Transformer Blocks / depth） | 多次提及（W 每层一套、深层 x 非固定） | Module 1 收尾（先学完单个 block 的零件） |
 | KV Cache（缓存已算出的 k/v） | qkv 预存讨论 | Module 3 |
+| 因果掩码 causal mask（每个位置只能看前面的词） | M2 概览讨论（最后位置预测） | Module 2 下钻（注意力/训练相关处） |
+| chat template + 指令微调(SFT/RLHF)（一问一答怎么实现） | M2 概览讨论 | Module 4（训练）/ Module 5 |
 
 ---
 
