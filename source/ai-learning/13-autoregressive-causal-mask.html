@@ -181,6 +181,28 @@
     <h3>Q：既然只用最后位置，为什么还算前面所有位置？（漂亮推论）</h3>
     <p>因为位置3<b>永远只看 1-3</b>，它的 hidden state 在 <code>"The cat sat"</code> 和 <code>"The cat sat on the"</code> 里<b>完全一样</b>（后面加多少词都不影响它）。这种"前面位置不受后面影响"的稳定性，正是为什么可以<b>把前面算过的结果缓存复用</b>——实际生成时甚至不用重算前面，只算新加的那个。</p>
     <div class="fix">这个缓存机制叫 <b>KV Cache</b>（🅿️ Module 3）；它成立的前提就是"因果掩码 → 前面位置稳定不变"。</div>
+
+    <h3>Q：每层到底在更新什么？后面几个位置会先保持不变吗？</h3>
+    <p><b>不会。每一层都会同时更新全部 N 个位置。</b>因果掩码只限制"每个位置可以从哪些位置收集信息"，不是让后面几行等待或冻结。</p>
+    <p>假设 <code>The cat sat on the</code> 有 5 个 token，且 <code>d_model=3</code>，初始矩阵是：</p>
+    <div class="mono" style="background:var(--panel2);border-radius:8px;padding:12px 14px;font-size:13px;color:#dbe4ff">
+      X⁰ [5×3] =<br>
+      The [1,0,0]<br>
+      cat [0,1,0]<br>
+      sat [0,0,1]<br>
+      on  [1,1,0]<br>
+      the [1,0,1]
+    </div>
+    <p>一次注意力中，五行通常并行更新，但读取范围不同：</p>
+    <div class="mono" style="background:var(--panel2);border-radius:8px;padding:12px 14px;font-size:13px;color:#dbe4ff">
+      pos1 新向量 = 只混合 V(pos1)<br>
+      pos2 新向量 = 混合 V(pos1~2)<br>
+      pos3 新向量 = 混合 V(pos1~3)<br>
+      pos4 新向量 = 混合 V(pos1~4)<br>
+      pos5 新向量 = 混合 V(pos1~5)
+    </div>
+    <p>经过注意力、残差、LayerNorm、FFN 后，第一层仍输出 <code>X¹ [5×3]</code>；第二层继续得到 <code>X² [5×3]</code>……最后一层仍是 <code>Xᴸ [5×3]</code>。</p>
+    <div class="fix"><b>最终生成时：</b>完整结果仍是 <code>[N×d_model]</code> 的 hidden-state 列表，只取最后一行 <code>h_last = Xᴸ[N]</code>，因为它负责预测位置 N+1。不是"只计算最后一行"，而是"全部计算，最后只读取最后一行"（未使用 KV Cache 的朴素视角）。</div>
   </div>
 
   <h2>✅ 快速检查（用自己的话答）</h2>

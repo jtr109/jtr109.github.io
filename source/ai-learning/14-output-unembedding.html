@@ -70,8 +70,9 @@
 
   <h2>① Why — hidden state 还不是 token</h2>
   <div class="card why">
-    <p>输入 <code>The cat sat on the</code> 经最后一层后，我们取最后位置 <code>the</code> 的 hidden state：</p>
+    <p>输入 <code>The cat sat on the</code> 经最后一层后，完整输出仍是 <code>H_last [5×d_model]</code>：五个位置各有一个 hidden state。输出层只读取最后一行，即位置5 <code>the</code> 的 hidden state：</p>
     <div class="formula">h_last　形状 = [1 × d_model]　例如 [1 × 512]</div>
+    <p style="color:var(--muted);font-size:13px">不是 Transformer 只算出一个向量；而是它算出整个列表，生成时取 <code>H_last[最后一行]</code> 预测位置6。矩阵逐层更新与因果掩码的具体例子见 <a href="13-autoregressive-causal-mask.html" style="color:#6ea8fe">Lesson 13 FAQ</a>。</p>
     <p>这个向量已经编码了“整句在说什么、接下来可能是什么”，但它仍是 512 个浮点数。要输出 token，模型必须回答：</p>
     <p class="center" style="font-size:17px;color:#cfe9d8"><b>词表中 10 万个候选 token，分别和当前语境有多匹配？</b></p>
     <p>输出层就是一个“大规模候选打分器”。</p>
