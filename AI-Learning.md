@@ -122,7 +122,7 @@
 ## Current Status
 
 **Current Module:** Module 2 — Large Language Models（进行中）
-**Current Lesson:** 输出层 / Unembedding（`14-output-unembedding.html`，进行中）
+**Current Lesson:** 输出层 / Unembedding 已通过 → 下一课采样（greedy / temperature / top-k / top-p）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -186,12 +186,18 @@
   - ✅ 参数大户：d_ff=4×d_model → FFN 约占 2/3 参数；知识多编码于此
   - 深挖沉淀(FAQ)：激活=门控(非0/1二元化)；FFN=提炼(非淘汰)；注意力更新的是表示非W参数
   - 📌 名词：激活函数=activation function；两种weight(模型权重 vs 注意力权重)已入补充D
+- **输出层 / Unembedding** — ✅ 通过（`14-output-unembedding.html`，3 题全对）
+  - ✅ h_last [1×d_model] × W_U [d_model×vocab_size] → logits [1×vocab_size]
+  - ✅ W_U 每列是一个候选 token 的匹配方向；hidden state 是当前语境需求，不是某个 token embedding 的复制品
+  - ✅ logits 可正可负；softmax → 0~1 正小数且总和1；采样后才得到整数 token id
+  - ✅ 词表不是新对象：输入 token→id、输出 id→token 复用同一 vocabulary
+  - ✅ W_U 可独立训练，也常用 weight tying：W_U=Eᵀ；方向相反但 embedding/unembedding 非严格逆运算
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- 🎯 Module 1 收尾（综合，非新概念）：拼装完整 Block + 多层堆叠 N 层 + 接输出层 → 完整 Transformer → 回答"如何预测下一个 token"
+- 采样：greedy vs sampling；temperature / top-k / top-p 如何改变候选分布
 
 ---
 
@@ -212,7 +218,7 @@
 | 残差连接 Residual | roadmap | ✅ 已讲（`09-residual.html`） |
 | LayerNorm | roadmap | ✅ 已讲（`10-layernorm.html`） |
 | 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
-| 输出层 / unembedding（映射回词表） | 概念问答 | 🔨 讲解中（`14-output-unembedding.html`） |
+| 输出层 / unembedding（映射回词表） | 概念问答 | ✅ 已讲（`14-output-unembedding.html`） |
 | 多层堆叠（Stacking N Transformer Blocks / depth） | 多次提及（W 每层一套、深层 x 非固定） | Module 1 收尾（先学完单个 block 的零件） |
 | KV Cache（缓存已算出的 k/v） | qkv 预存讨论 | Module 3 |
 | 因果掩码 causal mask（每个位置只能看前面的词） | M2 概览讨论（最后位置预测） | Module 2 下钻（注意力/训练相关处） |
