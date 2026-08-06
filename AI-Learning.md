@@ -122,7 +122,7 @@
 ## Current Status
 
 **Current Module:** Module 2 — Large Language Models（进行中）
-**Current Lesson:** 自回归 & 因果掩码已讲（`13`）→ 下一课下钻「输出层」（hidden state → 词表概率）
+**Current Lesson:** 输出层 / Unembedding（`14-output-unembedding.html`，进行中）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -212,7 +212,7 @@
 | 残差连接 Residual | roadmap | ✅ 已讲（`09-residual.html`） |
 | LayerNorm | roadmap | ✅ 已讲（`10-layernorm.html`） |
 | 位置编码 / RoPE（lesson 04 提到"位置信息"） | lesson 04 | Module 1 |
-| 输出层 / unembedding（映射回词表） | 概念问答 | Module 2（预测下一个 token 时） |
+| 输出层 / unembedding（映射回词表） | 概念问答 | 🔨 讲解中（`14-output-unembedding.html`） |
 | 多层堆叠（Stacking N Transformer Blocks / depth） | 多次提及（W 每层一套、深层 x 非固定） | Module 1 收尾（先学完单个 block 的零件） |
 | KV Cache（缓存已算出的 k/v） | qkv 预存讨论 | Module 3 |
 | 因果掩码 causal mask（每个位置只能看前面的词） | M2 概览讨论（最后位置预测） | Module 2 下钻（注意力/训练相关处） |

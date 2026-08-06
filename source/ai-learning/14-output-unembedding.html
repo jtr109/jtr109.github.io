@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 14 · 输出层 / Unembedding</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin:22px 0;text-align:center}
+  .fig figcaption{color:var(--muted);font-size:13px;margin-top:12px}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  svg{max-width:100%;height:auto}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="13-autoregressive-causal-mask.html" style="color:#6ea8fe;text-decoration:none">← 自回归 &amp; 因果掩码</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">下一课：采样</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 2 · LLM</span>
+    <span class="badge">Lesson 14</span>
+    <span class="badge">下钻 · 输出层</span>
+  </div>
+  <h1>输出层 / Unembedding</h1>
+  <p class="lead">最后位置的 hidden state 仍是一个 d_model 维向量。输出层用一个学出来的大矩阵，把它一次性变成“词表里每个 token 的候选分数”。</p>
+
+  <table class="meta">
+    <tr><td>Topic</td><td>hidden state → logits → 词表概率</td></tr>
+    <tr><td>Objectives</td><td>理解输出矩阵 W_U 的形状、每列的语义、logit 与概率的区别</td></tr>
+    <tr><td>Prerequisites</td><td>矩阵=变换 ✅、softmax ✅、最后位置预测下一词 ✅</td></tr>
+    <tr><td>Outcome</td><td>能具体解释“向量怎么翻译回 token”</td></tr>
+    <tr><td>Warning</td><td>输出层先给“分数”，还没有选择 token；选择属于下一课采样</td></tr>
+  </table>
+
+  <h2>① Why — hidden state 还不是 token</h2>
+  <div class="card why">
+    <p>输入 <code>The cat sat on the</code> 经最后一层后，我们取最后位置 <code>the</code> 的 hidden state：</p>
+    <div class="formula">h_last　形状 = [1 × d_model]　例如 [1 × 512]</div>
+    <p>这个向量已经编码了“整句在说什么、接下来可能是什么”，但它仍是 512 个浮点数。要输出 token，模型必须回答：</p>
+    <p class="center" style="font-size:17px;color:#cfe9d8"><b>词表中 10 万个候选 token，分别和当前语境有多匹配？</b></p>
+    <p>输出层就是一个“大规模候选打分器”。</p>
+  </div>
+
+  <h2>② How — 用 W_U 一次给整个词表打分</h2>
+  <div class="card how">
+    <p>设词表大小 <code>vocab_size = 100,000</code>、<code>d_model = 512</code>。输出矩阵：</p>
+    <div class="formula">W_U 形状 = [d_model × vocab_size] = [512 × 100,000]</div>
+    <p>把最后位置 hidden state 乘它：</p>
+    <div class="formula">logits = h_last · W_U　→　[1 × 100,000]</div>
+    <p>结果是 10 万个数：<b>每个词表 token 一个原始分数</b>，叫 <b>logit</b>。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 720 300" role="img" aria-label="unembedding matrix transforms hidden state to vocabulary logits">
+      <text x="360" y="22" fill="#e6e8ee" font-size="14" text-anchor="middle">hidden state × 输出矩阵 = 整个词表的候选分数</text>
+      <rect x="30" y="92" width="115" height="55" rx="8" fill="#2a2140" stroke="#a78bfa"/>
+      <text x="87" y="113" fill="#c9b8f5" font-size="12" text-anchor="middle" font-family="Consolas">h_last</text>
+      <text x="87" y="134" fill="#9aa3b2" font-size="11" text-anchor="middle" font-family="Consolas">1 × 512</text>
+      <text x="170" y="125" fill="#e6e8ee" font-size="18" text-anchor="middle">×</text>
+      <rect x="200" y="45" width="235" height="150" rx="8" fill="#0e1a2b" stroke="#6ea8fe"/>
+      <text x="318" y="70" fill="#9ec5ff" font-size="12" text-anchor="middle" font-family="Consolas">W_U：512 × 100,000</text>
+      <line x1="250" y1="82" x2="250" y2="180" stroke="#2f496b"/>
+      <line x1="303" y1="82" x2="303" y2="180" stroke="#2f496b"/>
+      <line x1="356" y1="82" x2="356" y2="180" stroke="#2f496b"/>
+      <text x="225" y="130" fill="#9aa3b2" font-size="10" text-anchor="middle">列: cat</text>
+      <text x="276" y="130" fill="#9aa3b2" font-size="10" text-anchor="middle">列: mat</text>
+      <text x="330" y="130" fill="#9aa3b2" font-size="10" text-anchor="middle">列: dog</text>
+      <text x="395" y="130" fill="#9aa3b2" font-size="18" text-anchor="middle">…</text>
+      <text x="318" y="215" fill="#9aa3b2" font-size="11" text-anchor="middle">每一列对应一个候选 token 的“匹配方向”</text>
+      <text x="460" y="125" fill="#e6e8ee" font-size="18" text-anchor="middle">=</text>
+      <rect x="490" y="62" width="200" height="116" rx="8" fill="#13231a" stroke="#4ade80"/>
+      <text x="590" y="84" fill="#bff0cf" font-size="12" text-anchor="middle" font-family="Consolas">logits [1 × 100,000]</text>
+      <text x="520" y="112" fill="#9aa3b2" font-size="11" font-family="Consolas">cat: 1.2</text>
+      <text x="520" y="134" fill="#fbe08a" font-size="11" font-family="Consolas">mat: 8.7  ← 高</text>
+      <text x="520" y="156" fill="#9aa3b2" font-size="11" font-family="Consolas">dog: 0.4　…</text>
+      <path d="M590 178 L590 236" stroke="#fbbf24" stroke-width="1.5"/>
+      <polygon points="590,236 586,228 594,228" fill="#fbbf24"/>
+      <text x="590" y="258" fill="#fbbf24" font-size="12" text-anchor="middle">softmax → 概率分布</text>
+      <text x="590" y="278" fill="#9aa3b2" font-size="10" text-anchor="middle">下一步才采样选 token</text>
+    </svg>
+    <figcaption>W_U 的每一列属于一个候选 token。h_last 与每列做匹配，得到该 token 的 logit；一次矩阵乘法给整个词表打完分。</figcaption>
+  </figure>
+
+  <h2>③ 机制直觉：每列是一个“候选答案方向”</h2>
+  <div class="card key">
+    <p>矩阵乘法展开后，每个 token 的 logit 本质是：</p>
+    <div class="formula">logit(token_j) = h_last · W_U[:, j]</div>
+    <p>也就是说，<code>W_U</code> 的第 j 列可以粗略理解成：</p>
+    <p class="center" style="font-size:16px;color:#cfe9d8"><b>“什么样的 hidden state，适合把 token_j 当作下一个词？”</b></p>
+    <ul>
+      <li>h_last 与 <code>mat</code> 那一列方向很匹配 → <code>mat</code> logit 高。</li>
+      <li>与 <code>dog</code> 那列不匹配 → logit 低。</li>
+      <li>模型训练时会调整 W_U，让正确下一个词的列更容易被当前语境命中。</li>
+    </ul>
+    <div class="fix"><b>机制版：</b>Transformer 把语境“压”进 h_last；W_U 把这个语境向量同时拿去和词表中每个候选答案的方向比较，从而恢复成词表分数。</div>
+  </div>
+
+  <h2>④ 为什么叫 unembedding？和 embedding 表有什么关系？</h2>
+  <div class="card">
+    <p><b>Embedding</b> 是 <code>token id → d_model 向量</code>；<b>unembedding</b> 是反方向：<code>d_model 向量 → 词表分数</code>。所以名字像“反向翻译”。</p>
+    <table class="meta">
+      <tr><td>Embedding</td><td>[vocab_size × d_model]：从词表取一行，得到初始词向量</td></tr>
+      <tr><td>Unembedding W_U</td><td>[d_model × vocab_size]：拿 hidden state 对所有候选列打分</td></tr>
+    </table>
+    <p>很多模型会让 <code>W_U = Eᵀ</code>，直接复用 embedding 表的转置，叫 <b>weight tying（权重绑定）</b>：同一套“token 方向”既负责读入，也负责输出，可省参数并让两个空间对齐。</p>
+    <div class="callout"><b>🅿️ 诚实边界：</b>不是所有模型都必须绑定；也可以让 W_U 独立学习。今天只记住“常见做法是复用 Eᵀ”。</div>
+  </div>
+
+  <h2>⑤ logit 还不是概率，更不是最终 token</h2>
+  <div class="card">
+    <p><b>logit</b> 是任意实数（可正可负、不和为1）。把整串 logits 过一次你已学过的 <b>softmax</b>，才得到词表概率：</p>
+    <div class="formula">P(token_j) = e^(logit_j) / Σ_k e^(logit_k)</div>
+    <p>例如：</p>
+    <div class="mono" style="background:var(--panel2);border-radius:8px;padding:12px 14px;color:#dbe4ff">
+      logits:　mat=8.7　cat=1.2　dog=0.4　…<br>
+      softmax: mat=0.82　cat=0.04　dog=0.02　…
+    </div>
+    <p>但概率出来后，模型还没决定究竟选哪个——<b>选词属于下一课“采样”</b>。可能选最高概率，也可能按概率随机选。</p>
+  </div>
+
+  <div class="callout">
+    <b>一句话全链：</b>最后位置 hidden state → 乘 W_U → 每个 token 一个 logit → softmax → 词表概率 →（下一课采样）→ 选出下一个 token。
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>若 d_model=512、词表=100,000，h_last 和 W_U 各是什么形状？相乘后得到什么形状、每个数代表什么？</li>
+      <li>用“候选答案方向”解释：为什么 h_last 与 W_U 某一列更匹配，该 token 的 logit 就更高？</li>
+      <li>logit、概率、最终选出的 token 三者分别处在哪一步？它们是同一个东西吗？</li>
+    </ol>
+  </div>
+  <p class="lead">答完这 3 题，下一课下钻“采样”：有概率之后，为什么不总选第一名？temperature / top-k / top-p 各自改变什么。</p>
+
+  <div class="footer">AI Learning System · Lesson 14 输出层 / Unembedding · 自包含 HTML</div>
+</div>
+</body>
+</html>

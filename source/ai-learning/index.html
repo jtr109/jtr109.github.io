@@ -59,6 +59,7 @@
   <h2>Module 2 · Large Language Models（LLM 如何生成文字）</h2>
   <a class="card" href="12-module2-overview.html"><span class="s">✅</span><span class="n">12</span><span class="t">Module 2 概览（自顶向下地图）</span><div class="d">先看清整条生成链路骨架：hidden state→输出层→softmax→采样→下一个词→循环。关键新观念：生成是自回归循环。</div></a>
   <a class="card" href="13-autoregressive-causal-mask.html"><span class="s">✅</span><span class="n">13</span><span class="t">自回归 &amp; 因果掩码</span><div class="d">每个位置预测"它的下一个词"，因果掩码=只能看左边（不作弊）。训练用全部位置，生成只读最后一个。</div></a>
+  <a class="card" href="14-output-unembedding.html"><span class="s">进行中</span><span class="n">14</span><span class="t">输出层 / Unembedding</span><div class="d">最后位置 hidden state × W_U → 整个词表的 logits → softmax 概率。每列是一个候选 token 的匹配方向；常见 weight tying。</div></a>
 
   <h2>补充 &amp; 复习</h2>
   <a class="card review" href="overview-module1-review.html"><span class="n">总复习</span><span class="t">Module 1 总复习（图 + 挖空自测）⭐</span><div class="d">整张心智模型图 + 一键挖空自测 + 引导复述提纲。对着马赛克版复述整条链路 = 真学会。学完 Module 1 必做。</div></a>
