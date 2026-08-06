@@ -193,14 +193,23 @@
       on  [1,1,0]<br>
       the [1,0,1]
     </div>
-    <p>一次注意力中，五行通常并行更新，但读取范围不同：</p>
+    <p>一次注意力中，五行通常并行更新，但读取范围不同。下面把真正的“注意力权重 × V，再求和”展开（数字仅为示意）：</p>
     <div class="mono" style="background:var(--panel2);border-radius:8px;padding:12px 14px;font-size:13px;color:#dbe4ff">
-      pos1 新向量 = 只混合 V(pos1)<br>
-      pos2 新向量 = 混合 V(pos1~2)<br>
-      pos3 新向量 = 混合 V(pos1~3)<br>
-      pos4 新向量 = 混合 V(pos1~4)<br>
-      pos5 新向量 = 混合 V(pos1~5)
+      pos1 新向量 = 1.0·V(The)<br><br>
+      pos2 新向量 = 0.3·V(The) + 0.7·V(cat)<br><br>
+      pos3 新向量 = 0.2·V(The) + 0.3·V(cat) + 0.5·V(sat)<br><br>
+      pos4 新向量 = 0.1·V(The) + 0.2·V(cat) + 0.2·V(sat)<br>
+     　　　　　　　+ 0.5·V(on)<br><br>
+      pos5 新向量 = 0.1·V(The) + 0.3·V(cat) + 0.2·V(sat)<br>
+     　　　　　　　+ 0.1·V(on) + 0.3·V(the)
     </div>
+    <p>每一行的系数都是该位置自己的 <b>softmax 注意力权重</b>，所以各自加起来等于 1。掩码让“不允许看的未来位置”权重变成 0：</p>
+    <ul>
+      <li><code>pos3</code> 只有 The / cat / sat 三项；on / the 的权重被 mask 成 0。</li>
+      <li><code>pos5</code> 可以给五个位置都分配权重，所以它的输出是整句五个 <code>V</code> 向量的加权和。</li>
+      <li>真正被搬运并混入新向量的是 <b>V</b>；Q/K 只负责计算这些权重。</li>
+    </ul>
+    <div class="fix"><b>这一层的关键图景：</b>不是“pos5 把五个词拼起来”，而是它用自己的 Q 去和五个 K 打分，softmax 得到五个比例，再按这些比例混合五个 V，形成 pos5 的新 hidden state。</div>
     <p>经过注意力、残差、LayerNorm、FFN 后，第一层仍输出 <code>X¹ [5×3]</code>；第二层继续得到 <code>X² [5×3]</code>……最后一层仍是 <code>Xᴸ [5×3]</code>。</p>
     <div class="fix"><b>最终生成时：</b>完整结果仍是 <code>[N×d_model]</code> 的 hidden-state 列表，只取最后一行 <code>h_last = Xᴸ[N]</code>，因为它负责预测位置 N+1。不是"只计算最后一行"，而是"全部计算，最后只读取最后一行"（未使用 KV Cache 的朴素视角）。</div>
   </div>
