@@ -155,6 +155,29 @@
     <p>但概率出来后，模型还没决定究竟选哪个——<b>选词属于下一课“采样”</b>。可能选最高概率，也可能按概率随机选。</p>
   </div>
 
+  <h2>💬 深入问答（来自讨论）</h2>
+  <div class="card">
+    <h3>Q：这里的“词表”是新出现的对象吗？</h3>
+    <p><b>不是。</b>它就是 Token / Embedding 课中 tokenizer 使用的同一套 <b>token vocabulary</b>（token ↔ id 映射），现在只是第一次从输出端重新看到它：</p>
+    <div class="mono" style="background:var(--panel2);border-radius:8px;padding:12px 14px;color:#dbe4ff">
+      输入：文字 → 同一词表 token→id → 查 embedding 表<br>
+      输出：词表中每个 id 的概率 → 采样某个 id → 同一词表 id→token → 文字
+    </div>
+    <p>词表里不只完整单词，也可能有子词、标点、空格和特殊 token。</p>
+
+    <h3>Q：最后 hidden state 是不是一个无法精确匹配 embedding 表的“新词向量”，所以才需要 W_U？</h3>
+    <p>方向基本对，但更准确是：<b>hidden state 本来就不是某个 token embedding 的复制品</b>。它表达的是“结合当前全部上下文，什么样的 token 适合出现在下一位置”。因此不是去 embedding 表里找一个完全相等的向量，而是对<b>所有候选 token</b>分别计算匹配分数。</p>
+    <div class="fix"><b>链路：</b>token id → 初始 embedding → Transformer 加工成上下文 hidden state → W_U 对全词表候选打分。hidden state 是“当前语境需求”，W_U 的列是“候选答案方向”。</div>
+
+    <h3>Q：W_U 是一个新的矩阵吗？</h3>
+    <p>有两种设计：</p>
+    <table class="meta">
+      <tr><td>独立输出矩阵</td><td>单独训练一个 <code>W_U [d_model×vocab_size]</code>，它是额外的模型参数。</td></tr>
+      <tr><td>权重绑定（常见）</td><td>直接用 embedding 表的转置：<code>W_U = Eᵀ</code>。不额外存一份，让同一套 token 方向既负责读入，也负责输出。</td></tr>
+    </table>
+    <p>两种都成立；今天只需记住“W_U 可以独立，也常复用 Eᵀ”。</p>
+  </div>
+
   <div class="callout">
     <b>一句话全链：</b>最后位置 hidden state → 乘 W_U → 每个 token 一个 logit → softmax → 词表概率 →（下一课采样）→ 选出下一个 token。
   </div>
