@@ -126,6 +126,16 @@
   <div class="card key">
     <p class="center" style="font-size:17px;color:#cfe9d8"><b>Temperature = 调节模型对“次优答案”的容忍度</b></p>
     <p class="center" style="color:var(--muted)">低温：我更相信第一名　·　高温：我愿意考虑更多备选</p>
+    <div class="fix"><b>记忆比喻：</b>低温 = 冷静谨慎；高温 = 热情奔放。温度控制模型“愿意冒多大风险”，但真正随机抽签的是 Sampling。</div>
+  </div>
+
+  <div class="card">
+    <h3>完整顺序（易混）</h3>
+    <div class="mono center" style="background:var(--panel2);border-radius:8px;padding:12px 14px;color:#dbe4ff">
+      logits → 除以 Temperature → softmax → probabilities → Sampling → token id
+    </div>
+    <p>Temperature 直接调整的是 <b>logits 的分差</b>；softmax 再把调整后的 logits 变成概率；Sampling 最后按概率抽取。</p>
+    <p><b>低温</b>会降低长尾候选概率；<b>高温</b>反而提高长尾候选概率。Temperature 不能彻底删除候选，真正过滤尾部要靠 Top-k / Top-p。</p>
   </div>
 
   <h2>✅ 快速检查（用自己的话答）</h2>

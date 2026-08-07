@@ -122,7 +122,7 @@
 ## Current Status
 
 **Current Module:** Module 2 — Large Language Models（进行中）
-**Current Lesson:** Temperature（`16-temperature.html`，进行中）
+**Current Lesson:** Temperature 已通过 → 下一课 Top-k / Top-p
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
@@ -197,12 +197,17 @@
   - ✅ Sampling：将概率划成累积区间，随机数落在哪段就选择哪个 token id
   - ✅ 随机性允许多个合理续写，使语言自然多样；风险是抽到低概率怪词
   - ✅ 后续机制：Temperature 调整体分布尖/平；Top-k/Top-p 删除不靠谱尾部候选
+- **Temperature** — ✅ 通过（`16-temperature.html`，3 题基本全对）
+  - ✅ 完整顺序：logits → /T → softmax → probabilities → sampling → token id
+  - ✅ T<1 放大分差（冷静谨慎、保守集中）；T>1 缩小分差（热情开放、多样冒险）
+  - ✅ 不改变候选排名、不产生随机数；随机性来自 Sampling
+  - 🔧 精修：低温降低长尾概率，高温提高长尾概率；Temperature 不删除候选，Top-k/Top-p 才过滤
 
 ### Open Questions
 - （无）
 
 ### Next Lesson
-- Temperature：在采样前调整概率分布有多尖锐/平坦（不改变候选排序）
+- Top-k / Top-p：在 Sampling 前过滤不靠谱的长尾候选
 
 ---
 
