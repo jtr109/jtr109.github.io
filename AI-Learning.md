@@ -122,7 +122,7 @@
 ## Current Status
 
 **Current Module:** Module 2 — Large Language Models（进行中）
-**Current Lesson:** Greedy 与 Sampling 已通过 → 下一课 Temperature
+**Current Lesson:** Temperature（`16-temperature.html`，进行中）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）

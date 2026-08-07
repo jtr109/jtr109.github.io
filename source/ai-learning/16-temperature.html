@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 16 · Temperature</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --panel2:#1e2230; --ink:#e6e8ee; --muted:#9aa3b2;
+    --line:#2a2f3d; --accent:#6ea8fe; --good:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --pink:#f472b6; --cyan:#22d3ee; --violet:#a78bfa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#0b0d13,#0f1117);color:var(--ink);
+    font:16px/1.7 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:30px;margin:0 0 4px}
+  h2{font-size:22px;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+  p{margin:12px 0}
+  code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Consolas,monospace;font-size:.92em;color:var(--cyan)}
+  .lead{color:var(--muted);font-size:15px;margin-top:0}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:12px;padding:3px 10px;border-radius:999px;margin-right:8px}
+  table.meta{width:100%;border-collapse:collapse;margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table.meta td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.meta tr:last-child td{border-bottom:none}
+  table.meta td:first-child{color:var(--accent);font-weight:600;width:150px;background:var(--panel2)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:18px 0}
+  .why{border-left:3px solid var(--violet)} .how{border-left:3px solid var(--cyan)} .key{border-left:3px solid var(--good)}
+  .callout{background:#221a0a;border:1px solid #4a3a12;border-left:3px solid var(--warn);border-radius:10px;padding:14px 18px;margin:18px 0}
+  .callout b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:7px 0}
+  .fix{background:#0e1f16;border:1px solid #1d3a2a;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .fix b{color:var(--good)}
+  .demo{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:20px 0}
+  .slider{width:100%;accent-color:#f472b6}
+  .barrow{display:grid;grid-template-columns:70px 1fr 70px;gap:10px;align-items:center;margin:10px 0;font-family:"SF Mono",Consolas,monospace;font-size:12px}
+  .barbg{height:26px;background:#242937;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+  .bar{height:100%;transition:width .15s}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:16px 0}
+  .q ol{padding-left:20px} .q li{margin:12px 0}
+  .mono{font-family:"SF Mono",Consolas,monospace}
+  .center{text-align:center}
+  .formula{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;text-align:center;font-family:"SF Mono",Consolas,monospace;font-size:15px;color:#dbe4ff}
+  .footer{margin-top:50px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:24px;font-family:Consolas,monospace;border-bottom:1px solid #2a2f3d;padding-bottom:14px">
+    <a href="15-sampling-basics.html" style="color:#6ea8fe;text-decoration:none">← Greedy 与 Sampling</a>
+    <span style="display:flex;gap:14px"><a href="https://jtr109.com/" style="color:#4ade80;text-decoration:none">🏠 首页</a><a href="index.html" style="color:#9aa3b2;text-decoration:none">☰ 目录</a></span>
+    <span style="color:#3a4050">下一课：Top-k / Top-p</span>
+  </nav>
+
+  <div>
+    <span class="badge">Module 2 · LLM</span>
+    <span class="badge">Lesson 16</span>
+    <span class="badge">下钻 · 调节随机性</span>
+  </div>
+  <h1>Temperature</h1>
+  <p class="lead">Sampling 负责“按概率抽签”；Temperature 负责在抽签前调整各候选的抽签面积——低温更集中保守，高温更平均开放。</p>
+
+  <table class="meta">
+    <tr><td>位置</td><td>logits → <b>Temperature 调整</b> → softmax 概率 → sampling</td></tr>
+    <tr><td>解决的问题</td><td>同一组模型分数，想控制回答更稳定还是更多样</td></tr>
+    <tr><td>输入</td><td>输出层产生的 logits</td></tr>
+    <tr><td>输出</td><td>排序相同、但尖锐程度不同的概率分布</td></tr>
+    <tr><td>本课边界</td><td>先掌握功能和效果；实现只需知道 logits 除以 T，再复用 softmax</td></tr>
+  </table>
+
+  <h2>① 已学对象为什么还不够</h2>
+  <div class="card why">
+    <p>Sampling 已经能按概率抽签，但原始概率可能：</p>
+    <ul>
+      <li><b>太集中</b>：每次几乎都抽到第一名，接近 greedy，缺少变化。</li>
+      <li><b>太分散</b>：很多次优候选都有机会，文本更大胆但也更容易跑偏。</li>
+    </ul>
+    <p>我们需要一个旋钮，在<b>不改变候选排名</b>的前提下，控制“第一名领先得有多夸张”。这个旋钮就是 Temperature（温度）T。</p>
+  </div>
+
+  <h2>② 功能心智模型：抽签面积的“集中度旋钮”</h2>
+  <table class="meta">
+    <tr><td>低温 T&lt;1</td><td>分布变尖：高分候选面积更大、低分更小 → 保守、稳定、接近 greedy</td></tr>
+    <tr><td>T=1</td><td>不改变原始分布</td></tr>
+    <tr><td>高温 T&gt;1</td><td>分布变平：第一名优势缩小，次优候选面积变大 → 多样、开放、风险更高</td></tr>
+  </table>
+  <div class="fix"><b>Temperature 本身不制造随机数。</b>随机来自 sampling；Temperature 只重分配每个候选的抽签面积。</div>
+
+  <h2>③ 交互演示：拖动温度</h2>
+  <div class="demo">
+    <p style="margin-top:0"><b>固定 logits：</b><code>mat=4, floor=3, sofa=2, dog=1</code></p>
+    <label for="temp">Temperature：<b id="tValue" style="color:#f472b6">1.00</b></label>
+    <input class="slider" id="temp" type="range" min="0.2" max="2.5" value="1" step="0.05">
+    <div id="bars"></div>
+    <p id="description" style="color:var(--muted);font-size:13px;margin-bottom:0"></p>
+  </div>
+
+  <h2>④ 实现层（现在只展开一行）</h2>
+  <div class="card how">
+    <p>Temperature 先把每个 logit 除以 T，再复用已学的 softmax：</p>
+    <div class="formula">P(token_i) = softmax(logit_i / T)</div>
+    <ul>
+      <li><code>T=0.5</code>：除以小数，相当于 logits 放大 2 倍 → 分差变大 → softmax 更尖。</li>
+      <li><code>T=2</code>：logits 缩小一半 → 分差变小 → softmax 更平。</li>
+    </ul>
+    <p>所有 logits 同除一个<b>正数</b>，所以候选的高低排序不变；改变的只是分差和概率比例。</p>
+  </div>
+
+  <h2>⑤ 一个具体对比</h2>
+  <div class="mono" style="background:var(--panel2);border-radius:8px;padding:14px;color:#dbe4ff;line-height:1.9">
+    原 logits：[4, 3, 2, 1]<br><br>
+    T=0.5 → softmax([8,6,4,2])　≈ [0.865, 0.117, 0.016, 0.002]<br>
+    　　　　第一名几乎独占 → 稳定、保守<br><br>
+    T=1.0 → softmax([4,3,2,1])　≈ [0.644, 0.237, 0.087, 0.032]<br>
+    　　　　原始分布<br><br>
+    T=2.0 → softmax([2,1.5,1,0.5]) ≈ [0.455, 0.276, 0.167, 0.102]<br>
+    　　　　候选更平均 → 多样、冒险
+  </div>
+
+  <div class="callout">
+    <b>🅿️ 重要边界：</b>高温只会让低概率候选“更有机会”，不会删除荒谬候选。要过滤长尾垃圾，需要下一课的 <b>Top-k / Top-p</b>。
+  </div>
+
+  <div class="card key">
+    <p class="center" style="font-size:17px;color:#cfe9d8"><b>Temperature = 调节模型对“次优答案”的容忍度</b></p>
+    <p class="center" style="color:var(--muted)">低温：我更相信第一名　·　高温：我愿意考虑更多备选</p>
+  </div>
+
+  <h2>✅ 快速检查（用自己的话答）</h2>
+  <div class="q">
+    <ol>
+      <li>Temperature 和 sampling 分别负责什么？随机性来自哪一个？</li>
+      <li>T&lt;1 和 T&gt;1 分别如何改变概率分布及文本风格？</li>
+      <li>Temperature 会改变候选 token 的排名吗？它为什么不能阻止抽到特别荒谬的长尾 token？</li>
+    </ol>
+  </div>
+  <p class="lead">答完后，下一课讲 Top-k / Top-p：在抽签前删除哪些候选，防止随机性跑到不靠谱的长尾。</p>
+
+  <div class="footer">AI Learning System · Lesson 16 Temperature · 自包含 HTML</div>
+</div>
+
+<script>
+const logits=[4,3,2,1];
+const names=['mat','floor','sofa','dog'];
+const colors=['#4ade80','#6ea8fe','#a78bfa','#fbbf24'];
+const slider=document.getElementById('temp');
+const value=document.getElementById('tValue');
+const bars=document.getElementById('bars');
+const description=document.getElementById('description');
+function softmax(xs){
+  const m=Math.max(...xs);
+  const ex=xs.map(x=>Math.exp(x-m));
+  const sum=ex.reduce((a,b)=>a+b,0);
+  return ex.map(x=>x/sum);
+}
+function render(){
+  const t=+slider.value;
+  const probs=softmax(logits.map(x=>x/t));
+  value.textContent=t.toFixed(2);
+  bars.innerHTML=probs.map((p,i)=>`
+    <div class="barrow">
+      <span>${names[i]}</span>
+      <div class="barbg"><div class="bar" style="width:${(p*100).toFixed(1)}%;background:${colors[i]}"></div></div>
+      <span>${(p*100).toFixed(1)}%</span>
+    </div>`).join('');
+  description.textContent=t<0.75?'低温：分布尖锐，接近 greedy。':
+    t>1.4?'高温：分布平坦，更多次优候选获得机会。':'中等温度：在稳定与多样之间折中。';
+}
+slider.addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
