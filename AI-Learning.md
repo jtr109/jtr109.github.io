@@ -122,7 +122,7 @@
 ## Current Status
 
 **Current Module:** Module 2 — Large Language Models（进行中）
-**Current Lesson:** 输出层 / Unembedding 已通过 → 下一课采样（greedy / temperature / top-k / top-p）
+**Current Lesson:** Greedy 与 Sampling（`15-sampling-basics.html`，进行中）
 
 ### Completed
 - **Token** — 基本掌握（诊断 5 题中 Q2/Q3/Q4 正确）
